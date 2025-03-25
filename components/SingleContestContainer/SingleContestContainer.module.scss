@@ -1,0 +1,26 @@
+@import 'styles/breakpoints';
+
+.component {
+  // padding-right: var(--wpe--container--padding-x);
+  // padding-left: var(--wpe--container--padding-x);
+  margin-right: 0;
+  margin-left: 0;
+  max-width: 100vw;
+  background-color: var(--wpe--color--light--blue);
+  padding-bottom: 2rem;
+  padding-top: 0;
+
+  @media (min-width: $breakpoint-small) {
+    padding-top: 1rem;
+  }
+
+  p {
+    font-family: 'Gotham A', 'Gotham B';
+    font-weight: 400;
+    font-size: 1.125rem;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 1.25rem;
+    }
+  }
+}

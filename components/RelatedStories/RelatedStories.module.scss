@@ -1,0 +1,113 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.component {
+  width: 100vw;
+  margin: 0 auto;
+  line-height: 1;
+  margin-bottom: 2rem;
+  display: flex;
+
+  @media (min-width: $breakpoint-extra-small) {
+    max-width: 700px;
+  }
+}
+
+.left-wrapper {
+  width: 60%;
+  display: block;
+}
+
+.content-wrapper-image {
+  figure {
+    position: relative;
+  }
+}
+
+.right-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.1rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    row-gap: 0.2rem;
+  }
+}
+
+.content-wrapper {
+  padding-left: 4vw;
+  padding-right: 1rem;
+  height: fit-content;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding-left: 2vw;
+  }
+}
+
+.category {
+  font-weight: 600;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  line-height: 1.2;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1rem;
+  }
+}
+
+.title {
+  font-family: 'Unit Slab Pro Black';
+  font-size: 1.2rem;
+  line-height: 1.2;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1.5rem;
+  }
+}
+
+.featuredImage {
+  min-width: 100%;
+  margin: 0;
+  margin-bottom: 1rem;
+  height: auto;
+  padding-left: 1rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding-left: 0;
+  }
+
+  span,
+  img {
+    min-width: 100%;
+  }
+}
+
+.excerpt {
+  font-family: 'Chronicle Display A', 'Chronicle Display B';
+  font-weight: 500;
+  font-size: 0.6rem;
+  padding: 0 0 0.25rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1rem;
+  }
+
+  p {
+    line-height: 1.6;
+  }
+
+  a {
+    display: none;
+  }
+}
+
+.border-bottom {
+  width: 95%;
+  margin: 0 auto 2rem;
+  border-bottom: 1px solid var(--wpe--color--black--cow);
+
+  @media (min-width: $breakpoint-extra-small) {
+    width: 100%;
+  }
+}

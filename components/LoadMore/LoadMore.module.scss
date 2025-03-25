@@ -1,0 +1,28 @@
+@import 'styles/variables';
+
+.button {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(wpe--color--black);
+  background-color: var(wpe--color--white);
+  text-transform: uppercase;
+  padding: 1.75rem 5rem;
+  font-size: 1.25rem;
+  appearance: none;
+  font-weight: $font-weight-bold;
+
+  color: var(wpe--color--black);
+
+  &:hover,
+  &:focus {
+    border-color: var(wpe--color--black);
+    background-color: var(wpe--color--black);
+    color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

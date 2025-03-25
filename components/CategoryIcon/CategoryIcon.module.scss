@@ -1,0 +1,43 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.component {
+  background-color: transparent;
+  color: var(--wpe--color--black);
+  position: relative;
+  overflow: hidden;
+  padding: 0.25rem 0;
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0.5rem 0;
+  }
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-weight: 500;
+
+  .category-label {
+    font-size: 1rem;
+    text-decoration: none;
+    line-height: 1;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .icon {
+    height: 1.25rem;
+    width: 1.25rem;
+    position: relative;
+
+    @media (min-width: $breakpoint-small) {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+  }
+}

@@ -1,0 +1,250 @@
+@import 'styles/breakpoints';
+
+.component {
+  width: 100vw;
+  margin: 0 auto;
+  line-height: 1.2;
+  padding: 0;
+
+  @media (min-width: $breakpoint-extra-small) {
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    max-width: 700px;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.25rem;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+  }
+
+  .chevron-wrapper {
+    position: fixed;
+    margin: 0 auto;
+    width: 100vw;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+
+    * {
+      padding: 0;
+    }
+
+    .circle-wrapper {
+      background-color: var(--wpe--color--dark--sand);
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chevron-button {
+      svg {
+        width: 5rem;
+        height: 2rem;
+        path {
+          fill: var(--wpe--color--white--smoke);
+        }
+      }
+    }
+  }
+
+  :global {
+    // Scope WordPress block styles within ContentWrapper.
+    @import 'styles/blocks';
+
+    * {
+      font-family: 'Ringside Regular A', 'Ringside Regular B';
+      font-weight: 400;
+      max-width: 100%;
+      padding: 0 0 0.5rem;
+      text-transform: none;
+      color: var(--wpe--color--white--smoke);
+
+      @media (min-width: $breakpoint-small) {
+        padding: 0 0 1rem;
+      }
+    }
+
+    i,
+    u,
+    strong,
+    b {
+      padding: 0;
+    }
+
+    span {
+      padding-left: 0;
+    }
+
+    p {
+      font-family: 'Ringside Regular A', 'Ringside Regular B';
+      font-weight: 400;
+      font-size: 1.125rem;
+      line-height: 1.2;
+
+      @media (min-width: $breakpoint-extra-small) {
+        font-size: 1.25rem;
+      }
+    }
+
+    figure {
+      min-width: 100%;
+      padding: 0;
+
+      figcaption {
+        display: none;
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1.15px;
+    }
+
+    p:has(img),
+    img,
+    a {
+      padding: 0.5rem 0 0.5rem;
+
+      @media (min-width: $breakpoint-small) {
+        padding: 0.75rem 0 0.75rem;
+      }
+    }
+
+    em {
+      padding: 0;
+    }
+
+    p:empty {
+      display: none;
+    }
+
+    strong {
+      padding: 0;
+      font-weight: 700;
+    }
+
+    a {
+      font-family: 'Ringside Regular A', 'Ringside Regular B';
+      font-weight: 400;
+      text-decoration: underline;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+
+    li {
+      font-size: 1.6rem;
+    }
+
+    ul > li {
+      padding: 0;
+    }
+
+    img {
+      display: inline-flex;
+      height: auto;
+    }
+
+    .alignleft {
+      display: inline;
+      float: left;
+      margin-right: 1.5em;
+    }
+
+    .alignright {
+      display: inline;
+      float: right;
+      margin-left: 1.5em;
+    }
+
+    .aligncenter {
+      clear: both;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    code,
+    pre {
+      color: var(--color-w);
+      background: var(--color-black);
+    }
+
+    code {
+      padding: 0.25rem 0.5rem;
+    }
+
+    pre {
+      max-width: 100%;
+      overflow: auto;
+      padding: 1rem;
+    }
+
+    blockquote {
+      border-top: 1px solid var(--color-black);
+      border-bottom: 1px solid var(--color-black);
+      font-style: italic;
+      margin-top: 0;
+      margin-left: 0;
+      margin-right: 0;
+      padding: 4rem 1rem 4rem;
+      text-align: center;
+
+      &::before {
+        content: '”';
+        display: block;
+        font-size: 6rem;
+        line-height: 0;
+        margin: 2rem 0;
+      }
+
+      > *:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    thead th {
+      border-bottom: 1px solid var(--wpe--color--slate);
+      padding-bottom: 0.5em;
+    }
+
+    th {
+      padding: 0.4rem 0;
+      text-align: left;
+    }
+
+    tr {
+      border-bottom: 1px solid var(--wpe--color--slate);
+    }
+
+    td {
+      padding: 1.25rem 0;
+
+      @media (min-width: $breakpoint-small) {
+        padding: 1rem 0;
+      }
+    }
+  }
+}

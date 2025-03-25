@@ -1,0 +1,59 @@
+@import 'styles/breakpoints';
+
+.component {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100vw;
+  position: relative;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 2rem;
+    max-width: calc(1400px + 2rem);
+  }
+
+  .post-wrapper,
+  .advertorial-wrapper {
+    width: 100vw;
+    max-width: 700px;
+
+    @media (min-width: $breakpoint-small) {
+      width: calc(50vw - 1rem);
+    }
+  }
+
+  .hc-wrapper {
+    margin: 0;
+    border-bottom: none;
+    font-family: 'Gotham A', 'Gotham B';
+
+    @media (min-width: $breakpoint-small) {
+      margin: 0 auto 2rem;
+      border-bottom: 0.6rem solid var(--wpe--hc--background-color);
+    }
+
+    article {
+      margin: 0;
+      background-color: var(--wpe--hc--background-color);
+      height: auto;
+
+      @media (min-width: $breakpoint-small) {
+        min-height: 45rem;
+      }
+
+      @media (min-width: $breakpoint-medium) {
+        min-height: 50rem;
+      }
+    }
+  }
+
+  .banner-ad-wrapper {
+    width: 100vw;
+  }
+}

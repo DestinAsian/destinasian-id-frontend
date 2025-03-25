@@ -1,0 +1,148 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.component {
+  width: 100%;
+  margin: 0 auto;
+  line-height: 1;
+  margin-bottom: 2rem;
+  background-color: var(--wpe--color--light--green);
+
+  @media (min-width: $breakpoint-extra-small) {
+    max-width: 700px;
+  }
+}
+
+.container-wrapper {
+  height: auto;
+
+  @media (min-width: $breakpoint-extra-small) {
+    min-height: 45rem;
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    min-height: 50rem;
+  }
+}
+
+.content-wrapper-image {
+  figure {
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    position: relative;
+
+    span,
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+}
+
+.content-wrapper {
+  padding: 0.1rem 4vw;
+  height: fit-content;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding: 0.2rem 2vw;
+  }
+}
+
+.category {
+  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  color: var(--wpe--color--black);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  line-height: 1.2;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1.15rem;
+  }
+}
+
+.title {
+  font-family: var(--font--eb--garamond);
+  font-weight: 700;
+  font-size: 1.65rem;
+  line-height: 1.2;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 2.4rem;
+  }
+}
+
+.parent {
+  margin-bottom: 0.5rem;
+}
+
+.postInfo {
+  margin-bottom: 1.5rem;
+}
+
+.featuredImage {
+  min-width: 100%;
+  margin: 0;
+  margin-bottom: 1rem;
+
+  span,
+  img {
+    min-width: 100%;
+  }
+}
+
+.excerpt {
+  padding: 0 0 0.25rem;
+
+  p {
+    font-family: 'Ringside Regular A', 'Ringside Regular B';
+    font-weight: 500;
+  }
+
+  a {
+    display: none;
+  }
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-weight: 500;
+  padding-bottom: 0.75rem;
+
+  .category-label {
+    font-size: 1rem;
+    line-height: 1.2;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .location-label {
+    font-size: 1rem;
+    line-height: 1.2;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .icon {
+    svg {
+      width: 1.8rem;
+      height: 1.8rem;
+    }
+  }
+}
+
+.border-bottom {
+  width: 100%;
+  margin: 0 auto 2rem;
+  border-bottom: 0.6rem solid var(--wpe--color--black);
+}

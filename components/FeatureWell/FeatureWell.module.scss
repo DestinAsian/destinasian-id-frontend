@@ -1,0 +1,128 @@
+@import 'styles/breakpoints';
+
+.video-wrapper {
+  width: 100%;
+  height: 100%;
+
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.caption-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: normal;
+  color: var(--wpe--color--white);
+  bottom: 7%;
+  width: 100%;
+  position: absolute;
+  font-family: 'Unit Slab Pro Black';
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-align: left;
+  padding: 0 1rem;
+  z-index: 10;
+  gap: 0.5rem;
+
+  @media (min-width: $breakpoint-small) {
+    text-align: center;
+    flex-direction: column;
+    align-content: center;
+    align-items: normal;
+    font-size: 3rem;
+    gap: 0;
+  }
+
+  // @media (min-width: $breakpoint-medium) {
+  //   top: 70%;
+  // }
+}
+
+.category-wrapper {
+  position: relative;
+  text-align: left;
+  width: 100%;
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: -1.5rem;
+    text-align: center;
+    transform: none;
+  }
+}
+
+.category {
+  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--wpe--color--black);
+  background-color: var(--wpe--color--white);
+  padding: 0.25rem 0.75rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: fit-content;
+
+  @media (min-width: $breakpoint-small) {
+    transform: none;
+  }
+}
+
+.caption {
+  width: fit-content;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.stand-first-wrapper {
+  position: relative;
+  text-align: left;
+
+  @media (min-width: $breakpoint-small) {
+    transform: none;
+  }
+}
+
+.stand-first {
+  font-family: var(--font--eb--garamond);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--wpe--color--white);
+  padding: 0.25rem 0;
+  white-space: normal;
+  width: 100%;
+  line-height: 1.2;
+  font-size: 1.125rem;
+
+  @media (min-width: $breakpoint-small) {
+    transform: none;
+    font-size: 1.25rem;
+  }
+}
+
+.bottom-gradient {
+  bottom: 0;
+  position: absolute;
+  text-align: center;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%);
+}

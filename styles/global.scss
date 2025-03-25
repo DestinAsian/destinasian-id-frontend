@@ -1,0 +1,15 @@
+// Global styles
+// These styles are available on all pages.
+// If a component has it's own styles, they can be found within the component's respective directory.
+
+@import "breakpoints";
+@import "css-variables";
+@import "base";
+@import "utilities";
+@import "animation";
+@import "variables";
+@import "fonts/typography";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

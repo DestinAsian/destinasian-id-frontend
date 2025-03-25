@@ -1,0 +1,70 @@
+// CSS Variables
+// See `_breakpoints.scss` for media query breakpoint variables.
+
+:root {
+  // Color Definitions.
+  --wpe--color--black: #000000;
+  --wpe--color--deep--black: #1e1e21;
+  --wpe--color--black--cow: #494949;
+  --wpe--color--light--grey: #d9d9d9;
+  --wpe--color--jet--grey: #363432;
+  --wpe--color--grey: #929292;
+  --wpe--color--white: #fff;
+  --wpe--color--white--smoke: #f5f5f5;
+  --wpe--color--transparent--white: #ffffff80;
+  --wpe--color--offwhite: #f7f7f7;
+  --wpe--color--neutral: rgba(175, 184, 193, 0.2);
+  --wpe--color--slate: #0a2540;
+  --wpe--color--purple: #635bff;
+  --wpe--color--blue: #197cc3;
+  --wpe--color--light--blue: #e3efef;
+  --wpe--color--dark--blue: #3b3f62;
+  --wpe--color--cyan: #c3e7e5;
+  --wpe--color--green: rgba(188, 228, 226, 0.6);
+  --wpe--color--teal: #dbf2f1;
+  --wpe--color--light--green: #d8eae9;
+  --wpe--color--red: #f94700;
+  --wpe--color--orange: #fa4700;
+  --wpe--color--orange--yellow: #ebb323;
+  --wpe--color--yellow: #daa520;
+  --wpe--color--light--yellow: #fdf5e0;
+  --wpe--color--cream: #f7e3b1;
+  --wpe--color--dark--sand: #eab421;
+
+  // Color Assignments.
+  --wpe--color--accent: var(--wpe--color--blue);
+  --wpe--color--accent--dark: var(--wpe--color--slate);
+  --wpe--color--title: var(--wpe--color--black);
+  --wpe--link--color: var(--wpe--color--accent);
+  --wpe--code--color: var(--wpe--color--black);
+  --wpe--code--background-color: var(--wpe--color--neutral);
+  --wpe--header--color: var(--wpe--color--black);
+  --wpe--header--background-color: var(--wpe--color--white);
+  --wpe--navigation-menu--color: var(--wpe--color--black);
+  --wpe--navigation-menu--color--hover: var(--wpe--color--accent);
+  --wpe--navigation-menu--background-color: transparent;
+  --wpe--dropdown--background-color: var(--wpe--color--white);
+  --wpe--main--color: var(--wpe--color--black);
+  --wpe--main--background-color: var(--wpe--color--white--smoke);
+  --wpe--hc--background-color: var(--wpe--color--light--yellow);
+  --wpe--footer--color: var(--wpe--color--black);
+  --wpe--footer--background-color: var(--wpe--color--white);
+  --wpe--heading--color: var(--wpe--color--accent);
+  --wpe--border--light: 1px solid var(--wpe--color--neutral);
+  --wpe--border--extra-light: 1px solid var(--wpe--color--offwhite);
+
+  // Type.
+  --wpe--font-weight--light: 300;
+  --wpe--font-weight--medium: 400;
+  --wpe--font-weight--bold: 700;
+
+  // Spacing.
+  --wpe--content--max-width: 620px;
+  --wpe--section--padding-y: 3rem;
+  --wpe--container--padding-x: 15px;
+  --wpe--container--max-width: 1000px;
+
+  // Shadows.
+  --wpe--shadow--large: 0 50px 120px -40px rgba(150, 150, 150, 0.2),
+    0 20px 60px -30px rgba(0, 0, 0, 0.5);
+}

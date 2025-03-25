@@ -1,0 +1,108 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.component {
+  display: block;
+  background-color: var(--wpe--color--deep--black);
+  color: var(--wpe--color--black);
+  position: relative;
+  overflow: hidden;
+  max-width: 100vw;
+  font-family: 'ChunkFive-Regular';
+  font-weight: 400;
+  letter-spacing: 0.08rem;
+  padding: 4.5rem 0 0;
+  top: 21rem;
+  height: fit-content;
+
+  @media (min-width: $breakpoint-extra-small) {
+    max-width: 700px;
+    padding: 5rem 5rem 2rem;
+    margin: 0 auto;
+    top: 0;
+  }
+}
+
+.defaultClass {
+  padding: 1rem 0 0;
+  height: fit-content;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding: 5rem 5rem 0 3.5rem;
+  }
+}
+
+.bothClass {
+  padding: 1rem 0 0;
+  height: fit-content;
+  border-top: 1px solid var(--wpe--color--white--smoke);
+
+  @media (min-width: $breakpoint-extra-small) {
+    border-top: none;
+    padding: 10rem 5rem 0 3.5rem;
+  }
+}
+
+.parentClass {
+  height: fit-content;
+
+  @media (min-width: $breakpoint-extra-small) {
+    width: 60%;
+    max-width: 100%;
+    min-height: 4.5rem;
+    padding: 0.5rem 1rem 0.5rem 2rem;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 47;
+    transform: translate(0, 94vh);
+  }
+}
+
+.header-wrapper {
+  display: flex;
+  margin: 0 auto;
+  padding: 0 1rem 1rem;
+  flex-direction: row;
+  row-gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (min-width: $breakpoint-extra-small) {
+    row-gap: 0.5rem;
+    padding: 0;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.category {
+  color: var(--wpe--color--black);
+  background-color: var(--wpe--color--white--smoke);
+  font-size: 0.5rem;
+  // line-height: 1.2;
+  // text-transform: uppercase;
+  text-align: center;
+  padding: 0.4rem;
+  width: fit-content;
+  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-weight: 700;
+  letter-spacing: normal;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 0.6rem;
+  }
+}
+
+.title {
+  font-size: 2rem;
+  // line-height: 1.2;
+  // text-transform: uppercase;
+  color: var(--wpe--color--white--smoke);
+  text-align: left;
+  text-align-last: left;
+  letter-spacing: normal;
+  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-weight: 700;
+}

@@ -1,0 +1,20 @@
+@import 'styles/breakpoints';
+
+.component {
+  // padding-right: var(--wpe--container--padding-x);
+  // padding-left: var(--wpe--container--padding-x);
+  margin-right: 0;
+  margin-left: 0;
+  width: 100vw;
+  background-color: var(--wpe--color--black);
+  padding: 0 0 2rem;
+  // padding: 0 0 7rem;
+
+  // @media (min-width: $breakpoint-extra-small) {
+  //   padding: 0 0 2rem;
+  // }
+
+  * {
+    color: var(--wpe--color--white);
+  }
+}

@@ -1,0 +1,194 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.component {
+  background-color: var(--wpe--main--background-color);
+  position: relative;
+  overflow: hidden;
+  line-height: 1;
+  // border-bottom: 1px solid var(--wpe--color--black--cow);
+}
+
+.container-wrapper {
+  width: 100vw;
+  margin: 0 auto;
+  padding: 0;
+
+  @media (min-width: $breakpoint-small) {
+    margin: 0 auto 1rem;
+    // max-width: 700px;
+    // padding: 0;
+  }
+}
+
+.text,
+.image {
+  text-align: center;
+}
+
+.text {
+  width: 100%;
+  padding: 0;
+  position: relative;
+  z-index: 1; // Pull text to the foreground to sit above <FeaturedImage />.
+
+  // @media (min-width: $breakpoint-small) {
+  //   padding: 0;
+  // }
+}
+
+.title,
+.parent {
+  font-family: 'Unit Slab Pro Black';
+  line-height: 1.2;
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--wpe--color--title);
+  text-transform: uppercase;
+  padding: 0.5rem 0;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1.75rem;
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin: 0 auto;
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    font-size: 2.5rem;
+  }
+}
+
+.byline {
+  font-weight: var(--wpe--font-weight--medium);
+  font-size: 1.2rem;
+}
+
+// Slider caption
+.image,
+.image-slider {
+  margin: 0;
+  width: 100%;
+  position: relative;
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  figcaption {
+    background-color: var(--wpe--color--white--smoke);
+    color: var(--wpe--color--grey);
+    height: 2rem;
+    position: relative;
+    top: 100%;
+    transform: translateY(-100%);
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    line-height: 1;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 1rem;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    @media (min-width: $breakpoint-large) {
+      padding: 0 1rem;
+    }
+
+    .caption {
+      width: 100%;
+      max-width: calc(1400px + 2rem);
+      text-align: right;
+    }
+  }
+}
+
+.image-slider {
+  height: 100%;
+}
+
+.image {
+  aspect-ratio: 3 / 2;
+  margin-bottom: 1rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    height: 60vh;
+  }
+
+  // Image only sub guides caption
+  .image-caption {
+    color: var(--wpe--color--grey);
+    height: 2rem;
+    position: relative;
+    height: 100%;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    line-height: 1;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 1rem;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    .caption-wrapper {
+      background-color: var(--wpe--color--white--smoke);
+      padding: 0.5rem 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .caption {
+      width: 100%;
+      max-width: calc(1400px + 2rem);
+      text-align: right;
+      padding: 0 1rem;
+
+      @media (min-width: calc(1400px + 2rem)) {
+        padding: 0;
+      }
+    }
+  }
+}
+
+.description {
+  padding: 1rem;
+  color: var(--wpe--color--black);
+  text-align: left;
+  font-size: 1.125rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1.25rem;
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin: 0 auto;
+    max-width: 700px;
+    padding: 1rem 0;
+  }
+
+  a {
+    font-family: 'Chronicle Display A', 'Chronicle Display B';
+    font-weight: 600;
+    color: var(--wpe--link--color);
+    text-decoration: underline;
+
+    &:hover,
+    &:focus {
+      color: var(--wpe--link--color);
+      text-decoration: none;
+    }
+  }
+}

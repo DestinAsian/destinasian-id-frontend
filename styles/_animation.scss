@@ -1,0 +1,129 @@
+.bounce {
+    animation-timing-function: cubic-bezier(.14, .85, .82, 1.06);
+}
+
+.linear {
+    animation-timing-function: linear;
+}
+
+.delay-50 {
+    animation-delay: 0.05s;
+}
+
+.delay-100 {
+    animation-delay: 0.10s;
+}
+
+.delay-250 {
+    animation-delay: 0.25s;
+}
+
+.delay-350 {
+    animation-delay: 0.35s;
+}
+
+.delay-500 {
+    animation-delay: 0.5s;
+}
+.delay-1000 {
+    animation-delay: 1s;
+}
+
+.delay-750 {
+    animation-delay: 0.75s;
+}
+
+/* top to botttom */
+.sliding-ttb {
+    animation-name: sliding-ttb;
+    animation-duration: 700ms;
+    animation-fill-mode: forwards;
+}
+
+/* botttom to top */
+.sliding-btt {
+    animation-name: sliding-btt;
+    animation-duration: 700ms;
+    animation-fill-mode: forwards;
+}
+
+/* left to right */
+.sliding-ltr {
+    animation-name: sliding-ltr;
+    animation-duration: 700ms;
+
+    animation-fill-mode: forwards;
+}
+
+/* right to left */
+.sliding-rtl {
+    animation-name: sliding-rtl;
+    animation-duration: 700ms;
+
+    animation-fill-mode: forwards;
+}
+
+.slide-ttb {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+.slide-btt {
+    clip-path: polygon(0 0%, 100% 0%, 100% 0%, 0 0%);
+}
+
+.slide-ltr {
+    clip-path: polygon(100% 0, 100% 100%, 100% 100%, 100% 0);
+}
+
+.slide-rtl {
+    clip-path: polygon(0% 100%, 0% 0%, 0% 0%, 0% 100%);
+}
+
+
+@keyframes sliding-ttb {
+    0% {
+        transform: translateY(-100%);
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    }
+
+    100% {
+        transform: translateY(0%);
+        clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%);
+    }
+}
+
+@keyframes sliding-btt {
+    0% {
+        transform: translateY(100%);
+        clip-path: polygon(0 0%, 100% 0%, 100% 0%, 0 0%);
+    }
+
+    100% {
+        transform: translateY(0%);
+        clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%);
+    }
+}
+
+@keyframes sliding-ltr {
+    0% {
+        transform: translateX(-100%);
+        clip-path: polygon(100% 0, 100% 100%, 100% 100%, 100% 0);
+    }
+
+    100% {
+        transform: translateX(0%);
+        clip-path: polygon(100% 0, 100% 100%, 0% 100%, 0 0);
+    }
+}
+
+@keyframes sliding-rtl {
+    0% {
+        transform: translateX(100%);
+        clip-path: polygon(0% 100%, 0% 0%, 0% 0%, 0% 100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+        clip-path: polygon(0% 100%, 0% 0%, 100% 0%, 100% 100%);
+    }
+}

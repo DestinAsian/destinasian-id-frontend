@@ -1,0 +1,200 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.adv-component {
+  width: 100vw;
+  line-height: 1;
+  background-color: var(--wpe--color--white);
+  padding-top: 5rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding-top: 8rem;
+  }
+}
+
+.hc-component {
+  width: 100vw;
+  padding-bottom: 2rem;
+  line-height: 1;
+  background-color: var(--wpe--color--white);
+}
+
+.main-wrapper {
+  margin: 0 auto;
+  padding: 1rem 1rem;
+  display: flex;
+  align-items: flex-start;
+
+  @media (min-width: $breakpoint-extra-small) {
+    max-width: 700px;
+    padding: 1rem 0;
+  }
+}
+
+.left-wrapper {
+  width: 30%;
+  display: block;
+}
+
+.right-wrapper {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.3rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    row-gap: 0.5rem;
+  }
+}
+
+.content-wrapper {
+  padding-left: 4vw;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding-left: 2vw;
+  }
+}
+
+.hc-content-wrapper {
+  padding-left: 4vw;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding-left: 2vw;
+  }
+}
+
+.content-wrapper-image {
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+
+  figure {
+    position: relative;
+  }
+
+  .border-right-adv {
+    border-right: 0.5rem solid var(--wpe--color--light--green);
+  }
+
+  .border-right-hc {
+    border-right: 0.5rem solid var(--wpe--color--yellow);
+  }
+}
+
+figure.image {
+  width: 100%;
+  height: 7rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    height: 10rem;
+  }
+
+  span,
+  img {
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+  }
+}
+
+.sub-title-adv {
+  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-weight: 500;
+  line-height: 1.6;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  color: rgba(0, 0, 0, 0.5);
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 0.8rem;
+  }
+}
+
+.honors-circle {
+  font-family: 'Gotham A', 'Gotham B';
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 0.6rem;
+  color: var(--wpe--color--yellow);
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 0.8rem;
+  }
+}
+
+.title {
+  font-family: var(--font--eb--garamond);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1.5rem;
+  }
+}
+
+.hc-title {
+  font-family: 'Hoefler Text A', 'Hoefler Text B';
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-transform: none;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1.5rem;
+  }
+
+  :first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.excerpt {
+  padding: 0 0 0.25rem;
+
+  p {
+    font-family: 'Ringside Regular A', 'Ringside Regular B';
+    font-weight: 500;
+    line-height: 1.6;
+    font-size: 0.65rem;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 0.95rem;
+    }
+  }
+
+  a {
+    display: none;
+  }
+}
+
+.hc-excerpt {
+  padding: 0 0 0.25rem;
+
+  p {
+    font-family: 'Gotham A', 'Gotham B';
+    font-weight: 500;
+    line-height: 1.6;
+    font-size: 0.65rem;
+
+    @media (min-width: $breakpoint-extra-small) {
+      font-size: 0.95rem;
+    }
+  }
+
+  a {
+    display: none;
+  }
+}
+
+.border-divider {
+  width: calc(-2rem + 100vw);
+  border-bottom: 0.5rem solid;
+  margin: 0 auto;
+  padding: 1rem 1rem 0;
+
+  @media (min-width: $breakpoint-extra-small) {
+    max-width: 700px;
+    padding: 1rem 0 0;
+  }
+}

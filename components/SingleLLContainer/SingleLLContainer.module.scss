@@ -1,0 +1,22 @@
+@import 'styles/breakpoints';
+
+.component {
+  margin-right: 0;
+  margin-left: 0;
+  width: 100vw;
+  background-color: var(--wpe--color--black);
+  padding: 0 0 2rem;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  min-height: 100vh;
+
+  * {
+    color: var(--wpe--color--white);
+  }
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
