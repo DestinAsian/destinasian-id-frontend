@@ -6,11 +6,7 @@ export const GetMenus = gql`
   query GetMenus(
     $first: Int
     $headerLocation: MenuLocationEnum
-    $secondHeaderLocation: MenuLocationEnum
-    $thirdHeaderLocation: MenuLocationEnum
-    $fourthHeaderLocation: MenuLocationEnum
-    $fifthHeaderLocation: MenuLocationEnum
-    $featureHeaderLocation: MenuLocationEnum
+    $footerLocation: MenuLocationEnum
   ) {
     headerMenuItems: menuItems(
       where: { location: $headerLocation }
@@ -20,40 +16,8 @@ export const GetMenus = gql`
         ...NavigationMenuItemFragment
       }
     }
-    secondHeaderMenuItems: menuItems(
-      where: { location: $secondHeaderLocation }
-      first: $first
-    ) {
-      nodes {
-        ...NavigationMenuItemFragment
-      }
-    }
-    thirdHeaderMenuItems: menuItems(
-      where: { location: $thirdHeaderLocation }
-      first: $first
-    ) {
-      nodes {
-        ...NavigationMenuItemFragment
-      }
-    }
-    fourthHeaderMenuItems: menuItems(
-      where: { location: $fourthHeaderLocation }
-      first: $first
-    ) {
-      nodes {
-        ...NavigationMenuItemFragment
-      }
-    }
-    fifthHeaderMenuItems: menuItems(
-      where: { location: $fifthHeaderLocation }
-      first: $first
-    ) {
-      nodes {
-        ...NavigationMenuItemFragment
-      }
-    }
-    featureHeaderMenuItems: menuItems(
-      where: { location: $featureHeaderLocation }
+    footerMenuItems: menuItems(
+      where: { location: $footerLocation }
       first: $first
     ) {
       nodes {
