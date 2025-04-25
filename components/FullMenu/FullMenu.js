@@ -93,6 +93,7 @@ export default function FullMenu({
       </>
     )
   }
+  console.log('latestStories:', latestStories)
 
   return (
     <div className={cx('component')}>
@@ -150,7 +151,8 @@ export default function FullMenu({
                 menuItems={featureMenuItems}
               />
             </nav>
-            {latestStories?.length !== 0 && (
+
+            {Array.isArray(latestStories) && latestStories.length > 0 && (
               <nav className={cx('latest-stories')}>
                 <ul className={cx('menu-name')}>{'Latest Travel Stories'}</ul>
                 <ul className={cx('menu-content')}>
@@ -166,7 +168,24 @@ export default function FullMenu({
                 </ul>
               </nav>
             )}
-            {luxuryTravelPosts?.length !== 0 && (
+
+            {/* {latestStories?.length !== 0 && (
+              <nav className={cx('latest-stories')}>
+                <ul className={cx('menu-name')}>{'Latest Travel Stories'}</ul>
+                <ul className={cx('menu-content')}>
+                  {latestStories.slice(0, visiblePosts).map((post) => (
+                    <li key={post?.id}>
+                      {post?.uri && (
+                        <Link href={post?.uri} className={cx('menu-item')}>
+                          {post?.title}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )} */}
+            {/* {luxuryTravelPosts?.length !== 0 && (
               <nav className={cx('luxury-travel')}>
                 {featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
                   ?.menuName && (
@@ -187,7 +206,7 @@ export default function FullMenu({
                   ))}
                 </ul>
               </nav>
-            )}
+            )} */}
             {/* <nav className={cx('feature-video')}>
               <ul className={cx('menu-name')}>
                 {featureMenuItems[0]?.menu?.node?.videosThumbnailMenu

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 // DAMG Logo
-import daiLogo from '../../assets/logo/DAI_logo.png'
+import daiLogo from '../../assets/logo/destinasian-indo-logo.png'
 import damanLogo from '../../assets/logo/DAMAN_logo.png'
 import prsLogo from '../../assets/logo/Prestige_logo.png'
 import scop3Logo from '../../assets/logo/Scop3_logo.png'
