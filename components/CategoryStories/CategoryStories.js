@@ -30,10 +30,10 @@ export default function CategoryStories(categoryUri) {
   // Declare state for banner ads
   const [ROSAdsArray, setROSAdsArray] = useState([])
   const [SpecificAdsArray, setSpecificAdsArray] = useState([])
-  const [AdvertorialArray, setAdvertorialArray] = useState([])
+  // const [AdvertorialArray, setAdvertorialArray] = useState([])
   // Post per fetching
   const postsPerPage = 4
-  const bannerPerPage = 20
+  // const bannerPerPage = 20
 
   const uri = categoryUri?.categoryUri
   const pinPosts = categoryUri?.pinPosts
@@ -87,225 +87,225 @@ export default function CategoryStories(categoryUri) {
     }
   }
 
-  // Get ROS Banner
-  const { data: bannerROSData, error: bannerROSError } = useQuery(
-    GetROSBannerAds,
-    {
-      variables: {
-        first: bannerPerPage,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
+  // // Get ROS Banner
+  // const { data: bannerROSData, error: bannerROSError } = useQuery(
+  //   GetROSBannerAds,
+  //   {
+  //     variables: {
+  //       first: bannerPerPage,
+  //     },
+  //     fetchPolicy: 'network-only',
+  //     nextFetchPolicy: 'cache-and-network',
+  //   },
+  // )
 
-  if (bannerROSError) {
-    return <pre>{JSON.stringify(error)}</pre>
-  }
+  // if (bannerROSError) {
+  //   return <pre>{JSON.stringify(error)}</pre>
+  // }
 
-  let bannerVariable = {
-    first: bannerPerPage,
-    search: null,
-  }
+  // let bannerVariable = {
+  //   first: bannerPerPage,
+  //   search: null,
+  // }
 
-  // Advertorial Var
-  let queryVariables = {
-    search: null,
-  }
+  // // Advertorial Var
+  // let queryVariables = {
+  //   search: null,
+  // }
 
-  // Main Category
-  if (!parent) {
-    // Modify the variables based on the condition
-    bannerVariable = {
-      search: name,
-    }
-    queryVariables = {
-      search: name,
-    }
-  }
+  // // Main Category
+  // if (!parent) {
+  //   // Modify the variables based on the condition
+  //   bannerVariable = {
+  //     search: name,
+  //   }
+  //   queryVariables = {
+  //     search: name,
+  //   }
+  // }
 
-  // Sub Category
-  if (children?.edges?.length !== 0 && parent !== (null || undefined)) {
-    // Modify the variables based on the condition
-    bannerVariable = {
-      search: name,
-    }
-    queryVariables = {
-      search: name,
-    }
-  }
+  // // Sub Category
+  // if (children?.edges?.length !== 0 && parent !== (null || undefined)) {
+  //   // Modify the variables based on the condition
+  //   bannerVariable = {
+  //     search: name,
+  //   }
+  //   queryVariables = {
+  //     search: name,
+  //   }
+  // }
 
-  // Child of Sub Category
-  if (children?.edges?.length === 0 && parent !== (null || undefined)) {
-    // Modify the variables based on the condition
-    bannerVariable = {
-      search: parent,
-    }
-    queryVariables = {
-      search: parent,
-    }
-  }
+  // // Child of Sub Category
+  // if (children?.edges?.length === 0 && parent !== (null || undefined)) {
+  //   // Modify the variables based on the condition
+  //   bannerVariable = {
+  //     search: parent,
+  //   }
+  //   queryVariables = {
+  //     search: parent,
+  //   }
+  // }
 
-  // Specific Category with no sub category
-  if (name === ('Trade Talk' || 'Airline News' || 'Travel News')) {
-    // Modify the variables based on the condition
-    bannerVariable = {
-      search: name,
-    }
-  }
+  // // Specific Category with no sub category
+  // if (name === ('Trade Talk' || 'Airline News' || 'Travel News')) {
+  //   // Modify the variables based on the condition
+  //   bannerVariable = {
+  //     search: name,
+  //   }
+  // }
 
-  // Get Specific Banner
-  const { data: bannerSpecificData, error: bannerSpecificError } = useQuery(
-    GetSpecificBannerAds,
-    {
-      variables: bannerVariable,
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
+  // // Get Specific Banner
+  // const { data: bannerSpecificData, error: bannerSpecificError } = useQuery(
+  //   GetSpecificBannerAds,
+  //   {
+  //     variables: bannerVariable,
+  //     fetchPolicy: 'network-only',
+  //     nextFetchPolicy: 'cache-and-network',
+  //   },
+  // )
 
-  if (bannerSpecificError) {
-    return <pre>{JSON.stringify(error)}</pre>
-  }
+  // if (bannerSpecificError) {
+  //   return <pre>{JSON.stringify(error)}</pre>
+  // }
 
-  // Get Advertorial Stories
-  const { data: advertorialsData, error: advertorialsError } = useQuery(
-    GetAdvertorialStories,
-    {
-      variables: queryVariables, // Use the modified variables
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
+  // // Get Advertorial Stories
+  // const { data: advertorialsData, error: advertorialsError } = useQuery(
+  //   GetAdvertorialStories,
+  //   {
+  //     variables: queryVariables, // Use the modified variables
+  //     fetchPolicy: 'network-only',
+  //     nextFetchPolicy: 'cache-and-network',
+  //   },
+  // )
 
-  if (advertorialsError) {
-    return <pre>{JSON.stringify(error)}</pre>
-  }
-
-  // Function to shuffle the banner ads and store them in state
-  // ROS Banner
-  useEffect(() => {
-    const shuffleBannerAds = () => {
-      const bannerAdsArrayObj = Object.values(
-        bannerROSData?.bannerAds?.edges || [],
-      )
-
-      // Separate shuffled banner ads with <img> tags from those without
-      const bannerROSAdsWithImg = bannerAdsArrayObj.filter(
-        (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
-      )
-
-      // Shuffle only the otherBannerAds array
-      const ROSBannerAds = shuffleArray(bannerROSAdsWithImg)
-
-      // Concatenate the arrays with pinned ads first and shuffled other banner ads
-      const shuffledBannerAdsArray = [...ROSBannerAds]
-
-      setROSAdsArray(shuffledBannerAdsArray)
-    }
-
-    // Shuffle the banner ads when the component mounts
-    shuffleBannerAds()
-
-    // Shuffle the banner ads every 10 seconds
-    const shuffleInterval = setInterval(() => {
-      shuffleBannerAds()
-    }, 60000) // 10000 milliseconds = 10 seconds
-
-    // Cleanup the interval when the component unmounts
-    return () => {
-      clearInterval(shuffleInterval)
-    }
-  }, [bannerROSData]) // Use bannerROSData as a dependency to trigger shuffling when new data arrives
+  // if (advertorialsError) {
+  //   return <pre>{JSON.stringify(error)}</pre>
+  // }
 
   // Function to shuffle the banner ads and store them in state
-  // Specific Banner
-  useEffect(() => {
-    const shuffleBannerAds = () => {
-      const bannerAdsArrayObj = Object.values(
-        bannerSpecificData?.bannerAds?.edges || [],
-      )
+  // // ROS Banner
+  // useEffect(() => {
+  //   const shuffleBannerAds = () => {
+  //     const bannerAdsArrayObj = Object.values(
+  //       bannerROSData?.bannerAds?.edges || [],
+  //     )
 
-      // Separate shuffled banner ads with <img> tags from those without
-      const bannerSpecificAdsWithImg = bannerAdsArrayObj.filter(
-        (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
-      )
+  //     // Separate shuffled banner ads with <img> tags from those without
+  //     const bannerROSAdsWithImg = bannerAdsArrayObj.filter(
+  //       (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
+  //     )
 
-      // Shuffle only the otherBannerAds array
-      const SpecificBannerAds = shuffleArray(bannerSpecificAdsWithImg)
+  //     // Shuffle only the otherBannerAds array
+  //     const ROSBannerAds = shuffleArray(bannerROSAdsWithImg)
 
-      // Concatenate the arrays with pinned ads first and shuffled other banner ads
-      const shuffledBannerAdsArray = [...SpecificBannerAds]
+  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
+  //     const shuffledBannerAdsArray = [...ROSBannerAds]
 
-      setSpecificAdsArray(shuffledBannerAdsArray)
-    }
+  //     setROSAdsArray(shuffledBannerAdsArray)
+  //   }
 
-    // Shuffle the banner ads when the component mounts
-    shuffleBannerAds()
+  //   // Shuffle the banner ads when the component mounts
+  //   shuffleBannerAds()
 
-    // Shuffle the banner ads every 10 seconds
-    const shuffleInterval = setInterval(() => {
-      shuffleBannerAds()
-    }, 60000) // 10000 milliseconds = 10 seconds
+  //   // Shuffle the banner ads every 10 seconds
+  //   const shuffleInterval = setInterval(() => {
+  //     shuffleBannerAds()
+  //   }, 60000) // 10000 milliseconds = 10 seconds
 
-    // Cleanup the interval when the component unmounts
-    return () => {
-      clearInterval(shuffleInterval)
-    }
-  }, [bannerSpecificData]) // Use bannerROSData as a dependency to trigger shuffling when new data arrives
+  //   // Cleanup the interval when the component unmounts
+  //   return () => {
+  //     clearInterval(shuffleInterval)
+  //   }
+  // }, [bannerROSData]) // Use bannerROSData as a dependency to trigger shuffling when new data arrives
 
-  // Advertorial Stories
-  useEffect(() => {
-    const shuffleAdvertorialPost = () => {
-      // Create a Set to store unique databaseId values
-      const uniqueDatabaseIds = new Set()
+  // // Function to shuffle the banner ads and store them in state
+  // // Specific Banner
+  // useEffect(() => {
+  //   const shuffleBannerAds = () => {
+  //     const bannerAdsArrayObj = Object.values(
+  //       bannerSpecificData?.bannerAds?.edges || [],
+  //     )
 
-      // Initialize an array to store unique posts
-      const contentAdvertorials = []
+  //     // Separate shuffled banner ads with <img> tags from those without
+  //     const bannerSpecificAdsWithImg = bannerAdsArrayObj.filter(
+  //       (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
+  //     )
 
-      // Loop through all the contentNodes posts
-      advertorialsData?.tags?.edges?.forEach((contentNodes) => {
-        {
-          contentNodes?.node?.contentNodes?.edges?.length !== 0 &&
-            contentNodes.node?.contentNodes?.edges.forEach((post) => {
-              const { databaseId } = post.node
+  //     // Shuffle only the otherBannerAds array
+  //     const SpecificBannerAds = shuffleArray(bannerSpecificAdsWithImg)
 
-              // Check if the databaseId is unique (not in the Set)
-              if (!uniqueDatabaseIds.has(databaseId)) {
-                uniqueDatabaseIds.add(databaseId) // Add the databaseId to the Set
-                contentAdvertorials.push(post.node) // Push the unique post to the array
-              }
-            })
-        }
-      })
+  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
+  //     const shuffledBannerAdsArray = [...SpecificBannerAds]
 
-      // Sort contentNodesPosts array by date
-      contentAdvertorials.sort((a, b) => {
-        // Assuming your date is stored in 'date' property of the post objects
-        const dateA = new Date(a.date)
-        const dateB = new Date(b.date)
+  //     setSpecificAdsArray(shuffledBannerAdsArray)
+  //   }
 
-        // Compare the dates
-        return dateB - dateA
-      })
+  //   // Shuffle the banner ads when the component mounts
+  //   shuffleBannerAds()
 
-      // const advertorialArray = Object.values(contentAdvertorials || [])
+  //   // Shuffle the banner ads every 10 seconds
+  //   const shuffleInterval = setInterval(() => {
+  //     shuffleBannerAds()
+  //   }, 60000) // 10000 milliseconds = 10 seconds
 
-      // Shuffle only the otherBannerAds array
-      const shuffleAdvertorialPost = shuffleArray(contentAdvertorials)
+  //   // Cleanup the interval when the component unmounts
+  //   return () => {
+  //     clearInterval(shuffleInterval)
+  //   }
+  // }, [bannerSpecificData]) // Use bannerROSData as a dependency to trigger shuffling when new data arrives
 
-      // Concatenate the arrays with pinned ads first and shuffled other banner ads
-      const shuffledAdvertorialArray = [...shuffleAdvertorialPost]
+  // // Advertorial Stories
+  // useEffect(() => {
+  //   const shuffleAdvertorialPost = () => {
+  //     // Create a Set to store unique databaseId values
+  //     const uniqueDatabaseIds = new Set()
 
-      // Get the last two elements
-      const lastTwoAdvertorials = shuffledAdvertorialArray.slice(-2)
+  //     // Initialize an array to store unique posts
+  //     const contentAdvertorials = []
 
-      setAdvertorialArray(lastTwoAdvertorials)
-    }
+  //     // Loop through all the contentNodes posts
+  //     advertorialsData?.tags?.edges?.forEach((contentNodes) => {
+  //       {
+  //         contentNodes?.node?.contentNodes?.edges?.length !== 0 &&
+  //           contentNodes.node?.contentNodes?.edges.forEach((post) => {
+  //             const { databaseId } = post.node
 
-    // Shuffle the banner ads when the component mounts
-    shuffleAdvertorialPost()
-  }, [advertorialsData])
+  //             // Check if the databaseId is unique (not in the Set)
+  //             if (!uniqueDatabaseIds.has(databaseId)) {
+  //               uniqueDatabaseIds.add(databaseId) // Add the databaseId to the Set
+  //               contentAdvertorials.push(post.node) // Push the unique post to the array
+  //             }
+  //           })
+  //       }
+  //     })
+
+  //     // Sort contentNodesPosts array by date
+  //     contentAdvertorials.sort((a, b) => {
+  //       // Assuming your date is stored in 'date' property of the post objects
+  //       const dateA = new Date(a.date)
+  //       const dateB = new Date(b.date)
+
+  //       // Compare the dates
+  //       return dateB - dateA
+  //     })
+
+  //     // const advertorialArray = Object.values(contentAdvertorials || [])
+
+  //     // Shuffle only the otherBannerAds array
+  //     const shuffleAdvertorialPost = shuffleArray(contentAdvertorials)
+
+  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
+  //     const shuffledAdvertorialArray = [...shuffleAdvertorialPost]
+
+  //     // Get the last two elements
+  //     const lastTwoAdvertorials = shuffledAdvertorialArray.slice(-2)
+
+  //     setAdvertorialArray(lastTwoAdvertorials)
+  //   }
+
+  //   // Shuffle the banner ads when the component mounts
+  //   shuffleAdvertorialPost()
+  // }, [advertorialsData])
 
   // Function to fetch more posts
   const fetchMorePosts = () => {
@@ -376,25 +376,25 @@ export default function CategoryStories(categoryUri) {
     [],
   )
 
-  // Concatenate the arrays to place ads specificAds first
-  const sortedBannerAdsArray = [...SpecificAdsArray, ...ROSAdsArray].reduce(
-    (uniqueAds, ad) => {
-      if (
-        !uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id) &&
-        !/(focus on|spotlight on)/i.test(ad?.node?.title || '')
-      ) {
-        uniqueAds.push(ad)
-      }
-      return uniqueAds
-    },
-    [],
-  )
+  // // Concatenate the arrays to place ads specificAds first
+  // const sortedBannerAdsArray = [...SpecificAdsArray, ...ROSAdsArray].reduce(
+  //   (uniqueAds, ad) => {
+  //     if (
+  //       !uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id) &&
+  //       !/(focus on|spotlight on)/i.test(ad?.node?.title || '')
+  //     ) {
+  //       uniqueAds.push(ad)
+  //     }
+  //     return uniqueAds
+  //   },
+  //   [],
+  // )
 
-  // Declare 2 Advertorial Post
-  const getAdvertorialPost = [...AdvertorialArray]
-  const numberOfAdvertorial = AdvertorialArray.length
+  // // Declare 2 Advertorial Post
+  // const getAdvertorialPost = [...AdvertorialArray]
+  // const numberOfAdvertorial = AdvertorialArray.length
 
-  const numberOfBannerAds = sortedBannerAdsArray.length
+  // const numberOfBannerAds = sortedBannerAdsArray.length
 
   return (
     <div className={cx('component')}>
@@ -424,7 +424,7 @@ export default function CategoryStories(categoryUri) {
               />
             </div>
             {/* Show 1st banner after 2 posts and then every 4 posts */}
-            {(index - 1) % 4 === 0 && (
+            {/* {(index - 1) % 4 === 0 && (
               <div className={cx('banner-ad-wrapper')}>
                 <ModuleAd
                   bannerAd={
@@ -433,10 +433,10 @@ export default function CategoryStories(categoryUri) {
                   }
                 />
               </div>
-            )}
-            {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
+            )} */}
                 {/* Advertorial Stories */}
+            {/* {index - 1 === 2 && (
+              <div className={cx('advertorial-wrapper')}>
                 {numberOfAdvertorial !== 0 && (
                   <AdvertorialPostTwoColumns
                     title={getAdvertorialPost[0]?.title}
@@ -446,10 +446,10 @@ export default function CategoryStories(categoryUri) {
                   />
                 )}
               </div>
-            )}
-            {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
+            )} */}
                 {/* Advertorial Stories */}
+            {/* {index - 1 === 2 && (
+              <div className={cx('advertorial-wrapper')}>
                 {numberOfAdvertorial !== 0 && numberOfAdvertorial > 1 && (
                   <AdvertorialPostTwoColumns
                     title={getAdvertorialPost[1]?.title}
@@ -459,7 +459,7 @@ export default function CategoryStories(categoryUri) {
                   />
                 )}
               </div>
-            )}
+            )} */}
           </React.Fragment>
         ))}
       {mergedPosts?.length === 0 && (

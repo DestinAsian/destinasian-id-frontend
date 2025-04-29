@@ -65,10 +65,13 @@ export default function PartnerContent({ parentName }) {
     },
   )
 
+  // if (advertorialsError) {
+  //   return <pre>{JSON.stringify(error)}</pre>
+  // }
   if (advertorialsError) {
-    return <pre>{JSON.stringify(error)}</pre>
+    return <pre>{JSON.stringify(advertorialsError)}</pre>
   }
-
+  
   // Get HC Stories
   const { data: honorsCirclesData, error: honorsCirclesError } = useQuery(
     GetHCStories,
@@ -83,45 +86,45 @@ export default function PartnerContent({ parentName }) {
     return <pre>{JSON.stringify(error)}</pre>
   }
 
-  // Advertorial Stories
-  useEffect(() => {
-    const shuffleAdvertorialPost = () => {
-      // Create a Set to store unique databaseId values
-      const uniqueDatabaseIds = new Set()
+  // // Advertorial Stories
+  // useEffect(() => {
+  //   const shuffleAdvertorialPost = () => {
+  //     // Create a Set to store unique databaseId values
+  //     const uniqueDatabaseIds = new Set()
 
-      // Initialize an array to store unique posts
-      const contentAdvertorials = []
+  //     // Initialize an array to store unique posts
+  //     const contentAdvertorials = []
 
-      // Loop through all the contentNodes posts
-      advertorialsData?.tags?.edges?.forEach((contentNodes) => {
-        {
-          contentNodes?.node?.contentNodes?.edges?.length !== 0 &&
-            contentNodes?.node?.contentNodes?.edges.forEach((post) => {
-              const { databaseId } = post.node
+  //     // Loop through all the contentNodes posts
+  //     advertorialsData?.tags?.edges?.forEach((contentNodes) => {
+  //       {
+  //         contentNodes?.node?.contentNodes?.edges?.length !== 0 &&
+  //           contentNodes?.node?.contentNodes?.edges.forEach((post) => {
+  //             const { databaseId } = post.node
 
-              // Check if the databaseId is unique (not in the Set)
-              if (!uniqueDatabaseIds.has(databaseId)) {
-                uniqueDatabaseIds.add(databaseId) // Add the databaseId to the Set
-                contentAdvertorials.push(post.node) // Push the unique post to the array
-              }
-            })
-        }
-      })
+  //             // Check if the databaseId is unique (not in the Set)
+  //             if (!uniqueDatabaseIds.has(databaseId)) {
+  //               uniqueDatabaseIds.add(databaseId) // Add the databaseId to the Set
+  //               contentAdvertorials.push(post.node) // Push the unique post to the array
+  //             }
+  //           })
+  //       }
+  //     })
 
-      const advertorialArray = Object.values(contentAdvertorials || [])
+  //     const advertorialArray = Object.values(contentAdvertorials || [])
 
-      // Shuffle only the otherBannerAds array
-      const shuffleAdvertorialPost = shuffleArray(advertorialArray)
+  //     // Shuffle only the otherBannerAds array
+  //     const shuffleAdvertorialPost = shuffleArray(advertorialArray)
 
-      // Concatenate the arrays with pinned ads first and shuffled other banner ads
-      const shuffledAdvertorialArray = [...shuffleAdvertorialPost]
+  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
+  //     const shuffledAdvertorialArray = [...shuffleAdvertorialPost]
 
-      setAdvertorialArray(shuffledAdvertorialArray)
-    }
+  //     setAdvertorialArray(shuffledAdvertorialArray)
+  //   }
 
-    // Shuffle the banner ads when the component mounts
-    shuffleAdvertorialPost()
-  }, [advertorialsData])
+  //   // Shuffle the banner ads when the component mounts
+  //   shuffleAdvertorialPost()
+  // }, [advertorialsData])
 
   // HC Stories
   useEffect(() => {

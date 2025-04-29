@@ -6,20 +6,19 @@ import {
   HomepageHeader,
   Main,
   Container,
+  CategoryIndo,
   FeaturedImage,
   SEO,
   FeatureWell,
   HomepageStories,
   HomepageSecondaryHeader,
-  Footer
+  Footer,
 } from '../components'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
-import { GetLatestRCA } from '../queries/GetLatestRCA'
-
-
+import { GetIndoCategory } from '../queries/GetIndoCategory'
 
 export default function Component(props) {
   // Loading state for previews
@@ -34,7 +33,7 @@ export default function Component(props) {
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
 
   const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? []
-  
+
   console.log(props?.data)
 
   const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
@@ -45,7 +44,7 @@ export default function Component(props) {
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isRCANavShown, setIsRCANavShown] = useState(false)
+  // const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -78,15 +77,6 @@ export default function Component(props) {
     }
   }, [isNavShown])
 
-  // Stop scrolling pages when isRCANavShown
-  useEffect(() => {
-    if (isRCANavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isRCANavShown])
-
   // Stop scrolling pages when isGuidesNavShown
   useEffect(() => {
     if (isGuidesNavShown) {
@@ -95,29 +85,6 @@ export default function Component(props) {
       document.body.style.overflow = 'visible'
     }
   }, [isGuidesNavShown])
-
-  const { data: rcaData } = useQuery(GetLatestRCA, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  const [latestRCA, setLatestRCA] = useState(null)
-
-  useEffect(() => {
-    if (rcaData?.readersChoiceAwards?.edges) {
-      // Find the first RCA where parent is null
-      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
-        (edge) => !edge.node.parent,
-      )?.node
-      setLatestRCA(filteredRCA || null)
-    }
-  }, [rcaData]) // Runs whenever rcaData changes
-
-  const {
-    // title: rcaTitle,
-    databaseId: rcaDatabaseId,
-    uri: rcaUri,
-  } = latestRCA ?? []
 
   const featureWell = [
     {
@@ -184,18 +151,18 @@ export default function Component(props) {
 
   console.log(primaryMenu)
 
-  // // Get pin posts stories
-  // const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
-  //   variables: {
-  //     id: databaseId,
-  //     asPreview: asPreview,
-  //   },
-  //   fetchPolicy: 'network-only',
-  //   nextFetchPolicy: 'cache-and-network',
-  // })
+  // Get pin posts stories
+  const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
+    variables: {
+      id: databaseId,
+      asPreview: asPreview,
+    },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
 
-  // // State variable of homepage pin posts
-  // const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
+  // State variable of homepage pin posts
+  const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
@@ -208,6 +175,19 @@ export default function Component(props) {
       nextFetchPolicy: 'cache-and-network',
     },
   )
+
+  // // Get Indo Category
+  // const {
+  //   data: indoCategoryData,
+  //   loading: indoLoading,
+  //   error: indoError,
+  // } = useQuery(GetIndoCategory, {
+  //   fetchPolicy: 'network-only',
+  //   nextFetchPolicy: 'cache-and-network',
+  // })
+
+  const { data: indoData, loading: indoLoading, error: indoError } = useQuery(GetIndoCategory)
+const indoCategory = indoData?.category?.children?.edges?.map(edge => edge.node) || []
 
   const posts = latestStories?.posts ?? []
   const editorials = latestStories?.editorials ?? []
@@ -222,15 +202,15 @@ export default function Component(props) {
     mainPosts.push(post.node)
   })
 
-  // loop through all the main categories and their posts
-  editorials?.edges?.forEach((post) => {
-    mainEditorialPosts.push(post.node)
-  })
+  // // loop through all the main categories and their posts
+  // editorials?.edges?.forEach((post) => {
+  //   mainEditorialPosts.push(post.node)
+  // })
 
-  // loop through all the main categories and their posts
-  updates?.edges?.forEach((post) => {
-    mainUpdatesPosts.push(post.node)
-  })
+  // // loop through all the main categories and their posts
+  // updates?.edges?.forEach((post) => {
+  //   mainUpdatesPosts.push(post.node)
+  // })
 
   // sort posts by date
   const sortPostsByDate = (a, b) => {
@@ -242,8 +222,8 @@ export default function Component(props) {
   // define mainCatPostCards
   const mainCatPosts = [
     ...(mainPosts != null ? mainPosts : []),
-    ...(mainEditorialPosts != null ? mainEditorialPosts : []),
-    ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
+    // ...(mainEditorialPosts != null ? mainEditorialPosts : []),
+    // ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
   ]
 
   // sortByDate mainCat & childCat Posts
@@ -277,15 +257,15 @@ export default function Component(props) {
         setIsNavShown={setIsNavShown}
         isScrolled={isScrolled}
       />
-       {/* <HomepageSecondaryHeader
+      {/* <HomepageSecondaryHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        rcaDatabaseId={rcaDatabaseId}
-        rcaUri={rcaUri}
+        // rcaDatabaseId={rcaDatabaseId}
+        // rcaUri={rcaUri}
         isGuidesNavShown={isGuidesNavShown}
         setIsGuidesNavShown={setIsGuidesNavShown}
-        isRCANavShown={isRCANavShown}
-        setIsRCANavShown={setIsRCANavShown}
+        // isRCANavShown={isRCANavShown}
+        // setIsRCANavShown={setIsRCANavShown}
         isScrolled={isScrolled}
       /> */}
 
@@ -302,9 +282,14 @@ export default function Component(props) {
             {/* <div id="snapStart" className="snap-start pt-16">
               <HomepageStories pinPosts={homepagePinPosts} />
             </div> */}
+            {!indoLoading && !indoError && indoCategory.length > 0 && (
+              <div className="mt-12">
+                <CategoryIndo data={indoCategory} />
+              </div>
+            )}
           </div>
         </>
-      </Main>   
+      </Main>
       <Footer />
     </main>
   )

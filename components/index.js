@@ -9,6 +9,7 @@ export { ChildrenNavigation } from './CategoryHeader/CategorySecondaryHeader/Chi
 export { ParentNavigation } from './CategoryHeader/CategorySecondaryHeader/ParentNavigation'
 export { SingleNavigation } from './CategoryHeader/CategorySecondaryHeader/SingleNavigation'
 export { CategoryIcon } from './CategoryIcon'
+export { CategoryIndo } from './CategoryIndo'
 export { CategoryStories } from './CategoryStories'
 export { Container } from './Container'
 export { ContentWrapper } from './ContentWrapper'

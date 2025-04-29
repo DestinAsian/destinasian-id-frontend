@@ -61,7 +61,7 @@ export default function MainCategoryMenu(categoryName) {
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetPrimaryMenu, {
     variables: {
-      first: 20,
+      first: 100,
       headerLocation: PRIMARY_LOCATION,
     },
     fetchPolicy: 'network-only',
@@ -76,7 +76,6 @@ export default function MainCategoryMenu(categoryName) {
       (post) => post?.node?.connectedNode?.node?.name === mainCategory,
     )
   }, [primaryMenu])
-
   // ProcessResults on Advertorials & HonorsCircles
   const processResults = (posts) => {
     const advertorials = []
@@ -270,7 +269,7 @@ export default function MainCategoryMenu(categoryName) {
   }, [travelGuidesData])
 
   let menuVariable = {
-    first: 50,
+    first: 100,
     footerHeaderLocation: FOOTER_LOCATION,
   }
 
@@ -666,15 +665,18 @@ export default function MainCategoryMenu(categoryName) {
                       <div className={cx('left-wrapper')}>
                         {connectedNode?.node?.uri &&
                           connectedNode?.node?.name &&
-                          connectedNode?.node?.categoryImages
-                            ?.categoryImages && (
+                          connectedNode?.node?.categoryImages && (
                             <Link href={connectedNode?.node?.uri}>
                               <div className={cx('image-wrapper')}>
                                 <div className={cx('image')}>
                                   <Image
                                     src={
                                       connectedNode?.node?.categoryImages
-                                        ?.categoryImages?.sourceUrl
+                                        ?.categorySlide1 !== null
+                                        ? connectedNode?.node?.categoryImages
+                                            ?.categorySlide1?.sourceUrl
+                                        : connectedNode?.node?.categoryImages
+                                            ?.categoryImages?.sourceUrl
                                     }
                                     alt={connectedNode?.node?.name}
                                     fill
@@ -702,7 +704,7 @@ export default function MainCategoryMenu(categoryName) {
                               )}
                             </div>
                             <div key={index} className={cx('posts-wrapper')}>
-                              {connectedNode.node?.posts?.edges?.map(
+                              {connectedNode?.node?.posts?.edges?.map(
                                 (post, index, array) => (
                                   <div
                                     key={index}

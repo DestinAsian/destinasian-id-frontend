@@ -278,13 +278,13 @@ export default function Component(props) {
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      <SEO
+      {/* <SEO
         title={seo?.title}
         description={seo?.metaDesc}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={uri}
         focuskw={seo?.focuskw}
-      />
+      /> */}
       <SingleHeader
         title={siteTitle}
         description={siteDescription}
@@ -327,15 +327,15 @@ export default function Component(props) {
           <Container>
             <ContentWrapper content={content} />
           </Container>
-          <EntryMoreReviews
+          {/* <EntryMoreReviews
             parentName={categories[0]?.node?.parent?.node?.name}
             categoryName={categories[0]?.node?.name}
             categoryUri={categories[0]?.node?.uri}
-          />
-          <MoreReviews databaseId={databaseId} />
-          <PartnerContent
+          /> */}
+          {/* <MoreReviews databaseId={databaseId} /> */}
+          {/* <PartnerContent
             parentName={categories[0]?.node?.parent?.node?.name}
-          />
+          /> */}
         </>
       </Main>
       <Footer footerMenu={footerMenu} />

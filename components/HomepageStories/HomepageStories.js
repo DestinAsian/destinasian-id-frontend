@@ -3,14 +3,10 @@ import classNames from 'classnames/bind'
 import styles from './HomepageStories.module.scss'
 import { useQuery } from '@apollo/client'
 import { GetHomepageStories } from '../../queries/GetHomepageStories'
-import { GetHomepageBannerAds } from '../../queries/GetHomepageBannerAds'
 import {
   Button,
   PostTwoColumns,
-  ModuleAd,
-  AdvertorialPostTwoColumns,
 } from '../../components'
-import { GetAdvertorialHomepageStories } from '../../queries/GetAdvertorialHomepageStories'
 
 let cx = classNames.bind(styles)
 
@@ -26,12 +22,13 @@ export default function HomepageStories(pinPosts) {
   // Fetching Posts
   const [isFetchingMore, setIsFetchingMore] = useState(false)
   // Declare state for banner ads
-  const [bannerAdsArray, setBannerAdsArray] = useState([])
-  const [AdvertorialArray, setAdvertorialArray] = useState([])
+  // const [bannerAdsArray, setBannerAdsArray] = useState([])
+
   // Post per fetching
   const postsPerPage = 4
-  const bannerPerPage = 20
-  const advertPerPage = 5
+  // const bannerPerPage = 20
+
+  
 
   // Get Stories / Posts
   const { data, error, loading, fetchMore } = useQuery(GetHomepageStories, {
@@ -43,124 +40,85 @@ export default function HomepageStories(pinPosts) {
     nextFetchPolicy: 'cache-and-network',
   })
 
-  // Get Banner
-  const { data: bannerData, error: bannerError } = useQuery(
-    GetHomepageBannerAds,
-    {
-      variables: {
-        first: bannerPerPage,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
+  // // Get Banner
+  // const { data: bannerData, error: bannerError } = useQuery(
+  //   GetHomepageBannerAds,
+  //   {
+  //     variables: {
+  //       first: bannerPerPage,
+  //     },
+  //     fetchPolicy: 'network-only',
+  //     nextFetchPolicy: 'cache-and-network',
+  //   },
+  // )
 
-  // Get Advertorial Stories
-  const { data: advertorialsData, error: advertorialsError } = useQuery(
-    GetAdvertorialHomepageStories,
-    {
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
 
-  if (advertorialsError) {
-    return <pre>{JSON.stringify(error)}</pre>
-  }
+ 
+  
+  // if (error || bannerError || advertorialsError) {
+  //   console.log("Error in fetching data:", error || bannerError || advertorialsError);
+  //   return <pre>{JSON.stringify(error || bannerError || advertorialsError)}</pre>;
+  // }
+  
+  // const updateQuery = (prev, { fetchMoreResult }) => {
+  //   if (!fetchMoreResult) return prev
 
-  const updateQuery = (prev, { fetchMoreResult }) => {
-    if (!fetchMoreResult) return prev
+  //   const prevEdges = data?.contentNodes?.edges || []
+  //   const newEdges = fetchMoreResult?.contentNodes?.edges || []
 
-    const prevEdges = data?.contentNodes?.edges || []
-    const newEdges = fetchMoreResult?.contentNodes?.edges || []
+  //   return {
+  //     ...data,
+  //     contentNodes: {
+  //       ...data?.contentNodes,
+  //       edges: [...prevEdges, ...newEdges],
+  //       pageInfo: fetchMoreResult?.contentNodes?.pageInfo,
+  //     },
+  //   }
+  // }
 
-    return {
-      ...data,
-      contentNodes: {
-        ...data?.contentNodes,
-        edges: [...prevEdges, ...newEdges],
-        pageInfo: fetchMoreResult?.contentNodes?.pageInfo,
-      },
-    }
-  }
+  // // Function to shuffle the banner ads and store them in state
+  // useEffect(() => {
+  //   const shuffleBannerAds = () => {
+  //     const bannerAdsArrayObj = Object.values(
+  //       bannerData?.bannerAds?.edges || [],
+  //     )
 
-  // Function to shuffle the banner ads and store them in state
-  useEffect(() => {
-    const shuffleBannerAds = () => {
-      const bannerAdsArrayObj = Object.values(
-        bannerData?.bannerAds?.edges || [],
-      )
+  //     // Separate shuffled banner ads with <img> tags from those without
+  //     const bannerAdsWithImg = bannerAdsArrayObj.filter(
+  //       (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
+  //     )
 
-      // Separate shuffled banner ads with <img> tags from those without
-      const bannerAdsWithImg = bannerAdsArrayObj.filter(
-        (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
-      )
+  //     // Shuffle only the otherBannerAds array
+  //     const shuffledBannerAds = shuffleArray(bannerAdsWithImg)
 
-      // Shuffle only the otherBannerAds array
-      const shuffledBannerAds = shuffleArray(bannerAdsWithImg)
+  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
+  //     const shuffledBannerAdsArray = [...shuffledBannerAds]
 
-      // Concatenate the arrays with pinned ads first and shuffled other banner ads
-      const shuffledBannerAdsArray = [...shuffledBannerAds]
+  //     setBannerAdsArray(shuffledBannerAdsArray)
+  //   }
 
-      setBannerAdsArray(shuffledBannerAdsArray)
-    }
+  //   // Shuffle the banner ads when the component mounts
+  //   shuffleBannerAds()
 
-    // Shuffle the banner ads when the component mounts
-    shuffleBannerAds()
+  //   // Shuffle the banner ads every 10 seconds
+  //   const shuffleInterval = setInterval(() => {
+  //     shuffleBannerAds()
+  //   }, 60000) // 10000 milliseconds = 10 seconds
 
-    // Shuffle the banner ads every 10 seconds
-    const shuffleInterval = setInterval(() => {
-      shuffleBannerAds()
-    }, 60000) // 10000 milliseconds = 10 seconds
+  //   // Cleanup the interval when the component unmounts
+  //   return () => {
+  //     clearInterval(shuffleInterval)
+  //   }
+  // }, [bannerData]) // Use bannerData as a dependency to trigger shuffling when new data arrives
 
-    // Cleanup the interval when the component unmounts
-    return () => {
-      clearInterval(shuffleInterval)
-    }
-  }, [bannerData]) // Use bannerData as a dependency to trigger shuffling when new data arrives
 
-  useEffect(() => {
-    const shuffleAdvertorialPost = () => {
-      // Create a Set to store unique databaseId values
-      const uniqueDatabaseIds = new Set()
-
-      // Initialize an array to store unique posts
-      const contentAdvertorials = []
-
-      // Loop through all the contentNodes posts
-      advertorialsData?.contentNodes?.edges?.forEach((post) => {
-        const { databaseId } = post.node
-
-        // Check if the databaseId is unique (not in the Set)
-        if (!uniqueDatabaseIds.has(databaseId)) {
-          uniqueDatabaseIds.add(databaseId) // Add the databaseId to the Set
-          contentAdvertorials.push(post.node) // Push the unique post to the array
-        }
-      })
-
-      // Shuffle only the otherBannerAds array
-      const shuffleAdvertorialPost = shuffleArray(contentAdvertorials)
-
-      // Concatenate the arrays with pinned ads first and shuffled other banner ads
-      const shuffledAdvertorialArray = [...shuffleAdvertorialPost]
-
-      // Get the last two elements
-      const lastTwoAdvertorials = shuffledAdvertorialArray.slice(-2)
-
-      setAdvertorialArray(lastTwoAdvertorials)
-    }
-
-    // Shuffle the banner ads when the component mounts
-    shuffleAdvertorialPost()
-  }, [advertorialsData])
-
-  // Concatenate the arrays to place ads with <img> tags first
-  const sortedBannerAdsArray = [...bannerAdsArray].reduce((uniqueAds, ad) => {
-    if (!uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id)) {
-      uniqueAds.push(ad)
-    }
-    return uniqueAds
-  }, [])
+  // // Concatenate the arrays to place ads with <img> tags first
+  // const sortedBannerAdsArray = [...bannerAdsArray].reduce((uniqueAds, ad) => {
+  //   if (!uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id)) {
+  //     uniqueAds.push(ad)
+  //   }
+  //   return uniqueAds
+  // }, [])
 
   // Function to fetch more posts
   const fetchMorePosts = () => {
@@ -201,9 +159,9 @@ export default function HomepageStories(pinPosts) {
     return <pre>{JSON.stringify(error)}</pre>
   }
 
-  if (bannerError) {
-    return <pre>{JSON.stringify(error)}</pre>
-  }
+  // if (bannerError) {
+  //   return <pre>{JSON.stringify(error)}</pre>
+  // }
 
   if (loading) {
     return (
@@ -238,11 +196,8 @@ export default function HomepageStories(pinPosts) {
     [],
   )
 
-  // Declare 2 Advertorial Post
-  const getAdvertorialPost = [...AdvertorialArray]
-  const numberOfAdvertorial = AdvertorialArray.length
 
-  const numberOfBannerAds = sortedBannerAdsArray.length
+  // const numberOfBannerAds = sortedBannerAdsArray.length
 
   return (
     <div className={cx('component')}>
@@ -271,9 +226,10 @@ export default function HomepageStories(pinPosts) {
                 />
               </div>
             )}
-            {post?.contentTypeName === 'editorial' && (
+
+            {/* Editorials Stories */}
+            {/* {post?.contentTypeName === 'editorial' && (
               <div className={cx('post-wrapper')}>
-                {/* Editorials Stories */}
                 <PostTwoColumns
                   title={post?.title}
                   excerpt={post?.excerpt}
@@ -292,9 +248,10 @@ export default function HomepageStories(pinPosts) {
                   locationUrl={post?.acfLocationIcon?.locationUrl}
                 />
               </div>
-            )}
+            )} */}
+
             {/* Updates Stories */}
-            {post?.contentTypeName === 'update' && (
+            {/* {post?.contentTypeName === 'update' && (
               <div className={cx('post-wrapper')}>
                 <PostTwoColumns
                   title={post?.title}
@@ -308,10 +265,10 @@ export default function HomepageStories(pinPosts) {
                   featuredImage={post?.featuredImage?.node}
                 />
               </div>
-            )}
-            {post?.contentTypeName === 'honors-circle' && (
-              <div className={cx('hc-wrapper')}>
+            )} */}
                 {/* Honors Circle Stories */}
+            {/* {post?.contentTypeName === 'honors-circle' && (
+              <div className={cx('hc-wrapper')}>
                 <PostTwoColumns
                   title={post?.title}
                   excerpt={post?.excerpt}
@@ -321,10 +278,10 @@ export default function HomepageStories(pinPosts) {
                   featuredImage={post?.featuredImage?.node}
                 />
               </div>
-            )}
+            )} */}
+                {/* Luxury Travel Stories */}
             {post?.contentTypeName === 'luxury-travel' && (
               <div className={cx('post-wrapper')}>
-                {/* Luxury Travel Stories */}
                 <PostTwoColumns
                   title={post?.title}
                   excerpt={post?.excerpt}
@@ -336,7 +293,7 @@ export default function HomepageStories(pinPosts) {
               </div>
             )}
             {/* Show 1st banner after 2 posts and then every 4 posts */}
-            {(index - 1) % 4 === 0 && (
+            {/* {(index - 1) % 4 === 0 && (
               <div className={cx('banner-ad-wrapper')}>
                 <ModuleAd
                   bannerAd={
@@ -345,33 +302,8 @@ export default function HomepageStories(pinPosts) {
                   }
                 />
               </div>
-            )}
-            {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
-                {/* Advertorial Stories */}
-                {numberOfAdvertorial !== 0 && (
-                  <AdvertorialPostTwoColumns
-                    title={getAdvertorialPost[0]?.title}
-                    excerpt={getAdvertorialPost[0]?.excerpt}
-                    uri={getAdvertorialPost[0]?.uri}
-                    featuredImage={getAdvertorialPost[0]?.featuredImage?.node}
-                  />
-                )}
-              </div>
-            )}
-            {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
-                {/* Advertorial Stories */}
-                {numberOfAdvertorial !== 0 && numberOfAdvertorial > 1 && (
-                  <AdvertorialPostTwoColumns
-                    title={getAdvertorialPost[1]?.title}
-                    excerpt={getAdvertorialPost[1]?.excerpt}
-                    uri={getAdvertorialPost[1]?.uri}
-                    featuredImage={getAdvertorialPost[1]?.featuredImage?.node}
-                  />
-                )}
-              </div>
-            )}
+            )} */}
+           
           </React.Fragment>
         ))}
       {mergedPosts.length && (
