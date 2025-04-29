@@ -176,26 +176,29 @@ export default function Component(props) {
     },
   )
 
-  // // Get Indo Category
+  const {
+    data: indoData,
+    loading: indoLoading,
+    error: indoError,
+  } = useQuery(GetIndoCategory)
+  const indoCategory =
+    indoData?.category?.children?.edges?.map((edge) => edge.node) || []
+
   // const {
-  //   data: indoCategoryData,
+  //   data: indoData,
   //   loading: indoLoading,
   //   error: indoError,
-  // } = useQuery(GetIndoCategory, {
-  //   fetchPolicy: 'network-only',
-  //   nextFetchPolicy: 'cache-and-network',
-  // })
-
-  const { data: indoData, loading: indoLoading, error: indoError } = useQuery(GetIndoCategory)
-const indoCategory = indoData?.category?.children?.edges?.map(edge => edge.node) || []
+  // } = useQuery(GetIndoCategory)
+  // const indoCategory =
+  //   indoData?.category?.children?.edges?.map((edge) => edge.node) || []
 
   const posts = latestStories?.posts ?? []
   const editorials = latestStories?.editorials ?? []
   const updates = latestStories?.updates ?? []
 
   const mainPosts = []
-  const mainEditorialPosts = []
-  const mainUpdatesPosts = []
+  // const mainEditorialPosts = []
+  // const mainUpdatesPosts = []
 
   // loop through all the main categories posts
   posts?.edges?.forEach((post) => {
@@ -257,7 +260,7 @@ const indoCategory = indoData?.category?.children?.edges?.map(edge => edge.node)
         setIsNavShown={setIsNavShown}
         isScrolled={isScrolled}
       />
-      {/* <HomepageSecondaryHeader
+      <HomepageSecondaryHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         // rcaDatabaseId={rcaDatabaseId}
@@ -267,7 +270,7 @@ const indoCategory = indoData?.category?.children?.edges?.map(edge => edge.node)
         // isRCANavShown={isRCANavShown}
         // setIsRCANavShown={setIsRCANavShown}
         isScrolled={isScrolled}
-      /> */}
+      />
 
       <Main>
         <>
@@ -279,9 +282,9 @@ const indoCategory = indoData?.category?.children?.edges?.map(edge => edge.node)
                 </Container>
               )}
             </div>
-            {/* <div id="snapStart" className="snap-start pt-16">
+            <div id="snapStart" className="snap-start pt-16">
               <HomepageStories pinPosts={homepagePinPosts} />
-            </div> */}
+            </div>
             {!indoLoading && !indoError && indoCategory.length > 0 && (
               <div className="mt-12">
                 <CategoryIndo data={indoCategory} />

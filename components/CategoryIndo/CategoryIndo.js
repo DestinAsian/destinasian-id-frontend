@@ -3,26 +3,27 @@ import Link from 'next/link';
 import styles from './CategoryIndo.module.scss';
 
 const CategoryIndo = ({ data }) => {
-  const categories = data?.category?.children?.edges || [];
+  const categories = data || [];
 
   return (
     <div className={styles.categoryIndoWrapper}>
       <h2 className={styles.title}>Destinasi Indonesia</h2>
       <div className={styles.grid}>
-        {categories.map(({ node }) => {
+        {categories.map((node) => {
           const {
             id,
             name,
             slug,
             categoryImages,
             contentNodes,
+            description,
           } = node;
 
-          // Ambil semua gambar dan caption dari categoryImages
           const images = [
             {
               url: categoryImages?.categorySlide1?.mediaItemUrl,
-              caption: categoryImages?.categoryImagesCaption,
+              caption: categoryImages?.categoryImagesCaption1,
+            //   description: categoryImages?.description,
             },
             {
               url: categoryImages?.categorySlide2?.mediaItemUrl,
@@ -44,6 +45,12 @@ const CategoryIndo = ({ data }) => {
 
           return (
             <Link key={id} href={`/category/${slug}`} className={styles.card}>
+              <h3 className={styles.name}>{name}</h3>
+              <p className={styles.slug}>/{slug}</p>
+              <p className={styles.description}>/{description}</p>
+              <p className={styles.contentCount}>
+                {contentNodes?.edges?.length || 0} artikel
+              </p>
               <div className={styles.imageGallery}>
                 {images.map((img, index) => (
                   img.url && (
@@ -54,11 +61,6 @@ const CategoryIndo = ({ data }) => {
                   )
                 ))}
               </div>
-              <h3 className={styles.name}>{name}</h3>
-              <p className={styles.slug}>/{slug}</p>
-              <p className={styles.contentCount}>
-                {contentNodes?.edges?.length || 0} artikel
-              </p>
             </Link>
           );
         })}

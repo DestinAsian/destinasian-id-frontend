@@ -16,6 +16,7 @@ export const GetIndoCategory = gql`
               fieldGroupName
               changeToSlider
               categoryImagesCaption
+              categorySlideCaption1
               categorySlideCaption2
               categorySlideCaption3
               categorySlideCaption4
@@ -43,6 +44,7 @@ export const GetIndoCategory = gql`
                 }
               }
             }
+            description
           }
         }
       }
