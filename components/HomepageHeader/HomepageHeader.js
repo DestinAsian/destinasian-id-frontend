@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind'
 import Link from 'next/link'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
-import destinasianLogoWht from '../../assets/logo/dai_logo.png'
+import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
 import { Container, FullMenu, SearchResults } from '../../components'
 import styles from './HomepageHeader.module.scss'
 import { useMediaQuery } from 'react-responsive'
