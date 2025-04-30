@@ -25,7 +25,10 @@ const CategoryIndo = ({ data }) => {
             const firstImage = categoryImages?.categorySlide1?.mediaItemUrl;
 
             return (
-              <Link key={id} href={`/category/${slug}`} className={cx('card')}>
+              <Link key={id} 
+            //   href={`/category/${slug}`} 
+            href={`/${node?.parent?.node?.slug}/${slug}`}
+              className={cx('card')}>
                 <div className={cx('imageWrapper')}>
                   {firstImage && (
                     <img

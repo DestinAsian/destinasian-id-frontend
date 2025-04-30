@@ -12,6 +12,11 @@ export const GetIndoCategory = gql`
             id
             name
             slug
+            parent {
+              node {
+                slug
+              }
+            }
             categoryImages {
               fieldGroupName
               changeToSlider
