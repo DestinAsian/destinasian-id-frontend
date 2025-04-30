@@ -11,7 +11,6 @@ const CategoryIndo = ({ data }) => {
 
   return (
     <div className={cx('categoryIndoWrapper')}>
-      <h2 className={cx('title')}>Destinasi Indonesia</h2>
       <div className={cx('grid')}>
         {categories?.length > 0 &&
           categories.map((node) => {
