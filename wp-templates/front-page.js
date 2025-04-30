@@ -285,7 +285,7 @@ export default function Component(props) {
             <div id="snapStart" className="snap-start pt-16">
               <HomepageStories pinPosts={homepagePinPosts} />
             </div>
-            {!indoLoading && !indoError && indoCategory.length > 0 && (
+            {!indoLoading && !indoError && indoCategory?.length > 0 && (
               <div className="mt-12">
                 <CategoryIndo data={indoCategory} />
               </div>

@@ -25,6 +25,11 @@ module.exports = withFaust({
   async redirects() {
     return [
       {
+        source: '/favicon.ico',
+        destination: '/icons/favicon.ico', // atau sesuaikan dengan path sebenarnya
+        permanent: true,
+      },
+      {
         source: '/advertorial/:slug*', // All advertorial slug redirect to partner-content
         destination: '/partner-content/:slug*',
         permanent: true, // This indicates a 301 permanent redirect

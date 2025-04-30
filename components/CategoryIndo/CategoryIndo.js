@@ -1,5 +1,3 @@
-
-
 // export default CategoryIndo;
 import React from 'react';
 import Link from 'next/link';
@@ -15,37 +13,39 @@ const CategoryIndo = ({ data }) => {
     <div className={cx('categoryIndoWrapper')}>
       <h2 className={cx('title')}>Destinasi Indonesia</h2>
       <div className={cx('grid')}>
-        {categories.map((node) => {
-          const {
-            id,
-            name,
-            slug,
-            categoryImages,
-          } = node;
+        {categories?.length > 0 &&
+          categories.map((node) => {
+            const {
+              id,
+              name,
+              slug,
+              categoryImages,
+            } = node ?? {};
 
-          const firstImage = categoryImages?.categorySlide1?.mediaItemUrl;
+            const firstImage = categoryImages?.categorySlide1?.mediaItemUrl;
 
-          return (
-            <Link key={id} href={`/category/${slug}`} className={cx('card')}>
-              <div className={cx('imageWrapper')}>
-                {firstImage && (
-                  <img
-                    src={firstImage}
-                    alt={name}
-                    className={cx('image')}
-                  />
-                )}
-                <h3 className={cx('nameOverlay')}>{name}</h3>
-              </div>
-            </Link>
-          );
-        })}
+            return (
+              <Link key={id} href={`/category/${slug}`} className={cx('card')}>
+                <div className={cx('imageWrapper')}>
+                  {firstImage && (
+                    <img
+                      src={firstImage}
+                      alt={name ?? 'Category Image'}
+                      className={cx('image')}
+                    />
+                  )}
+                  <h3 className={cx('nameOverlay')}>{name}</h3>
+                </div>
+              </Link>
+            );
+          })}
       </div>
     </div>
   );
 };
 
 export default CategoryIndo;
+
 
 
 

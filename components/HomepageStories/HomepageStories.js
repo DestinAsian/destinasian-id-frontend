@@ -197,11 +197,13 @@ export default function HomepageStories(pinPosts) {
   )
 
 
-  // const numberOfBannerAds = sortedBannerAdsArray.length
-
+  
   return (
+    
     <div className={cx('component')}>
-      {mergedPosts.length !== 0 &&
+      {/* {mergedPosts.length !== 0 &&
+        mergedPosts.map((post, index) => ( */}
+           {Array.isArray(mergedPosts) && mergedPosts?.length > 0 &&
         mergedPosts.map((post, index) => (
           <React.Fragment key={post?.id}>
             {/* Post / Guides Stories */}
@@ -306,7 +308,8 @@ export default function HomepageStories(pinPosts) {
            
           </React.Fragment>
         ))}
-      {mergedPosts.length && (
+      {/* {mergedPosts.length && ( */}
+      {Array.isArray(mergedPosts) && mergedPosts?.length > 0 && (
         <div className="mx-auto my-0 flex w-[100vw] justify-center ">
           {data?.contentNodes?.pageInfo?.hasNextPage &&
             data?.contentNodes?.pageInfo?.endCursor && (
