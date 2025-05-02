@@ -1,0 +1,115 @@
+.categoryUpdatesWrapper {
+  padding: 2rem;
+  background-color: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.articleCount {
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  color: #999;
+}
+
+.postsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  display: block;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+
+  &.sideBySide {
+    flex: 1 1 calc(50% - 1rem); // 👉️ Two side-by-side
+  }
+
+  &.fullWidth {
+    flex: 1 1 100%; // 👉️ Full width
+  }
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+
+.cardInner {
+  padding: 1rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: #999;
+  margin-bottom: 0.25rem;
+}
+
+.slug {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.type {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+.categoryImageWrapper {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.categoryImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.viewMoreWrapper {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.viewMoreButton {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #0059c1;
+  }
+}

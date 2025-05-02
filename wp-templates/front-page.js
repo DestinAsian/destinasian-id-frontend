@@ -7,6 +7,7 @@ import {
   Main,
   Container,
   CategoryIndo,
+  CategoryUpdates,
   FeaturedImage,
   SEO,
   FeatureWell,
@@ -19,6 +20,7 @@ import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { GetIndoCategory } from '../queries/GetIndoCategory'
+import { GetCategoryUpdates } from '../queries/GetCategoryUpdates'
 
 export default function Component(props) {
   // Loading state for previews
@@ -28,11 +30,11 @@ export default function Component(props) {
 
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
-  const { featuredImage, uri, seo } = props?.data?.page ?? []
+  const { featuredImage, uri, seo } = props?.data?.page ?? {}
 
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
 
-  const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? []
+  const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
   console.log(props?.data)
 
@@ -90,8 +92,8 @@ export default function Component(props) {
     {
       type: acfHomepageSlider?.typeSlide1,
       videoSrc: acfHomepageSlider?.video1?.mediaItemUrl,
-      desktopSrc: acfHomepageSlider?.desktopSlide2?.mediaItemUrl,
-      mobileSrc: acfHomepageSlider?.mobileSlide2?.mediaItemUrl,
+      desktopSrc: acfHomepageSlider?.desktopSlide1?.mediaItemUrl,
+      mobileSrc: acfHomepageSlider?.mobileSlide1?.mediaItemUrl,
       url: acfHomepageSlider?.slideLink1,
       category: acfHomepageSlider?.slideCategory1,
       categoryLink: acfHomepageSlider?.slideCategoryLink1,
@@ -100,9 +102,9 @@ export default function Component(props) {
     },
     {
       type: acfHomepageSlider?.typeSlide2,
+      videoSrc: acfHomepageSlider?.video2?.mediaItemUrl,
       desktopSrc: acfHomepageSlider?.desktopSlide2?.mediaItemUrl,
       mobileSrc: acfHomepageSlider?.mobileSlide2?.mediaItemUrl,
-      videoSrc: acfHomepageSlider?.video2?.mediaItemUrl,
       url: acfHomepageSlider?.slideLink2,
       category: acfHomepageSlider?.slideCategory2,
       categoryLink: acfHomepageSlider?.slideCategoryLink2,
@@ -111,9 +113,9 @@ export default function Component(props) {
     },
     {
       type: acfHomepageSlider?.typeSlide3,
+      videoSrc: acfHomepageSlider?.video3?.mediaItemUrl,
       desktopSrc: acfHomepageSlider?.desktopSlide3?.mediaItemUrl,
       mobileSrc: acfHomepageSlider?.mobileSlide3?.mediaItemUrl,
-      videoSrc: acfHomepageSlider?.video3?.mediaItemUrl,
       url: acfHomepageSlider?.slideLink3,
       category: acfHomepageSlider?.slideCategory3,
       categoryLink: acfHomepageSlider?.slideCategoryLink3,
@@ -142,27 +144,46 @@ export default function Component(props) {
     nextFetchPolicy: 'cache-and-network',
   })
 
+  const {
+    data: indoData,
+    loading: indoLoading,
+    error: indoError,
+  } = useQuery(GetIndoCategory)
+
+  const {
+    data: updatesData,
+    loading: updatesLoading,
+    error: updatesError,
+  } = useQuery(GetCategoryUpdates)
+  console.log('Category Updates Data:', updatesData)
+  console.log('Category Updates Loading:', updatesLoading)
+  console.log('Category Updates Error:', updatesError)
+
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
   const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
   const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
+  const indoCategory =
+    indoData?.category?.children?.edges?.map((edge) => edge.node) ?? []
+  const updatesCategory =
+    updatesData?.category?.children?.edges?.map((edge) => edge.node) ?? []
 
   console.log(primaryMenu)
 
-  // Get pin posts stories
-  const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
-    variables: {
-      id: databaseId,
-      asPreview: asPreview,
-    },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
+  // // Get pin posts stories
+  // const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
+  //   variables: {
+  //     id: databaseId,
+  //     asPreview: asPreview,
+  //   },
+  //   fetchPolicy: 'network-only',
+  //   nextFetchPolicy: 'cache-and-network',
+  // })
 
-  // State variable of homepage pin posts
-  const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
+  // // State variable of homepage pin posts
+  // const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
@@ -176,14 +197,6 @@ export default function Component(props) {
     },
   )
 
-  const {
-    data: indoData,
-    loading: indoLoading,
-    error: indoError,
-  } = useQuery(GetIndoCategory)
-  const indoCategory =
-    indoData?.category?.children?.edges?.map((edge) => edge.node) || []
-
   // const {
   //   data: indoData,
   //   loading: indoLoading,
@@ -193,8 +206,8 @@ export default function Component(props) {
   //   indoData?.category?.children?.edges?.map((edge) => edge.node) || []
 
   const posts = latestStories?.posts ?? []
-  const editorials = latestStories?.editorials ?? []
-  const updates = latestStories?.updates ?? []
+  // const editorials = latestStories?.editorials ?? []
+  // const updates = latestStories?.updates ?? []
 
   const mainPosts = []
   // const mainEditorialPosts = []
@@ -282,11 +295,27 @@ export default function Component(props) {
                 </Container>
               )}
             </div>
-              {!indoLoading && !indoError && indoCategory?.length > 0 && (
+            {!indoLoading && !indoError && indoCategory?.length > 0 && (
+              <div>
+                <CategoryIndo data={indoCategory} />
+              </div>
+            )}
+
+            {!updatesLoading && !updatesError && updatesCategory.length > 0 && (
+              <CategoryUpdates data={updatesCategory} />
+            )}
+            {/* {!updatesLoading &&
+              !updatesError &&
+              updatesCategory?.length > 0 && (
                 <div>
-                  <CategoryIndo data={indoCategory} />
+                  <CategoryUpdates
+                    categories={updatesCategory}
+                    loading={updatesLoading}
+                    error={updatesError}
+                  />
                 </div>
-              )}
+              )} */}
+
             {/* <div id="snapStart" className="snap-start pt-16">
               <HomepageStories pinPosts={homepagePinPosts} />
             </div> */}

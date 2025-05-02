@@ -327,12 +327,12 @@ export default function Component(props) {
           <Container>
             <ContentWrapper content={content} />
           </Container>
-          {/* <EntryMoreReviews
+          <EntryMoreReviews
             parentName={categories[0]?.node?.parent?.node?.name}
             categoryName={categories[0]?.node?.name}
             categoryUri={categories[0]?.node?.uri}
-          /> */}
-          {/* <MoreReviews databaseId={databaseId} /> */}
+          /> 
+          {/* <MoreReviews databaseId={databaseId} />
           {/* <PartnerContent
             parentName={categories[0]?.node?.parent?.node?.name}
           /> */}

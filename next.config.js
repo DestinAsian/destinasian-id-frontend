@@ -26,7 +26,7 @@ module.exports = withFaust({
     return [
       {
         source: '/favicon.ico',
-        destination: '/icons/favicon.ico', // atau sesuaikan dengan path sebenarnya
+        destination: '/icons/favicon.ico',
         permanent: true,
       },
       {
