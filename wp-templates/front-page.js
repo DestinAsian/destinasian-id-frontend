@@ -7,20 +7,22 @@ import {
   Main,
   Container,
   CategoryIndo,
-  CategoryUpdates,
   FeaturedImage,
   SEO,
   FeatureWell,
   HomepageStories,
   HomepageSecondaryHeader,
+  FrontPageLayout,
   Footer,
+  UpdatesPage,
 } from '../components'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
-import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
+// import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { GetIndoCategory } from '../queries/GetIndoCategory'
 import { GetCategoryUpdates } from '../queries/GetCategoryUpdates'
+import UpdateDetail from './UpdateDetail'
 
 export default function Component(props) {
   // Loading state for previews
@@ -127,8 +129,9 @@ export default function Component(props) {
   useEffect(() => {
     const filteredFeatureWell = featureWell.filter((item) => item.type !== null)
 
-    if (filteredFeatureWell.length > 0) {
-      const randomIndex = Math.floor(Math.random() * filteredFeatureWell.length)
+    // if (filteredFeatureWell.length > 0) {
+    if (filteredFeatureWell?.[0]) {
+      const randomIndex = Math.floor(Math.random() * filteredFeatureWell?.length)
       setCurrentFeatureWell(filteredFeatureWell[randomIndex])
     }
   }, [])
@@ -150,15 +153,6 @@ export default function Component(props) {
     error: indoError,
   } = useQuery(GetIndoCategory)
 
-  const {
-    data: updatesData,
-    loading: updatesLoading,
-    error: updatesError,
-  } = useQuery(GetCategoryUpdates)
-  console.log('Category Updates Data:', updatesData)
-  console.log('Category Updates Loading:', updatesLoading)
-  console.log('Category Updates Error:', updatesError)
-
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
   const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
@@ -167,8 +161,6 @@ export default function Component(props) {
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
   const indoCategory =
     indoData?.category?.children?.edges?.map((edge) => edge.node) ?? []
-  const updatesCategory =
-    updatesData?.category?.children?.edges?.map((edge) => edge.node) ?? []
 
   console.log(primaryMenu)
 
@@ -197,13 +189,6 @@ export default function Component(props) {
     },
   )
 
-  // const {
-  //   data: indoData,
-  //   loading: indoLoading,
-  //   error: indoError,
-  // } = useQuery(GetIndoCategory)
-  // const indoCategory =
-  //   indoData?.category?.children?.edges?.map((edge) => edge.node) || []
 
   const posts = latestStories?.posts ?? []
   // const editorials = latestStories?.editorials ?? []
@@ -295,15 +280,22 @@ export default function Component(props) {
                 </Container>
               )}
             </div>
-            {!indoLoading && !indoError && indoCategory?.length > 0 && (
+            {!indoLoading && !indoError && indoCategory?.[0] && (
               <div>
                 <CategoryIndo data={indoCategory} />
               </div>
             )}
 
-            {!updatesLoading && !updatesError && updatesCategory.length > 0 && (
+            <div className="mx-auto max-w-7xl px-4">
+              <FrontPageLayout />
+            </div>
+            {/* <div className="mx-auto max-w-7xl px-4">
+              <UpdatesPage />
+            </div> */}
+            {/* {!updatesLoading && !updatesError && updatesCategory?.[0] && (
               <CategoryUpdates data={updatesCategory} />
-            )}
+            )} */}
+
             {/* {!updatesLoading &&
               !updatesError &&
               updatesCategory?.length > 0 && (

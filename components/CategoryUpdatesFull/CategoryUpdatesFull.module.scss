@@ -1,12 +1,10 @@
-.categoryUpdatesWrapper {
+.categoryUpdatesFullWrapper {
   width: 100%;
-
 }
 
 .title {
   font-size: 2rem;
   font-weight: bold;
-  // margin-bottom: 1rem;
 }
 
 .description {
@@ -32,14 +30,7 @@
   display: block;
   text-decoration: none;
   overflow: hidden;
-
-  &.sideBySide {
-    flex: 1 1 calc(50% - 1rem); // 👉️ Two side-by-side
-  }
-
-  &.fullWidth {
-    flex: 1 1 100%; // 👉️ Full width
-  }
+  flex: 1 1 calc(50% - 1rem); // 2 kolom sejajar
 }
 
 .cardInner {
@@ -59,28 +50,18 @@
   text-transform: capitalize;
 }
 
-.type {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 0.5rem;
+.imageWrapper {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
 }
 
-.categoryImageWrapper {
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.categoryImage {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.p {
-  font-size: 1rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-  color: #333;
+.thumbnail {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
 }
 
 .viewMoreWrapper {
@@ -89,34 +70,16 @@
 }
 
 .viewMoreButton {
+  padding: 0.5rem 1.5rem;
   font-size: 1rem;
-  color: #690000;
+  background-color: #0070f3;
+  color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 
   &:hover {
-    color: #000000;
+    background-color: #0059c1;
   }
-}
-
-.imageWrapper {
-  position: relative;
-  overflow: hidden;
-
-  &.largeImage {
-    width: 800px;
-    // height: 1000px; // 4:5 ratio
-  }
-
-  &.squareImage {
-    width: 400px;
-    height: 300px; // 1:1 ratio
-  }
-}
-
-.thumbnail {
-  object-fit: cover;
-  object-position: center;
 }

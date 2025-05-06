@@ -1,0 +1,21 @@
+@import "styles/breakpoints";
+
+.component {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  line-height: normal;
+  width: 100%;
+  gap: 1rem;
+  align-items: center;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 300px;
+  height: 600px;
+
+  img {
+    object-fit: cover;
+  }
+}
