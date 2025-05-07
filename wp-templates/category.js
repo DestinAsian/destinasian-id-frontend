@@ -336,12 +336,12 @@ export default function Component(props) {
         <SecondaryHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          rcaDatabaseId={rcaDatabaseId}
-          rcaUri={rcaUri}
+          // rcaDatabaseId={rcaDatabaseId}
+          // rcaUri={rcaUri}
           isGuidesNavShown={isGuidesNavShown}
           setIsGuidesNavShown={setIsGuidesNavShown}
-          isRCANavShown={isRCANavShown}
-          setIsRCANavShown={setIsRCANavShown}
+          // isRCANavShown={isRCANavShown}
+          // setIsRCANavShown={setIsRCANavShown} 
           isScrolled={isScrolled}
         />
       )}

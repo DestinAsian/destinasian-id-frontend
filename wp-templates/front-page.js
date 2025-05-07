@@ -22,7 +22,6 @@ import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 // import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { GetIndoCategory } from '../queries/GetIndoCategory'
 import { GetCategoryUpdates } from '../queries/GetCategoryUpdates'
-import UpdateDetail from './UpdateDetail'
 
 export default function Component(props) {
   // Loading state for previews

@@ -11,12 +11,10 @@ import pageTravelGuides from './page-travel-guides'
 import pageVideos from './page-videos'
 import single from './single'
 import singleEditorial from './single-editorial'
-import singleAdvertorial from './single-advertorial'
 import singleHonorsCircle from './single-honors-circle'
 import singleUpdate from './single-update'
 import singleContest from './single-contest'
 import singleLuxeList from './single-luxe-list'
-import singleRca from './single-readers-choice-award'
 import singleLuxuryTravel from './single-luxury-travel'
 
 export default {
@@ -33,11 +31,11 @@ export default {
   'page-videos': pageVideos,
   single,
   'single-editorial': singleEditorial,
-  'single-advertorial': singleAdvertorial,
+  // 'single-advertorial': singleAdvertorial,
   'single-honors-circle': singleHonorsCircle,
   'single-update': singleUpdate,
   'single-contest': singleContest,
   'single-luxe-list': singleLuxeList,
-  'single-readers-choice-award': singleRca,
+  // 'single-readers-choice-award': singleRca,
   'single-luxury-travel': singleLuxuryTravel,
 }

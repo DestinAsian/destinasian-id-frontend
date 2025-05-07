@@ -515,7 +515,7 @@ const CategoryUpdates = () => {
               {visiblePosts.map(({ node: post }, index) => {
                 const featuredImage = post.featuredImage?.node
                 const isFirst = index === 0
-                const postUrl = `/${post.slug}`
+                const postUrl = `/countries/${post.slug}`
                 // const postUrl = `/${post.slug}`
 
                 return (
