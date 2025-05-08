@@ -51,7 +51,9 @@ const CategoryUpdates = () => {
               {visiblePosts.map(({ node: post }, index) => {
                 const featuredImage = post.featuredImage?.node
                 const isFirst = index === 0
-                const postUrl = `/${post.slug}`
+                const postUrl = `/${post.categories?.nodes?.[0]?.slug || ''}/${post.slug}` // Get the first category slug if available
+                // const postUrl = `/${post.slug}`
+
 
                 return (
                   <div
