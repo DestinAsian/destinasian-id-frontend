@@ -1,7 +1,3 @@
-
-
-
-
 import { gql } from '@apollo/client'
 
 export const GetCategoryInsights = gql`
@@ -22,8 +18,10 @@ export const GetCategoryInsights = gql`
               node {
                 mediaItemUrl
                 slug
-                description(format: RAW)
+                description
                 id
+                uri
+                title
               }
             }
           }
