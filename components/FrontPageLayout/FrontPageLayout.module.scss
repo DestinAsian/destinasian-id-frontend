@@ -1,24 +1,23 @@
+
 @import "styles/breakpoints";
 
-// Wrapper utama untuk layout
+// Main layout wrapper
 .component-updates {
   display: flex;
-  justify-content: center; /* Center content horizontally */
+  justify-content: center;
   padding: 2rem;
-  // background-color: var(--wpe--color--white);
+  background-color: var(--wpe--color--white);
 }
 
-// Struktur dua kolom
+// Two-column layout
 .two-columns {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 0;
   width: 100%;
   position: relative;
   z-index: 3;
-  // background-color: var(--wpe--color--white);
 
   @media (min-width: $breakpoint-small) {
     flex-direction: row;
@@ -29,53 +28,56 @@
   }
 }
 
-// Kolom kiri dengan lebar 7/12
+// Left column (70%)
 .left-column {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-content: flex-start;
-  flex-wrap: wrap;
   position: relative;
   z-index: 2;
-  
-  /* Mengatur lebar menjadi 7/12 */
+
   @media (min-width: $breakpoint-small) {
-    width: 58.33%; /* 7/12 dari lebar */
+    width: 70%;
   }
 
   @media (min-width: $breakpoint-medium) {
-    width: 58.33%; /* 7/12 dari lebar */
+    width: 70%;
   }
 }
 
-// Kolom kanan dengan lebar 5/12
+// Right column (25%)
 .right-column {
   width: 100%;
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-content: center;
-  flex-wrap: wrap;
+  align-items: flex-start;
   position: relative;
   z-index: 2;
 
   @media (min-width: $breakpoint-small) {
-    width: 41.67%; /* 5/12 dari lebar */
+    width: 25%;
+    margin-left: 5%;
   }
 
   @media (min-width: $breakpoint-medium) {
-    width: 41.67%; /* 5/12 dari lebar */
-    align-content: flex-end;
+    width: 25%;
+    margin-left: 5%;
+    align-items: flex-end;
   }
 }
 
-// Styling untuk komponen Outnow
+// Optional: Add spacing or background color for clarity
+.left-column,
+.right-column {
+  background-color: var(--wpe--color--white);
+}
+
+// Outnow Component
 .outnow-component {
   padding: 20px;
-  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 
   .outnow-title {
@@ -90,12 +92,9 @@
   }
 }
 
-// Styling untuk komponen CategoryUpdates
+// Category Updates Component
 .category-updates-component {
-
   padding: 20px;
-  // border-radius: 8px;
-  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   .category-updates-title {
     font-size: 1.5rem;
@@ -106,11 +105,11 @@
 
   .category-updates-item {
     padding: 10px;
-    // border-bottom: 1px solid var(--wpe--color--light-grey);
     margin-bottom: 10px;
 
     &:last-child {
-      border-bottom: none;
+      margin-bottom: 0;
     }
   }
 }
+

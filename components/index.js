@@ -10,6 +10,7 @@ export { ParentNavigation } from './CategoryHeader/CategorySecondaryHeader/Paren
 export { SingleNavigation } from './CategoryHeader/CategorySecondaryHeader/SingleNavigation'
 export { CategoryIcon } from './CategoryIcon'
 export { CategoryIndo } from './CategoryIndo'
+export { CategoryInsigths } from './CategoryInsigths'
 export { CategorySingleUpdates } from './CategorySingleUpdates'
 export { CategoryUpdates } from './CategoryUpdates'
 export { CategoryUpdatesFull } from './CategoryUpdatesFull'

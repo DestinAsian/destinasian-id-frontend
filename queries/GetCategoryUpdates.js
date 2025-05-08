@@ -48,6 +48,11 @@ export const GetCategoryUpdates = gql`
                         link
                       }
                     }
+                    categories {
+                      nodes {
+                        name
+                      }
+                    }
                   }
                 }
               }

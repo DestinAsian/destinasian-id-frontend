@@ -1,0 +1,146 @@
+@import 'styles/breakpoints';
+
+.CategoryInsigthsWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 1rem;
+  // margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.articleCount {
+  font-size: 0.9rem;
+  font-style: italic;
+  // margin-bottom: 1.5rem;
+  color: #999;
+}
+
+/* Main Wrapper for Posts */
+.postsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.leftColumn {
+  flex: 1 1 100%;  /* Make the left column take up full width */
+}
+
+.rightColumn {
+  flex: 1 1 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* Two columns for the right side */
+  // gap: 1rem;
+  width: 100%;
+}
+
+.cardWrapper {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+
+  &.sideBySide {
+    flex: 1 1 50%; /* 2 cards per row */
+  }
+
+  &.fullWidth {
+    flex: 1 1 100%; /* Full width for first card */
+  }
+}
+
+.card {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.cardInner {
+  padding: 1rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: #999;
+  // margin-bottom: 0.25rem;
+}
+
+.slug {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.type {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+
+  &.imageFirst {
+    aspect-ratio: 1 / 1;
+  }
+
+  &.imageOthers {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+.thumbnail {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Button to load more posts */
+.viewMoreWrapper {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.viewMoreButton {
+  font-size: 1rem;
+  color: #690000;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #000000;
+  }
+}
+
+/* Breakpoints for responsiveness */
+@media screen and (min-width: 768px) {
+  .CategoryInsigthsWrapper {
+    flex-direction: row;  /* Keep the layout side-by-side for larger screens */
+  }
+
+  .leftColumn {
+    flex: 1;
+  }
+
+  .rightColumn {
+    flex: 1;
+  }
+}
