@@ -359,7 +359,7 @@ export default function TravelGuidesMenu(className) {
                   )}
                 >
                   {/* <Accordion.Title theme={AccordionTitleCustomTheme}> */}
-                  <div className={cx('accordion-title')}>
+                  {/* <div className={cx('accordion-title')}>
                     {path && (
                       <Link href={path}>
                         <span
@@ -367,15 +367,35 @@ export default function TravelGuidesMenu(className) {
                             'title',
                             className?.className === 'dark-color'
                               ? 'title-dark'
-                              : '',
+                              : 'label ',
                           )}
                         >
                           {connectedNode?.node?.countryCode?.countryCode &&
                             connectedNode?.node?.countryCode?.countryCode}
                         </span>
+                        <span className={cx('menu-label')}>{label ?? ''}</span>
                       </Link>
                     )}
-                  </div>
+
+                  </div> */}
+                    <div className={cx('accordion-title')}>
+                      {path && (
+                        <Link href={path}>
+                          <span
+                            className={cx(
+                              'title',
+                              className?.className === 'dark-color'
+                                ? 'title-dark'
+                                : 'label',
+                            )}
+                          >
+                            {label}
+                            {connectedNode?.node?.countryCode?.countryCode &&
+                              ` (${connectedNode.node.countryCode.countryCode})`}
+                          </span>
+                        </Link>
+                      )}
+                    </div>
                   <div className={cx('navigation-wrapper')}>
                     <div className={cx('navigation')}>
                       {connectedNode?.node?.children?.edges?.map((post) => (
@@ -417,230 +437,3 @@ export default function TravelGuidesMenu(className) {
     </div>
   )
 }
-
-
-
-// import { useQuery, useApolloClient } from '@apollo/client'
-// import { FOOTER_LOCATION, PRIMARY_LOCATION } from '../../constants/menus'
-// import React, { useEffect, useMemo, useState } from 'react'
-// import Link from 'next/link'
-// import { Accordion } from 'flowbite-react'
-// import classNames from 'classnames/bind'
-// import styles from './TravelGuidesMenu.module.scss'
-// import flatListToHierarchical from '../../utilities/flatListToHierarchical'
-// import { GetPrimaryMenu } from '../../queries/GetPrimaryMenu'
-// import { GetTravelGuides } from '../../queries/GetTravelGuides'
-// import { GetTravelGuidesMenu } from '../../queries/GetTravelGuidesMenu'
-// import Image from 'next/image'
-
-// let cx = classNames.bind(styles)
-
-// function shuffleArray(array) {
-//   for (let i = array.length - 1; i > 0; i--) {
-//     const j = Math.floor(Math.random() * (i + 1))
-//     ;[array[i], array[j]] = [array[j], array[i]]
-//   }
-//   return array
-// }
-
-// export default function TravelGuidesMenu(className) {
-//   const [results, setResults] = useState([])
-//   const [loading, setLoading] = useState(true)
-//   const client = useApolloClient()
-//   const [HonorsCircleArray, setHonorsCircle] = useState([])
-
-//   const AccordionCustomIcon = () => (
-//     <span className={cx('custom-icon')}>{'+'}</span>
-//   )
-
-//   const AccordionCustomTheme = {
-//     base: 'text-white dark:text-white divide-y divide-transparent border-transparent dark:divide-transparent dark:border-transparent rounded-lg border',
-//     flush: {
-//       off: '',
-//       on: 'text-white bg-transparent dark:bg-transparent',
-//     },
-//   }
-
-//   const AccordionTitleCustomTheme = {
-//     base: 'flex w-full items-center justify-between pr-4',
-//     flush: {
-//       off: '',
-//       on: 'text-white bg-transparent dark:bg-transparent',
-//     },
-//     heading: '',
-//     open: {
-//       off: 'visible text-black dark:text-black',
-//       on: 'text-transparent',
-//     },
-//   }
-
-//   const { data: menusData, loading: menusLoading } = useQuery(GetPrimaryMenu, {
-//     variables: {
-//       first: 20,
-//       headerLocation: PRIMARY_LOCATION,
-//     },
-//     fetchPolicy: 'network-only',
-//     nextFetchPolicy: 'cache-and-network',
-//   })
-
-//   const primaryMenu = menusData?.headerMenuItems?.edges ?? []
-  
-//   const mainCategoryLabels = useMemo(() => {
-//     return primaryMenu
-//       .map((post) => post?.node?.connectedNode?.node?.name)
-//       .filter(Boolean)
-//   }, [primaryMenu])
-
-//   const processResults = (posts) => {
-//     const honorsCircles = []
-//     const uniqueHonorsCircleIds = new Set()
-
-//     posts.forEach((post) => {
-//       if (
-//         honorsCircles.length < 5 &&
-//         post?.node?.honorsCircles?.edges?.length
-//       ) {
-//         post.node.honorsCircles.edges.forEach((innerPost) => {
-//           const databaseId = innerPost.node.databaseId
-//           if (
-//             honorsCircles.length < 5 &&
-//             !uniqueHonorsCircleIds.has(databaseId)
-//           ) {
-//             uniqueHonorsCircleIds.add(databaseId)
-//             honorsCircles.push(innerPost.node)
-//           }
-//         })
-//       }
-//     })
-
-//     honorsCircles.sort((a, b) => new Date(b.date) - new Date(a.date))
-
-//     return { honorsCircles }
-//   }
-
-//   const {
-//     data: travelGuidesData,
-//     loading: travelGuidesloading,
-//     error: travelGuidesError,
-//   } = useQuery(GetTravelGuides, {
-//     variables: { search: 'null' },
-//     fetchPolicy: 'network-only',
-//     nextFetchPolicy: 'cache-and-network',
-//   })
-
-//   // if (travelGuidesError) {
-//   //   return <pre>{JSON.stringify(error)}</pre>
-//   // }
-
-//   if (travelGuidesError) {
-//     return <pre>{JSON.stringify(travelGuidesError)}</pre>
-//   }
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       setLoading(true)
-//       try {
-//         const allResults = []
-//         for (let i = 0; i < mainCategoryLabels.length; i++) {
-//           const category = mainCategoryLabels[i]
-//           const response = await client.query({
-//             query: GetTravelGuides,
-//             variables: { search: category },
-//             fetchPolicy: 'network-only',
-//           })
-//           const processedData = processResults(response.data.tags.edges)
-//           allResults.push({ category, data: processedData })
-//         }
-//         setResults(allResults)
-//       } catch (error) {
-//         return <pre>{JSON.stringify(error)}</pre>
-//       }
-//       setLoading(false)
-//     }
-//     fetchData()
-//   }, [client, mainCategoryLabels])
-
-//   useEffect(() => {
-//     const shuffleHonorsCirclePost = () => {
-//       const uniqueDatabaseIds = new Set()
-//       const contentHonorsCircle = []
-
-//       travelGuidesData?.tags?.edges?.forEach((contentNodes) => {
-//         contentNodes?.node?.honorsCircles?.edges?.length !== 0 &&
-//           contentNodes.node?.honorsCircles?.edges.forEach((post) => {
-//             const { databaseId } = post.node
-
-//             if (!uniqueDatabaseIds.has(databaseId)) {
-//               uniqueDatabaseIds.add(databaseId)
-//               contentHonorsCircle.push(post.node)
-//             }
-//           })
-//       })
-
-//       contentHonorsCircle.sort((a, b) => {
-//         const dateA = new Date(a.date)
-//         const dateB = new Date(b.date)
-//         return dateB - dateA
-//       })
-
-//       const shuffledHonorsCircle = shuffleArray(contentHonorsCircle)
-//       const lastFiveHonorsCircle = shuffledHonorsCircle.slice(-5)
-
-//       setHonorsCircle(lastFiveHonorsCircle)
-//     }
-
-//     shuffleHonorsCirclePost()
-//   }, [travelGuidesData])
-
-//   const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
-//     GetTravelGuidesMenu,
-//     {
-//       variables: {
-//         first: 50,
-//         footerHeaderLocation: FOOTER_LOCATION,
-//       },
-//       fetchPolicy: 'network-only',
-//       nextFetchPolicy: 'cache-and-network',
-//     }
-//   )
-
-//   const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
-
-//   const mainMenu = useMemo(() => {
-//     return footerMenu
-//   }, [footerMenu])
-
-//   const hierarchicalMenuItems = flatListToHierarchical(mainMenu)
-
-//   if (loading || menusLoading || travelGuidesloading || footerMenusLoading) {
-//     return (
-//       <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
-//         <div role="status">
-//           <svg
-//             aria-hidden="true"
-//             className="text-black-200 dark:text-black-600 mr-2 h-[80vh] w-8 animate-spin fill-black"
-//             viewBox="0 0 100 101"
-//             fill="none"
-//             xmlns="http://www.w3.org/2000/svg"
-//           >
-//             <path
-//               d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-//               fill="currentColor"
-//             />
-//             <path
-//               d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-//               fill="currentFill"
-//             />
-//           </svg>
-//         </div>
-//       </div>
-//     )
-//   }
-
-//   // NOTE: render UI dari hierarchicalMenuItems, results, HonorsCircleArray
-//   return (
-//     <div>
-//       {/* Render komponen Accordion dan lain-lain di sini */}
-//     </div>
-//   )
-// }
