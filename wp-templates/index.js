@@ -10,7 +10,7 @@ import pageLuxeList from './page-luxe-list'
 import pageTravelGuides from './page-travel-guides'
 import pageVideos from './page-videos'
 import single from './single'
-import singleEditorial from './single-editorial'
+import singleGuide from './single-guide'
 import singleHonorsCircle from './single-honors-circle'
 import singleUpdate from './single-update'
 import singleContest from './single-contest'
@@ -30,7 +30,7 @@ export default {
   'page-travel-guides': pageTravelGuides,
   'page-videos': pageVideos,
   single,
-  'single-editorial': singleEditorial,
+  'single-guide': singleGuide,
   // 'single-advertorial': singleAdvertorial,
   'single-honors-circle': singleHonorsCircle,
   'single-update': singleUpdate,

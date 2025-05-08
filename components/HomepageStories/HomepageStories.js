@@ -56,7 +56,6 @@ export default function HomepageStories(pinPosts) {
  
   
   // if (error || bannerError || advertorialsError) {
-  //   console.log("Error in fetching data:", error || bannerError || advertorialsError);
   //   return <pre>{JSON.stringify(error || bannerError || advertorialsError)}</pre>;
   // }
   
