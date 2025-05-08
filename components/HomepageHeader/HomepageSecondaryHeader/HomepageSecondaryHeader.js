@@ -1,4 +1,3 @@
-
 import classNames from 'classnames/bind'
 import styles from './HomepageSecondaryHeader.module.scss'
 import { TravelGuidesMenu } from '../../../components'
@@ -21,6 +20,7 @@ export default function HomepageSecondaryHeader({
         )}
       >
         <div className={cx('menu-wrapper')}>
+          {/* Tombol Travel Stories */}
           <button
             type="button"
             className={cx(
@@ -30,13 +30,14 @@ export default function HomepageSecondaryHeader({
             )}
             onClick={() => {
               searchQuery ? setSearchQuery('') : setSearchQuery('travel')
-              isGuidesNavShown ? setIsGuidesNavShown(!isGuidesNavShown) : null
+              if (isGuidesNavShown) setIsGuidesNavShown(false)
             }}
-            aria-label="Toggle navigation"
+            aria-label="Toggle Travel Stories"
           >
             <div className={cx('menu-title')}>{`Travel Stories`}</div>
           </button>
 
+          {/* Tombol Guides */}
           <button
             type="button"
             className={cx(
@@ -48,13 +49,14 @@ export default function HomepageSecondaryHeader({
               setIsGuidesNavShown(!isGuidesNavShown)
               setSearchQuery('')
             }}
-            aria-label="Toggle navigation"
+            aria-label="Toggle Guides"
           >
             <div className={cx('menu-title')}>{`Guides`}</div>
           </button>
         </div>
       </div>
 
+      {/* Konten Menu Guides */}
       <div
         className={cx(
           'full-menu-content',
@@ -73,108 +75,154 @@ export default function HomepageSecondaryHeader({
 
 // import classNames from 'classnames/bind'
 // import styles from './HomepageSecondaryHeader.module.scss'
-// import { RCAFullMenu, TravelGuidesMenu } from '../../../components'
+// import { TravelGuidesMenu } from '../../../components'
 
-// let cx = classNames.bind(styles)
+// const cx = classNames.bind(styles)
 
 // export default function HomepageSecondaryHeader({
-//   searchQuery,
 //   setSearchQuery,
-//   rcaDatabaseId,
-//   rcaUri,
-//   isGuidesNavShown,
-//   setIsGuidesNavShown,
-//   isRCANavShown,
-//   setIsRCANavShown,
+//   isNewsNavShown,
+//   setIsNewsNavShown,
+//   isInsightNavShown,
+//   setIsInsightNavShown,
+//   isFeaturesNavShown,
+//   setIsFeaturesNavShown,
+//   isCityGuidesNavShown,
+//   setIsCityGuidesNavShown,
+//   isHonorsNavShown,
+//   setIsHonorsNavShown,
 //   isScrolled,
 // }) {
 //   return (
 //     <>
-//       <div
-//         className={cx(
-//           'navigation-wrapper',
-//           { sticky: isScrolled },
-//         )}
-//       >
+//       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
 //         <div className={cx('menu-wrapper')}>
+//           {/* News */}
 //           <button
 //             type="button"
 //             className={cx(
 //               'menu-button',
-//               searchQuery ? 'active' : '',
-//               searchQuery && !isScrolled && 'active-not-scrolled',
+//               isNewsNavShown && 'active',
+//               isNewsNavShown && !isScrolled && 'active-not-scrolled'
 //             )}
 //             onClick={() => {
-//               searchQuery ? setSearchQuery('') : setSearchQuery('travel')
-//               isGuidesNavShown ? setIsGuidesNavShown(!isGuidesNavShown) : null
-//               isRCANavShown ? setIsRCANavShown(!isRCANavShown) : null
-//             }}
-//             aria-label="Toggle navigation"
-//             aria-controls={cx('rca-menu-wrapper')}
-//             aria-expanded={!isRCANavShown}
-//           >
-//             <div className={cx('menu-title')}>{`Travel Stories`}</div>
-//           </button>
-//           <button
-//             type="button"
-//             className={cx(
-//               'menu-button',
-//               isGuidesNavShown ? 'active' : '',
-//               isGuidesNavShown && !isScrolled && 'active-not-scrolled',
-//             )}
-//             onClick={() => {
-//               setIsGuidesNavShown(!isGuidesNavShown)
-//               isRCANavShown ? setIsRCANavShown(!isRCANavShown) : null
+//               setIsNewsNavShown(!isNewsNavShown)
 //               setSearchQuery('')
 //             }}
-//             aria-label="Toggle navigation"
-//             aria-controls={cx('rca-menu-wrapper')}
-//             aria-expanded={!isRCANavShown}
 //           >
-//             <div className={cx('menu-title')}>{`Guides`}</div>
+//             <div className={cx('menu-title')}>News</div>
 //           </button>
+
+//           {/* Insight */}
 //           <button
 //             type="button"
 //             className={cx(
 //               'menu-button',
-//               isRCANavShown ? 'active' : '',
-//               isRCANavShown && !isScrolled && 'active-not-scrolled',
+//               isInsightNavShown && 'active',
+//               isInsightNavShown && !isScrolled && 'active-not-scrolled'
 //             )}
 //             onClick={() => {
-//               setIsRCANavShown(!isRCANavShown)
-//               isGuidesNavShown ? setIsGuidesNavShown(!isGuidesNavShown) : null
+//               setIsInsightNavShown(!isInsightNavShown)
 //               setSearchQuery('')
 //             }}
-//             aria-label="Toggle navigation"
-//             aria-controls={cx('rca-menu-wrapper')}
-//             aria-expanded={!isRCANavShown}
 //           >
-//             <div className={cx('menu-title')}>{`Readers' Choice Awards`}</div>
+//             <div className={cx('menu-title')}>Insight</div>
+//           </button>
+
+//           {/* Features */}
+//           <button
+//             type="button"
+//             className={cx(
+//               'menu-button',
+//               isFeaturesNavShown && 'active',
+//               isFeaturesNavShown && !isScrolled && 'active-not-scrolled'
+//             )}
+//             onClick={() => {
+//               setIsFeaturesNavShown(!isFeaturesNavShown)
+//               setSearchQuery('')
+//             }}
+//           >
+//             <div className={cx('menu-title')}>Features</div>
+//           </button>
+
+//           {/* City Guides */}
+//           <button
+//             type="button"
+//             className={cx(
+//               'menu-button',
+//               isCityGuidesNavShown && 'active',
+//               isCityGuidesNavShown && !isScrolled && 'active-not-scrolled'
+//             )}
+//             onClick={() => {
+//               setIsCityGuidesNavShown(!isCityGuidesNavShown)
+//               setSearchQuery('')
+//             }}
+//           >
+//             <div className={cx('menu-title')}>City Guides</div>
+//           </button>
+
+//           {/* Honors Circle */}
+//           <button
+//             type="button"
+//             className={cx(
+//               'menu-button',
+//               isHonorsNavShown && 'active',
+//               isHonorsNavShown && !isScrolled && 'active-not-scrolled'
+//             )}
+//             onClick={() => {
+//               setIsHonorsNavShown(!isHonorsNavShown)
+//               setSearchQuery('')
+//             }}
+//           >
+//             <div className={cx('menu-title')}>Honors Circle</div>
 //           </button>
 //         </div>
 //       </div>
 
-//       <div
-//         className={cx(
-//           'full-menu-content',
-//           isGuidesNavShown ? 'show' : undefined,
-//         )}
-//       >
-//         <div className={cx('full-menu-wrapper')}>
-//           <TravelGuidesMenu />
+//       {/* Konten News */}
+//       {isNewsNavShown && (
+//         <div className={cx('full-menu-content', 'show')}>
+//           <div className={cx('full-menu-wrapper')}>
+//             <p>News content here</p>
+//           </div>
 //         </div>
-//       </div>
-//       <div
-//         className={cx('rca-menu-wrapper', isRCANavShown ? 'show' : undefined)}
-//       >
-//         <RCAFullMenu
-//           rcaDatabaseId={rcaDatabaseId}
-//           uri={rcaUri}
-//           isNavShown={isRCANavShown}
-//           setIsNavShown={setIsRCANavShown}
-//           className={'light-color'}
-//         />
-//       </div>
+//       )}
+
+//       {/* Konten Insight */}
+//       {isInsightNavShown && (
+//         <div className={cx('full-menu-content', 'show')}>
+//           <div className={cx('full-menu-wrapper')}>
+//             <p>Insight content here</p>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Konten Features */}
+//       {isFeaturesNavShown && (
+//         <div className={cx('full-menu-content', 'show')}>
+//           <div className={cx('full-menu-wrapper')}>
+//             <p>Features content here</p>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Konten City Guides */}
+//       {isCityGuidesNavShown && (
+//         <div className={cx('full-menu-content', 'show')}>
+//           <div className={cx('full-menu-wrapper')}>
+//             <TravelGuidesMenu />
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Konten Honors Circle */}
+//       {isHonorsNavShown && (
+//         <div className={cx('full-menu-content', 'show')}>
+//           <div className={cx('full-menu-wrapper')}>
+//             <p>Honors Circle content here</p>
+//           </div>
+//         </div>
+//       )}
 //     </>
 //   )
 // }
