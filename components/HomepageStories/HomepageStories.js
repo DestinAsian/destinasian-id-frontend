@@ -3,9 +3,11 @@ import classNames from 'classnames/bind'
 import styles from './HomepageStories.module.scss'
 import { useQuery } from '@apollo/client'
 import { GetHomepageStories } from '../../queries/GetHomepageStories'
+import { GetHomepageBannerAds } from '../../queries/GetHomepageBannerAds'
 import {
   Button,
   PostTwoColumns,
+  ModuleAd,
 } from '../../components'
 
 let cx = classNames.bind(styles)
@@ -22,13 +24,10 @@ export default function HomepageStories(pinPosts) {
   // Fetching Posts
   const [isFetchingMore, setIsFetchingMore] = useState(false)
   // Declare state for banner ads
-  // const [bannerAdsArray, setBannerAdsArray] = useState([])
-
+  const [bannerAdsArray, setBannerAdsArray] = useState([])
   // Post per fetching
   const postsPerPage = 4
-  // const bannerPerPage = 20
-
-  
+  const bannerPerPage = 20
 
   // Get Stories / Posts
   const { data, error, loading, fetchMore } = useQuery(GetHomepageStories, {
@@ -40,85 +39,78 @@ export default function HomepageStories(pinPosts) {
     nextFetchPolicy: 'cache-and-network',
   })
 
-  // // Get Banner
-  // const { data: bannerData, error: bannerError } = useQuery(
-  //   GetHomepageBannerAds,
-  //   {
-  //     variables: {
-  //       first: bannerPerPage,
-  //     },
-  //     fetchPolicy: 'network-only',
-  //     nextFetchPolicy: 'cache-and-network',
-  //   },
-  // )
+  // Get Banner
+  const { data: bannerData, error: bannerError } = useQuery(
+    GetHomepageBannerAds,
+    {
+      variables: {
+        first: bannerPerPage,
+      },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    },
+  )
+
+  const updateQuery = (prev, { fetchMoreResult }) => {
+    if (!fetchMoreResult) return prev
+
+    const prevEdges = data?.contentNodes?.edges || []
+    const newEdges = fetchMoreResult?.contentNodes?.edges || []
+
+    return {
+      ...data,
+      contentNodes: {
+        ...data?.contentNodes,
+        edges: [...prevEdges, ...newEdges],
+        pageInfo: fetchMoreResult?.contentNodes?.pageInfo,
+      },
+    }
+  }
+
+  // Function to shuffle the banner ads and store them in state
+  useEffect(() => {
+    const shuffleBannerAds = () => {
+      const bannerAdsArrayObj = Object.values(
+        bannerData?.bannerAds?.edges || [],
+      )
+
+      // Separate shuffled banner ads with <img> tags from those without
+      const bannerAdsWithImg = bannerAdsArrayObj.filter(
+        (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
+      )
+
+      // Shuffle only the otherBannerAds array
+      const shuffledBannerAds = shuffleArray(bannerAdsWithImg)
+
+      // Concatenate the arrays with pinned ads first and shuffled other banner ads
+      const shuffledBannerAdsArray = [...shuffledBannerAds]
+
+      setBannerAdsArray(shuffledBannerAdsArray)
+    }
+
+    // Shuffle the banner ads when the component mounts
+    shuffleBannerAds()
+
+    // Shuffle the banner ads every 10 seconds
+    const shuffleInterval = setInterval(() => {
+      shuffleBannerAds()
+    }, 60000) // 10000 milliseconds = 10 seconds
+
+    // Cleanup the interval when the component unmounts
+    return () => {
+      clearInterval(shuffleInterval)
+    }
+  }, [bannerData]) // Use bannerData as a dependency to trigger shuffling when new data arrives
 
 
- 
-  
-  // if (error || bannerError || advertorialsError) {
-  //   console.log("Error in fetching data:", error || bannerError || advertorialsError);
-  //   return <pre>{JSON.stringify(error || bannerError || advertorialsError)}</pre>;
-  // }
-  
-  // const updateQuery = (prev, { fetchMoreResult }) => {
-  //   if (!fetchMoreResult) return prev
 
-  //   const prevEdges = data?.contentNodes?.edges || []
-  //   const newEdges = fetchMoreResult?.contentNodes?.edges || []
-
-  //   return {
-  //     ...data,
-  //     contentNodes: {
-  //       ...data?.contentNodes,
-  //       edges: [...prevEdges, ...newEdges],
-  //       pageInfo: fetchMoreResult?.contentNodes?.pageInfo,
-  //     },
-  //   }
-  // }
-
-  // // Function to shuffle the banner ads and store them in state
-  // useEffect(() => {
-  //   const shuffleBannerAds = () => {
-  //     const bannerAdsArrayObj = Object.values(
-  //       bannerData?.bannerAds?.edges || [],
-  //     )
-
-  //     // Separate shuffled banner ads with <img> tags from those without
-  //     const bannerAdsWithImg = bannerAdsArrayObj.filter(
-  //       (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
-  //     )
-
-  //     // Shuffle only the otherBannerAds array
-  //     const shuffledBannerAds = shuffleArray(bannerAdsWithImg)
-
-  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
-  //     const shuffledBannerAdsArray = [...shuffledBannerAds]
-
-  //     setBannerAdsArray(shuffledBannerAdsArray)
-  //   }
-
-  //   // Shuffle the banner ads when the component mounts
-  //   shuffleBannerAds()
-
-  //   // Shuffle the banner ads every 10 seconds
-  //   const shuffleInterval = setInterval(() => {
-  //     shuffleBannerAds()
-  //   }, 60000) // 10000 milliseconds = 10 seconds
-
-  //   // Cleanup the interval when the component unmounts
-  //   return () => {
-  //     clearInterval(shuffleInterval)
-  //   }
-  // }, [bannerData]) // Use bannerData as a dependency to trigger shuffling when new data arrives
-
-
-  // // Concatenate the arrays to place ads with <img> tags first
-  // const sortedBannerAdsArray = [...bannerAdsArray].reduce((uniqueAds, ad) => {
-  //   if (!uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id)) {
-  //     uniqueAds.push(ad)
-  //   }
-  //   return uniqueAds
-  // }, [])
+  // Concatenate the arrays to place ads with <img> tags first
+  const sortedBannerAdsArray = [...bannerAdsArray].reduce((uniqueAds, ad) => {
+    if (!uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id)) {
+      uniqueAds.push(ad)
+    }
+    return uniqueAds
+  }, [])
 
   // Function to fetch more posts
   const fetchMorePosts = () => {
@@ -159,9 +151,9 @@ export default function HomepageStories(pinPosts) {
     return <pre>{JSON.stringify(error)}</pre>
   }
 
-  // if (bannerError) {
-  //   return <pre>{JSON.stringify(error)}</pre>
-  // }
+  if (bannerError) {
+    return <pre>{JSON.stringify(error)}</pre>
+  }
 
   if (loading) {
     return (
@@ -197,13 +189,11 @@ export default function HomepageStories(pinPosts) {
   )
 
 
-  
+  const numberOfBannerAds = sortedBannerAdsArray.length
+
   return (
-    
     <div className={cx('component')}>
-      {/* {mergedPosts.length !== 0 &&
-        mergedPosts.map((post, index) => ( */}
-           {Array.isArray(mergedPosts) && mergedPosts?.length > 0 &&
+      {mergedPosts.length !== 0 &&
         mergedPosts.map((post, index) => (
           <React.Fragment key={post?.id}>
             {/* Post / Guides Stories */}
@@ -228,10 +218,9 @@ export default function HomepageStories(pinPosts) {
                 />
               </div>
             )}
-
-            {/* Editorials Stories */}
-            {/* {post?.contentTypeName === 'editorial' && (
+            {post?.contentTypeName === 'editorial' && (
               <div className={cx('post-wrapper')}>
+                {/* Editorials Stories */}
                 <PostTwoColumns
                   title={post?.title}
                   excerpt={post?.excerpt}
@@ -250,10 +239,9 @@ export default function HomepageStories(pinPosts) {
                   locationUrl={post?.acfLocationIcon?.locationUrl}
                 />
               </div>
-            )} */}
-
+            )}
             {/* Updates Stories */}
-            {/* {post?.contentTypeName === 'update' && (
+            {post?.contentTypeName === 'update' && (
               <div className={cx('post-wrapper')}>
                 <PostTwoColumns
                   title={post?.title}
@@ -267,10 +255,10 @@ export default function HomepageStories(pinPosts) {
                   featuredImage={post?.featuredImage?.node}
                 />
               </div>
-            )} */}
-                {/* Honors Circle Stories */}
-            {/* {post?.contentTypeName === 'honors-circle' && (
+            )}
+            {post?.contentTypeName === 'honors-circle' && (
               <div className={cx('hc-wrapper')}>
+                {/* Honors Circle Stories */}
                 <PostTwoColumns
                   title={post?.title}
                   excerpt={post?.excerpt}
@@ -280,10 +268,10 @@ export default function HomepageStories(pinPosts) {
                   featuredImage={post?.featuredImage?.node}
                 />
               </div>
-            )} */}
-                {/* Luxury Travel Stories */}
+            )}
             {post?.contentTypeName === 'luxury-travel' && (
               <div className={cx('post-wrapper')}>
+                {/* Luxury Travel Stories */}
                 <PostTwoColumns
                   title={post?.title}
                   excerpt={post?.excerpt}
@@ -295,7 +283,7 @@ export default function HomepageStories(pinPosts) {
               </div>
             )}
             {/* Show 1st banner after 2 posts and then every 4 posts */}
-            {/* {(index - 1) % 4 === 0 && (
+            {(index - 1) % 4 === 0 && (
               <div className={cx('banner-ad-wrapper')}>
                 <ModuleAd
                   bannerAd={
@@ -304,12 +292,10 @@ export default function HomepageStories(pinPosts) {
                   }
                 />
               </div>
-            )} */}
-           
+            )}
           </React.Fragment>
         ))}
-      {/* {mergedPosts.length && ( */}
-      {Array.isArray(mergedPosts) && mergedPosts?.length > 0 && (
+      {mergedPosts.length && (
         <div className="mx-auto my-0 flex w-[100vw] justify-center ">
           {data?.contentNodes?.pageInfo?.hasNextPage &&
             data?.contentNodes?.pageInfo?.endCursor && (
