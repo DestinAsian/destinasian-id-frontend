@@ -44,11 +44,6 @@ export default function Component(props) {
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
-  const [isNewsNavShown, setIsNewsNavShown] = useState(false)
-  const [isInsightNavShown, setIsInsightNavShown] = useState(false)
-  const [isFeaturesNavShown, setIsFeaturesNavShown] = useState(false)
-  const [isCityGuidesNavShown, setIsCityGuidesNavShown] = useState(false)
-  const [isHonorsNavShown, setIsHonorsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
@@ -91,50 +86,6 @@ export default function Component(props) {
     }
   }, [isGuidesNavShown])
 
-  // Stop scrolling pages when isNewsNavShown
-  useEffect(() => {
-    if (isNewsNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isNewsNavShown])
-
-  // Stop scrolling pages when isInsightNavShown
-  useEffect(() => {
-    if (isInsightNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isInsightNavShown])
-
-  // Stop scrolling pages when isFeaturesNavShown
-  useEffect(() => {
-    if (isFeaturesNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isFeaturesNavShown])
-
-  // Stop scrolling pages when isCityGuidesNavShown
-  useEffect(() => {
-    if (isCityGuidesNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isCityGuidesNavShown])
-
-  // Stop scrolling pages when isHonorsNavShown
-  useEffect(() => {
-    if (isHonorsNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isHonorsNavShown])
 
   const featureWell = [
     {
@@ -306,22 +257,8 @@ export default function Component(props) {
       <HomepageSecondaryHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        // rcaDatabaseId={rcaDatabaseId}
-        // rcaUri={rcaUri}
         isGuidesNavShown={isGuidesNavShown}
         setIsGuidesNavShown={setIsGuidesNavShown}
-        isNewsNavShown={isNewsNavShown}
-        setIsNewsNavShown={setIsNewsNavShown}
-        isInsightNavShown={isInsightNavShown}
-        setIsInsightNavShown={setIsInsightNavShown}
-        isFeaturesNavShown={isFeaturesNavShown}
-        setIsFeaturesNavShown={setIsFeaturesNavShown}
-        isCityGuidesNavShown={isCityGuidesNavShown}
-        setIsCityGuidesNavShown={setIsCityGuidesNavShown}
-        isHonorsNavShown={isHonorsNavShown}
-        setIsHonorsNavShown={setIsHonorsNavShown}
-        // isRCANavShown={isRCANavShown}
-        // setIsRCANavShown={setIsRCANavShown}
         isScrolled={isScrolled}
       />
 

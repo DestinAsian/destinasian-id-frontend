@@ -1,3 +1,78 @@
+
+import classNames from 'classnames/bind'
+import styles from './HomepageSecondaryHeader.module.scss'
+import { TravelGuidesMenu } from '../../../components'
+import Link from 'next/link'
+
+let cx = classNames.bind(styles)
+
+export default function SecondaryHeader({
+
+  setSearchQuery,
+  isGuidesNavShown,
+  setIsGuidesNavShown,
+  isRCANavShown,
+  setIsRCANavShown,
+  isScrolled,
+}) {
+  return (
+    <>
+      <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
+        <div className={cx('menu-wrapper')}>
+          <button
+            type="button"
+            className={cx('menu-button', isGuidesNavShown ? 'active' : '')}
+            onClick={() => {
+              setIsGuidesNavShown(!isGuidesNavShown)
+              isRCANavShown ? setIsRCANavShown(!isRCANavShown) : null
+              setSearchQuery('')
+            }}
+            aria-label="Toggle navigation"
+            aria-controls={cx('rca-menu-wrapper')}
+            aria-expanded={!isRCANavShown}
+          >
+            <div className={cx('menu-title')}>{`Guides`}</div>
+          </button>
+          {/* News */}
+          <Link href="/news">
+            <div className={cx('menu-button')}>
+              <div className={cx('menu-title')}>NEWS</div>
+            </div>
+          </Link>
+
+          {/* Insights */}
+          <Link href="/insights">
+            <div className={cx( 'menu-button')}>
+              <div className={cx('menu-title')}>INSIGHTS</div>
+            </div>
+          </Link>
+
+          {/* Features */}
+          <Link href="/features">
+            <div className={cx('menu-button')}>
+              <div className={cx('menu-title')}>EATURES</div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      <div
+        className={cx(
+          'full-menu-content',
+          isGuidesNavShown ? 'show' : undefined,
+        )}
+      >
+        <div className={cx('full-menu-wrapper')}>
+          <TravelGuidesMenu />
+        </div>
+      </div>
+    </>
+  )
+}
+
+
+
+
 // import classNames from 'classnames/bind'
 // import styles from './HomepageSecondaryHeader.module.scss'
 // import { TravelGuidesMenu } from '../../../components'
@@ -87,160 +162,4 @@
 //   )
 // }
 
-import classNames from 'classnames/bind'
-import styles from './HomepageSecondaryHeader.module.scss'
-import { TravelGuidesMenu } from '../../../components'
 
-const cx = classNames.bind(styles)
-
-export default function HomepageSecondaryHeader({
-  setSearchQuery,
-  isNewsNavShown,
-  setIsNewsNavShown,
-  isInsightNavShown,
-  setIsInsightNavShown,
-  isFeaturesNavShown,
-  setIsFeaturesNavShown,
-  isCityGuidesNavShown,
-  setIsCityGuidesNavShown,
-  isHonorsNavShown,
-  setIsHonorsNavShown,
-  isScrolled,
-}) {
-  return (
-    <>
-      <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
-        <div className={cx('menu-wrapper')}>
-          {/* News */}
-          <button
-            type="button"
-            className={cx(
-              'menu-button',
-              isNewsNavShown && 'active',
-              isNewsNavShown && !isScrolled && 'active-not-scrolled',
-            )}
-            onClick={() => {
-              setIsNewsNavShown(!isNewsNavShown)
-              setSearchQuery('')
-            }}
-          >
-            <div className={cx('menu-title')}>{`News`}</div>
-          </button>
-
-          {/* Insight */}
-          <button
-            type="button"
-            className={cx(
-              'menu-button',
-              isInsightNavShown && 'active',
-              isInsightNavShown && !isScrolled && 'active-not-scrolled',
-            )}
-            onClick={() => {
-              setIsInsightNavShown(!isInsightNavShown)
-              setSearchQuery('')
-            }}
-          >
-            <div className={cx('menu-title')}>{`Insight`}</div>
-          </button>
-
-          {/* Features */}
-          <button
-            type="button"
-            className={cx(
-              'menu-button',
-              isFeaturesNavShown && 'active',
-              isFeaturesNavShown && !isScrolled && 'active-not-scrolled',
-            )}
-            onClick={() => {
-              setIsFeaturesNavShown(!isFeaturesNavShown)
-              setSearchQuery('')
-            }}
-          >
-            <div className={cx('menu-title')}>{`Features`}</div>
-          </button>
-
-          {/* City Guides */}
-          <button
-            type="button"
-            className={cx(
-              'menu-button',
-              isCityGuidesNavShown && 'active',
-              isCityGuidesNavShown && !isScrolled && 'active-not-scrolled',
-            )}
-            onClick={() => {
-              setIsCityGuidesNavShown(!isCityGuidesNavShown)
-              setSearchQuery('')
-            }}
-          >
-            <div className={cx('menu-title')}>{`City Guides`}</div>
-          </button>
-
-          {/* Honors Circle */}
-          <button
-            type="button"
-            className={cx(
-              'menu-button',
-              isHonorsNavShown && 'active',
-              isHonorsNavShown && !isScrolled && 'active-not-scrolled',
-            )}
-            onClick={() => {
-              setIsHonorsNavShown(!isHonorsNavShown)
-              setSearchQuery('')
-            }}
-          >
-            <div className={cx('menu-title')}>{`Honors Circle`}</div>
-          </button>
-        </div>
-      </div>
-
-
-      <div
-        className={cx('full-menu-content', isNewsNavShown ? 'show' : undefined)}
-      >
-        <div className={cx('full-menu-wrapper')}>
-          <TravelGuidesMenu />
-        </div>
-      </div>
-      <div
-        className={cx(
-          'full-menu-content',
-          isInsightNavShown ? 'show' : undefined,
-        )}
-      >
-        <div className={cx('full-menu-wrapper')}>
-          <TravelGuidesMenu />
-        </div>
-      </div>
-      <div
-        className={cx(
-          'full-menu-content',
-          isFeaturesNavShown ? 'show' : undefined,
-        )}
-      >
-        <div className={cx('full-menu-wrapper')}>
-          <TravelGuidesMenu />
-        </div>
-      </div>
-      <div
-        className={cx(
-          'full-menu-content',
-          isCityGuidesNavShown ? 'show' : undefined,
-        )}
-      >
-        <div className={cx('full-menu-wrapper')}>
-          <TravelGuidesMenu />
-        </div>
-      </div>
-      <div
-        className={cx(
-          'full-menu-content',
-          isHonorsNavShown ? 'show' : undefined,
-        )}
-      >
-        <div className={cx('full-menu-wrapper')}>
-          <TravelGuidesMenu />
-        </div>
-      </div>
-    </>
-  )
-}
