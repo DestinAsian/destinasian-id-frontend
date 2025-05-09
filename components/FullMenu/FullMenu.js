@@ -93,7 +93,6 @@ export default function FullMenu({
       </>
     )
   }
-  // console.log('latestStories:', latestStories)
 
   return (
     <div className={cx('component')}>

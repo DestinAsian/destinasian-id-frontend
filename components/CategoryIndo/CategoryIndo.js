@@ -130,3 +130,55 @@ export default CategoryIndo;
 //     </div>
 //   );
 // };
+
+// // export default CategoryIndo
+// import React from 'react'
+// import { useQuery } from '@apollo/client'
+// import { GetIndoCategory } from '../../queries/GetIndoCategory'
+// import classNames from 'classnames/bind'
+// import styles from './CategoryIndo.module.scss'
+// import Link from 'next/link'
+
+// const cx = classNames.bind(styles)
+
+// const CategoryIndo = () => {
+//   const { data, loading, error } = useQuery(GetIndoCategory, {
+//     variables: {
+//       include: [14601, 14606, 14616, 14611],
+//     },
+//   })
+
+//   if (loading) return <p>Loading...</p>
+//   if (error) return <p>Error: {error.message}</p>
+
+//   const categories = data?.categories?.nodes || []
+
+//   return (
+//     <div className={cx('categoryIndoWrapper')}>
+//       <div className={cx('grid')}>
+//         {categories.map((category) => {
+//           const { id, name, slug, categoryImages } = category
+//           const imageUrl =
+//             categoryImages?.categoryImages?.[0]?.mediaItemUrl || ''
+
+//           return (
+//             <Link key={id} href={`/category/${slug}`} className={cx('card')}>
+//               <div className={cx('imageWrapper')}>
+//                 {imageUrl && (
+//                   <img
+//                     src={imageUrl}
+//                     alt={name || 'Category Image'}
+//                     className={cx('image')}
+//                   />
+//                 )}
+//                 <h3 className={cx('nameOverlay')}>{name}</h3>
+//               </div>
+//             </Link>
+//           )
+//         })}
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default CategoryIndo

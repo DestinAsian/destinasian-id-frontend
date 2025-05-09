@@ -7,7 +7,7 @@ import {
   CategorySecondaryHeader,
   Main,
   CategoryEntryHeader,
-  FeaturedImage,
+  // FeaturedImage,
   SEO,
   Footer,
   CategoryStories,
@@ -341,7 +341,7 @@ export default function Component(props) {
           isGuidesNavShown={isGuidesNavShown}
           setIsGuidesNavShown={setIsGuidesNavShown}
           // isRCANavShown={isRCANavShown}
-          // setIsRCANavShown={setIsRCANavShown} 
+          // setIsRCANavShown={setIsRCANavShown}
           isScrolled={isScrolled}
         />
       )}
@@ -362,10 +362,10 @@ export default function Component(props) {
         <>
           <CategoryStories
             categoryUri={databaseId}
-            pinPosts={pinPosts}
+            // pinPosts={pinPosts}
             name={name}
-            children={children}
-            parent={parent?.node?.name}
+            // children={children}
+            // parent={parent?.node?.name}
           />
         </>
       </Main>
@@ -376,7 +376,6 @@ export default function Component(props) {
 
 Component.query = gql`
   ${BlogInfoFragment}
-  ${FeaturedImage.fragments.entry}
   query GetCategoryPage($databaseId: ID!) {
     category(id: $databaseId, idType: DATABASE_ID) {
       name
@@ -419,89 +418,7 @@ Component.query = gql`
         destinationGuides
         guidesTitle
       }
-      pinPosts {
-        pinPost {
-          ... on Post {
-            id
-            title
-            content
-            date
-            uri
-            excerpt
-            ...FeaturedImageFragment
-            author {
-              node {
-                name
-              }
-            }
-            categories(where: { childless: true }) {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-            acfCategoryIcon {
-              categoryLabel
-              chooseYourCategory
-              chooseIcon {
-                mediaItemUrl
-              }
-            }
-            acfLocationIcon {
-              fieldGroupName
-              locationLabel
-              locationUrl
-            }
-          }
-          ... on Editorial {
-            id
-            title
-            content
-            date
-            uri
-            excerpt
-            ...FeaturedImageFragment
-            author {
-              node {
-                name
-              }
-            }
-            categories {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-          ... on Advertorial {
-            id
-            title
-            content
-            date
-            uri
-            ...FeaturedImageFragment
-            author {
-              node {
-                name
-              }
-            }
-          }
-        }
-      }
+      
       parent {
         node {
           name

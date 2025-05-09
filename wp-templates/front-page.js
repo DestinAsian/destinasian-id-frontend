@@ -37,8 +37,6 @@ export default function Component(props) {
 
   const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
-  console.log(props?.data)
-
   const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
@@ -211,8 +209,6 @@ export default function Component(props) {
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
   const indoCategory =
     indoData?.category?.children?.edges?.map((edge) => edge.node) ?? []
-
-  console.log(primaryMenu)
 
   // // Get pin posts stories
   // const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {

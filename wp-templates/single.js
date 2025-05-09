@@ -1,31 +1,39 @@
+import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import React, { useEffect, useState } from 'react'
 import {
   SingleHeader,
   Footer,
   Main,
   Container,
-  SingleEntryHeader,
-  ContentWrapper,
+  SingleEditorialEntryHeader,
   FeaturedImage,
   SEO,
-  SingleSlider,
-  CategorySecondaryHeader,
-  EntryMoreReviews,
-  MoreReviews,
-  PartnerContent,
+  SingleEditorialFeaturedImage,
+  ContentWrapperEditorial,
+  RelatedStories,
+  EntryRelatedStories,
   PasswordProtected,
+  SecondaryHeader,
 } from '../components'
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
-import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
+import { GetLatestRCA } from '../queries/GetLatestRCA'
 
-export default function Component(props) {
+// Randomized Function
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+  return array
+}
+
+export default function Single(props) {
   // Loading state for previews
   if (props.loading) {
     return <>Loading...</>
@@ -35,15 +43,15 @@ export default function Component(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // Check for stored password in cookies on mount
-  useEffect(() => {
-    const storedPassword = Cookies.get('postPassword')
-    if (
-      storedPassword &&
-      storedPassword === props?.data?.post?.passwordProtected?.password
-    ) {
-      setIsAuthenticated(true)
-    }
-  }, [props?.data?.post?.passwordProtected?.password])
+  // useEffect(() => {
+  //   const storedPassword = Cookies.get('editorialPassword')
+  //   if (
+  //     storedPassword &&
+  //     storedPassword === props?.data?.editorial?.passwordProtected?.password
+  //   ) {
+  //     setIsAuthenticated(true)
+  //   }
+  // }, [props?.data?.editorial?.passwordProtected?.password])
 
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
@@ -51,15 +59,16 @@ export default function Component(props) {
     title,
     content,
     featuredImage,
-    databaseId,
+    author,
+    date,
     acfPostSlider,
-    acfCategoryIcon,
-    acfLocationIcon,
+    // acfSingleEditorialSlider,
     seo,
     uri,
     passwordProtected,
   } = props?.data?.post
-  const categories = props?.data?.post.categories?.edges ?? []
+  const categories = props?.data?.post?.categories?.edges ?? []
+  const relatedStories = categories[0]?.node?.posts ?? []
 
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
@@ -67,6 +76,8 @@ export default function Component(props) {
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -99,17 +110,46 @@ export default function Component(props) {
     }
   }, [isNavShown])
 
-  let catVariable = {
-    first: 1,
-    id: databaseId,
-  }
+  // Stop scrolling pages when isRCANavShown
+  useEffect(() => {
+    if (isRCANavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isRCANavShown])
 
-  // Get Category
-  const { data, loading } = useQuery(GetSecondaryHeader, {
-    variables: catVariable,
+  // Stop scrolling pages when isGuidesNavShown
+  useEffect(() => {
+    if (isGuidesNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isGuidesNavShown])
+
+  const { data: rcaData } = useQuery(GetLatestRCA, {
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
+
+  const [latestRCA, setLatestRCA] = useState(null)
+
+  useEffect(() => {
+    if (rcaData?.readersChoiceAwards?.edges) {
+      // Find the first RCA where parent is null
+      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
+        (edge) => !edge.node.parent,
+      )?.node
+      setLatestRCA(filteredRCA || null)
+    }
+  }, [rcaData]) // Runs whenever rcaData changes
+
+  const {
+    // title: rcaTitle,
+    databaseId: rcaDatabaseId,
+    uri: rcaUri,
+  } = latestRCA ?? []
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -245,12 +285,28 @@ export default function Component(props) {
     ],
   ]
 
+  // Randomized slice function
+  function getRandomSlice(array, count) {
+    const shuffledArray = shuffleArray([...array])
+    return shuffledArray.slice(0, count)
+  }
+
+  // Shuffle the relatedStories before rendering
+  const [shuffledRelatedStories, setShuffledRelatedStories] = useState([])
+
+  useEffect(() => {
+    if (relatedStories && relatedStories.edges) {
+      const shuffledSlice = getRandomSlice(relatedStories.edges, 5)
+      setShuffledRelatedStories(shuffledSlice)
+    }
+  }, [relatedStories])
+
   // Handle password submission
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
-      Cookies.set('postPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
+      Cookies.set('editorialPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
     } else {
       alert('Incorrect password. Please try again.')
     }
@@ -278,13 +334,13 @@ export default function Component(props) {
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      {/* <SEO
+      <SEO
         title={seo?.title}
         description={seo?.metaDesc}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={uri}
         focuskw={seo?.focuskw}
-      /> */}
+      />
       <SingleHeader
         title={siteTitle}
         description={siteDescription}
@@ -303,39 +359,47 @@ export default function Component(props) {
         setIsNavShown={setIsNavShown}
         isScrolled={isScrolled}
       />
-      <CategorySecondaryHeader
-        data={data}
-        databaseId={databaseId}
-        categoryUri={categories[0]?.node?.uri}
-        parentCategory={categories[0]?.node?.parent?.node?.name}
+      <SecondaryHeader
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        rcaDatabaseId={rcaDatabaseId}
+        rcaUri={rcaUri}
+        isGuidesNavShown={isGuidesNavShown}
+        setIsGuidesNavShown={setIsGuidesNavShown}
+        isRCANavShown={isRCANavShown}
+        setIsRCANavShown={setIsRCANavShown}
+        isScrolled={isScrolled}
       />
-      <Main>
+      <Main className={'relative top-[-0.75rem] sm:top-[-1rem]'}>
         <>
-          <SingleSlider images={images} />
-          <SingleEntryHeader
+          <SingleEditorialFeaturedImage image={featuredImage?.node} />
+          <SingleEditorialEntryHeader
+            image={featuredImage?.node}
             title={title}
             categoryUri={categories[0]?.node?.uri}
             parentCategory={categories[0]?.node?.parent?.node?.name}
             categoryName={categories[0]?.node?.name}
-            chooseYourCategory={acfCategoryIcon?.chooseYourCategory}
-            chooseIcon={acfCategoryIcon?.chooseIcon?.mediaItemUrl}
-            categoryLabel={acfCategoryIcon?.categoryLabel}
-            locationValidation={acfLocationIcon?.fieldGroupName}
-            locationLabel={acfLocationIcon?.locationLabel}
-            locationUrl={acfLocationIcon?.locationUrl}
+            author={author.node.name}
+            date={date}
           />
-          <Container>
-            <ContentWrapper content={content} />
-          </Container>
-          <EntryMoreReviews
-            parentName={categories[0]?.node?.parent?.node?.name}
-            categoryName={categories[0]?.node?.name}
-            categoryUri={categories[0]?.node?.uri}
-          /> 
-          {/* <MoreReviews databaseId={databaseId} />
-          {/* <PartnerContent
-            parentName={categories[0]?.node?.parent?.node?.name}
-          /> */}
+          <ContentWrapperEditorial content={content} images={images} />
+          <EntryRelatedStories />
+          {shuffledRelatedStories.map((post) => (
+            <Container>
+              {post.node.title !== title && (
+                // Render the merged posts here
+                <RelatedStories
+                  key={post.node.id}
+                  title={post.node.title}
+                  excerpt={post.node.excerpt}
+                  uri={post.node.uri}
+                  category={post.node.categories.edges[0]?.node?.name}
+                  categoryUri={post.node.categories.edges[0]?.node?.uri}
+                  featuredImage={post.node.featuredImage?.node}
+                />
+              )}
+            </Container>
+          ))}
         </>
       </Main>
       <Footer footerMenu={footerMenu} />
@@ -343,19 +407,19 @@ export default function Component(props) {
   )
 }
 
-Component.query = gql`
+Single.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}
   query GetPost($databaseId: ID!, $asPreview: Boolean = false) {
     post(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
       title
-      databaseId
       content
       date
       passwordProtected {
         onOff
         password
       }
+      ...FeaturedImageFragment
       author {
         node {
           name
@@ -364,45 +428,8 @@ Component.query = gql`
       seo {
         title
         metaDesc
-        focuskw
       }
       uri
-      categories(where: { childless: true }) {
-        edges {
-          node {
-            name
-            uri
-            parent {
-              node {
-                name
-                uri
-                countryCode {
-                  countryCode
-                }
-                destinationGuides {
-                  destinationGuides
-                }
-                children {
-                  edges {
-                    node {
-                      name
-                      uri
-                    }
-                  }
-                }
-              }
-            }
-            children {
-              edges {
-                node {
-                  name
-                  uri
-                }
-              }
-            }
-          }
-        }
-      }
       acfPostSlider {
         slide1 {
           mediaItemUrl
@@ -425,17 +452,35 @@ Component.query = gql`
         slideCaption4
         slideCaption5
       }
-      acfCategoryIcon {
-        categoryLabel
-        chooseYourCategory
-        chooseIcon {
-          mediaItemUrl
+      categories {
+        edges {
+          node {
+            name
+            uri
+            parent {
+              node {
+                name
+                uri
+                children {
+                  edges {
+                    node {
+                      name
+                      uri
+                    }
+                  }
+                }
+              }
+            }
+            children {
+              edges {
+                node {
+                  name
+                  uri
+                }
+              }
+            }
+          }
         }
-      }
-      acfLocationIcon {
-        fieldGroupName
-        locationLabel
-        locationUrl
       }
       ...FeaturedImageFragment
     }
@@ -445,7 +490,7 @@ Component.query = gql`
   }
 `
 
-Component.variables = ({ databaseId }, ctx) => {
+Single.variables = ({ databaseId }, ctx) => {
   return {
     databaseId,
     asPreview: ctx?.asPreview,

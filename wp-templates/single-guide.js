@@ -1,39 +1,31 @@
-import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
+import React, { useEffect, useState } from 'react'
 import {
   SingleHeader,
   Footer,
   Main,
   Container,
-  SingleEditorialEntryHeader,
+  SingleEntryHeader,
+  ContentWrapper,
   FeaturedImage,
   SEO,
-  SingleEditorialFeaturedImage,
-  ContentWrapperEditorial,
-  RelatedStories,
-  EntryRelatedStories,
+  SingleSlider,
+  CategorySecondaryHeader,
+  EntryMoreReviews,
+  MoreReviews,
+  PartnerContent,
   PasswordProtected,
-  SecondaryHeader,
 } from '../components'
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
-import { GetLatestRCA } from '../queries/GetLatestRCA'
+import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
-// Randomized Function
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
-  }
-  return array
-}
-
-export default function SingleEditorial(props) {
+export default function SingleGuide(props) {
   // Loading state for previews
   if (props.loading) {
     return <>Loading...</>
@@ -44,14 +36,14 @@ export default function SingleEditorial(props) {
 
   // Check for stored password in cookies on mount
   useEffect(() => {
-    const storedPassword = Cookies.get('editorialPassword')
+    const storedPassword = Cookies.get('postPassword')
     if (
       storedPassword &&
-      storedPassword === props?.data?.editorial?.passwordProtected?.password
+      storedPassword === props?.data?.post?.passwordProtected?.password
     ) {
       setIsAuthenticated(true)
     }
-  }, [props?.data?.editorial?.passwordProtected?.password])
+  }, [props?.data?.post?.passwordProtected?.password])
 
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
@@ -59,15 +51,15 @@ export default function SingleEditorial(props) {
     title,
     content,
     featuredImage,
-    author,
-    date,
-    acfSingleEditorialSlider,
+    databaseId,
+    acfPostSlider,
+    // acfCategoryIcon,
+    // acfLocationIcon,
     seo,
     uri,
     passwordProtected,
-  } = props?.data?.editorial
-  const categories = props?.data?.editorial?.categories?.edges ?? []
-  const relatedStories = categories[0]?.node?.editorials ?? []
+  } = props?.data?.guide
+  const categories = props?.data?.guide.categories?.edges ?? []
 
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
@@ -75,8 +67,6 @@ export default function SingleEditorial(props) {
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -109,46 +99,17 @@ export default function SingleEditorial(props) {
     }
   }, [isNavShown])
 
-  // Stop scrolling pages when isRCANavShown
-  useEffect(() => {
-    if (isRCANavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isRCANavShown])
+  let catVariable = {
+    first: 1,
+    id: databaseId,
+  }
 
-  // Stop scrolling pages when isGuidesNavShown
-  useEffect(() => {
-    if (isGuidesNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isGuidesNavShown])
-
-  const { data: rcaData } = useQuery(GetLatestRCA, {
+  // Get Category
+  const { data, loading } = useQuery(GetSecondaryHeader, {
+    variables: catVariable,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
-
-  const [latestRCA, setLatestRCA] = useState(null)
-
-  useEffect(() => {
-    if (rcaData?.readersChoiceAwards?.edges) {
-      // Find the first RCA where parent is null
-      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
-        (edge) => !edge.node.parent,
-      )?.node
-      setLatestRCA(filteredRCA || null)
-    }
-  }, [rcaData]) // Runs whenever rcaData changes
-
-  const {
-    // title: rcaTitle,
-    databaseId: rcaDatabaseId,
-    uri: rcaUri,
-  } = latestRCA ?? []
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -242,45 +203,54 @@ export default function SingleEditorial(props) {
   const allPosts = mainCatPosts.sort(sortPostsByDate)
 
   const images = [
-    acfSingleEditorialSlider.slide1 != null
-      ? acfSingleEditorialSlider.slide1.mediaItemUrl
-      : null,
-    acfSingleEditorialSlider.slide2 != null
-      ? acfSingleEditorialSlider.slide2.mediaItemUrl
-      : null,
-    acfSingleEditorialSlider.slide3 != null
-      ? acfSingleEditorialSlider.slide3.mediaItemUrl
-      : null,
-    acfSingleEditorialSlider.slide4 != null
-      ? acfSingleEditorialSlider.slide4.mediaItemUrl
-      : null,
-    acfSingleEditorialSlider.slide5 != null
-      ? acfSingleEditorialSlider.slide5.mediaItemUrl
-      : null,
+    [
+      acfPostSlider?.slide1 != null
+        ? acfPostSlider?.slide1?.mediaItemUrl
+        : null,
+      acfPostSlider?.slideCaption1 != null
+        ? acfPostSlider?.slideCaption1
+        : null,
+    ],
+    [
+      acfPostSlider?.slide2 != null
+        ? acfPostSlider?.slide2?.mediaItemUrl
+        : null,
+      acfPostSlider?.slideCaption2 != null
+        ? acfPostSlider?.slideCaption2
+        : null,
+    ],
+    [
+      acfPostSlider?.slide3 != null
+        ? acfPostSlider?.slide3?.mediaItemUrl
+        : null,
+      acfPostSlider?.slideCaption3 != null
+        ? acfPostSlider?.slideCaption3
+        : null,
+    ],
+    [
+      acfPostSlider?.slide4 != null
+        ? acfPostSlider?.slide4?.mediaItemUrl
+        : null,
+      acfPostSlider?.slideCaption4 != null
+        ? acfPostSlider?.slideCaption4
+        : null,
+    ],
+    [
+      acfPostSlider?.slide5 != null
+        ? acfPostSlider?.slide5?.mediaItemUrl
+        : null,
+      acfPostSlider?.slideCaption5 != null
+        ? acfPostSlider?.slideCaption5
+        : null,
+    ],
   ]
-
-  // Randomized slice function
-  function getRandomSlice(array, count) {
-    const shuffledArray = shuffleArray([...array])
-    return shuffledArray.slice(0, count)
-  }
-
-  // Shuffle the relatedStories before rendering
-  const [shuffledRelatedStories, setShuffledRelatedStories] = useState([])
-
-  useEffect(() => {
-    if (relatedStories && relatedStories.edges) {
-      const shuffledSlice = getRandomSlice(relatedStories.edges, 5)
-      setShuffledRelatedStories(shuffledSlice)
-    }
-  }, [relatedStories])
 
   // Handle password submission
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
-      Cookies.set('editorialPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
+      Cookies.set('postPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
     } else {
       alert('Incorrect password. Please try again.')
     }
@@ -308,13 +278,13 @@ export default function SingleEditorial(props) {
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      <SEO
+      {/* <SEO
         title={seo?.title}
         description={seo?.metaDesc}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={uri}
         focuskw={seo?.focuskw}
-      />
+      /> */}
       <SingleHeader
         title={siteTitle}
         description={siteDescription}
@@ -333,47 +303,39 @@ export default function SingleEditorial(props) {
         setIsNavShown={setIsNavShown}
         isScrolled={isScrolled}
       />
-      <SecondaryHeader
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        rcaDatabaseId={rcaDatabaseId}
-        rcaUri={rcaUri}
-        isGuidesNavShown={isGuidesNavShown}
-        setIsGuidesNavShown={setIsGuidesNavShown}
-        isRCANavShown={isRCANavShown}
-        setIsRCANavShown={setIsRCANavShown}
-        isScrolled={isScrolled}
+      <CategorySecondaryHeader
+        data={data}
+        databaseId={databaseId}
+        categoryUri={categories[0]?.node?.uri}
+        parentCategory={categories[0]?.node?.parent?.node?.name}
       />
-      <Main className={'relative top-[-0.75rem] sm:top-[-1rem]'}>
+      <Main>
         <>
-          <SingleEditorialFeaturedImage image={featuredImage?.node} />
-          <SingleEditorialEntryHeader
-            image={featuredImage?.node}
+          <SingleSlider images={images} />
+          <SingleEntryHeader
             title={title}
             categoryUri={categories[0]?.node?.uri}
             parentCategory={categories[0]?.node?.parent?.node?.name}
             categoryName={categories[0]?.node?.name}
-            author={author.node.name}
-            date={date}
+            // chooseYourCategory={acfCategoryIcon?.chooseYourCategory}
+            // chooseIcon={acfCategoryIcon?.chooseIcon?.mediaItemUrl}
+            // categoryLabel={acfCategoryIcon?.categoryLabel}
+            // locationValidation={acfLocationIcon?.fieldGroupName}
+            // locationLabel={acfLocationIcon?.locationLabel}
+            // locationUrl={acfLocationIcon?.locationUrl}
           />
-          <ContentWrapperEditorial content={content} images={images} />
-          <EntryRelatedStories />
-          {shuffledRelatedStories.map((post) => (
-            <Container>
-              {post.node.title !== title && (
-                // Render the merged posts here
-                <RelatedStories
-                  key={post.node.id}
-                  title={post.node.title}
-                  excerpt={post.node.excerpt}
-                  uri={post.node.uri}
-                  category={post.node.categories.edges[0]?.node?.name}
-                  categoryUri={post.node.categories.edges[0]?.node?.uri}
-                  featuredImage={post.node.featuredImage?.node}
-                />
-              )}
-            </Container>
-          ))}
+          <Container>
+            <ContentWrapper content={content} />
+          </Container>
+          <EntryMoreReviews
+            parentName={categories[0]?.node?.parent?.node?.name}
+            categoryName={categories[0]?.node?.name}
+            categoryUri={categories[0]?.node?.uri}
+          /> 
+          {/* <MoreReviews databaseId={databaseId} />
+          {/* <PartnerContent
+            parentName={categories[0]?.node?.parent?.node?.name}
+          /> */}
         </>
       </Main>
       <Footer footerMenu={footerMenu} />
@@ -381,19 +343,19 @@ export default function SingleEditorial(props) {
   )
 }
 
-SingleEditorial.query = gql`
+SingleGuide.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}
   query GetPost($databaseId: ID!, $asPreview: Boolean = false) {
-    editorial(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+    post(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
       title
+      databaseId
       content
       date
       passwordProtected {
         onOff
         password
       }
-      ...FeaturedImageFragment
       author {
         node {
           name
@@ -402,20 +364,10 @@ SingleEditorial.query = gql`
       seo {
         title
         metaDesc
+        focuskw
       }
       uri
-      acfSingleEditorialSlider {
-        slide1 {
-          mediaItemUrl
-        }
-        slide2 {
-          mediaItemUrl
-        }
-        slide3 {
-          mediaItemUrl
-        }
-      }
-      categories {
+      categories(where: { childless: true }) {
         edges {
           node {
             name
@@ -424,6 +376,12 @@ SingleEditorial.query = gql`
               node {
                 name
                 uri
+                countryCode {
+                  countryCode
+                }
+                destinationGuides {
+                  destinationGuides
+                }
                 children {
                   edges {
                     node {
@@ -442,26 +400,30 @@ SingleEditorial.query = gql`
                 }
               }
             }
-            editorials {
-              edges {
-                node {
-                  title
-                  excerpt
-                  uri
-                  ...FeaturedImageFragment
-                  categories {
-                    edges {
-                      node {
-                        name
-                        uri
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         }
+      }
+      acfPostSlider {
+        slide1 {
+          mediaItemUrl
+        }
+        slide2 {
+          mediaItemUrl
+        }
+        slide3 {
+          mediaItemUrl
+        }
+        slide4 {
+          mediaItemUrl
+        }
+        slide5 {
+          mediaItemUrl
+        }
+        slideCaption1
+        slideCaption3
+        slideCaption2
+        slideCaption4
+        slideCaption5
       }
       ...FeaturedImageFragment
     }
@@ -471,7 +433,7 @@ SingleEditorial.query = gql`
   }
 `
 
-SingleEditorial.variables = ({ databaseId }, ctx) => {
+SingleGuide.variables = ({ databaseId }, ctx) => {
   return {
     databaseId,
     asPreview: ctx?.asPreview,

@@ -299,16 +299,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-                        {/* Advertorials */}
-                        {node?.contentType?.node?.graphqlPluralName ==
-                          'Advertorials' &&
-                          node?.uri && (
-                            <Link href={node?.uri}>
-                              <h2 className={cx('meta')}>
-                                {'Partner Content'}
-                              </h2>
-                            </Link>
-                          )}
+                    
 
                         {/* LuxeList */}
                         {node?.contentType?.node?.graphqlPluralName ==
@@ -322,14 +313,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                           <Link href={'/contests'}>
                             <h2 className={cx('meta')}>{'Contest'}</h2>
                           </Link>
-                        )}
-
-                        {/* Readers Choice Awards */}
-                        {node?.contentType?.node?.graphqlPluralName ==
-                          'ReadersChoiceAwards' && (
-                          <h2 className={cx('meta')}>
-                            {'Readers’ Choice Awards'}
-                          </h2>
                         )}
 
                         {/* Luxury Travel */}
@@ -389,16 +372,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-                      {/* Advertorials */}
-                      {node?.contentType?.node?.graphqlPluralName ==
-                        'Advertorials' &&
-                        node?.uri && (
-                          <Link href={node?.uri}>
-                            <h2 className={cx('title', 'title-advertorial')}>
-                              {node?.title}
-                            </h2>
-                          </Link>
-                        )}
+
 
                       {/* LuxeList */}
                       {node?.contentType?.node?.graphqlPluralName ==
@@ -422,16 +396,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-                      {/* Readers Choice Awards */}
-                      {node?.contentType?.node?.graphqlPluralName ==
-                        'ReadersChoiceAwards' &&
-                        node?.uri && (
-                          <Link href={node?.uri}>
-                            <h2 className={cx('title', 'title-rca')}>
-                              {node?.title}
-                            </h2>
-                          </Link>
-                        )}
+
 
                       {/* Luxury Travel */}
                       {node?.contentType?.node?.graphqlPluralName ==

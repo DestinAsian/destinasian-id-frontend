@@ -104,6 +104,15 @@ export default function HomepageStories(pinPosts) {
 
 
 
+ 
+  
+  // if (error || bannerError || advertorialsError) {
+  //   return <pre>{JSON.stringify(error || bannerError || advertorialsError)}</pre>;
+  // }
+  
+  // const updateQuery = (prev, { fetchMoreResult }) => {
+  //   if (!fetchMoreResult) return prev
+
   // Concatenate the arrays to place ads with <img> tags first
   const sortedBannerAdsArray = [...bannerAdsArray].reduce((uniqueAds, ad) => {
     if (!uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id)) {
