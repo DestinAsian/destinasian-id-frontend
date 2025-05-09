@@ -7,6 +7,7 @@ import {
   Main,
   Container,
   CategoryIndo,
+  // CategoryInsights,
   FeaturedImage,
   SEO,
   FeatureWell,
@@ -14,14 +15,13 @@ import {
   HomepageSecondaryHeader,
   FrontPageLayout,
   Footer,
-  UpdatesPage,
 } from '../components'
+
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 // import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { GetIndoCategory } from '../queries/GetIndoCategory'
-import { GetCategoryUpdates } from '../queries/GetCategoryUpdates'
 
 export default function Component(props) {
   // Loading state for previews
@@ -46,8 +46,12 @@ export default function Component(props) {
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
+  const [isNewsNavShown, setIsNewsNavShown] = useState(false)
+  const [isInsightNavShown, setIsInsightNavShown] = useState(false)
+  const [isFeaturesNavShown, setIsFeaturesNavShown] = useState(false)
+  const [isCityGuidesNavShown, setIsCityGuidesNavShown] = useState(false)
+  const [isHonorsNavShown, setIsHonorsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  // const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -88,6 +92,51 @@ export default function Component(props) {
       document.body.style.overflow = 'visible'
     }
   }, [isGuidesNavShown])
+
+  // Stop scrolling pages when isNewsNavShown
+  useEffect(() => {
+    if (isNewsNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isNewsNavShown])
+
+  // Stop scrolling pages when isInsightNavShown
+  useEffect(() => {
+    if (isInsightNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isInsightNavShown])
+
+  // Stop scrolling pages when isFeaturesNavShown
+  useEffect(() => {
+    if (isFeaturesNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isFeaturesNavShown])
+
+  // Stop scrolling pages when isCityGuidesNavShown
+  useEffect(() => {
+    if (isCityGuidesNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isCityGuidesNavShown])
+
+  // Stop scrolling pages when isHonorsNavShown
+  useEffect(() => {
+    if (isHonorsNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isHonorsNavShown])
 
   const featureWell = [
     {
@@ -130,7 +179,9 @@ export default function Component(props) {
 
     // if (filteredFeatureWell.length > 0) {
     if (filteredFeatureWell?.[0]) {
-      const randomIndex = Math.floor(Math.random() * filteredFeatureWell?.length)
+      const randomIndex = Math.floor(
+        Math.random() * filteredFeatureWell?.length,
+      )
       setCurrentFeatureWell(filteredFeatureWell[randomIndex])
     }
   }, [])
@@ -187,7 +238,6 @@ export default function Component(props) {
       nextFetchPolicy: 'cache-and-network',
     },
   )
-
 
   const posts = latestStories?.posts ?? []
   // const editorials = latestStories?.editorials ?? []
@@ -264,6 +314,16 @@ export default function Component(props) {
         // rcaUri={rcaUri}
         isGuidesNavShown={isGuidesNavShown}
         setIsGuidesNavShown={setIsGuidesNavShown}
+        isNewsNavShown={isNewsNavShown}
+        setIsNewsNavShown={setIsNewsNavShown}
+        isInsightNavShown={isInsightNavShown}
+        setIsInsightNavShown={setIsInsightNavShown}
+        isFeaturesNavShown={isFeaturesNavShown}
+        setIsFeaturesNavShown={setIsFeaturesNavShown}
+        isCityGuidesNavShown={isCityGuidesNavShown}
+        setIsCityGuidesNavShown={setIsCityGuidesNavShown}
+        isHonorsNavShown={isHonorsNavShown}
+        setIsHonorsNavShown={setIsHonorsNavShown}
         // isRCANavShown={isRCANavShown}
         // setIsRCANavShown={setIsRCANavShown}
         isScrolled={isScrolled}
@@ -289,23 +349,8 @@ export default function Component(props) {
               <FrontPageLayout />
             </div>
             {/* <div className="mx-auto max-w-7xl px-4">
-              <UpdatesPage />
+              <CategoryInsights />
             </div> */}
-            {/* {!updatesLoading && !updatesError && updatesCategory?.[0] && (
-              <CategoryUpdates data={updatesCategory} />
-            )} */}
-
-            {/* {!updatesLoading &&
-              !updatesError &&
-              updatesCategory?.length > 0 && (
-                <div>
-                  <CategoryUpdates
-                    categories={updatesCategory}
-                    loading={updatesLoading}
-                    error={updatesError}
-                  />
-                </div>
-              )} */}
 
             {/* <div id="snapStart" className="snap-start pt-16">
               <HomepageStories pinPosts={homepagePinPosts} />
