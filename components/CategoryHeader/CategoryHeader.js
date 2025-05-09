@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import Link from 'next/link'
-import destinasianLogo from '../../assets/logo/destinasian-logo.png'
+import destinasianLogo from '../../assets/logo/destinasian-indo-logo.png'
 import {
   Container,
   FullMenu,
