@@ -12,9 +12,11 @@ import {
   SEO,
   FeatureWell,
   HomepageStories,
+  ContentGuides,
   HomepageSecondaryHeader,
   FrontPageLayout,
   Footer,
+  ContentWrapperGuide,
 } from '../components'
 
 import { GetMenus } from '../queries/GetMenus'
@@ -31,7 +33,10 @@ export default function Component(props) {
 
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
-  const { featuredImage, uri, seo } = props?.data?.page ?? {}
+    const { featuredImage, uri, seo } = props?.data?.page || {}
+    const { content } = props?.data?.guide || {}
+const images = props?.data?.page?.acfGalleryImages ?? []
+
 
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
 
@@ -160,7 +165,11 @@ export default function Component(props) {
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
   const indoCategory =
     indoData?.category?.children?.edges?.map((edge) => edge.node) ?? []
+    
+   
 
+   
+    
   // // Get pin posts stories
   // const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
   //   variables: {
@@ -187,16 +196,22 @@ export default function Component(props) {
   )
 
   const posts = latestStories?.posts ?? []
+  const guides = latestStories?.guides ?? []
   // const editorials = latestStories?.editorials ?? []
   // const updates = latestStories?.updates ?? []
 
   const mainPosts = []
+  const mainGuidePosts = []
   // const mainEditorialPosts = []
   // const mainUpdatesPosts = []
 
   // loop through all the main categories posts
   posts?.edges?.forEach((post) => {
     mainPosts.push(post.node)
+  })
+
+  guides?.edges?.forEach((post) => {
+    mainGuidePosts.push(post.node)
   })
 
   // // loop through all the main categories and their posts
@@ -208,6 +223,7 @@ export default function Component(props) {
   // updates?.edges?.forEach((post) => {
   //   mainUpdatesPosts.push(post.node)
   // })
+
 
   // sort posts by date
   const sortPostsByDate = (a, b) => {
@@ -280,7 +296,9 @@ export default function Component(props) {
 
             <div className="mx-auto max-w-7xl px-4">
               <FrontPageLayout />
+              {/* <ContentGuides /> */}
             </div>
+            <ContentWrapperGuide content={content} images={images} />
             {/* <div className="mx-auto max-w-7xl px-4">
               <CategoryInsights />
             </div> */}

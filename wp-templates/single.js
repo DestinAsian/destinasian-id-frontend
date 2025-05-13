@@ -7,11 +7,14 @@ import {
   Footer,
   Main,
   Container,
-  SingleEditorialEntryHeader,
+  // SingleEditorialEntryHeader,
+  SingleGuideEntryHeader,
   FeaturedImage,
   SEO,
-  SingleEditorialFeaturedImage,
-  ContentWrapperEditorial,
+  // SingleEditorialFeaturedImage,
+  SingleGuideFeaturedImage,
+  // ContentWrapperEditorial,
+  ContentWrapperGuide,
   RelatedStories,
   EntryRelatedStories,
   PasswordProtected,
@@ -22,7 +25,6 @@ import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
-import { GetLatestRCA } from '../queries/GetLatestRCA'
 
 // Randomized Function
 function shuffleArray(array) {
@@ -62,6 +64,7 @@ export default function Single(props) {
     author,
     date,
     acfPostSlider,
+    acfSingleGuideSlider,
     // acfSingleEditorialSlider,
     seo,
     uri,
@@ -171,11 +174,13 @@ export default function Single(props) {
   )
 
   const posts = latestStories?.posts ?? []
-  const editorials = latestStories?.editorials ?? []
+  // const editorials = latestStories?.editorials ?? []
+  const guides = latestStories?.guides ?? []
   const updates = latestStories?.updates ?? []
 
   const mainPosts = []
-  const mainEditorialPosts = []
+  // const mainEditorialPosts = []
+  const mainGuidePosts = []
   const mainUpdatesPosts = []
 
   // loop through all the main categories posts
@@ -183,9 +188,13 @@ export default function Single(props) {
     mainPosts.push(post.node)
   })
 
-  // loop through all the main categories and their posts
-  editorials?.edges?.forEach((post) => {
-    mainEditorialPosts.push(post.node)
+  // // loop through all the main categories and their posts
+  // editorials?.edges?.forEach((post) => {
+  //   mainEditorialPosts.push(post.node)
+  // })
+  // // loop through all the main categories and their posts
+  guides?.edges?.forEach((post) => {
+    mainGuidePosts.push(post.node)
   })
 
   // loop through all the main categories and their posts
@@ -203,7 +212,8 @@ export default function Single(props) {
   // define mainCatPostCards
   const mainCatPosts = [
     ...(mainPosts != null ? mainPosts : []),
-    ...(mainEditorialPosts != null ? mainEditorialPosts : []),
+    // ...(mainEditorialPosts != null ? mainEditorialPosts : []),
+    ...(mainGuidePosts != null ? mainGuidePosts : []),
     ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
   ]
 
@@ -262,23 +272,45 @@ export default function Single(props) {
   // Shuffle the relatedStories before rendering
   const [shuffledRelatedStories, setShuffledRelatedStories] = useState([])
 
-  useEffect(() => {
-    if (relatedStories && relatedStories.edges) {
-      const shuffledSlice = getRandomSlice(relatedStories.edges, 5)
-      setShuffledRelatedStories(shuffledSlice)
-    }
-  }, [relatedStories])
+  // useEffect(() => {
+  //   if (relatedStories && relatedStories.edges) {
+  //     const shuffledSlice = getRandomSlice(relatedStories.edges, 5)
+  //     setShuffledRelatedStories(shuffledSlice)
+  //   }
+  // }, [relatedStories])
 
-  // Handle password submission
+  // // Handle password submission
+  // const handlePasswordSubmit = (e) => {
+  //   e.preventDefault()
+  //   if (enteredPassword === passwordProtected?.password) {
+  //     setIsAuthenticated(true)
+  //     Cookies.set('editorialPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
+  //   } else {
+  //     alert('Incorrect password. Please try again.')
+  //   }
+  // }
+
+
+  useEffect(() => {
+    const storedPassword = Cookies.get('contentPassword')
+    if (
+      storedPassword &&
+      storedPassword === passwordProtected?.password
+    ) {
+      setIsAuthenticated(true)
+    }
+  }, [passwordProtected?.password])
+  
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
-      Cookies.set('editorialPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
+      Cookies.set('contentPassword', enteredPassword, { expires: 1 }) // expires in 1 day
     } else {
       alert('Incorrect password. Please try again.')
     }
   }
+  
 
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
@@ -299,6 +331,10 @@ export default function Single(props) {
       </main>
     )
   }
+
+  const passwordType = props?.data?.post?.__typename === 'Editorial' ? 'editorialPassword' : 'guidePassword'
+Cookies.set(passwordType, enteredPassword, { expires: 1 })
+
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
@@ -336,7 +372,7 @@ export default function Single(props) {
       />
       <Main className={'relative top-[-0.75rem] sm:top-[-1rem]'}>
         <>
-          <SingleEditorialFeaturedImage image={featuredImage?.node} />
+          {/* <SingleEditorialFeaturedImage image={featuredImage?.node} />
           <SingleEditorialEntryHeader
             image={featuredImage?.node}
             title={title}
@@ -346,7 +382,19 @@ export default function Single(props) {
             author={author.node.name}
             date={date}
           />
-          <ContentWrapperEditorial content={content} images={images} />
+          <ContentWrapperEditorial content={content} images={images} /> */}
+
+          <SingleGuideFeaturedImage image={featuredImage?.node} />
+          <SingleGuideEntryHeader
+            image={featuredImage?.node}
+            title={title}
+            categoryUri={categories[0]?.node?.uri}
+            parentCategory={categories[0]?.node?.parent?.node?.name}
+            categoryName={categories[0]?.node?.name}
+            author={author.node.name}
+            date={date}
+          />
+          <ContentWrapperGuide content={content} images={images} />
           <EntryRelatedStories />
           {shuffledRelatedStories.map((post) => (
             <Container>
