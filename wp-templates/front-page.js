@@ -150,9 +150,6 @@ export default function Component(props) {
   const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
-  const indoCategory =
-    indoData?.category?.children?.edges?.map((edge) => edge.node) ?? []
-  const categories = data?.categories?.edges?.map((edge) => edge.node) || []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
