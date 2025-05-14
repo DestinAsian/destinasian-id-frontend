@@ -49,9 +49,16 @@ import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './FrontPageLayout.module.scss'
 
-import { Outnow, CategoryUpdates, CategoryInsigths } from '../../components'
+import {
+  Outnow,
+  CategoryUpdates,
+  CategoryInsigths,
+  CategoryIndo,
+} from '../../components'
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
-import { GetCategoryInsights } from '../../queries/GetCategoryInsights' // Import the query for CategoryInsigths
+import { GetCategoryInsights } from '../../queries/GetCategoryInsights'
+
+import { GetIndoCategory } from '../../queries/GetIndoCategory'
 
 const cx = classNames.bind(styles)
 
@@ -69,7 +76,17 @@ export default function FrontPageLayout() {
     loading: insightsLoading,
     error: insightsError,
   } = useQuery(GetCategoryInsights, {
-    variables: { id: '29' }, // The ID of the category to fetch insights for
+    variables: { id: '29' },
+  })
+
+  const {
+    data: indoData,
+    loading: indoLoading,
+    error: indoError,
+  } = useQuery(GetIndoCategory, {
+    variables: {
+      include: ['14616', '14601', '14606', '14611'],
+    },
   })
 
   // Safely extract category children edges for updates
@@ -79,9 +96,18 @@ export default function FrontPageLayout() {
 
   // Safely extract category insights
   const categoryInsights = insightsData?.category
+  const indoCategories =
+    indoData?.categories?.edges?.map((edge) => edge.node) || []
 
   return (
     <>
+      <div className={cx('component-indo')}>
+        {!indoLoading && !indoError && indoCategories.length > 0 && (
+          <div className={cx('category-indo-component')}>
+            <CategoryIndo data={indoCategories} />
+          </div>
+        )}
+      </div>
       <div className={cx('component-updates')}>
         <div className={cx('two-columns')}>
           <div className={cx('left-column')}>

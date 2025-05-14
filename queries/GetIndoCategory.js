@@ -1,55 +1,23 @@
 import { gql } from '@apollo/client'
 
 export const GetIndoCategory = gql`
-  query GetIndoCategory {
-    category(id: "73", idType: DATABASE_ID) {
-      id
-      name
-      slug
-      children(first: 10) {
-        edges {
-          node {
-            id
-            name
-            slug
-            parent {
-              node {
-                slug
-              }
-            }
+  query GetIndoCategory($include: [ID] = ["14616", "14601", "14606", "14611"]) {
+    categories(where: { include: $include }) {
+      edges {
+        node {
+          id
+          name
+          slug
+          uri
+          link
+          description
+          categoryImages {
             categoryImages {
-              fieldGroupName
-              changeToSlider
-              categoryImagesCaption
-              categorySlideCaption1
-              categorySlideCaption2
-              categorySlideCaption3
-              categorySlideCaption4
-              categorySlideCaption5
-              categorySlide1 {
-                mediaItemUrl
-              }
-              categorySlide2 {
-                mediaItemUrl
-              }
-              categorySlide3 {
-                mediaItemUrl
-              }
-              categorySlide4 {
-                mediaItemUrl
-              }
-              categorySlide5 {
-                mediaItemUrl
-              }
+              mediaItemUrl
             }
-            contentNodes {
-              edges {
-                node {
-                  id
-                }
-              }
+            categorySlide1 {
+              mediaItemUrl
             }
-            description
           }
         }
       }

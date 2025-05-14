@@ -6,8 +6,6 @@ import {
   HomepageHeader,
   Main,
   Container,
-  CategoryIndo,
-  // CategoryInsights,
   FeaturedImage,
   SEO,
   FeatureWell,
@@ -22,8 +20,6 @@ import {
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
-// import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
-import { GetIndoCategory } from '../queries/GetIndoCategory'
 
 export default function Component(props) {
   // Loading state for previews
@@ -33,10 +29,9 @@ export default function Component(props) {
 
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
-    const { featuredImage, uri, seo } = props?.data?.page || {}
-    const { content } = props?.data?.guide || {}
-const images = props?.data?.page?.acfGalleryImages ?? []
-
+  const { featuredImage, uri, seo } = props?.data?.page || {}
+  const { content } = props?.data?.guide || {}
+  const images = props?.data?.page?.acfGalleryImages ?? []
 
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
 
@@ -50,7 +45,6 @@ const images = props?.data?.page?.acfGalleryImages ?? []
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-
   // Stop scrolling pages when searchQuery
   useEffect(() => {
     if (searchQuery !== '') {
@@ -90,7 +84,6 @@ const images = props?.data?.page?.acfGalleryImages ?? []
       document.body.style.overflow = 'visible'
     }
   }, [isGuidesNavShown])
-
 
   const featureWell = [
     {
@@ -151,12 +144,6 @@ const images = props?.data?.page?.acfGalleryImages ?? []
     nextFetchPolicy: 'cache-and-network',
   })
 
-  const {
-    data: indoData,
-    loading: indoLoading,
-    error: indoError,
-  } = useQuery(GetIndoCategory)
-
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
   const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
@@ -165,23 +152,7 @@ const images = props?.data?.page?.acfGalleryImages ?? []
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
   const indoCategory =
     indoData?.category?.children?.edges?.map((edge) => edge.node) ?? []
-    
-   
-
-   
-    
-  // // Get pin posts stories
-  // const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
-  //   variables: {
-  //     id: databaseId,
-  //     asPreview: asPreview,
-  //   },
-  //   fetchPolicy: 'network-only',
-  //   nextFetchPolicy: 'cache-and-network',
-  // })
-
-  // // State variable of homepage pin posts
-  // const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
+  const categories = data?.categories?.edges?.map((edge) => edge.node) || []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
@@ -223,7 +194,6 @@ const images = props?.data?.page?.acfGalleryImages ?? []
   // updates?.edges?.forEach((post) => {
   //   mainUpdatesPosts.push(post.node)
   // })
-
 
   // sort posts by date
   const sortPostsByDate = (a, b) => {
@@ -288,24 +258,11 @@ const images = props?.data?.page?.acfGalleryImages ?? []
                 </Container>
               )}
             </div>
-            {!indoLoading && !indoError && indoCategory?.[0] && (
-              <div>
-                <CategoryIndo data={indoCategory} />
-              </div>
-            )}
-
             <div className="mx-auto max-w-7xl px-4">
               <FrontPageLayout />
               {/* <ContentGuides /> */}
             </div>
             <ContentWrapperGuide content={content} images={images} />
-            {/* <div className="mx-auto max-w-7xl px-4">
-              <CategoryInsights />
-            </div> */}
-
-            {/* <div id="snapStart" className="snap-start pt-16">
-              <HomepageStories pinPosts={homepagePinPosts} />
-            </div> */}
           </div>
         </>
       </Main>

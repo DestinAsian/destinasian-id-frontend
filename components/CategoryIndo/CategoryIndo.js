@@ -1,33 +1,28 @@
-// export default CategoryIndo;
-import React from 'react';
-import Link from 'next/link';
-import classNames from 'classnames/bind';
-import styles from './CategoryIndo.module.scss';
+import React from 'react'
+import Link from 'next/link'
+import classNames from 'classnames/bind'
+import styles from './CategoryIndo.module.scss'
 
-const cx = classNames.bind(styles);
+const cx = classNames.bind(styles)
 
 const CategoryIndo = ({ data }) => {
-  const categories = data || [];
+  const categories = data || []
 
   return (
     <div className={cx('categoryIndoWrapper')}>
       <div className={cx('grid')}>
-        {categories?.length > 0 &&
+        {categories.length > 0 &&
           categories.map((node) => {
-            const {
-              id,
-              name,
-              slug,
-              categoryImages,
-            } = node ?? {};
+            const { id, name, slug, categoryImages } = node ?? {}
 
-            const firstImage = categoryImages?.categorySlide1?.mediaItemUrl;
+            // Ambil gambar pertama
+            const firstImage =
+              categoryImages?.categoryImages?.[0]?.mediaItemUrl ||
+              categoryImages?.categorySlide1?.mediaItemUrl || // fallback
+              null
 
             return (
-              <Link key={id} 
-            //   href={`/category/${slug}`} 
-            href={`/${node?.parent?.node?.slug}/${slug}`}
-              className={cx('card')}>
+              <Link key={id} href={`/${slug}`} className={cx('card')}>
                 <div className={cx('imageWrapper')}>
                   {firstImage && (
                     <img
@@ -39,19 +34,22 @@ const CategoryIndo = ({ data }) => {
                   <h3 className={cx('nameOverlay')}>{name}</h3>
                 </div>
               </Link>
-            );
+            )
           })}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CategoryIndo;
-
-
+export default CategoryIndo
 
 
 
+
+
+
+
+// // export default CategoryIndo;
 // import React from 'react';
 // import Link from 'next/link';
 // import classNames from 'classnames/bind';
@@ -64,121 +62,39 @@ export default CategoryIndo;
 
 //   return (
 //     <div className={cx('categoryIndoWrapper')}>
-//       <h2 className={cx('title')}>Destinasi Indonesia</h2>
 //       <div className={cx('grid')}>
-//         {categories.map((node) => {
-//           const {
-//             id,
-//             name,
-//             slug,
-//             categoryImages,
-//             contentNodes,
-//             description,
-//           } = node;
+//         {categories?.length > 0 &&
+//           categories.map((node) => {
+//             const {
+//               id,
+//               name,
+//               slug,
+//               categoryImages,
+//             } = node ?? {};
 
-//           const images = [
-//             {
-//               url: categoryImages?.categorySlide1?.mediaItemUrl,
-//               caption: categoryImages?.categoryImagesCaption1,
-//             },
-//             {
-//               url: categoryImages?.categorySlide2?.mediaItemUrl,
-//               caption: categoryImages?.categorySlideCaption2,
-//             },
-//             {
-//               url: categoryImages?.categorySlide3?.mediaItemUrl,
-//               caption: categoryImages?.categorySlideCaption3,
-//             },
-//             {
-//               url: categoryImages?.categorySlide4?.mediaItemUrl,
-//               caption: categoryImages?.categorySlideCaption4,
-//             },
-//             {
-//               url: categoryImages?.categorySlide5?.mediaItemUrl,
-//               caption: categoryImages?.categorySlideCaption5,
-//             },
-//           ];
+//             const firstImage = categoryImages?.categorySlide1?.mediaItemUrl;
 
-//           return (
-//             <Link key={id} href={`/category/${slug}`} className={cx('card')}>
-//               <h3 className={cx('name')}>{name}</h3>
-//               <p className={cx('slug')}>/{slug}</p>
-//               <p className={cx('description')}>{description}</p>
-//               <p className={cx('contentCount')}>
-//                 {contentNodes?.edges?.length || 0} artikel
-//               </p>
-//               <div className={cx('imageGallery')}>
-//                 {images.map((img, index) => (
-//                   img.url && (
-//                     <div key={index} className={cx('imageWrapper')}>
-//                       <img
-//                         src={img.url}
-//                         alt={`${name} - Slide ${index + 1}`}
-//                         className={cx('image')}
-//                       />
-//                       {img.caption && (
-//                         <p className={cx('caption')}>{img.caption}</p>
-//                       )}
-//                     </div>
-//                   )
-//                 ))}
-//               </div>
-//             </Link>
-//           );
-//         })}
+//             return (
+//               <Link key={id} 
+//             //   href={`/category/${slug}`} 
+//             href={`/${node?.parent?.node?.slug}/${slug}`}
+//               className={cx('card')}>
+//                 <div className={cx('imageWrapper')}>
+//                   {firstImage && (
+//                     <img
+//                       src={firstImage}
+//                       alt={name ?? 'Category Image'}
+//                       className={cx('image')}
+//                     />
+//                   )}
+//                   <h3 className={cx('nameOverlay')}>{name}</h3>
+//                 </div>
+//               </Link>
+//             );
+//           })}
 //       </div>
 //     </div>
 //   );
 // };
 
-// // export default CategoryIndo
-// import React from 'react'
-// import { useQuery } from '@apollo/client'
-// import { GetIndoCategory } from '../../queries/GetIndoCategory'
-// import classNames from 'classnames/bind'
-// import styles from './CategoryIndo.module.scss'
-// import Link from 'next/link'
-
-// const cx = classNames.bind(styles)
-
-// const CategoryIndo = () => {
-//   const { data, loading, error } = useQuery(GetIndoCategory, {
-//     variables: {
-//       include: [14601, 14606, 14616, 14611],
-//     },
-//   })
-
-//   if (loading) return <p>Loading...</p>
-//   if (error) return <p>Error: {error.message}</p>
-
-//   const categories = data?.categories?.nodes || []
-
-//   return (
-//     <div className={cx('categoryIndoWrapper')}>
-//       <div className={cx('grid')}>
-//         {categories.map((category) => {
-//           const { id, name, slug, categoryImages } = category
-//           const imageUrl =
-//             categoryImages?.categoryImages?.[0]?.mediaItemUrl || ''
-
-//           return (
-//             <Link key={id} href={`/category/${slug}`} className={cx('card')}>
-//               <div className={cx('imageWrapper')}>
-//                 {imageUrl && (
-//                   <img
-//                     src={imageUrl}
-//                     alt={name || 'Category Image'}
-//                     className={cx('image')}
-//                   />
-//                 )}
-//                 <h3 className={cx('nameOverlay')}>{name}</h3>
-//               </div>
-//             </Link>
-//           )
-//         })}
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default CategoryIndo
+// export default CategoryIndo;
