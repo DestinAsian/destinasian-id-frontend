@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
@@ -13,11 +12,8 @@ export default function SecondaryHeader({
   setSearchQuery,
   isGuidesNavShown,
   setIsGuidesNavShown,
-  isRCANavShown,
-  setIsRCANavShown,
   isScrolled,
 }) {
-
   const { data, error } = useQuery(GetSecondaryHeaders, {
     variables: { include: ["20", "29", "3"] },
   })
@@ -35,12 +31,9 @@ export default function SecondaryHeader({
             className={cx('menu-button', isGuidesNavShown ? 'active' : '')}
             onClick={() => {
               setIsGuidesNavShown(!isGuidesNavShown)
-              isRCANavShown ? setIsRCANavShown(!isRCANavShown) : null
               setSearchQuery('')
             }}
             aria-label="Toggle navigation"
-            aria-controls={cx('rca-menu-wrapper')}
-            aria-expanded={!isRCANavShown}
           >
             <div className={cx('menu-title')}>{`Guides`}</div>
           </button>
