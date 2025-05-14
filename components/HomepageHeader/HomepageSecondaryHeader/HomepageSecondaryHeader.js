@@ -50,7 +50,7 @@ export default function SecondaryHeader({
           {/* Features */}
           <Link href="/features">
             <div className={cx('menu-button')}>
-              <div className={cx('menu-title')}>EATURES</div>
+              <div className={cx('menu-title')}>FEATURES</div>
             </div>
           </Link>
         </div>

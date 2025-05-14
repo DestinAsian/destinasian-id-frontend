@@ -7,7 +7,6 @@ import {
   CategorySecondaryHeader,
   Main,
   CategoryEntryHeader,
-  // FeaturedImage,
   SEO,
   Footer,
   CategoryStories,
@@ -18,7 +17,6 @@ import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
-import { GetLatestRCA } from '../queries/GetLatestRCA'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
 export default function Component(props) {
@@ -34,7 +32,6 @@ export default function Component(props) {
     description,
     children,
     parent,
-    pinPosts,
     categoryImages,
     destinationGuides,
     databaseId,
@@ -49,7 +46,6 @@ export default function Component(props) {
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -82,14 +78,7 @@ export default function Component(props) {
     }
   }, [isNavShown])
 
-  // Stop scrolling pages when isRCANavShown
-  useEffect(() => {
-    if (isRCANavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isRCANavShown])
+
 
   // Stop scrolling pages when isGuidesNavShown
   useEffect(() => {
@@ -100,34 +89,11 @@ export default function Component(props) {
     }
   }, [isGuidesNavShown])
 
-  const { data: rcaData } = useQuery(GetLatestRCA, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
 
-  const [latestRCA, setLatestRCA] = useState(null)
-
-  useEffect(() => {
-    if (rcaData?.readersChoiceAwards?.edges) {
-      // Find the first RCA where parent is null
-      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
-        (edge) => !edge.node.parent,
-      )?.node
-      setLatestRCA(filteredRCA || null)
-    }
-  }, [rcaData]) // Runs whenever rcaData changes
-
-  const {
-    // title: rcaTitle,
-    databaseId: rcaDatabaseId,
-    uri: rcaUri,
-  } = latestRCA ?? []
-
-  let catVariable = {
-    first: 1,
+  const catVariable = {
     id: databaseId,
   }
-
+  
   // Get Category
   const { data, loading } = useQuery(GetSecondaryHeader, {
     variables: catVariable,
@@ -173,7 +139,7 @@ export default function Component(props) {
     GetFooterMenus,
     {
       variables: {
-        first: 50,
+        first: 100,
         footerHeaderLocation: MENUS.FOOTER_LOCATION,
       },
       fetchPolicy: 'network-only',
@@ -293,17 +259,6 @@ export default function Component(props) {
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      {/* <SEO
-        title={seo?.title}
-        description={seo?.metaDesc}
-        imageUrl={
-          categorySlider[0]
-            ? categorySlider[0]
-            : categoryImages?.categoryImages?.mediaItemUrl
-        }
-        url={uri}
-        focuskw={seo?.focuskw}
-      /> */}
       <CategoryHeader
         title={siteTitle}
         description={siteDescription}
@@ -336,12 +291,8 @@ export default function Component(props) {
         <SecondaryHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          // rcaDatabaseId={rcaDatabaseId}
-          // rcaUri={rcaUri}
           isGuidesNavShown={isGuidesNavShown}
           setIsGuidesNavShown={setIsGuidesNavShown}
-          // isRCANavShown={isRCANavShown}
-          // setIsRCANavShown={setIsRCANavShown}
           isScrolled={isScrolled}
         />
       )}
@@ -362,10 +313,9 @@ export default function Component(props) {
         <>
           <CategoryStories
             categoryUri={databaseId}
-            // pinPosts={pinPosts}
             name={name}
-            // children={children}
-            // parent={parent?.node?.name}
+            children={children}
+            parent={parent?.node?.name}
           />
         </>
       </Main>
@@ -423,7 +373,7 @@ Component.query = gql`
         node {
           name
           uri
-          children(where: { childless: true }) {
+          children(first: 1000, where: { childless: true }) {
             edges {
               node {
                 name
