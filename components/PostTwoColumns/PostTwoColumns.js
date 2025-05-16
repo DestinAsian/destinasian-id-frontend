@@ -21,12 +21,12 @@ export default function PostTwoColumns({
   categoryUri,
   uri,
   featuredImage,
-  categoryLabel,
-  chooseYourCategory,
-  chooseIcon,
-  locationLabel,
-  locationUrl,
-  locationValidation,
+  // categoryLabel,
+  // chooseYourCategory,
+  // chooseIcon,
+  // locationLabel,
+  // locationUrl,
+  // locationValidation,
 }) {
   let trimmedExcerpt = excerpt?.substring(0, MAX_EXCERPT_LENGTH)
   const lastSpaceIndex = trimmedExcerpt?.lastIndexOf(' ')
@@ -83,7 +83,7 @@ export default function PostTwoColumns({
             )}
           </div>
         )}
-        <div className={cx('content-wrapper')}>
+        {/* <div className={cx('content-wrapper')}>
           {(chooseYourCategory || locationValidation) && (
             <div className={cx('icon-wrapper')}>
               {chooseYourCategory && (
@@ -102,7 +102,7 @@ export default function PostTwoColumns({
               )}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
       <div className={cx('border-bottom')}></div>
     </article>

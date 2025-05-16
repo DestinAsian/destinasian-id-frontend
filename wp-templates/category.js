@@ -78,8 +78,6 @@ export default function Component(props) {
     }
   }, [isNavShown])
 
-
-
   // Stop scrolling pages when isGuidesNavShown
   useEffect(() => {
     if (isGuidesNavShown) {
@@ -89,11 +87,10 @@ export default function Component(props) {
     }
   }, [isGuidesNavShown])
 
-
   const catVariable = {
     id: databaseId,
   }
-  
+
   // Get Category
   const { data, loading } = useQuery(GetSecondaryHeader, {
     variables: catVariable,
@@ -278,16 +275,33 @@ export default function Component(props) {
         isScrolled={isScrolled}
       />
       {/* Guides category */}
-      {isGuidesCategory && (
+      {/* {isGuidesCategory && (
         <CategorySecondaryHeader
           data={data}
           databaseId={databaseId}
           name={name}
           parent={parent?.node?.name}
         />
-      )}
+      )} */}
       {/* Another category */}
-      {!isGuidesCategory && (
+      {/* {!isGuidesCategory && (
+        <SecondaryHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
+      )} */}
+
+      {isGuidesCategory ? (
+        <CategorySecondaryHeader
+          data={data}
+          databaseId={databaseId}
+          name={name}
+          parent={parent?.node?.name}
+        />
+      ) : (
         <SecondaryHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -296,6 +310,7 @@ export default function Component(props) {
           isScrolled={isScrolled}
         />
       )}
+
       {/* EntryHeader category name */}
       <CategoryEntryHeader
         parent={parent?.node?.name}
@@ -368,7 +383,7 @@ Component.query = gql`
         destinationGuides
         guidesTitle
       }
-      
+
       parent {
         node {
           name

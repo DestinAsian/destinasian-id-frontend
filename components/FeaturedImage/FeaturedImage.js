@@ -1,3 +1,55 @@
+// import { gql } from '@apollo/client';
+// import Image from 'next/image';
+
+// export default function FeaturedImage({
+//   image,
+//   width,
+//   height,
+//   className,
+//   priority,
+//   fill,
+//   ...props
+// }) {
+//   const src = image?.sourceUrl;
+//   const { altText } = image || '';
+
+//   width = width ? width : image?.mediaDetails?.width;
+//   height = height ? height : image?.mediaDetails?.height;
+
+//   return src && width && height ? (
+//     <figure className={className}>
+//       <Image
+//         src={src}
+//         alt={altText}
+//         width={width}
+//         height={height}
+//         priority={priority}
+//         fill={fill}
+//         {...props}
+//       />
+//     </figure>
+//   ) : null;
+// }
+
+// // Fragmen GraphQL untuk digunakan di query manapun
+// FeaturedImage.fragments = {
+//   image: gql`
+//     fragment FeaturedImageFragment on MediaItem {
+//       id
+//       sourceUrl
+//       altText
+//       mediaDetails {
+//         width
+//         height
+//       }
+//     }
+//   `,
+// };
+
+
+
+
+
 import { gql } from '@apollo/client';
 import Image from "next/image"
 export default function FeaturedImage({

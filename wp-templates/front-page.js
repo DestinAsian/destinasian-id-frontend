@@ -19,6 +19,7 @@ import {
 
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
+import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 export default function Component(props) {
@@ -151,6 +152,21 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
 
+
+    // Get pin posts stories
+    const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
+      variables: {
+        id: databaseId,
+        asPreview: asPreview,
+      },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    })
+  
+    // State variable of homepage pin posts
+    const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
+  
+
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
     GetLatestStories,
@@ -261,6 +277,10 @@ export default function Component(props) {
             </div>
             <ContentWrapperGuide content={content} images={images} />
           </div>
+          <div id="snapStart" className="snap-start pt-16">
+              {/* All posts sorted by pinPosts then mainPosts & date */}
+              <HomepageStories pinPosts={homepagePinPosts} />
+            </div>
         </>
       </Main>
       <Footer />
