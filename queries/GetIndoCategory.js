@@ -19,6 +19,16 @@ export const GetIndoCategory = gql`
               mediaItemUrl
             }
           }
+          children {
+            edges {
+              node {
+                name
+                slug
+                uri
+                id
+              }
+            }
+          }
         }
       }
     }

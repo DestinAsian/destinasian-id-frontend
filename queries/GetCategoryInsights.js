@@ -14,6 +14,8 @@ export const GetCategoryInsights = gql`
           node {
             id
             slug
+            uri
+            excerpt
             featuredImage {
               node {
                 mediaItemUrl
