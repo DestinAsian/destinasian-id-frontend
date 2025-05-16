@@ -1,0 +1,183 @@
+@import 'styles/breakpoints';
+
+.CategoryEatdrinkWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 1rem;
+  // margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.articleCount {
+  font-size: 0.9rem;
+  font-style: italic;
+  // margin-bottom: 1.5rem;
+  color: #999;
+}
+
+/* Main Wrapper for Posts */
+.postsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+
+.leftColumn {
+  flex: 1 1 100%;
+  max-width: 100%;
+
+  @media screen and (min-width: 768px) {
+    flex: 1;
+    max-width: 50%;
+  }
+}
+
+
+.rightColumn {
+  flex: 1 1 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* Two columns for the right side */
+  // gap: 1rem;
+  width: 100%;
+}
+
+.cardWrapper {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+
+  &.sideBySide {
+    flex: 1 1 50%; /* 2 cards per row */
+  }
+
+  &.fullWidth {
+    flex: 1 1 100%; /* Full width for first card */
+  }
+}
+
+.card {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.cardInner {
+  padding: 1rem 0.5rem;
+}
+.cardInners {
+  padding: 1rem 0.5rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: #999;
+  // margin-bottom: 0.25rem;
+}
+
+.slug {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.type {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+
+  &.imageFirst {
+    aspect-ratio: 1 / 1;
+  }
+
+  &.imageOthers {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+.thumbnail {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Button to load more posts */
+.viewMoreWrapper {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.viewMoreButton {
+  font-size: 1rem;
+  color: #690000;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #000000;
+  }
+}
+
+/* Breakpoints for responsiveness */
+@media screen and (min-width: 768px) {
+  .CategoryInsigthsWrapper {
+    flex-direction: row; 
+  }
+
+  .leftColumn {
+    flex: 1;
+  }
+
+  .rightColumn {
+    flex: 1;
+  }
+}
+
+
+.gridSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25rem;
+
+  @media (min-width: $breakpoint-extra-small) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+  } 
+}
+
+
+.excerpt {
+  font-size: 0.5rem;
+  color: #666;
+  margin-top: 0.2rem;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+

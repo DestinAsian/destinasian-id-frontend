@@ -9,10 +9,11 @@ import {
   CategoryUpdates,
   CategoryInsigths,
   CategoryIndo,
+  CategoryEatdrink,
 } from '../../components'
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryInsights } from '../../queries/GetCategoryInsights'
-
+import { GetCategoryEatdrink } from '../../queries/GetCategoryEatdrink'
 import { GetIndoCategory } from '../../queries/GetIndoCategory'
 
 const cx = classNames.bind(styles)
@@ -33,7 +34,14 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryInsights, {
     variables: { id: '29' },
   })
-
+  const {
+    data: eatdrinkData,
+    loading: eatdrinkLoading,
+    error: eatdrinkError,
+  } = useQuery(GetCategoryEatdrink, {
+    variables: { id: '651' },
+  })
+  
   const {
     data: indoData,
     loading: indoLoading,
@@ -51,8 +59,10 @@ export default function FrontPageLayout() {
 
   // Safely extract category insights
   const categoryInsights = insightsData?.category
+  const categoryEatdrink = eatdrinkData?.category
   const indoCategories =
     indoData?.categories?.edges?.map((edge) => edge.node) || []
+
 
   return (
     <>
@@ -85,6 +95,13 @@ export default function FrontPageLayout() {
         {!insightsLoading && !insightsError && categoryInsights && (
           <div className={cx('category-insights-component')}>
             <CategoryInsigths data={categoryInsights} />
+          </div>
+        )}
+      </div><hr className={cx('divider')} /> 
+      <div className={cx('component-updates')}>
+        {!eatdrinkLoading && !eatdrinkError && categoryEatdrink && (
+          <div className={cx('category-insights-component')}>
+            <CategoryEatdrink data={categoryEatdrink} />
           </div>
         )}
       </div>
