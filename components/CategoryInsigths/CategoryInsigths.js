@@ -55,7 +55,7 @@ const CategoryInsigths = () => {
             {visiblePosts[0] && (
               <Link
                 href={
-                  visiblePosts[0]?.node.uri || `/${visiblePosts[0]?.node.uri}`
+                  visiblePosts[0]?.node.uri || `/${visiblePosts[0]?.node.slug}`
                 }
                 key={visiblePosts[0]?.node.id}
               >
@@ -71,7 +71,7 @@ const CategoryInsigths = () => {
                           }
                           alt={
                             visiblePosts[0]?.node.featuredImage?.node
-                              ?.description || visiblePosts[0]?.node.uri
+                              ?.description || visiblePosts[0]?.node.slug
                           }
                           width={800}
                           height={800}
@@ -79,8 +79,8 @@ const CategoryInsigths = () => {
                         />
                       </div>
                     )}
-                    <h4 className={cx('uri')}>
-                      {visiblePosts[0]?.node.uri.replace(/-/g, ' ')}
+                    <h4 className={cx('slug')}>
+                      {visiblePosts[0]?.node.slug.replace(/-/g, ' ')}
                     </h4>
                     <div
                       className={cx('excerpt')}
@@ -107,15 +107,15 @@ const CategoryInsigths = () => {
                           <div className={cx('imageWrapper', 'imageOthers')}>
                             <Image
                               src={featuredImage.mediaItemUrl}
-                              alt={featuredImage.description || post.uri}
+                              alt={featuredImage.description || post.slug}
                               width={600}
                               height={400}
                               className={cx('thumbnail')}
                             />
                           </div>
                         )}
-                        <h4 className={cx('uri')}>
-                          {post.uri.replace(/-/g, ' ')}
+                        <h4 className={cx('slug')}>
+                          {post.slug.replace(/-/g, ' ')}
                         </h4>
                         <div
                           className={cx('excerpt')}
@@ -138,14 +138,14 @@ const CategoryInsigths = () => {
                     <div className={cx('imageWrapper', 'imageOthers')}>
                       <Image
                         src={post.featuredImage?.node?.mediaItemUrl}
-                        alt={post.uri}
+                        alt={post.slug}
                         width={600}
                         height={400}
                         className={cx('thumbnail')}
                       />
                     </div>
-                    <h4 className={cx('uri')}>
-                      {post.uri.replace(/-/g, ' ')}
+                    <h4 className={cx('slug')}>
+                      {post.slug.replace(/-/g, ' ')}
                     </h4>
                     <div
                       className={cx('excerpt')}
