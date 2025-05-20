@@ -3,19 +3,21 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import {
+  Button,
   CategoryHeader,
   CategorySecondaryHeader,
-  Main,
   CategoryEntryHeader,
-  SEO,
-  Footer,
   CategoryStories,
   SecondaryHeader,
-  Button,
+  Footer,
+  HomepageStories,
+  Main,
+  SEO,
 } from '../components'
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
+import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
@@ -46,6 +48,7 @@ export default function Component(props) {
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const {asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -131,6 +134,19 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
+    // Get pin posts stories
+    const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
+      variables: {
+        id: databaseId,
+        asPreview: asPreview,
+      },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    })
+  
+    // State variable of homepage pin posts
+    const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
+
   // Get Footer menus
   const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
     GetFooterMenus,
@@ -161,12 +177,14 @@ export default function Component(props) {
 
   // Latest Travel Stories
   const latestPosts = latestStories?.posts ?? []
-  const latestEditorials = latestStories?.editorials ?? []
-  const latestUpdates = latestStories?.updates ?? []
+  const latestGuides = latestStories?.guides ?? []
+  // const latestEditorials = latestStories?.editorials ?? []
+  // const latestUpdates = latestStories?.updates ?? []
 
   const latestMainPosts = []
-  const latestMainEditorialPosts = []
-  const latestMainUpdatesPosts = []
+  const latestMainGuidePosts = []
+  // const latestMainEditorialPosts = []
+  // const latestMainUpdatesPosts = []
 
   // loop through all the latest categories posts
   latestPosts?.edges?.forEach((post) => {
@@ -174,20 +192,25 @@ export default function Component(props) {
   })
 
   // loop through all the latest categories and their posts
-  latestEditorials?.edges?.forEach((post) => {
-    latestMainEditorialPosts.push(post.node)
+  latestGuides?.edges?.forEach((post) => {
+    latestMainGuidePosts.push(post.node)
   })
+  // // loop through all the latest categories and their posts
+  // latestEditorials?.edges?.forEach((post) => {
+  //   latestMainEditorialPosts.push(post.node)
+  // })
 
-  // loop through all the latest categories and their posts
-  latestUpdates?.edges?.forEach((post) => {
-    latestMainUpdatesPosts.push(post.node)
-  })
+  // // loop through all the latest categories and their posts
+  // latestUpdates?.edges?.forEach((post) => {
+  //   latestMainUpdatesPosts.push(post.node)
+  // })
 
   // define latestCatPostCards
   const latestMainCatPosts = [
     ...(latestMainPosts != null ? latestMainPosts : []),
-    ...(latestMainEditorialPosts != null ? latestMainEditorialPosts : []),
-    ...(latestMainUpdatesPosts != null ? latestMainUpdatesPosts : []),
+    ...(latestMainGuidePosts != null ? latestMainGuidePosts : []),
+    // ...(latestMainEditorialPosts != null ? latestMainEditorialPosts : []),
+    // ...(latestMainUpdatesPosts != null ? latestMainUpdatesPosts : []),
   ]
 
   // sort posts by date
@@ -275,33 +298,16 @@ export default function Component(props) {
         isScrolled={isScrolled}
       />
       {/* Guides category */}
-      {/* {isGuidesCategory && (
+      {isGuidesCategory && (
         <CategorySecondaryHeader
           data={data}
           databaseId={databaseId}
           name={name}
           parent={parent?.node?.name}
         />
-      )} */}
+      )}
       {/* Another category */}
-      {/* {!isGuidesCategory && (
-        <SecondaryHeader
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          isGuidesNavShown={isGuidesNavShown}
-          setIsGuidesNavShown={setIsGuidesNavShown}
-          isScrolled={isScrolled}
-        />
-      )} */}
-
-      {isGuidesCategory ? (
-        <CategorySecondaryHeader
-          data={data}
-          databaseId={databaseId}
-          name={name}
-          parent={parent?.node?.name}
-        />
-      ) : (
+      {!isGuidesCategory && (
         <SecondaryHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -310,6 +316,7 @@ export default function Component(props) {
           isScrolled={isScrolled}
         />
       )}
+      {/* 
 
       {/* EntryHeader category name */}
       <CategoryEntryHeader
@@ -332,6 +339,9 @@ export default function Component(props) {
             children={children}
             parent={parent?.node?.name}
           />
+          <div id="snapStart" className="snap-start pt-16">
+            <HomepageStories pinPosts={homepagePinPosts} />
+          </div>
         </>
       </Main>
       <Footer footerMenu={footerMenu} />
