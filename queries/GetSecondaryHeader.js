@@ -3,9 +3,6 @@ import { gql } from '@apollo/client'
 export const GetSecondaryHeader = gql`
   query GetSecondaryHeader($id: ID!) {
     category(id: $id, idType: DATABASE_ID) {
-      destinationGuides {
-        destinationGuides
-      }
       parent {
         node {
           children(where: { childless: true }) {
