@@ -9,6 +9,7 @@ import {
   CategoryEntryHeader,
   CategoryStories,
   SecondaryHeader,
+  FeaturedImage,
   Footer,
   HomepageStories,
   Main,
@@ -17,7 +18,6 @@ import {
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
-import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
@@ -34,6 +34,7 @@ export default function Component(props) {
     description,
     children,
     parent,
+    pinPosts,
     categoryImages,
     destinationGuides,
     databaseId,
@@ -48,7 +49,7 @@ export default function Component(props) {
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const {asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
+  // const { asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -134,19 +135,6 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
-    // Get pin posts stories
-    const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
-      variables: {
-        id: databaseId,
-        asPreview: asPreview,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    })
-  
-    // State variable of homepage pin posts
-    const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
-
   // Get Footer menus
   const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
     GetFooterMenus,
@@ -177,40 +165,26 @@ export default function Component(props) {
 
   // Latest Travel Stories
   const latestPosts = latestStories?.posts ?? []
-  const latestGuides = latestStories?.guides ?? []
-  // const latestEditorials = latestStories?.editorials ?? []
-  // const latestUpdates = latestStories?.updates ?? []
+  const latestUpdates = latestStories?.updates ?? []
 
   const latestMainPosts = []
-  const latestMainGuidePosts = []
-  // const latestMainEditorialPosts = []
-  // const latestMainUpdatesPosts = []
+  const latestMainUpdatesPosts = []
 
   // loop through all the latest categories posts
   latestPosts?.edges?.forEach((post) => {
     latestMainPosts.push(post.node)
   })
 
-  // loop through all the latest categories and their posts
-  latestGuides?.edges?.forEach((post) => {
-    latestMainGuidePosts.push(post.node)
-  })
-  // // loop through all the latest categories and their posts
-  // latestEditorials?.edges?.forEach((post) => {
-  //   latestMainEditorialPosts.push(post.node)
-  // })
 
-  // // loop through all the latest categories and their posts
-  // latestUpdates?.edges?.forEach((post) => {
-  //   latestMainUpdatesPosts.push(post.node)
-  // })
+  // loop through all the latest categories and their posts
+  latestUpdates?.edges?.forEach((post) => {
+    latestMainUpdatesPosts.push(post.node)
+  })
 
   // define latestCatPostCards
   const latestMainCatPosts = [
     ...(latestMainPosts != null ? latestMainPosts : []),
-    ...(latestMainGuidePosts != null ? latestMainGuidePosts : []),
-    // ...(latestMainEditorialPosts != null ? latestMainEditorialPosts : []),
-    // ...(latestMainUpdatesPosts != null ? latestMainUpdatesPosts : []),
+    ...(latestMainUpdatesPosts != null ? latestMainUpdatesPosts : []),
   ]
 
   // sort posts by date
@@ -335,13 +309,11 @@ export default function Component(props) {
         <>
           <CategoryStories
             categoryUri={databaseId}
+            pinPosts={pinPosts}
             name={name}
             children={children}
             parent={parent?.node?.name}
           />
-          <div id="snapStart" className="snap-start pt-16">
-            <HomepageStories pinPosts={homepagePinPosts} />
-          </div>
         </>
       </Main>
       <Footer footerMenu={footerMenu} />
@@ -351,6 +323,7 @@ export default function Component(props) {
 
 Component.query = gql`
   ${BlogInfoFragment}
+  ${FeaturedImage.fragments.entry}
   query GetCategoryPage($databaseId: ID!) {
     category(id: $databaseId, idType: DATABASE_ID) {
       name
@@ -393,7 +366,37 @@ Component.query = gql`
         destinationGuides
         guidesTitle
       }
-
+      pinPosts {
+        pinPost {
+          ... on Post {
+            id
+            title
+            content
+            date
+            uri
+            excerpt
+            ...FeaturedImageFragment
+            author {
+              node {
+                name
+              }
+            }
+            categories(first: 1000, where: { childless: true }) {
+              edges {
+                node {
+                  name
+                  uri
+                  parent {
+                    node {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       parent {
         node {
           name
