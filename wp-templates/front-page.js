@@ -149,8 +149,6 @@ export default function Component(props) {
     nextFetchPolicy: 'cache-and-network',
   })
 
-console.log(menusData)
-
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
   const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []

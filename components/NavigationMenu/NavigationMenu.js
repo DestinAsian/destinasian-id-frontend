@@ -66,43 +66,6 @@ NavigationMenu.fragments = {
       menu {
         node {
           name
-          luxuryTravelsMenu {
-            menuName
-            luxuryTravelPostLabel1
-            luxuryTravelPostLabel2
-            luxuryTravelPostLabel3
-            luxuryTravelPostLabel4
-            luxuryTravelPostLabel5
-            luxuryTravelPostUrl1 {
-              url
-            }
-            luxuryTravelPostUrl2 {
-              url
-            }
-            luxuryTravelPostUrl3 {
-              url
-            }
-            luxuryTravelPostUrl4 {
-              url
-            }
-            luxuryTravelPostUrl5 {
-              url
-            }
-          }
-          videosThumbnailMenu {
-            videosPage {
-              url
-            }
-            videoLabel
-            videosThumbnail {
-              sourceUrl
-              altText
-              mediaDetails {
-                width
-                height
-              }
-            }
-          }
         }
       }
     }
