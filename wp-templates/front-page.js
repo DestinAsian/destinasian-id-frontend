@@ -139,11 +139,17 @@ export default function Component(props) {
     variables: {
       first: 20,
       headerLocation: MENUS.PRIMARY_LOCATION,
-      footerLocation: MENUS.FOOTER_LOCATION,
+      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+      thirdHeaderLocation: MENUS.THIRD_LOCATION,
+      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+      featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
+
+console.log(menusData)
 
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
@@ -152,20 +158,18 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
 
+  // Get pin posts stories
+  const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
+    variables: {
+      id: databaseId,
+      asPreview: asPreview,
+    },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
 
-    // Get pin posts stories
-    const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
-      variables: {
-        id: databaseId,
-        asPreview: asPreview,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    })
-  
-    // State variable of homepage pin posts
-    const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
-  
+  // State variable of homepage pin posts
+  const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
@@ -273,14 +277,11 @@ export default function Component(props) {
             </div>
             <div className="mx-auto max-w-7xl px-4">
               <FrontPageLayout />
-              {/* <ContentGuides /> */}
             </div>
-            <ContentWrapperGuide content={content} images={images} />
           </div>
-          <div id="snapStart" className="snap-start pt-16">
-              {/* All posts sorted by pinPosts then mainPosts & date */}
-              <HomepageStories pinPosts={homepagePinPosts} />
-            </div>
+          {/* <div id="snapStart" className="snap-start pt-16">
+            <HomepageStories pinPosts={homepagePinPosts} />
+          </div> */}
         </>
       </Main>
       <Footer />

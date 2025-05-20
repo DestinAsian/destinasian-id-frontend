@@ -1,20 +1,28 @@
-
 import { gql } from '@apollo/client'
 
-export const GetSecondaryHeaders = gql`
-  query GetSecondaryHeaders($include: [ID] = ["3", "29", "20"]) {
-    categories(where: {include: $include, orderby: COUNT}) {
-      edges {
+export const GetSecondaryHeader = gql`
+  query GetSecondaryHeader($id: ID!) {
+    category(id: $id, idType: DATABASE_ID) {
+      parent {
         node {
-          id
-          name
-          slug
-          uri
-          link
+          children(where: { childless: true }) {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      }
+      children {
+        edges {
+          node {
+            id
+          }
         }
       }
     }
-    guide(id: $id, idType: DATABASE_ID) {
+    post(id: $id, idType: DATABASE_ID) {
       categories(where: { childless: true }) {
         edges {
           node {
