@@ -5,7 +5,6 @@ export const GetCategoryStories = gql`
     $first: Int
     $after: String
     $id: ID!
-    $contentTypes: [ContentTypesOfCategoryEnum]
   ) {
     category(id: $id, idType: DATABASE_ID) {
       name
@@ -19,7 +18,7 @@ export const GetCategoryStories = gql`
         after: $after
         where: {
           status: PUBLISH
-          contentTypes: $contentTypes
+          contentTypes: [POST]
           orderby: [{ field: DATE, order: DESC }]
         }
       ) {
