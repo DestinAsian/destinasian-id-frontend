@@ -49,7 +49,13 @@ export default function NavigationMenu({ menuItems, className }) {
       role="navigation"
       aria-label={menuName}
     >
-      <ul className={cx('menu-name')}>{menuName}</ul>
+      <ul className={cx('menu-name')}>
+        {menuItems[0]?.path !== '#' && menuItems[0]?.path !== undefined ? (
+          <Link href={menuItems[0]?.path}>{menuName}</Link>
+        ) : (
+          menuName
+        )}
+      </ul>
       {renderMenu(hierarchicalMenuItems)}
     </nav>
   )

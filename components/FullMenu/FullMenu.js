@@ -13,7 +13,7 @@ export default function FullMenu({
   thirdMenuItems,
   fourthMenuItems,
   fifthMenuItems,
-  featureMenuItems,
+  // featureMenuItems,
   latestStories,
   clearSearch,
   searchQuery,
@@ -27,44 +27,6 @@ export default function FullMenu({
 }) {
   // LatestStories content
   const [visiblePosts] = useState(3)
-
-  // const luxuryTravelPosts = [
-  //   {
-  //     label:
-  //       featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //         ?.luxuryTravelPostLabel1,
-  //     url: featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //       ?.luxuryTravelPostUrl1?.url,
-  //   },
-  //   {
-  //     label:
-  //       featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //         ?.luxuryTravelPostLabel2,
-  //     url: featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //       ?.luxuryTravelPostUrl2?.url,
-  //   },
-  //   {
-  //     label:
-  //       featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //         ?.luxuryTravelPostLabel3,
-  //     url: featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //       ?.luxuryTravelPostUrl3?.url,
-  //   },
-  //   {
-  //     label:
-  //       featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //         ?.luxuryTravelPostLabel4,
-  //     url: featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //       ?.luxuryTravelPostUrl4?.url,
-  //   },
-  //   {
-  //     label:
-  //       featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //         ?.luxuryTravelPostLabel5,
-  //     url: featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-  //       ?.luxuryTravelPostUrl5?.url,
-  //   },
-  // ]
 
   // Loading Menu
   if (menusLoading || latestLoading) {
@@ -143,124 +105,13 @@ export default function FullMenu({
             />
           </div>
           <div className={cx('third-wrapper')}>
-            {/* Feature Stories & Latest Travel Stories */}
-            <nav className={cx('feature-stories')}>
-              <NavigationMenu
-                className={cx('feature-navigation')}
-                menuItems={featureMenuItems}
-              />
-            </nav>
-
-            {Array.isArray(latestStories) && latestStories.length > 0 && (
-              <nav className={cx('latest-stories')}>
-                <ul className={cx('menu-name')}>{'Latest Travel Stories'}</ul>
-                <ul className={cx('menu-content')}>
-                  {latestStories.slice(0, visiblePosts).map((post) => (
-                    <li key={post?.id}>
-                      {post?.uri && (
-                        <Link href={post?.uri} className={cx('menu-item')}>
-                          {post?.title}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )}
-
-            {latestStories?.length !== 0 && (
-              <nav className={cx('latest-stories')}>
-                <ul className={cx('menu-name')}>{'Latest Travel Stories'}</ul>
-                <ul className={cx('menu-content')}>
-                  {latestStories.slice(0, visiblePosts).map((post) => (
-                    <li key={post?.id}>
-                      {post?.uri && (
-                        <Link href={post?.uri} className={cx('menu-item')}>
-                          {post?.title}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )}
-            {/* {luxuryTravelPosts?.length !== 0 && (
-              <nav className={cx('luxury-travel')}>
-                {featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-                  ?.menuName && (
-                  <ul className={cx('menu-name')}>
-                    {
-                      featureMenuItems[0]?.menu?.node?.luxuryTravelsMenu
-                        ?.menuName
-                    }
-                  </ul>
-                )}
-                <ul className={cx('menu-content')}>
-                  {luxuryTravelPosts?.map((post, index) => (
-                    <li key={index}>
-                      <Link href={post?.url} className={cx('menu-item')}>
-                        {post?.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )} */}
-            {/* <nav className={cx('feature-video')}>
-              <ul className={cx('menu-name')}>
-                {featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                  ?.videoLabel
-                  ? featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                      ?.videoLabel
-                  : 'Videos Produced By DestinAsian'}
-              </ul>
-              {featureMenuItems[0]?.menu?.node?.videosThumbnailMenu?.videosPage
-                ?.url && (
-                <Link
-                  href={
-                    featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                      ?.videosPage?.url
-                  }
-                >
-                  <div className={cx('thumbnail-wrapper')}>
-                    <Image
-                      src={
-                        featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                          ?.videosThumbnail?.sourceUrl
-                      }
-                      alt={
-                        featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                          ?.videosThumbnail?.altText
-                      }
-                      width={
-                        featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                          ?.videosThumbnail?.mediaDetails?.width
-                          ? featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                              ?.videosThumbnail?.mediaDetails?.width
-                          : '1280'
-                      }
-                      height={
-                        featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                          ?.videosThumbnail?.mediaDetails?.height
-                          ? featureMenuItems[0]?.menu?.node?.videosThumbnailMenu
-                              ?.videosThumbnail?.mediaDetails?.height
-                          : '720'
-                      }
-                      sizes="100%"
-                      priority
-                    />
-                  </div>
-                </Link>
-              )}
-            </nav> */}
+            <NavigationMenu
+              className={cx(['third-navigation'])}
+              menuItems={thirdMenuItems}
+            />
           </div>
           <div className={cx('fourth-wrapper')}>
             <div className={cx('left-wrapper')}>
-              {/* Third Menu {Static Pages Menu} */}
-              <NavigationMenu
-                className={cx(['third-navigation'])}
-                menuItems={thirdMenuItems}
-              />
               {/* Fourth Menu {Newsletters Menu} */}
               <NavigationMenu
                 className={cx(['fourth-navigation'])}

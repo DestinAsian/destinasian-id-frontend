@@ -267,11 +267,6 @@ export default function Single(props) {
     }
   }, [relatedStories])
 
-  console.log(
-    'Judul relatedStories:',
-    relatedStories?.edges?.map((item) => item.node.title),
-  )
-
   useEffect(() => {
     const storedPassword = Cookies.get('contentPassword')
     if (storedPassword && storedPassword === passwordProtected?.password) {
