@@ -98,8 +98,6 @@ export default function Component(props) {
     nextFetchPolicy: 'cache-and-network',
   })
 
-  console.log(data?.category)
-
   // Logic for Guides Category
   const isGuidesCategory = data?.category?.destinationGuides?.destinationGuides === 'yes'
 
