@@ -98,15 +98,10 @@ export default function Component(props) {
     nextFetchPolicy: 'cache-and-network',
   })
 
+  console.log(data?.category)
+
   // Logic for Guides Category
-  const isGuidesCategory =
-    (data?.category?.children?.edges?.length != 0 &&
-      data?.category?.children != null &&
-      data?.category?.children != undefined) ||
-    (!data?.category?.children?.edges?.length &&
-      data?.category?.parent?.node?.children?.edges?.length != 0 &&
-      data?.category?.parent != null &&
-      data?.category?.parent != undefined)
+  const isGuidesCategory = data?.category?.destinationGuides?.destinationGuides === 'yes'
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
