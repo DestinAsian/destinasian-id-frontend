@@ -7,13 +7,10 @@ import {
   Footer,
   Main,
   Container,
-  // SingleEditorialEntryHeader,
   SingleGuideEntryHeader,
   FeaturedImage,
   SEO,
-  // SingleEditorialFeaturedImage,
   SingleGuideFeaturedImage,
-  // ContentWrapperEditorial,
   ContentWrapperGuide,
   RelatedStories,
   EntryRelatedStories,
@@ -45,15 +42,15 @@ export default function Single(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // Check for stored password in cookies on mount
-  // useEffect(() => {
-  //   const storedPassword = Cookies.get('editorialPassword')
-  //   if (
-  //     storedPassword &&
-  //     storedPassword === props?.data?.editorial?.passwordProtected?.password
-  //   ) {
-  //     setIsAuthenticated(true)
-  //   }
-  // }, [props?.data?.editorial?.passwordProtected?.password])
+  useEffect(() => {
+    const storedPassword = Cookies.get('postPassword')
+    if (
+      storedPassword &&
+      storedPassword === props?.data?.post?.passwordProtected?.password
+    ) {
+      setIsAuthenticated(true)
+    }
+  }, [props?.data?.post?.passwordProtected?.password])
 
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
@@ -61,18 +58,17 @@ export default function Single(props) {
     title,
     content,
     featuredImage,
+    databaseId,
     author,
     date,
     acfPostSlider,
     acfSingleGuideSlider,
-    // acfSingleEditorialSlider,
     seo,
     uri,
     passwordProtected,
   } = props?.data?.post
   const categories = props?.data?.post?.categories?.edges ?? []
   const relatedStories = categories[0]?.node?.posts ?? []
-
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
   // Scrolled Function
@@ -120,7 +116,6 @@ export default function Single(props) {
       document.body.style.overflow = 'visible'
     }
   }, [isGuidesNavShown])
-
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -174,12 +169,10 @@ export default function Single(props) {
   )
 
   const posts = latestStories?.posts ?? []
-  // const editorials = latestStories?.editorials ?? []
   const guides = latestStories?.guides ?? []
   const updates = latestStories?.updates ?? []
 
   const mainPosts = []
-  // const mainEditorialPosts = []
   const mainGuidePosts = []
   const mainUpdatesPosts = []
 
@@ -188,10 +181,6 @@ export default function Single(props) {
     mainPosts.push(post.node)
   })
 
-  // // loop through all the main categories and their posts
-  // editorials?.edges?.forEach((post) => {
-  //   mainEditorialPosts.push(post.node)
-  // })
   // // loop through all the main categories and their posts
   guides?.edges?.forEach((post) => {
     mainGuidePosts.push(post.node)
@@ -212,7 +201,6 @@ export default function Single(props) {
   // define mainCatPostCards
   const mainCatPosts = [
     ...(mainPosts != null ? mainPosts : []),
-    // ...(mainEditorialPosts != null ? mainEditorialPosts : []),
     ...(mainGuidePosts != null ? mainGuidePosts : []),
     ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
   ]
@@ -272,45 +260,35 @@ export default function Single(props) {
   // Shuffle the relatedStories before rendering
   const [shuffledRelatedStories, setShuffledRelatedStories] = useState([])
 
-  // useEffect(() => {
-  //   if (relatedStories && relatedStories.edges) {
-  //     const shuffledSlice = getRandomSlice(relatedStories.edges, 5)
-  //     setShuffledRelatedStories(shuffledSlice)
-  //   }
-  // }, [relatedStories])
+  useEffect(() => {
+    if (relatedStories && relatedStories.edges) {
+      const shuffledSlice = getRandomSlice(relatedStories.edges, 5)
+      setShuffledRelatedStories(shuffledSlice)
+    }
+  }, [relatedStories])
 
-  // // Handle password submission
-  // const handlePasswordSubmit = (e) => {
-  //   e.preventDefault()
-  //   if (enteredPassword === passwordProtected?.password) {
-  //     setIsAuthenticated(true)
-  //     Cookies.set('editorialPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
-  //   } else {
-  //     alert('Incorrect password. Please try again.')
-  //   }
-  // }
-
+  console.log(
+    'Judul relatedStories:',
+    relatedStories?.edges?.map((item) => item.node.title),
+  )
 
   useEffect(() => {
     const storedPassword = Cookies.get('contentPassword')
-    if (
-      storedPassword &&
-      storedPassword === passwordProtected?.password
-    ) {
+    if (storedPassword && storedPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
     }
   }, [passwordProtected?.password])
-  
+
+  // Handle password submission
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
-      Cookies.set('contentPassword', enteredPassword, { expires: 1 }) // expires in 1 day
+      Cookies.set('postPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
     } else {
       alert('Incorrect password. Please try again.')
     }
   }
-  
 
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
@@ -331,11 +309,6 @@ export default function Single(props) {
       </main>
     )
   }
-
-  const passwordType = props?.data?.post?.__typename === 'Editorial' ? 'editorialPassword' : 'guidePassword'
-Cookies.set(passwordType, enteredPassword, { expires: 1 })
-
-
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       <SEO
@@ -399,7 +372,6 @@ Cookies.set(passwordType, enteredPassword, { expires: 1 })
           {shuffledRelatedStories.map((post) => (
             <Container>
               {post.node.title !== title && (
-                // Render the merged posts here
                 <RelatedStories
                   key={post.node.id}
                   title={post.node.title}
@@ -442,6 +414,60 @@ Single.query = gql`
         metaDesc
       }
       uri
+      categories(where: { childless: true }) {
+        edges {
+          node {
+            name
+            uri
+            parent {
+              node {
+                name
+                uri
+                countryCode {
+                  countryCode
+                }
+                destinationGuides {
+                  destinationGuides
+                }
+                children {
+                  edges {
+                    node {
+                      name
+                      uri
+                    }
+                  }
+                }
+              }
+            }
+            children {
+              edges {
+                node {
+                  name
+                  uri
+                }
+              }
+            }
+            posts {
+              edges {
+                node {
+                  title
+                  excerpt
+                  uri
+                  ...FeaturedImageFragment
+                  categories {
+                    edges {
+                      node {
+                        name
+                        uri
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       acfPostSlider {
         slide1 {
           mediaItemUrl
@@ -463,36 +489,6 @@ Single.query = gql`
         slideCaption2
         slideCaption4
         slideCaption5
-      }
-      categories {
-        edges {
-          node {
-            name
-            uri
-            parent {
-              node {
-                name
-                uri
-                children {
-                  edges {
-                    node {
-                      name
-                      uri
-                    }
-                  }
-                }
-              }
-            }
-            children {
-              edges {
-                node {
-                  name
-                  uri
-                }
-              }
-            }
-          }
-        }
       }
       ...FeaturedImageFragment
     }
