@@ -41,8 +41,4 @@ module.exports = withFaust({
       },
     ]
   },
-  transpilePackages: ['react-lite-youtube-embed'],
-  experimental: {
-    esmExternals: false, // Treat node_modules as CommonJS
-  },
 })

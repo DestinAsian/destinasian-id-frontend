@@ -3,17 +3,17 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import {
-  Button,
   CategoryHeader,
   CategorySecondaryHeader,
-  CategoryEntryHeader,
   CategoryStories,
+  Main,
+  CategoryEntryHeader,
+  Footer,
   SecondaryHeader,
   FeaturedImage,
-  Footer,
   HomepageStories,
-  Main,
   SEO,
+  Button,
 } from '../components'
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
@@ -50,6 +50,7 @@ export default function Component(props) {
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   // const { asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
+
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -103,14 +104,7 @@ export default function Component(props) {
   })
 
   // Logic for Guides Category
-  const isGuidesCategory =
-    (data?.category?.children?.edges?.length != 0 &&
-      data?.category?.children != null &&
-      data?.category?.children != undefined) ||
-    (!data?.category?.children?.edges?.length &&
-      data?.category?.parent?.node?.children?.edges?.length != 0 &&
-      data?.category?.parent != null &&
-      data?.category?.parent != undefined)
+  const isGuidesCategory = data?.category?.destinationGuides?.destinationGuides === 'yes'
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -272,16 +266,33 @@ export default function Component(props) {
         isScrolled={isScrolled}
       />
       {/* Guides category */}
-      {isGuidesCategory && (
+      {/* {isGuidesCategory && (
         <CategorySecondaryHeader
           data={data}
           databaseId={databaseId}
           name={name}
           parent={parent?.node?.name}
         />
-      )}
+      )} */}
       {/* Another category */}
-      {!isGuidesCategory && (
+      {/* {!isGuidesCategory && (
+        <SecondaryHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
+      )} */}
+
+      {isGuidesCategory ? (
+        <CategorySecondaryHeader
+          data={data}
+          databaseId={databaseId}
+          name={name}
+          parent={parent?.node?.name}
+        />
+      ) : (
         <SecondaryHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -290,7 +301,6 @@ export default function Component(props) {
           isScrolled={isScrolled}
         />
       )}
-      {/* 
 
       {/* EntryHeader category name */}
       <CategoryEntryHeader

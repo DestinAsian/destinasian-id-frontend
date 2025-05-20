@@ -1,8 +1,6 @@
 import classNames from 'classnames/bind'
 import {
   FeaturedImage,
-  CategoryIcon,
-  LocationIcon,
   Container,
 } from '../../components'
 import styles from './PostTwoColumns.module.scss'
@@ -21,12 +19,6 @@ export default function PostTwoColumns({
   categoryUri,
   uri,
   featuredImage,
-  // categoryLabel,
-  // chooseYourCategory,
-  // chooseIcon,
-  // locationLabel,
-  // locationUrl,
-  // locationValidation,
 }) {
   let trimmedExcerpt = excerpt?.substring(0, MAX_EXCERPT_LENGTH)
   const lastSpaceIndex = trimmedExcerpt?.lastIndexOf(' ')
@@ -83,26 +75,6 @@ export default function PostTwoColumns({
             )}
           </div>
         )}
-        {/* <div className={cx('content-wrapper')}>
-          {(chooseYourCategory || locationValidation) && (
-            <div className={cx('icon-wrapper')}>
-              {chooseYourCategory && (
-                <CategoryIcon
-                  chooseYourCategory={chooseYourCategory}
-                  chooseIcon={chooseIcon}
-                  categoryLabel={categoryLabel}
-                />
-              )}
-              {locationValidation && (
-                <LocationIcon
-                  locationValidation={locationValidation}
-                  locationLabel={locationLabel}
-                  locationUrl={locationUrl}
-                />
-              )}
-            </div>
-          )}
-        </div> */}
       </div>
       <div className={cx('border-bottom')}></div>
     </article>

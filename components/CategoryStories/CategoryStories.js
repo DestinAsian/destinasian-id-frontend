@@ -45,10 +45,10 @@ export default function CategoryStories(categoryUri) {
     first: postsPerPage,
     after: null,
     id: uri,
-    contentTypes: [CONTENT_TYPES.EDITORIAL, CONTENT_TYPES.POST],
+    contentTypes: [ CONTENT_TYPES.POST],
   }
 
-  // Editorial & Updates Stories
+  // Updates Stories
   if (
     (parent === null || parent === undefined) &&
     children?.edges?.length === 0
@@ -57,7 +57,7 @@ export default function CategoryStories(categoryUri) {
       first: postsPerPage,
       after: null,
       id: uri,
-      contentTypes: [CONTENT_TYPES.EDITORIAL, CONTENT_TYPES.UPDATE],
+      contentTypes: [CONTENT_TYPES.UPDATE],
     }
   }
 
@@ -415,12 +415,6 @@ export default function CategoryStories(categoryUri) {
                 category={post?.categories?.edges[0]?.node?.name}
                 categoryUri={post?.categories?.edges[0]?.node?.uri}
                 featuredImage={post?.featuredImage?.node}
-                chooseYourCategory={post?.acfCategoryIcon?.chooseYourCategory}
-                chooseIcon={post?.acfCategoryIcon?.chooseIcon?.mediaItemUrl}
-                categoryLabel={post?.acfCategoryIcon?.categoryLabel}
-                locationValidation={post?.acfLocationIcon?.fieldGroupName}
-                locationLabel={post?.acfLocationIcon?.locationLabel}
-                locationUrl={post?.acfLocationIcon?.locationUrl}
               />
             </div>
             {/* Show 1st banner after 2 posts and then every 4 posts */}
