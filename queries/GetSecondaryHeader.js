@@ -14,5 +14,18 @@ export const GetSecondaryHeaders = gql`
         }
       }
     }
+    guide(id: $id, idType: DATABASE_ID) {
+      categories(where: { childless: true }) {
+        edges {
+          node {
+            parent {
+              node {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
   }
 `
