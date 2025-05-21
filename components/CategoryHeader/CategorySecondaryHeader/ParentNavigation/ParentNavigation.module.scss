@@ -268,12 +268,16 @@
   align-items: center;
 
   button svg {
-    height: 2rem;
-    padding-right: 1rem;
+    width: 16px;
+    height: 16px;
 
-    @media (min-width: $breakpoint-extra-small) {
-      padding-top: 0;
-      padding-right: 0;
+    @media (min-width: $breakpoint-small) {
+      width: 21px;
+      height: 21px;
+    }
+    @media (min-width: $breakpoint-medium) {
+      width: 30px;
+      height: 30px;
     }
   }
 }
@@ -302,6 +306,74 @@
     @media (min-width: $breakpoint-extra-small) {
       padding: 0 0 1rem;
       margin-top: 3rem;
+    }
+  }
+}
+
+
+.menu-button-parent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: black;
+  padding: 0.25rem 0.75rem; 
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    .menu-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background-color: transparent;
+
+      width: 1.3rem;
+      height: 1.3rem;
+
+      @media (min-width: $breakpoint-extra-small) {
+        width: 1.6rem;
+        height: 1.6rem;
+      }
+
+      @media (min-width: $breakpoint-medium) {
+        width: 1.8rem;
+        height: 1.8rem;
+      }
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .da-guide-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      column-gap: 0.5rem;
+
+      .nav-name {
+        font-size: 0.65rem;
+        font-weight: 500;
+        text-transform: uppercase;
+
+        @media (min-width: $breakpoint-extra-small) {
+          font-size: 0.875rem;
+        }
+
+        @media (min-width: $breakpoint-medium) {
+          font-size: 1.25rem;
+        }
+
+        color: white;
+      }
     }
   }
 }

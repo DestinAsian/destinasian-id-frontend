@@ -49,78 +49,25 @@ export default function ParentNavigation({
         )}
       >
         {/* {'parent'} */}
-        {!isScrolled && (
-          <div
-            className={cx('text-menu-wrapper', isNavShown ? 'show' : undefined)}
-          >
-            {/* Menu Button */}
-            <div className={cx('menu-button')}>
-              {/* menu button */}
-              <button
-                type="button"
-                className={cx('menu-icon')}
-                onClick={() => {
-                  setIsMainNavShown(!isMainNavShown)
-                  isNavShown ? setIsNavShown(!isNavShown) : undefined
-                }}
-                aria-label="Toggle navigation"
-                aria-controls={cx('full-menu-wrapper')}
-                aria-expanded={!isMainNavShown}
-              >
-                <div key={'text-menu'} className={cx('da-guide-wrapper')}>
-                  {data?.category?.destinationGuides?.destinationGuides ==
-                    'yes' && (
-                    <DaGuideMenu
-                      title={data?.category?.countryCode?.countryCode}
-                      titleName={data?.category?.name}
-                    />
-                  )}
-                  {data?.category?.destinationGuides?.destinationGuides ==
-                    null && null}
-                </div>
-              </button>
-            </div>
-          </div>
-        )}
-        {!!isScrolled && (
+
+        {data?.category && (
           <div
             className={cx(
-              'sticky-text-menu-wrapper',
+              isScrolled ? 'sticky-text-menu-wrapper' : 'text-menu-wrapper',
               isNavShown ? 'show' : undefined,
             )}
           >
-            <div className={cx('menu-button')}>
-              {/* menu button */}
-              <button
-                type="button"
-                className={cx('menu-icon')}
-                onClick={() => {
-                  setIsMainNavShown(!isMainNavShown)
-                  isNavShown ? setIsNavShown(!isNavShown) : undefined
-                }}
-                aria-label="Toggle navigation"
-                aria-controls={cx('full-menu-wrapper')}
-                aria-expanded={!isMainNavShown}
-              >
-                <div
-                  key={'sticky-text-menu'}
-                  className={cx('da-guide-wrapper')}
-                >
-                  {data?.category?.destinationGuides?.destinationGuides ==
-                    'yes' && (
-                    <DaGuideMenu
-                      title={data?.category?.countryCode?.countryCode}
-                      titleName={data?.category?.name}
-                    />
-                  )}
-                  {data?.category?.destinationGuides?.destinationGuides ==
-                    null && null}
-                </div>
-              </button>
+            <div className={cx('menu-button-parent')}>
+              <Link href={data.category.uri}>
+                <button type="button" className={cx('menu-icon')}>
+                  <div className={cx('da-guide-wrapper')}>
+                    <span className={cx('nav-name')}>{data.category.name}</span>
+                  </div>
+                </button>
+              </Link>
             </div>
           </div>
         )}
-
         <div
           className={cx(
             'navigation-wrapper',
