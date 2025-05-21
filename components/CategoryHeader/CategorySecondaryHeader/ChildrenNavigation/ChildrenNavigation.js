@@ -49,6 +49,12 @@ export default function ChildrenNavigation({
         )}
       >
         {/* {'children'} */}
+        <div
+            className={cx(
+              isScrolled ? 'sticky-text-menu-wrapper' : 'text-menu-wrapper',
+              isNavShown ? 'show' : undefined,
+            )}
+          >
         {data?.category?.parent?.node && (
           <div className={cx('menu-button-children')}>
             <Link href={data.category.parent.node.uri}>
@@ -62,6 +68,7 @@ export default function ChildrenNavigation({
             </Link>
           </div>
         )}
+        </div>
 
         <div
           className={cx(
