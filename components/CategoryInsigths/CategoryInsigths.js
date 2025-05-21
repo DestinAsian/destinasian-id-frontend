@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import styles from './CategoryInsigths.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 const cx = classNames.bind(styles)
 
@@ -16,6 +17,8 @@ const CategoryInsigths = () => {
   })
 
   const [visibleCount, setVisibleCount] = useState(6)
+
+  const router = useRouter()
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error.message}</p>
@@ -32,8 +35,17 @@ const CategoryInsigths = () => {
   const visiblePosts = posts.slice(0, 5)
   const extraPosts = posts.slice(visibleCount)
 
+  const [clickCount, setClickCount] = useState(0)
+
   const handleViewMore = () => {
-    setVisibleCount((prev) => Math.min(prev + 4, posts.length))
+    const newClickCount = clickCount + 1
+    setClickCount(newClickCount)
+
+    if (newClickCount >= 3) {
+      router.push(category?.uri || '/')
+    } else {
+      setVisibleCount((prev) => Math.min(prev + 4, posts.length))
+    }
   }
 
   return (
@@ -50,7 +62,6 @@ const CategoryInsigths = () => {
         <p className={cx('articleCount')}>{posts.length} Articles</p>
 
         <div className={cx('postsWrapper')}>
-          {/* Kolom Kiri: Satu post utama */}
           <div className={cx('leftColumn')}>
             {visiblePosts[0] && (
               <Link
@@ -94,7 +105,6 @@ const CategoryInsigths = () => {
             )}
           </div>
 
-          {/* Kolom Kanan: 5 post lainnya */}
           <div className={cx('rightColumn')}>
             {visiblePosts.slice(1).map(({ node: post }, index) => {
               const featuredImage = post.featuredImage?.node
@@ -129,7 +139,8 @@ const CategoryInsigths = () => {
             })}
           </div>
 
-          {/* Bagian bawah: sisanya (4 per klik) */}
+         
+
           <div className={cx('gridSection')}>
             {posts.slice(6, visibleCount).map(({ node: post }) => (
               <Link key={post.id} href={post.uri || `/${post.uri}`}>
@@ -158,7 +169,6 @@ const CategoryInsigths = () => {
           </div>
         </div>
 
-        {/* Tombol View More */}
         {visibleCount < posts.length && (
           <div className={cx('viewMoreWrapper')}>
             <button onClick={handleViewMore} className={cx('viewMoreButton')}>

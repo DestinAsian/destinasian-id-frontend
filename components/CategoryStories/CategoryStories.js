@@ -57,7 +57,7 @@ export default function CategoryStories(categoryUri) {
       first: postsPerPage,
       after: null,
       id: uri,
-      contentTypes: [CONTENT_TYPES.UPDATE],
+      contentTypes: [CONTENT_TYPES.POST, CONTENT_TYPES.UPDATE],
     }
   }
 

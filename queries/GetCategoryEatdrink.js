@@ -6,6 +6,7 @@ export const GetCategoryEatdrink = gql`
       id
       name
       slug
+      uri
       categoryImages {
         categoryImagesCaption
       }

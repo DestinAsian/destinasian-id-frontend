@@ -12,14 +12,8 @@ export const GetCategoryUpdates = gql`
             id
             name
             slug
-            categoryId
             description
             uri
-            guides {
-              nodes {
-                title
-              }
-            }
             contentNodes(first: 1000) {
               edges {
                 cursor
@@ -27,11 +21,8 @@ export const GetCategoryUpdates = gql`
                   id
                   databaseId
                   date
-                  guid
-                  isContentNode
                   link
                   slug
-                  status
                   uri
                   contentTypeName
                   ... on Post {
@@ -39,13 +30,10 @@ export const GetCategoryUpdates = gql`
                     slug
                     title
                     uri
+                    excerpt
                     featuredImage {
                       node {
-                        caption
                         mediaItemUrl
-                        title
-                        date
-                        link
                       }
                     }
                     categories {
@@ -58,7 +46,6 @@ export const GetCategoryUpdates = gql`
               }
             }
           }
-          cursor
         }
       }
     }

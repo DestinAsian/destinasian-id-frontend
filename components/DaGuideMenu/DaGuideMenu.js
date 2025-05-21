@@ -41,11 +41,33 @@ export default function DaGuideMenu({
         {!!hasTitle && (
           <div key={'hasTitle'} className={cx('text')}>
             <Container>
-              {!!title && <Heading className={cx('title')}>{title}</Heading>}
+              {/* {!!title && <Heading className={cx('title')}>{title}</Heading>} */}
+              {!!title && (
+                <Heading className={cx('title')}>
+                  <button
+                    type="button"
+                    className={cx('menu-button')}
+                    onClick={() => setIsNavShown(!isNavShown)}
+                    aria-controls={cx('full-menu-wrapper')}
+                    aria-expanded={!isNavShown}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                    >
+                      <path
+                        d="M5 10h30v3H5zM5 18.5h30v3H5zM5 27h30v3H5z"
+                        fill="#fff"
+                      />
+                    </svg>
+                  </button>
+                  <span>{title}</span>
+                </Heading>
+              )}
             </Container>
           </div>
         )}
-
+      
         {/* Children category navigation */}
         {!!hasParent && (
           <div key={'hasParent'} className={cx('text')}>
@@ -54,7 +76,6 @@ export default function DaGuideMenu({
             </Container>
           </div>
         )}
-
         {/* Single post navigation */}
         {!!hasCategory && (
           <div key={'hasCategory'} className={cx('text')}>
