@@ -1,4 +1,6 @@
 @import 'styles/breakpoints';
+@import 'styles/variables';
+@import 'styles/fonts/typography';
 
 .CategoryInsigthsWrapper {
   width: 100%;
@@ -130,16 +132,32 @@
   margin-top: 1rem;
 }
 
+
 .viewMoreButton {
-  font-size: 1rem;
-  color: #690000;
   cursor: pointer;
-  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  appearance: none;
+  font-family: 'Unit Slab Pro Black';
+  line-height: 1.6;
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--wpe--color--title);
+  text-transform: uppercase;
 
   &:hover {
-    color: #000000;
+    border-color: var(--color-black);
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+
+  &:focus {
+    outline: 1px dotted;
+    outline: 1px auto -webkit-focus-ring-color;
   }
 }
+
 
 /* Breakpoints for responsiveness */
 @media screen and (min-width: 768px) {

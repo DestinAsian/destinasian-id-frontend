@@ -7,7 +7,7 @@ import classNames from 'classnames/bind'
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import styles from './CategoryUpdates.module.scss'
-import buttonStyles from '../button/button.module.scss'
+
 
 const cx = classNames.bind(styles)
 
@@ -136,11 +136,7 @@ const CategoryUpdates = () => {
                   onClick={() =>
                     handleViewMore(category.id, posts.length, category.uri)
                   }
-                  className={classNames(
-                    buttonStyles.button,
-                    buttonStyles['button-secondary'],
-                    styles.viewMoreButton,
-                  )}
+                  className={cx('viewMoreButton')}
                 >
                   View More
                 </button>
