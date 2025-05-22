@@ -8,6 +8,7 @@ import styles from './CategoryEatdrink.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import buttonStyles from '../button/button.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -166,7 +167,14 @@ const CategoryInsigths = () => {
 
         {visibleCount < posts.length && (
           <div className={cx('viewMoreWrapper')}>
-            <button onClick={handleViewMore} className={cx('viewMoreButton')}>
+            <button
+              onClick={handleViewMore}
+              className={classNames(
+                buttonStyles.button,
+                buttonStyles['button-primary'],
+                styles.viewMoreButton,
+              )}
+            >
               View More
             </button>
           </div>

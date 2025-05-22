@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import styles from './CategoryUpdates.module.scss'
+import buttonStyles from '../button/button.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -47,8 +48,17 @@ const CategoryUpdates = () => {
     })
   }
 
+  const isAllFinished = children.every(({ node: category }) => {
+    const posts = category?.contentNodes?.edges || []
+    const visibleCount = getVisibleCount(category.id)
+    return visibleCount >= posts.length
+  })
+
   return (
-    <div className={cx('categoryUpdatesWrapper')}>
+    <div
+      className={cx('categoryUpdatesWrapper')}
+      data-updates-finished={isAllFinished ? 'true' : 'false'}
+    >
       {children.map(({ node: category }) => {
         const posts = category?.contentNodes?.edges || []
         const visibleCount = getVisibleCount(category.id)
@@ -126,7 +136,11 @@ const CategoryUpdates = () => {
                   onClick={() =>
                     handleViewMore(category.id, posts.length, category.uri)
                   }
-                  className={cx('viewMoreButton')}
+                  className={classNames(
+                    buttonStyles.button,
+                    buttonStyles['button-secondary'],
+                    styles.viewMoreButton,
+                  )}
                 >
                   View More
                 </button>
