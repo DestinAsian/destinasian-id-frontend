@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './MoreReviews.module.scss'
 import { GetMoreReviews } from '../../queries/GetMoreReviews'
-import { Button, CategoryIcon, LocationIcon } from '../../components'
+import { Button } from '../../components'
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)
@@ -71,24 +71,6 @@ export default function MoreReviews({ databaseId }) {
               <Link href={post?.node?.uri}>
                 <div className={cx('row-wrapper')}>
                   <h2 className={cx('title')}>{post?.node?.title}</h2>
-                  <div className={cx('icon-wrapper')}>
-                    <CategoryIcon
-                      chooseYourCategory={
-                        post?.node?.acfCategoryIcon?.chooseYourCategory
-                      }
-                      chooseIcon={
-                        post?.node?.acfCategoryIcon?.chooseIcon?.mediaItemUrl
-                      }
-                      categoryLabel={post?.node?.acfCategoryIcon?.categoryLabel}
-                    />
-                    <LocationIcon
-                      locationValidation={
-                        post?.node?.acfLocationIcon?.fieldGroupName
-                      }
-                      locationLabel={post?.node?.acfLocationIcon?.locationLabel}
-                      locationUrl={post?.node?.acfLocationIcon?.locationUrl}
-                    />
-                  </div>
                 </div>
               </Link>
             )}
