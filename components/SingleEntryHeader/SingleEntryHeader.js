@@ -12,12 +12,7 @@ export default function SingleEntryHeader({
   parentCategory,
   categoryUri,
   categoryName,
-  categoryLabel,
-  chooseYourCategory,
-  chooseIcon,
-  locationLabel,
-  locationUrl,
-  locationValidation,
+
 }) {
   return (
     <div className={cx(['component', className])}>
@@ -36,18 +31,6 @@ export default function SingleEntryHeader({
             {/* {parent || null} */}
             {title}
           </Heading>
-          <div className={cx('icon-wrapper')}>
-            <CategoryIcon
-              chooseYourCategory={chooseYourCategory}
-              chooseIcon={chooseIcon}
-              categoryLabel={categoryLabel}
-            />
-            <LocationIcon
-              locationValidation={locationValidation}
-              locationLabel={locationLabel}
-              locationUrl={locationUrl}
-            />
-          </div>
         </div>
       </Container>
     </div>
