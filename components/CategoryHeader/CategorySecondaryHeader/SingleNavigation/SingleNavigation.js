@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './SingleNavigation.module.scss'
 import {
-  DaGuideMenu,
   MainCategoryMenu,
   TravelGuidesMenu,
 } from '../../../../components'
@@ -56,35 +55,25 @@ export default function SingleNavigation({
             {/* Menu Button */}
             <div className={cx('menu-button')}>
               {/* menu button */}
-              <button
-                type="button"
-                className={cx('menu-icon')}
-                onClick={() => {
-                  setIsMainNavShown(!isMainNavShown)
-                  isNavShown ? setIsNavShown(!isNavShown) : undefined
-                }}
-                aria-label="Toggle navigation"
-                aria-controls={cx('full-menu-wrapper')}
-                aria-expanded={!isMainNavShown}
-              >
-                <div key={'text-menu'} className={cx('da-guide-wrapper')}>
-                  {data?.post?.categories?.edges[0]?.node?.parent?.node
-                    ?.destinationGuides?.destinationGuides == 'yes' && (
-                    <DaGuideMenu
-                      title={
-                        data?.post?.categories?.edges[0]?.node?.parent?.node
-                          ?.countryCode?.countryCode
-                      }
-                      titleName={
-                        data?.post?.categories?.edges[0]?.node?.parent?.node
-                          ?.name
-                      }
-                    />
-                  )}
-                  {data?.post?.categories?.edges[0]?.node?.parent?.node
-                    ?.destinationGuides?.destinationGuides == null && null}
-                </div>
-              </button>
+          
+                {data?.post?.categories?.edges[0]?.node?.parent?.node && (
+                  <div className={cx('menu-button-single')}>
+                    <Link
+                      href={data.post.categories.edges[0].node.parent.node.uri}
+                    >
+                      <button type="button" className={cx('menu-icon')}>
+                        <div className={cx('da-guide-wrapper')}>
+                          <span className={cx('nav-name')}>
+                            {
+                              data.post.categories.edges[0].node.parent.node
+                                .name
+                            }
+                          </span>
+                        </div>
+                      </button>
+                    </Link>
+                  </div>
+                )}
             </div>
           </div>
         )}
@@ -97,38 +86,32 @@ export default function SingleNavigation({
           >
             <div className={cx('menu-button')}>
               {/* menu button */}
-              <button
-                type="button"
-                className={cx('menu-icon')}
-                onClick={() => {
-                  setIsMainNavShown(!isMainNavShown)
-                  isNavShown ? setIsNavShown(!isNavShown) : undefined
-                }}
-                aria-label="Toggle navigation"
-                aria-controls={cx('full-menu-wrapper')}
-                aria-expanded={!isMainNavShown}
-              >
+              
                 <div
                   key={'sticky-text-menu'}
                   className={cx('da-guide-wrapper')}
                 >
-                  {data?.post?.categories?.edges[0]?.node?.parent?.node
-                    ?.destinationGuides?.destinationGuides == 'yes' && (
-                    <DaGuideMenu
-                      title={
-                        data?.post?.categories?.edges[0]?.node?.parent?.node
-                          ?.countryCode?.countryCode
-                      }
-                      titleName={
-                        data?.post?.categories?.edges[0]?.node?.parent?.node
-                          ?.name
-                      }
-                    />
+                  {data?.post?.categories?.edges[0]?.node?.parent?.node && (
+                    <div className={cx('menu-button-single')}>
+                      <Link
+                        href={
+                          data.post.categories.edges[0].node.parent.node.uri
+                        }
+                      >
+                        <button type="button" className={cx('menu-icon')}>
+                          <div className={cx('da-guide-wrapper')}>
+                            <span className={cx('nav-name')}>
+                              {
+                                data.post.categories.edges[0].node.parent.node
+                                  .name
+                              }
+                            </span>
+                          </div>
+                        </button>
+                      </Link>
+                    </div>
                   )}
-                  {data?.post?.categories?.edges[0]?.node?.parent?.node
-                    ?.destinationGuides?.destinationGuides == null && null}
                 </div>
-              </button>
             </div>
           </div>
         )}
