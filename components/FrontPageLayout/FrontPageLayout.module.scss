@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   padding: 1rem;
-  background-color: var(--wpe--color--white);
+  background-color: var(--wpe--color--white--smoke);
 }
 
 // Two-column layout
@@ -72,7 +72,7 @@
 // Optional: Add spacing or background color for clarity
 .left-column,
 .right-column {
-  background-color: var(--wpe--color--white);
+  background-color: var(--wpe--color--white--smoke);
 }
 
 // Outnow Component

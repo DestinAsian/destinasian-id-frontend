@@ -4,7 +4,8 @@
 .adv-component {
   width: 100vw;
   line-height: 1;
-  background-color: var(--wpe--color--white);
+  // background-color: var(--wpe--color--white);
+  background-color: var(--wpe--main--background-color);
   padding-top: 5rem;
 
   @media (min-width: $breakpoint-extra-small) {
