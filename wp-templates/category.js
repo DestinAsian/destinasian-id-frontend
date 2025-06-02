@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import {
-  CategoryHeader,
-  CategorySecondaryHeader,
-  CategoryStories,
-  Main,
-  CategoryEntryHeader,
-  Footer,
-  SecondaryHeader,
-  FeaturedImage,
-  HomepageStories,
-  SEO,
-  Button,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const CategoryHeader = dynamic(() => import('../components/CategoryHeader/CategoryHeader'))
+const CategoryStories = dynamic(() => import('../components/CategoryStories/CategoryStories'))
+const Main = dynamic(() => import('../components/Main/Main'))
+const CategoryEntryHeader = dynamic(() => import('../components/CategoryEntryHeader/CategoryEntryHeader'))
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage';
+const HomepageStories = dynamic(() => import('../components/HomepageStories/HomepageStories'))
+const SecondaryHeader= dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'))
+const CategorySecondaryHeader = dynamic(() => import('../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'))
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const Button = dynamic(() => import('../components/Button/Button'))
+
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -22,6 +23,9 @@ import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
 export default function Component(props) {
+
+  console.log('FeaturedImage.fragments:', FeaturedImage.fragments);
+
   // Loading state for previews
   if (props.loading) {
     return <>Loading...</>
@@ -40,7 +44,7 @@ export default function Component(props) {
     databaseId,
     seo,
     uri,
-  } = props?.data?.category ?? []
+  } = props?.data?.category ?? {}
 
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
@@ -105,6 +109,7 @@ export default function Component(props) {
 
   // Logic for Guides Category
   const isGuidesCategory = data?.category?.destinationGuides?.destinationGuides === 'yes'
+
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -266,16 +271,16 @@ export default function Component(props) {
         isScrolled={isScrolled}
       />
       {/* Guides category */}
-      {/* {isGuidesCategory && (
+      {isGuidesCategory && (
         <CategorySecondaryHeader
           data={data}
           databaseId={databaseId}
           name={name}
           parent={parent?.node?.name}
         />
-      )} */}
+      )}
       {/* Another category */}
-      {/* {!isGuidesCategory && (
+      {!isGuidesCategory && (
         <SecondaryHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -283,9 +288,9 @@ export default function Component(props) {
           setIsGuidesNavShown={setIsGuidesNavShown}
           isScrolled={isScrolled}
         />
-      )} */}
+      )}
 
-      {isGuidesCategory ? (
+      {/* {isGuidesCategory ? (
         <CategorySecondaryHeader
           data={data}
           databaseId={databaseId}
@@ -300,7 +305,7 @@ export default function Component(props) {
           setIsGuidesNavShown={setIsGuidesNavShown}
           isScrolled={isScrolled}
         />
-      )}
+      )} */}
 
       {/* EntryHeader category name */}
       <CategoryEntryHeader
@@ -330,6 +335,7 @@ export default function Component(props) {
     </main>
   )
 }
+
 
 Component.query = gql`
   ${BlogInfoFragment}

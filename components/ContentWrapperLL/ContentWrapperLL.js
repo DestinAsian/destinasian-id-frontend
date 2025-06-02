@@ -1,10 +1,11 @@
 import className from 'classnames/bind'
 import styles from './ContentWrapperLL.module.scss'
-import {
-  SingleLLSlider,
-  SingleLLEntryHeader,
-  FeaturedImage,
-} from '../../components'
+import dynamic from 'next/dynamic'
+
+const SingleLLSlider = dynamic(() => import('../../components/SingleLLSlider/SingleLLSlider'))
+const SingleLLEntryHeader = dynamic(() => import('../../components/SingleLLEntryHeader/SingleLLEntryHeader'))
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+
 import { GetLuxeListPagination } from '../../queries/GetLuxeListPagination'
 import { useQuery } from '@apollo/client'
 import React, { useEffect, useState, useRef } from 'react'

@@ -1,5 +1,9 @@
 import className from 'classnames/bind'
-import { Heading, Container } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+const Container = dynamic(() => import('../../components/Container/Container'))
+
 import styles from './CategoryEntryHeader.module.scss'
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'

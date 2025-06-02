@@ -1,5 +1,15 @@
 import classNames from 'classnames/bind'
-import { NavigationMenu, SearchInput, SearchResults } from '../../components'
+import dynamic from 'next/dynamic'
+
+const NavigationMenu = dynamic(() =>
+  import('../../components/NavigationMenu/NavigationMenu'),
+)
+const SearchInput = dynamic(() =>
+  import('../../components/SearchInput/SearchInput'),
+)
+const SearchResults = dynamic(() =>
+  import('../../components/SearchResults/SearchResults'),
+)
 import styles from './FullMenu.module.scss'
 import { useState } from 'react'
 import Link from 'next/link'

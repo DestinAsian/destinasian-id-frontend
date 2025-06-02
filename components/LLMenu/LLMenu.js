@@ -1,6 +1,10 @@
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
-import { Button, LLPost, FeaturedImage } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Button = dynamic(() => import('../../components/Button/Button'))
+const LLPost = dynamic(() => import('../../components/LLPost/LLPost'))
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
 import styles from './LLMenu.module.scss'
 import React, { useState, useEffect } from 'react'
 import { GetLuxeListMenu } from '../../queries/GetLuxeListMenu'

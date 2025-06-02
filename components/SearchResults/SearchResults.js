@@ -1,10 +1,3 @@
-import {
-  CategoryIcon,
-  Container,
-  FeaturedImage,
-  LocationIcon,
-  PostInfo,
-} from '../../components'
 import { FaSearch } from 'react-icons/fa'
 import className from 'classnames/bind'
 
@@ -12,7 +5,13 @@ import styles from './SearchResults.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
+const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
+const Container = dynamic(() => import('../../components/Container/Container'))
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+const LocationIcon = dynamic(() => import('../../components/LocationIcon/LocationIcon'))
+const PostInfo = dynamic(() => import('../../components/PostInfo/PostInfo'))
 let cx = className.bind(styles)
 
 /**

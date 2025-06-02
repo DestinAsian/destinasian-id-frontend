@@ -2,19 +2,17 @@ import React, { useEffect, useState, useRef } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import {
-  Main,
-  FeaturedImage,
-  SEO,
-  SingleLLContainer,
-  SingleLLFeaturedImage,
-  ContentWrapperLL,
-  LLHeader,
-  PasswordProtected,
-  RCASecondaryHeader,
-  SecondaryHeader,
-  LLSecondaryHeader,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const Main = dynamic(() => import('../components/Main/Main'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const SingleLLContainer = dynamic(() => import('../components/SingleLLContainer/SingleLLContainer'))
+const SingleLLFeaturedImage = dynamic(() => import('../components/SingleLLFeaturedImage/SingleLLFeaturedImage'))
+const ContentWrapperLL = dynamic(() => import('../components/ContentWrapperLL/ContentWrapperLL'))
+const LLHeader = dynamic(() => import('../components/LLHeader/LLHeader'))
+const LLSecondaryHeader= dynamic(() => import('../components/LLHeader/LLSecondaryHeader/LLSecondaryHeader'))
+const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'

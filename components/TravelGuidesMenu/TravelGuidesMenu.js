@@ -69,35 +69,6 @@ export default function TravelGuidesMenu(className) {
       .filter(Boolean)
   }, [primaryMenu])
 
-  const processResults = (posts) => {
-    const honorsCircles = []
-    const uniqueHonorsCircleIds = new Set()
-
-    posts.forEach((post) => {
-      if (
-        honorsCircles.length < 5 &&
-        post?.node?.honorsCircles?.edges?.length
-      ) {
-        post.node.honorsCircles.edges.forEach((innerPost) => {
-          const databaseId = innerPost.node.databaseId
-          if (
-            honorsCircles.length < 5 &&
-            !uniqueHonorsCircleIds.has(databaseId)
-          ) {
-            uniqueHonorsCircleIds.add(databaseId)
-            honorsCircles.push(innerPost.node)
-          }
-        })
-      }
-    })
-
-    honorsCircles.sort((a, b) => new Date(b.date) - new Date(a.date))
-    return { honorsCircles }
-  }
-  let travelGuidesVariable = {
-    search: 'null',
-  }
-
   const {
     data: travelGuidesData,
     loading: travelGuidesloading,
@@ -136,58 +107,7 @@ export default function TravelGuidesMenu(className) {
     setLoading(false)
   }, [client, mainCategoryLabels])
 
-  // Random Honors Circle Stories
-  useEffect(() => {
-    const shuffleHonorsCirclePost = () => {
-      // Create a Set to store unique databaseId values
-      const uniqueDatabaseIds = new Set()
 
-      // Initialize an array to store unique posts
-      const contentHonorsCircle = []
-
-      // Loop through all the contentNodes posts
-      travelGuidesData?.tags?.edges?.forEach((contentNodes) => {
-        {
-          contentNodes?.node?.honorsCircles?.edges?.length !== 0 &&
-            contentNodes.node?.honorsCircles?.edges.forEach((post) => {
-              const { databaseId } = post.node
-
-              // Check if the databaseId is unique (not in the Set)
-              if (!uniqueDatabaseIds.has(databaseId)) {
-                uniqueDatabaseIds.add(databaseId) // Add the databaseId to the Set
-                contentHonorsCircle.push(post.node) // Push the unique post to the array
-              }
-            })
-        }
-      })
-
-      // Sort contentNodesPosts array by date
-      contentHonorsCircle.sort((a, b) => {
-        // Assuming your date is stored in 'date' property of the post objects
-        const dateA = new Date(a.date)
-        const dateB = new Date(b.date)
-
-        // Compare the dates
-        return dateB - dateA
-      })
-
-      // const TravelGuidesArray = Object.values(contentHonorsCircle || [])
-
-      // Shuffle only the otherBannerAds array
-      const shuffleHonorsCirclePost = shuffleArray(contentHonorsCircle)
-
-      // Concatenate the arrays with pinned ads first and shuffled other banner ads
-      const shuffledHonorsCircle = [...shuffleHonorsCirclePost]
-
-      // Get the last two elements
-      const lastFiveHonorsCircle = shuffledHonorsCircle.slice(-5)
-
-      setHonorsCircle(lastFiveHonorsCircle)
-    }
-
-    // Shuffle the banner ads when the component mounts
-    shuffleHonorsCirclePost()
-  }, [travelGuidesData])
 
   let menuVariable = {
     first: 1000,
@@ -235,7 +155,6 @@ export default function TravelGuidesMenu(className) {
     )
   }
 
-  const getHonorsCircle = [...HonorsCircleArray]
 
   function renderMenu(items) {
     return (

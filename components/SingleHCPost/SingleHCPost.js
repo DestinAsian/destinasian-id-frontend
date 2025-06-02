@@ -1,5 +1,9 @@
 import classNames from 'classnames/bind'
-import { FeaturedImage, CategoryIcon, LocationIcon } from '../../components'
+import dynamic from 'next/dynamic'
+
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
+const LocationIcon = dynamic(() => import('../../components/LocationIcon/LocationIcon'))
 import styles from './SingleHCPost.module.scss'
 import Link from 'next/link'
 

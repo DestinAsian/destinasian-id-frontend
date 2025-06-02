@@ -1,9 +1,11 @@
 import classNames from 'classnames/bind'
 import styles from './SingleNavigation.module.scss'
-import {
-  MainCategoryMenu,
-  TravelGuidesMenu,
-} from '../../../../components'
+import dynamic from 'next/dynamic'
+
+const DaGuideMenu = dynamic(() => import('../../../../components/DaGuideMenu/DaGuideMenu'))
+const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'))
+const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'))
+
 import { useQuery } from '@apollo/client'
 import { GetSingleNavigation } from '../../../../queries/GetSingleNavigation'
 import Link from 'next/link'

@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { NavigationMenu } from '../components'
+import NavigationMenu from '../components/NavigationMenu/NavigationMenu'
 
 export const GetMenus = gql`
   ${NavigationMenu.fragments.entry}

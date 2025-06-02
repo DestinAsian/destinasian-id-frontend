@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { FeaturedImage } from '../components'
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
 export const GetLatestStories = gql`
   ${FeaturedImage.fragments.entry}
@@ -30,30 +30,6 @@ export const GetLatestStories = gql`
         }
       }
     }
-    guides(first: $first, where: { status: PUBLISH }) {
-      edges {
-        node {
-          id
-          title
-          content
-          date
-          uri
-          ...FeaturedImageFragment
-          categories {
-            edges {
-              node {
-                name
-                uri
-                parent {
-                  node {
-                    name
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    
   }
 `

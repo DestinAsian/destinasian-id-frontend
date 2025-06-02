@@ -1,6 +1,13 @@
 import className from 'classnames/bind'
-import { Heading, PostInfo, Container, FeaturedImage } from '../../components'
 import styles from './EntryHeader.module.scss'
+import dynamic from 'next/dynamic'
+
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+const PostInfo = dynamic(() => import('../../components/PostInfo/PostInfo'))
+const Container = dynamic(() => import('../../components/Container/Container'))
+const FeaturedImage = dynamic(() =>
+  import('../../components/FeaturedImage/FeaturedImage'),
+)
 
 let cx = className.bind(styles)
 

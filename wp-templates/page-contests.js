@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import {
-  Main,
-  Container,
-  FeaturedImage,
-  SEO,
-  EntryHeader,
-  ContentWrapperContestFrontPage,
-  Header,
-  SecondaryHeader,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const Main = dynamic(() => import('../components/Main/Main'))
+const Container = dynamic(() => import('../components/Container/Container'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const EntryHeader = dynamic(() => import('../components/EntryHeader/EntryHeader'))
+const ContentWrapperContestFrontPage = dynamic(() => import('../components/ContentWrapperContestFrontPage/ContentWrapperContestFrontPage'))
+const Header = dynamic(() => import('../components/Header/Header'))
 import { GetMenus } from '../queries/GetMenus'
+const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'));
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetLatestRCA } from '../queries/GetLatestRCA'

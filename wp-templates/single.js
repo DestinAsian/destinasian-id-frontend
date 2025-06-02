@@ -2,28 +2,27 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import React, { useEffect, useState } from 'react'
-import {
-  SingleHeader,
-  Footer,
-  Main,
-  Container,
-  SingleEntryHeader,
-  ContentWrapper,
-  FeaturedImage,
-  SEO,
-  SingleSlider,
-  CategorySecondaryHeader,
-  EntryMoreReviews,
-  MoreReviews,
-  PartnerContent,
-  PasswordProtected,
-  RelatedStories,
-  SingleEditorialEntryHeader,
-  SingleEditorialFeaturedImage,
-  ContentWrapperEditorial,
-  EntryRelatedStories,
-  SecondaryHeader,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const SingleHeader = dynamic(() => import('../components/SingleHeader/SingleHeader'))
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+const Main = dynamic(() => import('../components/Main/Main'))
+const Container = dynamic(() => import('../components/Container/Container'))
+const SingleEntryHeader = dynamic(() => import('../components/SingleEntryHeader/SingleEntryHeader'))
+const ContentWrapper = dynamic(() => import('../components/ContentWrapper/ContentWrapper'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const SingleSlider = dynamic(() => import('../components/SingleSlider/SingleSlider'))
+const CategorySecondaryHeader= dynamic(() => import('../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'))
+const EntryMoreReviews = dynamic(() => import('../components/EntryMoreReviews/EntryMoreReviews'))
+const MoreReviews = dynamic(() => import('../components/MoreReviews/MoreReviews'))
+const PartnerContent = dynamic(() => import('../components/PartnerContent/PartnerContent'))
+const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
+const RelatedStories = dynamic(() => import('../components/RelatedStories/RelatedStories'))
+const SingleEditorialEntryHeader = dynamic(() => import('../components/SingleEditorialEntryHeader/SingleEditorialEntryHeader'))
+const SingleEditorialFeaturedImage = dynamic(() => import('../components/SingleEditorialFeaturedImage/SingleEditorialFeaturedImage'))
+const ContentWrapperEditorial = dynamic(() => import('../components/ContentWrapperEditorial/ContentWrapperEditorial'))
+const EntryRelatedStories = dynamic(() => import('../components/EntryRelatedStories/EntryRelatedStories'))
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'

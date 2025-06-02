@@ -1,7 +1,8 @@
 import classNames from 'classnames/bind'
 import styles from './RCASecondaryHeader.module.scss'
-import { TravelGuidesMenu } from '../../../components'
+import dynamic from 'next/dynamic'
 
+const TravelGuidesMenu = dynamic(() => import('../../../components/TravelGuidesMenu/TravelGuidesMenu'))
 let cx = classNames.bind(styles)
 
 export default function RCASecondaryHeader({

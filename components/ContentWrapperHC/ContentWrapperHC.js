@@ -1,6 +1,8 @@
 import className from 'classnames/bind'
 import styles from './ContentWrapperHC.module.scss'
-import { SingleHCSlider } from '../SingleHCSlider'
+import dynamic from 'next/dynamic'
+
+const SingleHCSlider = dynamic(() => import('../SingleHCSlider/SingleHCSlider'))
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'

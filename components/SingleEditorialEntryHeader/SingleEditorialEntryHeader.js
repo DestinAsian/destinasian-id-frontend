@@ -1,5 +1,8 @@
 import className from 'classnames/bind'
-import { Heading, FormatDate } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+const FormatDate = dynamic(() => import('../../components/FormatDate/FormatDate'))
 import styles from './SingleEditorialEntryHeader.module.scss'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'

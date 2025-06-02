@@ -11,6 +11,7 @@ import pageTravelGuides from './page-travel-guides'
 import pageVideos from './page-videos'
 import single from './single'
 import singleGuide from './single-guide'
+import singleAdvertorial from './single-editorial'
 import singleHonorsCircle from './single-honors-circle'
 import singleUpdate from './single-update'
 import singleContest from './single-contest'
@@ -31,7 +32,7 @@ export default {
   'page-videos': pageVideos,
   single,
   'single-guide': singleGuide,
-  // 'single-advertorial': singleAdvertorial,
+  'single-advertorial': singleAdvertorial,
   'single-honors-circle': singleHonorsCircle,
   'single-update': singleUpdate,
   'single-contest': singleContest,

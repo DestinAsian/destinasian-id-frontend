@@ -15,8 +15,9 @@ const CategoryInsigths = () => {
   const { data, loading, error } = useQuery(GetCategoryEatdrink, {
     variables: { id: '651' },
   })
-
+  
   const [visibleCount, setVisibleCount] = useState(6)
+  const [clickCount, setClickCount] = useState(0)
   const router = useRouter()
 
   if (loading) return <p>Loading...</p>
@@ -26,15 +27,14 @@ const CategoryInsigths = () => {
   const posts = Array.isArray(category?.posts?.edges)
     ? category.posts.edges
     : []
-
-  if (!category || posts.length === 0) {
+    
+    if (!category || posts.length === 0) {
     return <p>Category data or articles not found.</p>
   }
 
   const visiblePosts = posts.slice(0, 5)
   const extraPosts = posts.slice(visibleCount)
 
-  const [clickCount, setClickCount] = useState(0)
 
   const handleViewMore = () => {
     const newClickCount = clickCount + 1

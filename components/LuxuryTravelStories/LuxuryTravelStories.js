@@ -5,12 +5,13 @@ import { useQuery } from '@apollo/client'
 import { GetSpecificBannerAds } from '../../queries/GetSpecificBannerAds'
 import LiteYouTubeEmbed from 'react-lite-youtube-embed'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
-import {
-  PostTwoColumns,
-  AdvertorialPostTwoColumns,
-  ModuleAd,
-  Heading,
-} from '../../components'
+import dynamic from 'next/dynamic'
+
+const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
+const AdvertorialPostTwoColumns = dynamic(() => import('../../components/AdvertorialPostTwoColumns/AdvertorialPostTwoColumns'))
+const ModuleAd = dynamic(() => import('../../components/ModuleAd/ModuleAd'))
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)

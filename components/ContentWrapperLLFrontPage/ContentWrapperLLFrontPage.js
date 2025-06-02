@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react'
 import className from 'classnames/bind'
 import styles from './ContentWrapperLLFrontPage.module.scss'
 import { GetLuxeListStories } from '../../queries/GetLuxeListStories'
-import { LLPost, Button } from '../../components'
+import dynamic from 'next/dynamic'
+
+const LLPost = dynamic(() => import('../../components/LLPost/LLPost'))
+const Button = dynamic(() => import('../../components/Button/Button'))
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'

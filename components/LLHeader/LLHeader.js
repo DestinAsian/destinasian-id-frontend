@@ -2,12 +2,12 @@ import classNames from 'classnames/bind'
 import Link from 'next/link'
 import destinasianLogo from '../../assets/logo/destinasian-logo.png'
 import destinasianLogoOrange from '../../assets/logo/destinasian-logo-orange.png'
-import {
-  Container,
-  FullMenu,
-  SearchInput,
-  SearchResults,
-} from '../../components'
+import dynamic from 'next/dynamic'
+
+const Container = dynamic(() => import('../../components/Container/Container'))
+const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
+const SearchInput = dynamic(() => import('../../components/SearchInput/SearchInput'))
+const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
 import styles from './LLHeader.module.scss'
 import { useState, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'

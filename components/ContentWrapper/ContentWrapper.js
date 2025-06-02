@@ -2,7 +2,9 @@ import className from 'classnames/bind'
 import styles from './ContentWrapper.module.scss'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { GallerySlider } from '../../components'
+import dynamic from 'next/dynamic'
+
+const GallerySlider = dynamic(() => import('../../components/GallerySlider/GallerySlider'))
 import { BACKEND_URL } from '../../constants/backendUrl'
 
 let cx = className.bind(styles)

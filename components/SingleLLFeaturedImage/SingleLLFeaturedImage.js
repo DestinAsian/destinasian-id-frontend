@@ -1,10 +1,12 @@
 import className from 'classnames/bind'
-import { FeaturedImage } from '../../components'
+import dynamic from 'next/dynamic'
+
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
 import { useState, useEffect } from 'react'
 import styles from './SingleLLFeaturedImage.module.scss'
-import { Container, FullMenu } from '../../components'
-import { LLMenu } from '../LLMenu'
-
+const Container = dynamic(() => import('../../components/Container/Container'))
+const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
+const LLMenu = dynamic(() => import('../LLMenu/LLMenu'))
 let cx = className.bind(styles)
 
 export default function SingleLLFeaturedImage({

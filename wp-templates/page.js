@@ -3,18 +3,18 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { HeaderFooterVisibilityFragment } from '../fragments/HeaderFooterVisibility'
-import {
-  Header,
-  Footer,
-  Main,
-  Container,
-  ContentWrapperPage,
-  EntryHeader,
-  FeaturedImage,
-  SEO,
-  PasswordProtected,
-  SecondaryHeader,
-} from '../components'
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+import dynamic from 'next/dynamic'
+
+const Header = dynamic(() => import('../components/Header/Header'))
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+const Main = dynamic(() => import('../components/Main/Main'))
+const Container = dynamic(() => import('../components/Container/Container'))
+const ContentWrapperPage = dynamic(() => import('../components/ContentWrapperPage/ContentWrapperPage'))
+const EntryHeader = dynamic(() => import('../components/EntryHeader/EntryHeader'))
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
+const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'));
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'

@@ -47,7 +47,10 @@ export default function GallerySlider({ gallerySlider }) {
           })
         } else {
           // Traverse child nodes
-          Array.from(node.childNodes).forEach(extractImagesRecursively)
+          // Array.from(node.childNodes).forEach(extractImagesRecursively)
+          if (node.childNodes && node.childNodes.length) {
+            Array.from(node.childNodes).forEach(extractImagesRecursively)
+          }
         }
       }
 

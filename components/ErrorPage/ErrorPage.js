@@ -1,7 +1,11 @@
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 import className from 'classnames/bind'
-import { SearchInput, SearchResults, FeaturedImage, Button } from '../../components'
+import dynamic from 'next/dynamic'
+const SearchInput = dynamic(() => import('../../components/SearchInput/SearchInput'))
+const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+const Button = dynamic(() => import('../../components/Button/Button'))
 import styles from './ErrorPage.module.scss'
 import { GetSearchResults } from '../../queries/GetSearchResults'
 import appConfig from '../../app.config'

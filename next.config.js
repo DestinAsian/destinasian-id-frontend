@@ -16,6 +16,12 @@ module.exports = withFaust({
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'test.destinasian.co.id',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   i18n: {

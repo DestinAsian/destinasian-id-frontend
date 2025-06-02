@@ -4,7 +4,10 @@ import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './UpdatesPage.module.scss'
 
-import { Outnow, CategoryUpdatesFull } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Outnow = dynamic(() => import('../../components/Outnow/Outnow'))
+const CategoryUpdatesFull = dynamic(() => import('../../components/CategoryUpdatesFull/CategoryUpdatesFull'))
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 
 const cx = classNames.bind(styles)

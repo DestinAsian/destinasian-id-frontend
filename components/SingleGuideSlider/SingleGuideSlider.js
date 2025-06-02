@@ -12,7 +12,11 @@ import 'swiper/css/navigation'
 import { EffectFade, Autoplay, Pagination, Navigation } from 'swiper'
 import Image from 'next/image'
 
-export default function SingleGuideSlider({ images }) {
+export default function SingleSlider({ images }) {
+  const menuIndex = images?.map((image, index) => {
+    return index
+  })
+
   return (
     <>
       <Swiper
@@ -20,31 +24,41 @@ export default function SingleGuideSlider({ images }) {
         effect={'fade'}
         loop={true}
         autoplay={{
-          delay: 5000,
+          delay: 25000,
           disableOnInteraction: true,
         }}
         pagination={{
-          type: 'fraction',
+          clickable: true,
+          el: '.swiper-post-custom-pagination',
+          clickable: true,
+          renderBullet: function (index, className) {
+            return `<span key="${menuIndex[index]}" class="${className}"></span>`
+          },
         }}
         navigation={{
           prevEl: '.swiper-custom-button-prev',
           nextEl: '.swiper-custom-button-next',
         }}
         modules={[EffectFade, Autoplay, Pagination, Navigation]}
-        className="post-Guide-swiper"
+        className="post-swiper"
         style={{ display: images[0] ? 'block' : 'none' }}
       >
         {images?.map((image, index) => (
           <div className="post-swiper-slide">
-            {image && (
+            {image[0] && (
               <SwiperSlide key={index}>
                 <Image
-                  src={image}
+                  src={image[0]}
                   alt="Slider Image"
                   fill
                   sizes="100%"
                   priority
                 />
+                {image[1] && (
+                  <figcaption className={'slide-caption'}>
+                    {image[1]}
+                  </figcaption>
+                )}
               </SwiperSlide>
             )}
           </div>
@@ -98,6 +112,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
           </svg>
         </div>
       </Swiper>
+      <div className="swiper-post-custom-pagination"></div>
     </>
   )
 }

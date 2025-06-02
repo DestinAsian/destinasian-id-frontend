@@ -1,5 +1,8 @@
 import className from 'classnames/bind'
-import { Heading, FormatDate } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+const FormatDate = dynamic(() => import('../../components/FormatDate/FormatDate'))
 import styles from './SingleUpdateEntryHeader.module.scss'
 import Link from 'next/link'
 

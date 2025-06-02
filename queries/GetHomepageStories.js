@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { FeaturedImage } from '../components'
+import  FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
 export const GetHomepageStories = gql`
   ${FeaturedImage.fragments.entry}

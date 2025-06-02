@@ -1,5 +1,8 @@
 import classNames from 'classnames/bind'
-import { NavigationMenu, Container } from '../../components'
+import dynamic from 'next/dynamic'
+
+const NavigationMenu = dynamic(() => import('../../components/NavigationMenu/NavigationMenu'))
+const Container = dynamic(() => import('../../components/Container/Container'))
 import styles from './Footer.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'

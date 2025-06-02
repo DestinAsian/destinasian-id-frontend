@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import {
-  HomepageHeader,
-  Main,
-  Container,
-  FeaturedImage,
-  SEO,
-  FeatureWell,
-  HomepageStories,
-  ContentGuides,
-  HomepageSecondaryHeader,
-  FrontPageLayout,
-  Footer,
-  ContentWrapperGuide,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const HomepageHeader = dynamic(() => import('../components/HomepageHeader/HomepageHeader'))
+
+
+const Main = dynamic(() => import('../components/Main/Main'))
+const Container = dynamic(() => import('../components/Container/Container'))
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage';
+const HomepageStories = dynamic(() => import('../components/HomepageStories/HomepageStories'))
+const FrontPageLayout = dynamic(() => import('../components/FrontPageLayout/FrontPageLayout'))
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+const ContentWrapperGuide = dynamic(() => import('../components/ContentWrapperGuide/ContentWrapperGuide'))
+const HomepageSecondaryHeader = dynamic(() => import('../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'))
+const FeatureWell = dynamic(() => import('../components/FeatureWell/FeatureWell'))
+
 
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -23,6 +25,7 @@ import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 export default function Component(props) {
+
   // Loading state for previews
   if (props.loading) {
     return <>Loading...</>

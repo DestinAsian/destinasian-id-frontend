@@ -1,84 +1,107 @@
 import className from 'classnames/bind'
 import styles from './ContentWrapperGuide.module.scss'
-import { SingleEditorialSlider } from '../SingleEditorialSlider'
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
+const GallerySlider = dynamic(() => import('../../components/GallerySlider/GallerySlider'))
+
 import { BACKEND_URL } from '../../constants/backendUrl'
 
 let cx = className.bind(styles)
 
-export default function ContentWrapperGuide({ content, children, images }) {
-  const [transformedContent, setTransformedContent] = useState('')
+export default function ContentWrapperGuide({ content, children }) {
+  const [processedContent, setProcessedContent] = useState([])
 
   useEffect(() => {
-    // Function to extract image data and replace <img> with <Image>
-    const extractImageData = () => {
-      // Create a DOMParser
-      const parser = new DOMParser()
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(content, 'text/html')
+    const finalElements = []
 
-      // Parse the HTML content
-      const doc = parser.parseFromString(content, 'text/html')
+    const processNode = (node, index) => {
+      // Instagram blockquote
+      if (
+        node.nodeType === 1 &&
+        node.tagName === 'BLOCKQUOTE' &&
+        node.getAttribute('data-instgrm-permalink')
+      ) {
+        const url = node.getAttribute('data-instgrm-permalink')
+        const captioned = node.hasAttribute('data-instgrm-captioned')
 
-      // Get only image elements with src containing BACKEND_URL
-      const imageElements = doc.querySelectorAll(`img[src*="${BACKEND_URL}"]`)
-
-      // Replace <img> elements with <Image> components
-      imageElements.forEach((img) => {
-        const src = img.getAttribute('src')
-        const alt = img.getAttribute('alt')
-        const width = img.getAttribute('width')
-        const height = img.getAttribute('height')
-
-        // Create Image component
-        const imageComponent = (
-          <Image
-            src={src}
-            alt={alt}
-            width={width ? width : '500'}
-            height={height ? height : '500'}
-            style={{ objectFit: 'contain' }}
-            priority
-          />
+        finalElements.push(
+          <div
+            key={`ig-${index}`}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <InstagramEmbed url={url} width={500} captioned={captioned} />
+          </div>,
         )
+        return
+      }
 
-        // Render the Image component to HTML string
-        const imageHtmlString = renderToStaticMarkup(imageComponent)
+      // Galeri (div id="gallery-...")
+      if (
+        node.nodeType === 1 &&
+        node.tagName === 'DIV' &&
+        node.id?.startsWith('gallery-')
+      ) {
+        finalElements.push(
+          <GallerySlider key={`gallery-${index}`} gallerySlider={node} />,
+        )
+        return
+      }
 
-        // Replace the <img> element with the Image HTML string in the HTML content
-        img.outerHTML = imageHtmlString
-      })
+      // Gambar biasa (gunakan next/image dengan rasio 4:3)
+      if (node.nodeType === 1 && node.tagName === 'IMG') {
+        const src = node.getAttribute('src')
+        const alt = node.getAttribute('alt') || 'Image'
 
-      // Set the transformed HTML content
-      setTransformedContent(doc.body.innerHTML)
+        finalElements.push(
+          <div
+            key={`img-${index}`}
+            style={{
+              position: 'relative',
+              width: '100%',
+              paddingTop: '75%', // rasio 4:3
+              marginBottom: '1rem',
+            }}
+          >
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              sizes="100vw"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>,
+        )
+        return
+      }
+
+      // Node lain: render langsung sebagai HTML
+      if (node.nodeType === 1) {
+        finalElements.push(
+          <div
+            key={`html-${index}`}
+            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+          />,
+        )
+      }
+
+      // Node teks biasa
+      if (node.nodeType === 3 && node.textContent.trim() !== '') {
+        finalElements.push(<p key={`text-${index}`}>{node.textContent}</p>)
+      }
     }
 
-    // Call the function to extract image data and replace <img>
-    extractImageData()
+    Array.from(doc.body.childNodes).forEach((node, i) => processNode(node, i))
+    setProcessedContent(finalElements)
   }, [content])
 
   return (
     <article className={cx('component')}>
-      {images[0] != null && (
-        <div className={cx('with-slider-wrapper')}>
-          <SingleEditorialSlider images={images} />
-          <div
-            className={cx('content-wrapper')}
-            dangerouslySetInnerHTML={{ __html: transformedContent ?? '' }}
-          />
-          {children}
-        </div>
-      )}
-
-      {images[0] == null && (
-        <div className={cx('with-slider-wrapper')}>
-          <div
-            className={cx('content-wrapper')}
-            dangerouslySetInnerHTML={{ __html: transformedContent ?? '' }}
-          />
-          {children}
-        </div>
-      )}
+      <div className={cx('content-wrapper')}>{processedContent}</div>
+      {children}
     </article>
   )
 }

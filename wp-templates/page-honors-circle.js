@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import {
-  Main,
-  Container,
-  FeaturedImage,
-  SEO,
-  ContentWrapperHCFrontPage,
-  EntryHeader,
-  Header,
-  PasswordProtected,
-  SecondaryHeader,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const Main = dynamic(() => import('../components/Main/Main'))
+const Container = dynamic(() => import('../components/Container/Container'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const ContentWrapperHCFrontPage = dynamic(() => import('../components/ContentWrapperHCFrontPage/ContentWrapperHCFrontPage'))
+const EntryHeader = dynamic(() => import('../components/EntryHeader/EntryHeader'))
+const Header = dynamic(() => import('../components/Header/Header'))
+const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
+const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'));
+
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'

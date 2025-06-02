@@ -4,7 +4,10 @@ import classNames from 'classnames/bind'
 import styles from './PartnerContent.module.scss'
 import { GetHCStories } from '../../queries/GetHCStories'
 import { GetPartnerContent } from '../../queries/GetPartnerContent'
-import { Button, FeaturedImage } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Button = dynamic(() => import('../../components/Button/Button'))
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)

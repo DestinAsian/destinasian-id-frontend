@@ -1,16 +1,23 @@
-
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './FrontPageLayout.module.scss'
 
-import {
-  Outnow,
-  CategoryUpdates,
-  CategoryInsigths,
-  CategoryIndo,
-  CategoryEatdrink,
-} from '../../components'
+import dynamic from 'next/dynamic'
+const Outnow = dynamic(() => import('../../components/Outnow/Outnow'))
+const CategoryUpdates = dynamic(() =>
+  import('../../components/CategoryUpdates/CategoryUpdates'),
+)
+const CategoryInsigths = dynamic(() =>
+  import('../../components/CategoryInsigths/CategoryInsigths'),
+)
+const CategoryEatdrink = dynamic(() =>
+  import('../../components/CategoryEatdrink/CategoryEatdrink'),
+)
+const CategoryIndo = dynamic(() =>
+  import('../../components/CategoryIndo/CategoryIndo'),
+)
+
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryInsights } from '../../queries/GetCategoryInsights'
 import { GetCategoryEatdrink } from '../../queries/GetCategoryEatdrink'
@@ -41,7 +48,7 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryEatdrink, {
     variables: { id: '651' },
   })
-  
+
   const {
     data: indoData,
     loading: indoLoading,
@@ -62,7 +69,6 @@ export default function FrontPageLayout() {
   const categoryEatdrink = eatdrinkData?.category
   const indoCategories =
     indoData?.categories?.edges?.map((edge) => edge.node) || []
-
 
   return (
     <>
@@ -97,7 +103,8 @@ export default function FrontPageLayout() {
             <CategoryInsigths data={categoryInsights} />
           </div>
         )}
-      </div><hr className={cx('divider')} /> 
+      </div>
+      <hr className={cx('divider')} />
       <div className={cx('component-updates')}>
         {!eatdrinkLoading && !eatdrinkError && categoryEatdrink && (
           <div className={cx('category-insights-component')}>
@@ -108,50 +115,3 @@ export default function FrontPageLayout() {
     </>
   )
 }
-
-
-// import React from 'react'
-// import { useQuery } from '@apollo/client'
-// import classNames from 'classnames/bind'
-// import styles from './FrontPageLayout.module.scss'
-
-// import { Outnow, CategoryUpdates } from '../../components'
-// import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
-
-// const cx = classNames.bind(styles)
-
-// export default function FrontPageLayout() {
-//   const {
-//     data: updatesData,
-//     loading: updatesLoading,
-//     error: updatesError,
-//   } = useQuery(GetCategoryUpdates, {
-//     variables: { include: ['41'] },
-//   })
-
-//   // Safely extract category children edges
-//   const updatesCategory = Array.isArray(updatesData?.category?.children?.edges)
-//     ? updatesData.category.children.edges
-//     : []
-
-//   return (
-//     <div className={cx('component-updates')}>
-//       <div className={cx('two-columns')}>
-//         <div className={cx('left-column')}>
-//           {!updatesLoading && !updatesError && updatesCategory.length > 0 && (
-//             <div className={cx('category-updates-component')}>
-//               <CategoryUpdates data={updatesCategory} />
-//             </div>
-//           )}
-//         </div>
-//         <div className={cx('right-column')}>
-//           <aside className="sticky top-14 h-auto sm:top-20">
-//             <div className={cx('outnow-component')}>
-//               <Outnow />
-//             </div>
-//           </aside>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }

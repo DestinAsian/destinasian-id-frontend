@@ -3,7 +3,9 @@ import React, { useState, useRef } from 'react'
 import className from 'classnames/bind'
 import styles from './ContentWrapperVideo.module.scss'
 import { GetVideos } from '../../queries/GetVideos'
-import { Button, Heading } from '../../components'
+import dynamic from 'next/dynamic'
+const Button = dynamic(() => import('../../components/Button/Button'))
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
 import LiteYouTubeEmbed from 'react-lite-youtube-embed'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 import Link from 'next/link'

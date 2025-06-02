@@ -1,5 +1,7 @@
 import className from 'classnames/bind'
-import { FeaturedImage } from '../../components'
+import dynamic from 'next/dynamic'
+
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
 import styles from './SingleEditorialFeaturedImage.module.scss'
 
 let cx = className.bind(styles)

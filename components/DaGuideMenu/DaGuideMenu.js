@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import className from 'classnames/bind'
-import { Heading, Container } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+const Container = dynamic(() => import('../../components/Container/Container'))
 import styles from './DaGuideMenu.module.scss'
 import Link from 'next/link'
 
@@ -51,10 +54,7 @@ export default function DaGuideMenu({
                     aria-controls={cx('full-menu-wrapper')}
                     aria-expanded={!isNavShown}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 40 40"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
                       <path
                         d="M5 10h30v3H5zM5 18.5h30v3H5zM5 27h30v3H5z"
                         fill="#fff"
@@ -67,7 +67,7 @@ export default function DaGuideMenu({
             </Container>
           </div>
         )}
-      
+
         {/* Children category navigation */}
         {!!hasParent && (
           <div key={'hasParent'} className={cx('text')}>
@@ -83,27 +83,6 @@ export default function DaGuideMenu({
               {!!categories && (
                 <Heading className={cx('title')}>{categories}</Heading>
               )}
-              {/* <div
-                className={cx([
-                  'index-menu-wrapper',
-                  isNavShown ? 'show' : undefined,
-                ])}
-              >
-                <div className={cx('index-menu-content')}>
-                  <div className={cx('first-wrapper')}>
-               && (
-                      
-                        <>
-                      
-                          {categoryName}
-                        </>
-                      </Link>
-                    )}
-                  </div>
-                  <div className={cx('second-wrapper')}>
-                  </div>
-                </div>
-              </div> */}
             </Container>
           </div>
         )}

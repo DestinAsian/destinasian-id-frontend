@@ -1,57 +1,6 @@
-// import { gql } from '@apollo/client';
-// import Image from 'next/image';
-
-// export default function FeaturedImage({
-//   image,
-//   width,
-//   height,
-//   className,
-//   priority,
-//   fill,
-//   ...props
-// }) {
-//   const src = image?.sourceUrl;
-//   const { altText } = image || '';
-
-//   width = width ? width : image?.mediaDetails?.width;
-//   height = height ? height : image?.mediaDetails?.height;
-
-//   return src && width && height ? (
-//     <figure className={className}>
-//       <Image
-//         src={src}
-//         alt={altText}
-//         width={width}
-//         height={height}
-//         priority={priority}
-//         fill={fill}
-//         {...props}
-//       />
-//     </figure>
-//   ) : null;
-// }
-
-// // Fragmen GraphQL untuk digunakan di query manapun
-// FeaturedImage.fragments = {
-//   image: gql`
-//     fragment FeaturedImageFragment on MediaItem {
-//       id
-//       sourceUrl
-//       altText
-//       mediaDetails {
-//         width
-//         height
-//       }
-//     }
-//   `,
-// };
-
-
-
-
-
 import { gql } from '@apollo/client';
-import Image from "next/image"
+import Image from "next/image";
+
 export default function FeaturedImage({
   image,
   width,
@@ -62,28 +11,27 @@ export default function FeaturedImage({
   ...props
 }) {
   const src = image?.sourceUrl;
-  const { altText } = image || '';
+  const altText = image?.altText || '';
 
-  width = width ? width : image?.mediaDetails?.width;
-  height = height ? height : image?.mediaDetails?.height;
+  // Tentukan ukuran, fallback ke mediaDetails atau default
+  const imgWidth = width || image?.mediaDetails?.width || 600;
+  const imgHeight = height || image?.mediaDetails?.height || 400;
 
-  return src && width && height ? (
-    <figure className={className}>
+  const useFill = !!fill;
+
+  if (!src) return null;
+
+  return (
+    <figure className={className} style={useFill ? { position: 'relative' } : undefined}>
       <Image
         src={src}
         alt={altText}
-        fill={fill}
-        width={width}
-        height={height}
+        {...(useFill ? { fill: true } : { width: imgWidth, height: imgHeight })}
         priority={priority}
         {...props}
-        // style={{
-        //   maxWidth: "100%",
-        //   height: "auto"
-        // }} 
-        />
+      />
     </figure>
-  ) : null;
+  );
 }
 
 FeaturedImage.fragments = {

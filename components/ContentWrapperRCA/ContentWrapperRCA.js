@@ -1,10 +1,11 @@
 import className from 'classnames/bind'
 import styles from './ContentWrapperRCA.module.scss'
-import {
-  RCAFullMenu,
-  SingleRCAEntryHeader,
-  SingleRCASlider,
-} from '../../components'
+import dynamic from 'next/dynamic'
+
+const RCAFullMenu = dynamic(() => import('../../components/RCAFullMenu/RCAFullMenu'))
+const SingleRCAEntryHeader = dynamic(() => import('../../components/SingleRCAEntryHeader/SingleRCAEntryHeader'))
+const SingleRCASlider = dynamic(() => import('../../components/SingleRCASlider/SingleRCASlider'))
+
 import React, { useEffect, useState, useRef } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'

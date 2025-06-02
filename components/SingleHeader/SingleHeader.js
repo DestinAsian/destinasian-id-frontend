@@ -2,7 +2,11 @@ import classNames from 'classnames/bind'
 import Link from 'next/link'
 import destinasianLogo from '../../assets/logo/destinasian-indo-logo.png'
 // import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
-import { Container, FullMenu, SearchResults } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Container = dynamic(() => import('../../components/Container/Container'))
+const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
+const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
 import styles from './SingleHeader.module.scss'
 import { useMediaQuery } from 'react-responsive'
 import Image from 'next/image'

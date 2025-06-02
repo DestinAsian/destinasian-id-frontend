@@ -8,35 +8,14 @@
   margin-bottom: 2rem;
 
   @media (min-width: $breakpoint-extra-small) {
-    margin: 0 auto 5rem;
-    background-color: var(--wpe--main--background-color);
     max-width: 700px;
-    padding: 1rem;
-    position: relative;
-  }
-
-  .with-slider-wrapper {
-    padding: 0;
   }
 
   .content-wrapper {
-    display: block;
-    padding: 1.125rem 0;
-
-    @media (min-width: $breakpoint-extra-small) {
-      padding: 0 1rem;
-    }
-  }
-
-  .content-wrapper > em:first-child {
-    padding: 0 1rem;
-    font-weight: 400;
-    letter-spacing: 1.15px;
-    line-height: 1.6;
-
-    @media (min-width: $breakpoint-extra-small) {
-      padding: 0;
-    }
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.25rem;
+    padding: 1rem 0;
   }
 
   :global {
@@ -45,10 +24,10 @@
 
     * {
       max-width: 100%;
-      padding: 0 1rem 1rem;
+      padding: 0 1rem 0.5rem;
 
       @media (min-width: $breakpoint-extra-small) {
-        padding: 0 0 1.5rem;
+        padding: 0 2rem 1rem;
       }
     }
 
@@ -67,9 +46,21 @@
       min-width: 100%;
       padding: 0;
 
-      // figcaption {
-      //   display: none;
-      // }
+      figcaption {
+        display: flex;
+        padding: 0;
+        padding-right: 1rem;
+        justify-content: flex-end;
+        color: var(--wpe--color--grey);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        line-height: 1;
+
+        @media (min-width: $breakpoint-extra-small) {
+          padding-right: 0;
+          font-size: 1rem;
+        }
+      }
     }
 
     h1,
@@ -82,10 +73,10 @@
       text-transform: uppercase;
       font-weight: 700;
       letter-spacing: 1.15px;
+      padding-bottom: 0;
     }
 
     p:has(img),
-    p > em:first-of-type,
     img,
     a,
     em {
@@ -94,6 +85,10 @@
       @media (min-width: $breakpoint-extra-small) {
         padding: 0.75rem 0 0.75rem;
       }
+    }
+
+    p:empty {
+      display: none;
     }
 
     strong {
@@ -204,5 +199,23 @@
     td {
       padding: 0.4em;
     }
+
+    iframe {
+      position: relative;
+      top: 0;
+      left: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 80vh;
+    }
   }
+}
+
+
+.single-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin-bottom: 1rem;
 }

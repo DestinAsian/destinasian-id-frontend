@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import {
-  SingleHeader,
-  Footer,
-  Main,
-  SingleContestEntryHeader,
-  FeaturedImage,
-  SEO,
-  SingleSlider,
-  SingleContestContainer,
-  ContentWrapperContest,
-  PasswordProtected,
-  SecondaryHeader,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const SingleHeader = dynamic(() => import('../components/SingleHeader/SingleHeader'))
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+const Main = dynamic(() => import('../components/Main/Main'))
+const SingleContestEntryHeader = dynamic(() => import('../components/SingleContestEntryHeader/SingleContestEntryHeader'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const SingleSlider = dynamic(() => import('../components/SingleSlider/SingleSlider'))
+const SingleContestContainer = dynamic(() => import('../components/SingleContestContainer/SingleContestContainer'))
+const ContentWrapperContest = dynamic(() => import('../components/ContentWrapperContest/ContentWrapperContest'))
+const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'

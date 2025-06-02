@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind'
-import {
-  FeaturedImage,
-  Container,
-} from '../../components'
+import dynamic from 'next/dynamic'
+
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+const Container = dynamic(() => import('../../components/Container/Container'))
 import styles from './PostTwoColumns.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'

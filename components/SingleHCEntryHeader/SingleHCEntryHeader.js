@@ -1,5 +1,8 @@
 import className from 'classnames/bind'
-import { Heading } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+
 import styles from './SingleHCEntryHeader.module.scss'
 import { useState, useEffect } from 'react'
 import locationIcon from '../../assets/icons/icon-location.png'

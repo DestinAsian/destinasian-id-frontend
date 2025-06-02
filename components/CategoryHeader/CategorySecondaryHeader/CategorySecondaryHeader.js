@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategorySecondaryHeader.module.scss'
-import {
-  ChildrenNavigation,
-  ParentNavigation,
-  SingleNavigation,
-} from '../../../components'
+import dynamic from 'next/dynamic'
+
+const ChildrenNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'))
+const ParentNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'))
+const SingleNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'))
+
 
 let cx = classNames.bind(styles)
 
@@ -22,7 +23,7 @@ export default function CategorySecondaryHeader({
   const [isMainNavShown, setIsMainNavShown] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [prevScrollY, setPrevScrollY] = useState(0)
+  const [prevScrollY, setPrevScrollY] = useState(0) 
 
   // Add currentUrl function
   useEffect(() => {

@@ -2,21 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import {
-  Main,
-  FeaturedImage,
-  SEO,
-  Header,
-  SingleLLContainer,
-  SingleLLFrontPageContainer,
-  ContentWrapperLLFrontPage,
-  SingleLLFeaturedImage,
-  ContentWrapperLL,
-  SingleLLFrontPageFeaturedImage,
-  SingleLLEntryHeader,
-  PasswordProtected,
-  SecondaryHeader,
-} from '../components'
+import dynamic from 'next/dynamic'
+
+const Main = dynamic(() => import('../components/Main/Main'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+const Header = dynamic(() => import('../components/Header/Header'))
+const SingleLLContainer = dynamic(() => import('../components/SingleLLContainer/SingleLLContainer'))
+const SingleLLFrontPageContainer = dynamic(() => import('../components/SingleLLFrontPageContainer/SingleLLFrontPageContainer'))
+const ContentWrapperLLFrontPage = dynamic(() => import('../components/ContentWrapperLLFrontPage/ContentWrapperLLFrontPage'))
+const SingleLLFeaturedImage = dynamic(() => import('../components/SingleLLFeaturedImage/SingleLLFeaturedImage'))
+const ContentWrapperLL = dynamic(() => import('../components/ContentWrapperLL/ContentWrapperLL'))
+const SingleLLFrontPageFeaturedImage = dynamic(() => import('../components/SingleLLFrontPageFeaturedImage/SingleLLFrontPageFeaturedImage'))
+const SingleLLEntryHeader = dynamic(() => import('../components/SingleLLEntryHeader/SingleLLEntryHeader'))
+const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'

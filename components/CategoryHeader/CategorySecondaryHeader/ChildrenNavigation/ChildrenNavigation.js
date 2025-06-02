@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind'
 import styles from './ChildrenNavigation.module.scss'
-import {
-  DaGuideMenu,
-  MainCategoryMenu,
-  TravelGuidesMenu,
-} from '../../../../components'
+import dynamic from 'next/dynamic'
+
+const DaGuideMenu = dynamic(() => import('../../../../components/DaGuideMenu/DaGuideMenu'))
+const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'))
+const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'))
+
 import { useQuery } from '@apollo/client'
 import { GetChildrenNavigation } from '../../../../queries/GetChildrenNavigation'
 import Link from 'next/link'

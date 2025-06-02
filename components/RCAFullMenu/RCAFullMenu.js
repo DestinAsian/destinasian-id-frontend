@@ -1,6 +1,10 @@
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
-import { Button, FeaturedImage, NavigationMenu } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Button = dynamic(() => import('../../components/Button/Button'))
+const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+const NavigationMenu = dynamic(() => import('../../components/NavigationMenu/NavigationMenu'))
 import styles from './RCAFullMenu.module.scss'
 import React, { useState, useEffect } from 'react'
 import * as MENUS from '../../constants/menus'

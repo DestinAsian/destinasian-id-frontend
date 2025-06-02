@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react'
 import className from 'classnames/bind'
 import styles from './ContentWrapperContestFrontPage.module.scss'
 import { GetContestPages } from '../../queries/GetContestPages'
-import { Button, ContestPost } from '../../components'
+import dynamic from 'next/dynamic'
+
+const Button = dynamic(() => import('../../components/Button/Button'))
+const ContestPost = dynamic(() => import('../../components/ContestPost/ContestPost'))
+
 
 let cx = className.bind(styles)
 
