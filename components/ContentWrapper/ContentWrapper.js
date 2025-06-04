@@ -15,7 +15,6 @@ export default function ContentWrapper({ content, children }) {
   const [transformedContent, setTransformedContent] = useState('')
 
   useEffect(() => {
-    console.log('BACKEND_URL:', BACKEND_URL)
     const extractHTMLData = () => {
       const parser = new DOMParser()
 
@@ -27,9 +26,6 @@ export default function ContentWrapper({ content, children }) {
       const doc = parser.parseFromString(cleanedContent, 'text/html')
       // Recursively extract all images and their captions
       const extractImagesRecursively = (node) => {
-        console.log('Content node ', node)
-        console.log('node type ', node.nodeType === 1)
-
         if (
           typeof node === 'object' &&
           node.nodeType === 1 &&
