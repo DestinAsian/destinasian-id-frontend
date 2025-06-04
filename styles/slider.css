@@ -155,7 +155,7 @@
 }
 
 .post-luxury-travel-swiper .swiper-slide .slide-caption {
-  background-color: #000000;
+  background-color: #000000 !important;
   color: #ffffff;
   height: auto;
   padding: 0.5rem 1rem;
@@ -186,8 +186,8 @@
 }
 
 .swiper-pagination-bullet-active {
-  color: #000000;
-  background: #000000;
+  color: #000000 !important;
+  background: #000000 !important;
   opacity: 1;
 }
 
