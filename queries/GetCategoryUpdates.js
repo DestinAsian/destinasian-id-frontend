@@ -14,6 +14,11 @@ export const GetCategoryUpdates = gql`
             slug
             description
             uri
+            parent {
+              node {
+                name
+              }
+            }
             contentNodes(first: 1000) {
               edges {
                 cursor

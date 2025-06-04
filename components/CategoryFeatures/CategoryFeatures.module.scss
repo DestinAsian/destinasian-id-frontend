@@ -1,0 +1,102 @@
+@import 'styles/breakpoints';
+@import 'styles/variables';
+@import 'styles/fonts/typography';
+
+.CategoryFeaturesWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+}
+
+.articleCount {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #999;
+}
+
+.gridSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.cardInner {
+  padding: 1rem 0.5rem;
+}
+
+.slug {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.excerpt {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+}
+
+.thumbnail {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.viewMoreWrapper {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.viewMoreButton {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  font-family: 'Unit Slab Pro Black';
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--wpe--color--title);
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+
+  &:focus {
+    outline: 1px dotted;
+  }
+}

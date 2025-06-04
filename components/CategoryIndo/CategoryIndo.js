@@ -43,9 +43,6 @@
 
 // export default CategoryIndo
 
-
-
-
 import React from 'react'
 import Link from 'next/link'
 import classNames from 'classnames/bind'
@@ -58,6 +55,7 @@ const CategoryIndo = ({ data }) => {
 
   return (
     <div className={cx('categoryIndoWrapper')}>
+      <h2 className={cx('title')}>Guides</h2>
       <div className={cx('grid')}>
         {categories.length > 0 &&
           categories.map((node) => {
@@ -91,8 +89,6 @@ const CategoryIndo = ({ data }) => {
 
 export default CategoryIndo
 
-
-
 // // export default CategoryIndo;
 // import React from 'react';
 // import Link from 'next/link';
@@ -119,8 +115,8 @@ export default CategoryIndo
 //             const firstImage = categoryImages?.categorySlide1?.mediaItemUrl;
 
 //             return (
-//               <Link key={id} 
-//             //   href={`/category/${slug}`} 
+//               <Link key={id}
+//             //   href={`/category/${slug}`}
 //             href={`/${node?.parent?.node?.slug}/${slug}`}
 //               className={cx('card')}>
 //                 <div className={cx('imageWrapper')}>

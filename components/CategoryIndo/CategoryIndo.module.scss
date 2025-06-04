@@ -1,11 +1,11 @@
 @import 'styles/breakpoints';
 
 .categoryIndoWrapper {
-  padding: 0;
+  padding: 2rem 1rem;
   background-color: #f9f9f9;
-  width: 100vw;
-  max-width: 100vw;
-  margin: 0;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto; 
   overflow-x: hidden;
 }
 
@@ -13,34 +13,49 @@
   font-size: 2rem;
   margin: 1.5rem 0;
   text-align: center;
+  font-weight: bold;
 }
 
 .grid {
   display: grid;
-  gap: 0; // Remove spacing between cards
-  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  // Mobile default: 2 kolom
+  grid-template-columns: repeat(2, 1fr);
 
   @media (min-width: $breakpoint-small) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   @media (min-width: $breakpoint-large) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
+
 
 .card {
   position: relative;
   display: block;
-  border-radius: 0;
   overflow: hidden;
+  background-color: #fff;
+  text-decoration: none;
   transition: transform 0.2s ease;
+  border-radius: 4px;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.cardInner {
+  padding: 0.5rem 0.75rem;
 }
 
 .imageWrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 4;
+  aspect-ratio: 4 / 3; 
+  overflow: hidden;
 }
 
 .image {
@@ -61,38 +76,41 @@
   text-align: center;
   padding: 0 1rem;
   line-height: 1.2;
-
-  // Mobile
   font-size: 2rem;
 
-  // Tablet
   @media (min-width: $breakpoint-small) {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
-  // Desktop
   @media (min-width: $breakpoint-large) {
-    font-size: 4rem;
+    font-size: 3rem;
   }
 }
 
 
 
-
-
+// old code
 // @import 'styles/breakpoints';
 
 // .categoryIndoWrapper {
 //   padding: 0;
 //   background-color: #f9f9f9;
 //   width: 100vw;
-//   margin-left: calc(-50vw + 50%);
+//   max-width: 100vw;
+//   margin: 0;
+//   overflow-x: hidden;
+// }
+
+// .title {
+//   font-size: 2rem;
+//   margin: 1.5rem 0;
+//   text-align: center;
 // }
 
 // .grid {
 //   display: grid;
+//   gap: 0; // Remove spacing between cards
 //   grid-template-columns: 1fr;
-//   gap: 0;
 
 //   @media (min-width: $breakpoint-small) {
 //     grid-template-columns: repeat(2, 1fr);
@@ -106,6 +124,7 @@
 // .card {
 //   position: relative;
 //   display: block;
+//   border-radius: 0;
 //   overflow: hidden;
 //   transition: transform 0.2s ease;
 // }
@@ -135,13 +154,17 @@
 //   padding: 0 1rem;
 //   line-height: 1.2;
 
+//   // Mobile
 //   font-size: 2rem;
 
+//   // Tablet
 //   @media (min-width: $breakpoint-small) {
 //     font-size: 3rem;
 //   }
 
+//   // Desktop
 //   @media (min-width: $breakpoint-large) {
 //     font-size: 4rem;
 //   }
 // }
+

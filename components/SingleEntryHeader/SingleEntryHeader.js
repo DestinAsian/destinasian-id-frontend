@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 const Heading = dynamic(() => import('../../components/Heading/Heading'))
 const Container = dynamic(() => import('../../components/Container/Container'))
 const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
-const LocationIcon = dynamic(() => import('../../components/LocationIcon/LocationIcon'))
 import styles from './SingleEntryHeader.module.scss'
 import Link from 'next/link'
 
@@ -17,6 +16,7 @@ export default function SingleEntryHeader({
   parentCategory,
   categoryUri,
   categoryName,
+  categoryLabel,
 
 }) {
   return (

@@ -8,8 +8,14 @@ const Outnow = dynamic(() => import('../../components/Outnow/Outnow'))
 const CategoryUpdates = dynamic(() =>
   import('../../components/CategoryUpdates/CategoryUpdates'),
 )
+const CategoryNewsUpdates = dynamic(() =>
+  import('../../components/CategoryNewsUpdates/CategoryNewsUpdates'),
+)
 const CategoryInsigths = dynamic(() =>
   import('../../components/CategoryInsigths/CategoryInsigths'),
+)
+const CategoryFeatures = dynamic(() =>
+  import('../../components/CategoryFeatures/CategoryFeatures'),
 )
 const CategoryEatdrink = dynamic(() =>
   import('../../components/CategoryEatdrink/CategoryEatdrink'),
@@ -20,6 +26,7 @@ const CategoryIndo = dynamic(() =>
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryInsights } from '../../queries/GetCategoryInsights'
+import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import { GetCategoryEatdrink } from '../../queries/GetCategoryEatdrink'
 import { GetIndoCategory } from '../../queries/GetIndoCategory'
 
@@ -33,13 +40,32 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
   })
+  const {
+    data: newsupdatesData,
+    loading: newsupdatesLoading,
+    error: newsupdatesError,
+  } = useQuery(GetCategoryUpdates, {
+    variables: { include: ['41'] },
+  })
 
+  const { data, loading, error } = useQuery(GetCategoryUpdates, {
+    variables: { include: ['41'] },
+  })
+
+  const children = data?.category?.children?.edges || []
   const {
     data: insightsData,
     loading: insightsLoading,
     error: insightsError,
   } = useQuery(GetCategoryInsights, {
     variables: { id: '29' },
+  })
+  const {
+    data: featuresData,
+    loading: featuresLoading,
+    error: featuresError,
+  } = useQuery(GetCategoryFeatures, {
+    variables: { id: '20' },
   })
   const {
     data: eatdrinkData,
@@ -63,30 +89,60 @@ export default function FrontPageLayout() {
   const updatesCategory = Array.isArray(updatesData?.category?.children?.edges)
     ? updatesData.category.children.edges
     : []
+  // Safely extract category children edges for updates
+  const newsupdatesCategory = Array.isArray(
+    newsupdatesData?.category?.children?.edges,
+  )
+    ? newsupdatesData.category.children.edges
+    : []
 
   // Safely extract category insights
   const categoryInsights = insightsData?.category
+  const categoryFeatures = featuresData?.category
   const categoryEatdrink = eatdrinkData?.category
   const indoCategories =
     indoData?.categories?.edges?.map((edge) => edge.node) || []
 
   return (
     <>
-      <div className={cx('component-indo')}>
+      <div className={cx('component-updates')}>
         {!indoLoading && !indoError && indoCategories.length > 0 && (
-          <div className={cx('category-indo-component')}>
+          <div className={cx('category-insights-component')}>
             <CategoryIndo data={indoCategories} />
           </div>
         )}
       </div>
       <div className={cx('component-updates')}>
+        {!updatesLoading && !updatesError && updatesCategory.length > 0 && (
+          <div className={cx('category-updates-component')}>
+            <CategoryUpdates data={updatesCategory} />
+          </div>
+        )}
+      </div>
+
+      {newsupdatesCategory.map(({ node: category }) => {
+        const parentName = category?.parent?.node?.name || ''
+        const childName = category.name
+
+        return (
+          <div key={category.id} className={cx('category-updates-component')}>
+            <h2 className={styles.title}>
+              {parentName ? `${parentName} ${childName}` : childName}
+            </h2>
+          </div>
+        )
+      })}
+
+      <div className={cx('component-updates')}>
         <div className={cx('two-columns')}>
           <div className={cx('left-column')}>
-            {!updatesLoading && !updatesError && updatesCategory.length > 0 && (
-              <div className={cx('category-updates-component')}>
-                <CategoryUpdates data={updatesCategory} />
-              </div>
-            )}
+            {!newsupdatesLoading &&
+              !newsupdatesError &&
+              newsupdatesCategory.length > 0 && (
+                <div className={cx('category-updates-component')}>
+                  <CategoryNewsUpdates data={newsupdatesCategory} />
+                </div>
+              )}
           </div>
           <div className={cx('right-column')}>
             <aside className="sticky top-14 h-auto sm:top-20">
@@ -96,6 +152,13 @@ export default function FrontPageLayout() {
             </aside>
           </div>
         </div>
+      </div>
+      <div className={cx('component-updates')}>
+        {!featuresLoading && !featuresError && categoryFeatures && (
+          <div className={cx('category-insights-component')}>
+            <CategoryFeatures data={categoryFeatures} />
+          </div>
+        )}
       </div>
       <div className={cx('component-updates')}>
         {!insightsLoading && !insightsError && categoryInsights && (
