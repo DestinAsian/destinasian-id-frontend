@@ -10,7 +10,6 @@ import styles from './CategoryNewsUpdates.module.scss'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-
 const CategoryNewsUpdates = () => {
   const { data, loading, error } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
@@ -52,7 +51,8 @@ const CategoryNewsUpdates = () => {
                           <Image
                             src={featuredImage.mediaItemUrl}
                             alt={post.title}
-                            fill
+                            width={800}
+                            height={600}
                             className={styles.thumbnail}
                           />
 

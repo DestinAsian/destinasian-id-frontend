@@ -1,4 +1,4 @@
-import { EB_Garamond, Rubik, Rubik_Mono_One } from 'next/font/google'
+import { EB_Garamond, Rubik, Rubik_Mono_One,  Open_Sans } from 'next/font/google'
 
 export const eb_garamond = EB_Garamond({
   weight: ['400', '500', '600', '700'],
@@ -22,3 +22,11 @@ export const rubik = Rubik({
   display: 'swap',
   variable: '--font--rubik',
 })
+
+export const open_sans = Open_Sans({
+  weight: ['400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font--open--sans',
+});

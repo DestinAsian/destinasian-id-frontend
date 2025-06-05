@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 import styles from './FrontPageLayout.module.scss'
 
 import dynamic from 'next/dynamic'
+
 const Outnow = dynamic(() => import('../../components/Outnow/Outnow'))
 const CategoryUpdates = dynamic(() =>
   import('../../components/CategoryUpdates/CategoryUpdates'),
@@ -40,6 +41,7 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
   })
+
   const {
     data: newsupdatesData,
     loading: newsupdatesLoading,
@@ -48,11 +50,12 @@ export default function FrontPageLayout() {
     variables: { include: ['41'] },
   })
 
-  const { data, loading, error } = useQuery(GetCategoryUpdates, {
-    variables: { include: ['41'] },
-  })
+  // const { data } = useQuery(GetCategoryUpdates, {
+  //   variables: { include: ['41'] },
+  // })
 
-  const children = data?.category?.children?.edges || []
+  // const children = data?.category?.children?.edges || []
+
   const {
     data: insightsData,
     loading: insightsLoading,
@@ -60,6 +63,7 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryInsights, {
     variables: { id: '29' },
   })
+
   const {
     data: featuresData,
     loading: featuresLoading,
@@ -67,6 +71,7 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryFeatures, {
     variables: { id: '20' },
   })
+
   const {
     data: eatdrinkData,
     loading: eatdrinkLoading,
@@ -85,18 +90,16 @@ export default function FrontPageLayout() {
     },
   })
 
-  // Safely extract category children edges for updates
   const updatesCategory = Array.isArray(updatesData?.category?.children?.edges)
     ? updatesData.category.children.edges
     : []
-  // Safely extract category children edges for updates
+
   const newsupdatesCategory = Array.isArray(
     newsupdatesData?.category?.children?.edges,
   )
     ? newsupdatesData.category.children.edges
     : []
 
-  // Safely extract category insights
   const categoryInsights = insightsData?.category
   const categoryFeatures = featuresData?.category
   const categoryEatdrink = eatdrinkData?.category
@@ -112,6 +115,9 @@ export default function FrontPageLayout() {
           </div>
         )}
       </div>
+      
+      <hr className={cx('divider')} />
+
       <div className={cx('component-updates')}>
         {!updatesLoading && !updatesError && updatesCategory.length > 0 && (
           <div className={cx('category-updates-component')}>
@@ -119,6 +125,7 @@ export default function FrontPageLayout() {
           </div>
         )}
       </div>
+      <hr className={cx('divider')} />
 
       {newsupdatesCategory.map(({ node: category }) => {
         const parentName = category?.parent?.node?.name || ''
@@ -133,7 +140,7 @@ export default function FrontPageLayout() {
         )
       })}
 
-      <div className={cx('component-updates')}>
+      <div className={cx('component-news-updates')}>
         <div className={cx('two-columns')}>
           <div className={cx('left-column')}>
             {!newsupdatesLoading &&
@@ -153,6 +160,8 @@ export default function FrontPageLayout() {
           </div>
         </div>
       </div>
+      <hr className={cx('divider')} />
+
       <div className={cx('component-updates')}>
         {!featuresLoading && !featuresError && categoryFeatures && (
           <div className={cx('category-insights-component')}>
@@ -160,21 +169,24 @@ export default function FrontPageLayout() {
           </div>
         )}
       </div>
-      <div className={cx('component-updates')}>
+
+      {/* <div className={cx('component-updates')}>
         {!insightsLoading && !insightsError && categoryInsights && (
           <div className={cx('category-insights-component')}>
             <CategoryInsigths data={categoryInsights} />
           </div>
         )}
-      </div>
+      </div> */}
+
       <hr className={cx('divider')} />
-      <div className={cx('component-updates')}>
+
+      {/* <div className={cx('component-updates')}>
         {!eatdrinkLoading && !eatdrinkError && categoryEatdrink && (
           <div className={cx('category-insights-component')}>
             <CategoryEatdrink data={categoryEatdrink} />
           </div>
         )}
-      </div>
+      </div> */}
     </>
   )
 }

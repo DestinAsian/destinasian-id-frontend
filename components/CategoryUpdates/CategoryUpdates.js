@@ -74,26 +74,9 @@ const CategoryUpdates = () => {
                             />
                           </div>
                         )}
-
-                        {/* {post.categories?.nodes?.length > 0 && (
-                          <div className={cx('categoryList')}>
-                            {post.categories.nodes
-                              .slice(-2)
-                              .map((cat) => cat.name)
-                              .join(' | ')}
-                          </div>
-                        )} */}
-
                         <h4 className={cx('slug')}>
                           {post.slug.replace(/-/g, ' ')}
                         </h4>
-
-                        {/* {post.excerpt && (
-                          <div
-                            className={cx('excerpt')}
-                            dangerouslySetInnerHTML={{ __html: post.excerpt }}
-                          />
-                        )} */}
                       </div>
                     </Link>
                   </div>

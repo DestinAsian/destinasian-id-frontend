@@ -1,31 +1,39 @@
-
-@import "styles/breakpoints";
+@import 'styles/breakpoints';
 
 // Main layout wrapper
 .component-updates {
   display: flex;
   justify-content: center;
-  padding: 1rem;
+  // padding: 1rem;
   background-color: var(--wpe--color--white--smoke);
 }
 
-// Two-column layout
 .two-columns {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  justify-content: space-between;
+  // justify-content: space-between;
   width: 100%;
   position: relative;
   z-index: 3;
 
   @media (min-width: $breakpoint-small) {
     flex-direction: row;
+    // align-items: stretch; // ⬅️ Tambahkan ini
+    align-items: flex-start;
   }
 
   @media (min-width: $breakpoint-medium) {
     max-width: var(--wpe--container--max--width);
   }
+}
+
+.component-news-updates {
+  display: flex;
+  justify-content: center;
+  // padding: 1rem;
+  background-color: var(--wpe--color--white--smoke);
+  min-height: 100%; // ⬅️ Tambahan untuk jaga-jaga
 }
 
 // Left column (70%)
@@ -36,9 +44,11 @@
   justify-content: flex-start;
   position: relative;
   z-index: 2;
+  // padding-left: 1rem;
+  // padding-right: 1rem;
 
   @media (min-width: $breakpoint-small) {
-    width: 70%;
+    width: 100%;
   }
 
   @media (min-width: $breakpoint-medium) {
@@ -46,16 +56,14 @@
   }
 }
 
-// Right column (25%)
 .right-column {
   width: 100%;
-  padding: 1rem 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: flex-start; // ⬅️ penting
+  align-items: flex-end; // tetap seperti sebelumnya
   position: relative;
-  z-index: 2;
 
   @media (min-width: $breakpoint-small) {
     width: 25%;
@@ -67,23 +75,30 @@
     margin-left: 5%;
     align-items: flex-end;
   }
+
+  aside {
+    margin-top: 0 !important; // ⬅️ pastikan tidak terdorong ke bawah
+  }
 }
 
-// Optional: Add spacing or background color for clarity
 .left-column,
 .right-column {
   background-color: var(--wpe--color--white--smoke);
+  height: 100%; // ⬅️ Tambahkan ini
 }
+// .outnow-component {
+//   margin-top: 0 !important;
+// }
 
 // Outnow Component
 .outnow-component {
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 0 1rem;
+  // margin-top: 1rem;
 
   .outnow-title {
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
   }
 
   .outnow-content {
@@ -94,12 +109,12 @@
 
 // Category Updates Component
 .category-updates-component {
-  padding: 1rem;
+  // padding: 1rem;
 
   .category-updates-title {
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
     color: var(--wpe--color--dark);
   }
 
@@ -112,7 +127,6 @@
     }
   }
 }
-
 
 .component-indo {
   padding: 0;
@@ -131,25 +145,24 @@
 .divider {
   border: none;
   border-top: 1px solid #000000;
-  margin:0 auto;
-  width: 95%;
+  margin: 0 auto;
+  width: 100%;
   max-width: 100%;
-  padding: 0 0 1rem 0;
 }
 
 .title {
   font-size: 2rem;
-  margin: 1.5rem 0;
-  text-align: center;
   font-weight: bold;
+  font-family: 'Scheherazade New', serif;
+  text-align: start;
 }
 
 .category-updates-component {
   text-align: center;
 
   h2 {
-    font-size: 24px;
-    margin-bottom: 16px;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Scheherazade New', serif;
   }
 }

@@ -16,14 +16,23 @@ export const GetCategoryFeatures = gql`
             id
             slug
             uri
+            date
             excerpt
+            categories {
+              edges {
+                node {
+                  parent {
+                    node {
+                      name
+                    }
+                  }
+                }
+              }
+            }
             featuredImage {
               node {
                 mediaItemUrl
                 slug
-                description
-                id
-                uri
                 title
               }
             }
