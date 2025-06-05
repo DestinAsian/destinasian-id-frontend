@@ -16,12 +16,6 @@ module.exports = withFaust({
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'test.destinasian.co.id',
-        port: '',
-        pathname: '/**',
-      },
     ],
   },
   i18n: {
@@ -40,11 +34,11 @@ module.exports = withFaust({
         destination: '/partner-content/:slug*',
         permanent: true, // This indicates a 301 permanent redirect
       },
-      {
-        source: '/category/:slug*', // All category slug redirect
-        destination: '/:slug*',
-        permanent: true, // This indicates a 301 permanent redirect
-      },
+      // {
+      //   source: '/category/:slug*', // All category slug redirect
+      //   destination: '/:slug*',
+      //   permanent: true, // This indicates a 301 permanent redirect
+      // },
     ]
   },
 })

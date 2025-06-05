@@ -23,6 +23,7 @@
     "flowbite": "^2.4.1",
     "flowbite-react": "^0.10.1",
     "framer-motion": "^11.1.9",
+    "git": "^0.1.5",
     "graphql": "^16.6.0",
     "html-react-parser": "^5.2.4",
     "js-cookie": "^3.0.5",
@@ -41,8 +42,10 @@
     "reveal.js": "^4.5.0",
     "sass": "^1.54.9",
     "sharp": "^0.33.3",
+    "status": "^0.0.13",
     "swiper": "^9.4.1",
-    "turnstone": "^2.2.0"
+    "turnstone": "^2.2.0",
+    "uninstall": "^0.0.0"
   },
   "devDependencies": {
     "@zeit/next-css": "^1.0.1",
