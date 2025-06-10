@@ -50,9 +50,9 @@
 }
 
 .image-wrapper {
-    aspect-ratio: 4 / 3;
-    width: 100%;
-    max-width: 800px;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  max-width: 800px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -66,7 +66,6 @@
     // Tidak perlu aspect-ratio di sini
   }
 }
-
 
 .gallery-slider-wrapper {
   .slide-wrapper {
@@ -91,7 +90,6 @@
       padding: 0 1rem;
       @media (min-width: $breakpoint-extra-small) {
         padding: 0 2rem;
-  
       }
     }
   }
@@ -123,24 +121,28 @@
   justify-content: flex-end;
   align-items: flex-end;
   z-index: 2;
-  padding: 1rem 0 1.8rem;
+  padding: 1rem 1rem 1.8rem;
   pointer-events: none;
   width: 100%;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding: 1rem 2rem 1.8rem;
+  }
 }
 
 .caption {
-  background-color: var(--wpe--color--light--green) !important;
+  background-color: var(--wpe--color--white--smoke) !important;
   color: var(--wpe--color--grey);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   width: 100%;
   text-align: left;
   pointer-events: auto;
   font-size: 0.8rem;
-  line-height: 1;
+  line-height: 1.2;
   box-sizing: border-box;
 
   @media (min-width: $breakpoint-extra-small) {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
     font-size: 1rem;
   }
 
