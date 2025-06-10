@@ -5,7 +5,9 @@ import styles from './FrontPageLayout.module.scss'
 
 import dynamic from 'next/dynamic'
 
-const Outnow = dynamic(() => import('../../components/Outnow/Outnow'))
+const Outnow = dynamic(() => 
+  import('../../components/Outnow/Outnow'),
+)
 const CategoryUpdates = dynamic(() =>
   import('../../components/CategoryUpdates/CategoryUpdates'),
 )
@@ -157,7 +159,7 @@ export default function FrontPageLayout() {
               )}
           </div>
           <div className={cx('right-column')}>
-            <aside className="sticky top-14 h-auto sm:top-20">
+            <aside className={cx('outnow-wrapper')}>
               <div className={cx('outnow-component')}>
                 <Outnow />
               </div>
@@ -182,7 +184,6 @@ export default function FrontPageLayout() {
           </div>
         )}
       </div> */}
-
 
       {/* <div className={cx('component-updates')}>
         {!eatdrinkLoading && !eatdrinkError && categoryEatdrink && (

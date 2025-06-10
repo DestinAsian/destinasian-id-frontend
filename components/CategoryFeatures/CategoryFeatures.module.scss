@@ -1,6 +1,6 @@
 @import 'styles/breakpoints';
 @import 'styles/variables';
-@import 'styles/fonts/typography'; // Asumsikan font Open Sans sudah di-import dan di-setup di sini
+@import 'styles/fonts/typography';
 
 .CategoryFeaturesWrapper {
   width: 100%;
@@ -9,12 +9,14 @@
   gap: 2rem;
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;  
+  padding-bottom: 2rem;
 }
 
 .title {
   font-size: 2rem;
   font-weight: bold;
   font-family: 'Scheherazade New', serif;
+  padding: 0 0 1rem 0;
 }
 
 .description {
@@ -49,7 +51,6 @@
 }
 
 .cardInner {
-  padding: 1rem 0.5rem;
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -62,14 +63,14 @@
 }
 
 .excerpt {
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 1rem;
+  font-weight: 300;
   margin-top: 0.2rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
 }
 
 .imageWrapper {
@@ -91,27 +92,6 @@
   font-family: 'Open Sans', sans-serif;
 }
 
-.viewMoreButton {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  background-color: transparent;
-  font-family: 'Scheherazade New', serif;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: var(--wpe--color--title);
-  text-transform: uppercase;
-
-  &:hover {
-    background-color: var(--wpe--color--black);
-    padding: 0 0.5rem;
-    color: var(--wpe--color--white);
-  }
-
-  &:focus {
-    outline: 1px dotted;
-  }
-}
 
 .categoryName {
   font-size: 0.75rem;
@@ -166,4 +146,30 @@
   color: #aaa;
   margin-top: 0.3rem;
   font-family: 'Open Sans', sans-serif;
+}
+
+
+.viewMoreButton {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  font-family: 'Scheherazade New', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--wpe--color--title);
+  text-transform: uppercase;
+  margin: 1rem 0;
+
+  &:hover {
+    background-color: var(--wpe--color--black);
+    padding: 0 0.5rem;
+    color: var(--wpe--color--white);
+    margin: 1rem 0;
+
+  }
+
+  &:focus {
+    outline: 1px dotted;
+  }
 }

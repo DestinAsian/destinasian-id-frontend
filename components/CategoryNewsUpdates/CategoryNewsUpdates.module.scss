@@ -10,6 +10,8 @@
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  padding: 0 0 1rem 0;
+  font-family: 'Scheherazade New', serif;
 }
 
 .description {
@@ -86,8 +88,6 @@
     color: black;
   }
 }
-
-
 
 .swiperContainer {
   :global(.swiper-button-next),

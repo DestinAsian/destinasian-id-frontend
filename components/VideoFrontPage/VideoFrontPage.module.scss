@@ -5,6 +5,7 @@
   justify-content: center;
   background-color: var(--wpe--color--teal--deep);
   min-height: 100%;
+  padding:0 0 2rem 0;
 }
 
 .wrapper-videos {
@@ -21,6 +22,7 @@
   font-family: 'Scheherazade New', serif;
   color: var(--wpe--color--white);
   background-color: var(--wpe--color--teal--deep);
+  padding: 1rem 0;  
 }
 
 // ========================
@@ -53,7 +55,7 @@
   order: 1;
 
   @media (min-width: $breakpoint-small) {
-    width: 70%;
+    width: 73%;
     order: 1;
   }
 }
@@ -68,7 +70,7 @@
   order: 2;
 
   @media (min-width: $breakpoint-small) {
-    width: 25%;
+    width: 20%;
     margin-left: 5%;
     order: 2;
   }

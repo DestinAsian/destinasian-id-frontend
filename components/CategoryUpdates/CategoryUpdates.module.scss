@@ -24,6 +24,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  @media (min-width: $breakpoint-extra-small) {
+    gap: 1rem;
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    gap: 1rem;
+  }
 }
 
 .card {
@@ -44,12 +51,13 @@
 }
 
 .slug {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 300;
   font-family: 'Open Sans', sans-serif;
   color: var(--wpe--color--black);
   line-height: 1.4;
   text-align: start;
+  padding: 1rem 0;
 
   text-transform: capitalize;
 

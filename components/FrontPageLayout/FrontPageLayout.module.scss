@@ -7,110 +7,13 @@
   background-color: var(--wpe--color--white--smoke);
 }
 
-
-.two-columns {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  // justify-content: space-between;
-  width: 100%;
-  position: relative;
-  z-index: 3;
-
-  @media (min-width: $breakpoint-small) {
-    flex-direction: row;
-    // align-items: stretch; // ⬅️ Tambahkan ini
-    align-items: flex-start;
-  }
-
-  @media (min-width: $breakpoint-medium) {
-    max-width: var(--wpe--container--max--width);
-  }
-}
-
-.component-news-updates {
-  display: flex;
-  justify-content: center;
-  // padding: 1rem;
-  background-color: var(--wpe--color--white--smoke);
-  min-height: 100%; 
-}
-
-
-// Left column (70%)
-.left-column {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  position: relative;
-  z-index: 2;
-  // padding-left: 1rem;
-  // padding-right: 1rem;
-
-  @media (min-width: $breakpoint-small) {
-    width: 100%;
-  }
-
-  @media (min-width: $breakpoint-medium) {
-    width: 70%;
-  }
-}
-
-.right-column {
-  width: 100%;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; // ⬅️ penting
-  align-items: flex-end; // tetap seperti sebelumnya
-  position: relative;
-
-  @media (min-width: $breakpoint-small) {
-    width: 25%;
-    margin-left: 5%;
-  }
-
-  @media (min-width: $breakpoint-medium) {
-    width: 25%;
-    margin-left: 5%;
-    align-items: flex-end;
-  }
-
-  aside {
-    margin-top: 0 !important; // ⬅️ pastikan tidak terdorong ke bawah
-  }
-}
-
-.left-column,
-.right-column {
-  background-color: transparent;
-  height: 100%;
-}
-
-// Outnow Component
-.outnow-component {
-  padding: 0 1rem;
-
-  .outnow-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  .outnow-content {
-    font-size: 1rem;
-    color: var(--wpe--color--dark);
-  }
-}
-
 // Category Updates Component
 .category-updates-component {
-  // padding: 1rem;
+  padding: 0 0 1rem 0;
 
   .category-updates-title {
     font-size: 1.5rem;
     font-weight: bold;
-    // margin-bottom: 15px;
     color: var(--wpe--color--dark);
   }
 
@@ -127,7 +30,7 @@
 .component-indo {
   padding: 0;
   margin: 0;
-  background-color: #f9f9f9;
+  background-color: var(--wpe--color--white--smoke);
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   position: relative;
@@ -144,6 +47,7 @@
   margin: 0 auto;
   width: 100%;
   max-width: 100%;
+  padding: 1rem 0;
 }
 
 .title {
@@ -151,11 +55,12 @@
   font-weight: bold;
   font-family: 'Scheherazade New', serif;
   text-align: start;
+  // padding: 1rem 0;
 }
 
 .category-updates-component {
   text-align: center;
-  
+
   h2 {
     font-size: 2rem;
     font-weight: bold;
@@ -170,13 +75,13 @@
   flex-direction: column;
   align-items: center;
 }
- 
-.component-videos{
+
+.component-videos {
   display: flex;
   justify-content: center;
   background-color: var(--wpe--color--teal--deep);
   min-height: 100%;
-} 
+}
 
 .title-videos {
   font-size: 2rem;
@@ -194,11 +99,92 @@
   .outnow-title {
     font-size: 1.5rem;
     font-weight: bold;
-    // margin-bottom: 10px;
   }
 
   .outnow-content {
     font-size: 1rem;
     color: var(--wpe--color--dark);
+  }
+}
+.component-news-updates {
+  display: flex;
+  justify-content: center;
+  background-color: var(--wpe--color--white--smoke);
+  min-height: 100%;
+
+  .two-columns {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+
+    @media (min-width: $breakpoint-small) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    @media (min-width: $breakpoint-medium) {
+      max-width: var(--wpe--container--max--width);
+    }
+  }
+
+  .left-column {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    z-index: 2;
+    order: 1;
+
+    @media (min-width: $breakpoint-small) {
+      width: 73%;
+      order: 1;
+    }
+  }
+
+  .right-column {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    order: 2;
+
+    @media (min-width: $breakpoint-small) {
+      width: 20%;
+      margin-left: 5%;
+      order: 2;
+    }
+
+    .outnow-wrapper {
+      margin-top: 2rem;
+
+      @media (min-width: $breakpoint-small) {
+        position: sticky;
+        top: 5rem;
+        margin-top: 0;
+      }
+    }
+  }
+
+  // ========================
+  // OUTNOW SECTION
+  // ========================
+
+  .outnow-videos {
+    background-color: var(--wpe--color--teal--deep);
+    padding: 0 1rem;
+
+    .outnow-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .outnow-content {
+      font-size: 1rem;
+      color: var(--wpe--color--dark);
+    }
   }
 }
