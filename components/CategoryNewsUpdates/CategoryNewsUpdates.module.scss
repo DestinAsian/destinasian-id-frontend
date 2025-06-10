@@ -7,11 +7,15 @@
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 1.5rem; // lebih kecil di mobile
   font-weight: bold;
   margin-bottom: 1rem;
   padding: 0 0 1rem 0;
   font-family: 'Scheherazade New', serif;
+
+  @media (min-width: $breakpoint-medium) {
+    font-size: 2rem;
+  }
 }
 
 .description {
@@ -27,18 +31,23 @@
 .swiperContainer {
   position: relative;
   width: 100%;
+  overflow: hidden;
 }
 
 .slideWrapper {
   position: relative;
-  height: 600px; 
-}
+  height: 60vw;
+  max-height: 600px;
 
+  @media (min-width: $breakpoint-medium) {
+    height: 600px;
+  }
+}
 
 .imageWrapper {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 100%;
 }
 
 .thumbnail {
@@ -55,37 +64,59 @@
   left: 0;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; // Tombol rata kiri
-}
+  align-items: flex-start;
 
+  @media (min-width: $breakpoint-medium) {
+    padding: 2rem 1rem;
+  }
+}
 
 .postTitle {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
-  padding: 0.4rem 0.8rem;
-  display: block; 
+  font-size: 1rem;
+  font-family: "Scheherazade New", serif;
+  color: var(--wpe--color--white);
+  padding: 0;
+  display: block;
   text-align: left;
+  width: 100%;        
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+
+  @media (min-width: $breakpoint-medium) {
+    font-size: 1.5rem;
+    width: 80%;
+    padding: 0.3rem 1rem;
+  }
+
+  @media (min-width: $breakpoint-large) {
+    font-size: 2rem;
+    width: 70%;
+    padding: 0.4rem 2rem;
+  }
 }
 
+
 .readMore {
-  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 300;
+  margin-top: 0.5rem;
+  padding: 0.2rem 0;
+  color: var(--wpe--color--white);
+  font-family: 'Open Sans', sans-serif;
   background-color: transparent;
-  color: white;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 600;
   transition: background-color 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: transparent;
     color: black;
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    padding: 0.4rem 0 0.4rem 2rem;
   }
 }
 
@@ -95,6 +126,19 @@
     color: rgb(255, 255, 255) !important;
     fill: rgb(255, 255, 255) !important;
     stroke: rgb(255, 255, 255) !important;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+
+    // gunakan scale agar proporsional
+    transform: scale(0.5); // setengah dari ukuran default
+
+    @media (min-width: $breakpoint-medium) {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      transform: scale(1);
+    }
   }
 
   :global(.swiper-button-next:hover),
