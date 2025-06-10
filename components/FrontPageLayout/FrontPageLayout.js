@@ -24,13 +24,18 @@ const CategoryEatdrink = dynamic(() =>
 const CategoryIndo = dynamic(() =>
   import('../../components/CategoryIndo/CategoryIndo'),
 )
+const VideoFrontPage = dynamic(() =>
+  import('../../components/VideoFrontPage/VideoFrontPage'),
+)
+const ContentWrapperVideo = dynamic(() =>
+  import('../../components/ContentWrapperVideo/ContentWrapperVideo'),
+)
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryInsights } from '../../queries/GetCategoryInsights'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import { GetCategoryEatdrink } from '../../queries/GetCategoryEatdrink'
 import { GetIndoCategory } from '../../queries/GetIndoCategory'
-
 const cx = classNames.bind(styles)
 
 export default function FrontPageLayout() {
@@ -103,9 +108,9 @@ export default function FrontPageLayout() {
   const categoryInsights = insightsData?.category
   const categoryFeatures = featuresData?.category
   const categoryEatdrink = eatdrinkData?.category
+
   const indoCategories =
     indoData?.categories?.edges?.map((edge) => edge.node) || []
-
   return (
     <>
       <div className={cx('component-updates')}>
@@ -115,7 +120,7 @@ export default function FrontPageLayout() {
           </div>
         )}
       </div>
-      
+
       <hr className={cx('divider')} />
 
       <div className={cx('component-updates')}>
@@ -178,7 +183,6 @@ export default function FrontPageLayout() {
         )}
       </div> */}
 
-      <hr className={cx('divider')} />
 
       {/* <div className={cx('component-updates')}>
         {!eatdrinkLoading && !eatdrinkError && categoryEatdrink && (

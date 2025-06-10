@@ -24,8 +24,6 @@ export const GetVideos = gql`
           }
           videosAcf {
             videoLink
-            guidesCategoryLink
-            guidesCategoryText
             customLink
             customText
           }

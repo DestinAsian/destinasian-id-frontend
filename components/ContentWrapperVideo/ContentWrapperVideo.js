@@ -159,24 +159,6 @@ export default function ContentWrapperVideo() {
                 </div>
               )}
               <div className={cx('first-video-text-wrapper')}>
-                <div className={cx('first-guides-text-wrapper')}>
-                  {latestVideos?.node?.videosAcf?.guidesCategoryLink &&
-                    latestVideos?.node?.videosAcf?.guidesCategoryText && (
-                      <Link
-                        href={latestVideos?.node?.videosAcf?.guidesCategoryLink}
-                      >
-                        <Heading className={cx('first-guides-text')}>
-                          {latestVideos?.node?.videosAcf?.guidesCategoryText}
-                        </Heading>
-                      </Link>
-                    )}
-                  {latestVideos?.node?.videosAcf?.guidesCategoryLink === null &&
-                    latestVideos?.node?.videosAcf?.guidesCategoryText && (
-                      <Heading className={cx('first-guides-text')}>
-                        {latestVideos?.node?.videosAcf?.guidesCategoryText}
-                      </Heading>
-                    )}
-                </div>
                 <div className={cx('first-title-wrapper')}>
                   {latestVideos?.node?.videosAcf?.videoLink &&
                     latestVideos?.node?.title && (
@@ -213,7 +195,7 @@ export default function ContentWrapperVideo() {
             </div>
           </div>
         )}
-        <div className={cx('other-wrapper')}>
+        {/* <div className={cx('other-wrapper')}>
           {otherVideos.length !== 0 &&
             otherVideos.map((post, index) => (
               <div className={cx('other-video-wrapper')}>
@@ -256,22 +238,6 @@ export default function ContentWrapperVideo() {
                   </div>
                 )}
                 <div className={cx('other-video-text-wrapper')}>
-                  <div className={cx('other-guides-text-wrapper')}>
-                    {post?.node?.videosAcf?.guidesCategoryLink &&
-                      post?.node?.videosAcf?.guidesCategoryText && (
-                        <Link href={post?.node?.videosAcf?.guidesCategoryLink}>
-                          <Heading className={cx('other-guides-text')}>
-                            {post?.node?.videosAcf?.guidesCategoryText}
-                          </Heading>
-                        </Link>
-                      )}
-                    {post?.node?.videosAcf?.guidesCategoryLink === null &&
-                      post?.node?.videosAcf?.guidesCategoryText && (
-                        <Heading className={cx('other-guides-text')}>
-                          {post?.node?.videosAcf?.guidesCategoryText}
-                        </Heading>
-                      )}
-                  </div>
                   <div className={cx('other-title-wrapper')}>
                     {post?.node?.videosAcf?.videoLink && post?.node?.title && (
                       <Link href={post?.node?.videosAcf?.videoLink}>
@@ -299,8 +265,8 @@ export default function ContentWrapperVideo() {
                   </div>
                 </div>
               </div>
-            ))}
-          {otherVideos.length && (
+            ))} */}
+          {/* {otherVideos.length && (
             <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]	">
               {data?.videos?.pageInfo?.hasNextPage &&
                 data?.videos?.pageInfo?.endCursor && (
@@ -348,8 +314,8 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                   </Button>
                 )}
             </div>
-          )}
-        </div>
+          )} */}
+        {/* </div> */}
       </div>
     </div>
   )

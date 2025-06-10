@@ -4,20 +4,35 @@ import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import dynamic from 'next/dynamic'
 
-const HomepageHeader = dynamic(() => import('../components/HomepageHeader/HomepageHeader'))
-
+const HomepageHeader = dynamic(() =>
+  import('../components/HomepageHeader/HomepageHeader'),
+)
 
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
 const SEO = dynamic(() => import('../components/SEO/SEO'))
-import FeaturedImage from '../components/FeaturedImage/FeaturedImage';
-const HomepageStories = dynamic(() => import('../components/HomepageStories/HomepageStories'))
-const FrontPageLayout = dynamic(() => import('../components/FrontPageLayout/FrontPageLayout'))
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+const HomepageStories = dynamic(() =>
+  import('../components/HomepageStories/HomepageStories'),
+)
+const FrontPageLayout = dynamic(() =>
+  import('../components/FrontPageLayout/FrontPageLayout'),
+)
+const VideoFrontPage = dynamic(() =>
+  import('../components/VideoFrontPage/VideoFrontPage'),
+)
 const Footer = dynamic(() => import('../components/Footer/Footer'))
-const ContentWrapperGuide = dynamic(() => import('../components/ContentWrapperGuide/ContentWrapperGuide'))
-const HomepageSecondaryHeader = dynamic(() => import('../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'))
-const FeatureWell = dynamic(() => import('../components/FeatureWell/FeatureWell'))
-
+const ContentWrapperGuide = dynamic(() =>
+  import('../components/ContentWrapperGuide/ContentWrapperGuide'),
+)
+const HomepageSecondaryHeader = dynamic(() =>
+  import(
+    '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
+  ),
+)
+const FeatureWell = dynamic(() =>
+  import('../components/FeatureWell/FeatureWell'),
+)
 
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -25,7 +40,6 @@ import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 export default function Component(props) {
-
   // Loading state for previews
   if (props.loading) {
     return <>Loading...</>
@@ -278,6 +292,11 @@ export default function Component(props) {
             </div>
             <div className="mx-auto max-w-7xl px-4">
               <FrontPageLayout />
+            </div>
+            <div className="w-full" style={{ backgroundColor: '#008080' }}>
+              <div className="mx-auto max-w-7xl px-4">
+                <VideoFrontPage />
+              </div>
             </div>
           </div>
           {/* <div id="snapStart" className="snap-start pt-16">

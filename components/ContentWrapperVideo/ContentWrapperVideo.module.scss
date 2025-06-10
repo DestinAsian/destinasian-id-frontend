@@ -1,92 +1,118 @@
 @import 'styles/breakpoints';
 
 .component {
-  width: 100vw;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  line-height: 1.2;
-  padding: 0;
-
-  @media (min-width: $breakpoint-extra-small) {
-    margin: 0 auto;
-    width: 100%;
-    position: relative;
-  }
+  color: var(--wpe--color--white);
 
   .first-wrapper {
     display: flex;
     flex-direction: column;
-    width: 100vw;
-    padding: 0 0 1rem;
-    margin: 0 auto;
+    gap: 1rem;
 
-    @media (min-width: $breakpoint-extra-small) {
-      padding: 0 0 2rem;
+    @media (min-width: $breakpoint-medium) {
+      flex-direction: row;
+      gap: 2rem;
+    }
+
+    .first-video-wrapper {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .first-title-wrapper {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: 'Scheherazade New', serif;
+        color: var(--wpe--color--white);
+      }
+
+      .first-iframe-wrapper {
+        position: relative;
+        padding-bottom: 56.25%; // 16:9 aspect ratio
+        height: 0;
+        overflow: hidden;
+
+        div {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+
+          lite-youtube {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+
+    .first-video-text-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: var(--wpe--color--teal--deep);
+
+      .first-guides-text {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .first-custom-text {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 300;
+        white-space: pre-line;
+      }
     }
   }
 
   .other-wrapper {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     flex-wrap: wrap;
-    padding: 0;
-    margin-right: auto;
-    margin-left: auto;
-    width: 100vw;
-    position: relative;
-    column-gap: 1rem;
-
-    @media (min-width: $breakpoint-extra-small) {
-      column-gap: 2rem;
-      max-width: calc(1400px + 2rem);
-    }
-  }
-
-  .first-video-text-wrapper,
-  .other-video-text-wrapper {
-    background-color: var(--wpe--color--white);
-    min-height: 10rem;
-    display: flex;
-    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
     justify-content: center;
 
-    @media (min-width: $breakpoint-extra-small) {
-      min-height: 14rem;
-    }
-  }
-
-  .first-video-wrapper {
-    padding: 0;
-    width: 100%;
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-
-    @media (min-width: $breakpoint-medium) {
-      padding: 0;
-      font-size: 2rem;
-    }
-
-    @media (min-width: $breakpoint-medium) {
-      max-width: var(--wpe--container--max--width);
-    }
-  }
-
-  .first-iframe-wrapper {
-    width: 100%;
-    padding: 0;
-
-    div {
+    .other-video-wrapper {
       width: 100%;
+      max-width: 600px;
+      flex: 1;
 
-      lite-youtube {
-        margin: 0 auto;
-        max-width: 100%;
+      .other-iframe-wrapper {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+
+        lite-youtube {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .other-title-wrapper {
+        padding: 0.5rem 0;
+        font-family: 'Unit Slab Pro Black';
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: var(--wpe--color--title);
+      }
+
+      .other-video-text-wrapper {
+        padding: 0.5rem 0;
+        font-size: 1rem;
+        color: var(--wpe--color--white);
       }
     }
   }
+
 
   .first-guides-text-wrapper,
   .other-guides-text-wrapper {
@@ -141,21 +167,21 @@
     .first-custom-text,
     .other-guides-text,
     .other-custom-text {
-      font-size: 0.5rem;
-      font-weight: 700;
-      padding: 0.1rem 0.75rem;
+      font-size: 1rem;
+      padding: 0.1rem 0;
       display: flex;
-      text-transform: uppercase;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
       justify-content: center;
       align-items: center;
       width: fit-content;
 
       @media (min-width: $breakpoint-extra-small) {
-        font-size: 0.6rem;
+        font-size: 1rem;
       }
 
       @media (min-width: $breakpoint-medium) {
-        font-size: 0.8rem;
+        font-size: 1rem;
       }
     }
   }
@@ -163,36 +189,51 @@
   .first-guides-text,
   .other-guides-text {
     color: var(--wpe--color--white);
-    background-color: var(--wpe--color--black);
-    border: 1.5px solid var(--wpe--color--black);
+    background-color: var(--wpe--color--white);
+    border: 1.5px solid var(--wpe--color--white);
   }
 
-  .first-custom-text,
-  .other-custom-text {
-    color: var(--wpe--color--black);
-    background-color: var(--wpe--color--white);
-    border: 1.5px solid var(--wpe--color--black);
+  .first-custom-text-wrapper {
+    margin: 0;
+    padding: 0 1rem 0 0;
   }
+  
+  .first-custom-text 
+  .other-custom-text {
+    color: var(--wpe--color--white);
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    text-transform: none;
+    white-space: pre-line; 
+    word-break: break-word;
+    font-size: 1.125rem;
+  
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+  
 
   .first-title-wrapper {
-    padding: 0.25rem 1rem;
+    padding: 0.25rem 0;
     text-align: left;
-    font-family: 'Unit Slab Pro Black';
-    line-height: 1.6;
-    font-size: 1.7rem;
+    font-family: 'Scheherazade New', serif;
+    line-height: 1;
+    font-size: 1.75rem;
     font-weight: 500;
-    color: var(--wpe--color--black);
+    color: var(--wpe--color--white);
     max-width: calc(1400px + 2rem);
     width: 100%;
     margin: 0 auto;
 
     @media (min-width: $breakpoint-extra-small) {
       font-size: 1.75rem;
-      padding: 0.5rem 2rem;
+      padding: 0.5rem 0;
     }
 
     @media (min-width: $breakpoint-medium) {
-      font-size: 2.5rem;
+      font-size: 2rem;
     }
 
     a {
@@ -204,9 +245,7 @@
     .title {
       margin: 0 auto;
     }
-  }
 
-  .first-title-wrapper {
     @media (min-width: calc(1400px + 2rem)) {
       padding: 0.5rem 0 0.5rem;
     }
