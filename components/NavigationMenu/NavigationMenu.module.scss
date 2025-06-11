@@ -41,19 +41,20 @@
   gap: 0.25rem;
 
   a {
-    color: var(--wpe--navigation-menu--color);
+    color: var(--wpe--color--white);
     display: block;
     transition: all 0.2s ease-out;
     width: 100%;
     text-align: left;
-    font-weight: 700;
+    font-weight: 400;
     white-space: break-spaces;
     word-break: break-word;
     word-wrap: break-word;
+    font-family: 'Open Sans', sans-serif;
 
     &:hover,
     &:focus {
-      color: var(--wpe--color--orange);
+      color: var(--wpe--color--black);
 
       // @media (min-width: $breakpoint-small) {
       //   color: var(--wpe--color--orange);

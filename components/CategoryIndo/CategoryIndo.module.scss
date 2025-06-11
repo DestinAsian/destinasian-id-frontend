@@ -1,14 +1,30 @@
 @import 'styles/breakpoints';
 
+// .categoryIndoWrapper {
+//   padding: 1rem 0 3rem;
+//   background-color: var(--wpe--color--white--smoke);
+//   width: 100%;
+//   max-width: 1280px;
+//   margin: 0 auto;
+//   overflow-x: hidden;
+// }
+
 .categoryIndoWrapper {
   padding: 1rem 0 3rem;
   background-color: var(--wpe--color--white--smoke);
   width: 100%;
-  max-width: 1280px;
+  max-width: 1280px; // default mobile & tablet
   margin: 0 auto;
   overflow-x: hidden;
+  
+  @media (min-width: $breakpoint-small) {
+    max-width: 1280px; // default mobile & tablet
+  }
+  
+  @media (min-width: $breakpoint-large) {
+    max-width: calc(1400px + 2rem); // lebih lebar di desktop
+  }
 }
-
 .title {
   font-size: 2rem;
   font-weight: bold;

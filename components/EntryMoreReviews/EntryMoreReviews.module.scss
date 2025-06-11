@@ -15,8 +15,8 @@
 
 .entry-wrapper {
   display: flex;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
-  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   width: 100%;
   flex-direction: row;
   align-items: center;
@@ -36,7 +36,7 @@
     text-transform: uppercase;
     font-weight: 700;
     color: var(--wpe--color--white);
-    background-color: var(--wpe--color--black);
+    background-color: var(--wpe--color--teal--deep);
     padding: 0.65rem 1.25rem;
 
     @media (min-width: $breakpoint-extra-small) {
@@ -45,7 +45,7 @@
   }
 
   .entry-border {
-    background: var(--wpe--color--black);
+    background: var(--wpe--color--teal--deep);
     width: 60%;
     height: 0.06rem;
 
@@ -67,8 +67,9 @@
 }
 
 .category {
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
-  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  color: var(--wpe--color--teal--light);
+  font-weight: 500;
   font-size: 0.6rem;
   text-transform: uppercase;
   line-height: 1.2;

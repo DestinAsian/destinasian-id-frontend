@@ -122,10 +122,11 @@
 
     &:hover,
     &:focus {
-      border-bottom: 3px solid var(--wpe--color--black);
-
+      // border-bottom: 3px solid var(--wpe--color--black);
+      color: var(--wpe--color--teal--light);
       @media (min-width: $breakpoint-extra-small) {
-        border-bottom: 5px solid var(--wpe--color--black);
+        // border-bottom: 5px solid var(--wpe--color--black);
+        color: var(--wpe--color--teal--light);
       }
     }
   }
@@ -145,8 +146,9 @@
 
 .nav-name {
   font-size: 0.65rem;
-  font-weight: 500;
+  font-weight: 400;
   text-transform: uppercase;
+  font-family: 'Open Sans', sans-serif;
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 0.875rem;
@@ -310,13 +312,12 @@
   }
 }
 
-
 .menu-button-parent {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background-color: black;
-  padding: 0.75rem; 
+  background-color: var(--wpe--color--teal--light);
+  padding: 0.75rem;
 
   button {
     display: flex;
@@ -361,8 +362,9 @@
 
       .nav-name {
         font-size: 0.65rem;
-        font-weight: 500;
+        font-weight: 400;
         text-transform: uppercase;
+        font-family: 'Open Sans', sans-serif;
 
         @media (min-width: $breakpoint-extra-small) {
           font-size: 0.875rem;

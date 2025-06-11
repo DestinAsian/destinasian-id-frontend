@@ -13,7 +13,8 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  // font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 1.125rem;
 
@@ -44,13 +45,14 @@ h6 {
 }
 
 p {
-  font-family: 'Chronicle Display A', 'Chronicle Display B';
-  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
   margin: 0 0 1rem;
   letter-spacing: 1.15px;
   line-height: 1.6;
   font-size: 1.125rem;
-
+  text-transform: lowercase;
+  
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.25rem;
   }

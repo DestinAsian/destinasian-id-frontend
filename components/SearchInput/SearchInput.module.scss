@@ -28,7 +28,11 @@ $input-border-color: rgb(221, 221, 221);
   top: 50%;
   right: 1rem;
   transform: translateY(-50%);
-  color: var(--wpe--color--black);
+  color: var(--wpe--color--white);
+  &:hover,
+  &:focus {
+    color: var(--wpe--color--black);
+  }
 
   @media (min-width: $breakpoint-extra-small) {
     display: block;
@@ -39,7 +43,7 @@ $input-border-color: rgb(221, 221, 221);
     height: 1rem;
 
     g {
-      fill: var(--wpe--color--black);
+      fill: var(--wpe--color--white);
     }
   }
 }
@@ -56,7 +60,7 @@ $input-border-color: rgb(221, 221, 221);
   line-height: 1.2;
   margin: 0;
   padding: 1rem 2.5rem;
-  border: 2px solid #000000;
+  border: 2px solid #ffffff;
   border-radius: 50px;
   text-align: left;
   font-size: 0.7rem;

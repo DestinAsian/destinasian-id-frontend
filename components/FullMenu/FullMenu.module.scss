@@ -1,8 +1,9 @@
 @import 'styles/breakpoints';
 
 .component {
-  background-color: transparent;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  // background-color: transparent;
+  background-color: var(--wpe--color--teal--light);
+  font-family: 'Open Sans', sans-serif;
   font-weight: 700;
   display: flex;
   justify-content: center;
@@ -21,15 +22,11 @@
 
   * {
     text-transform: uppercase;
-    // font-size: 1rem;
-
-    // @media (min-width: $breakpoint-extra-small) {
-    //   font-size: 0.7rem;
-    // }
-
-    // @media (min-width: $breakpoint-large) {
-    //   font-size: 1rem;
-    // }
+    color: var(--wpe--color--white);
+    &:hover,
+    &:focus {
+      color: var(--wpe--color--black);
+    }
   }
 
   @media (min-width: $breakpoint-extra-small) {
@@ -65,7 +62,7 @@
     .search-result-wrapper {
       position: absolute;
       display: grid;
-      background-color: var(--wpe--main--background-color);
+      background-color: var(--wpe--color--teal--light);
       top: 4.5rem;
       left: 0;
       width: 100%;
@@ -189,7 +186,7 @@
         position: static;
 
         a {
-          color: var(--wpe--navigation-menu--color);
+          color: var(--wpe--color--white);
           display: block;
           transition: all 0.2s ease-out;
           width: 100%;
@@ -201,7 +198,7 @@
 
           &:hover,
           &:focus {
-            color: var(--wpe--color--orange);
+            color: var(--wpe--color--black);
 
             // @media (min-width: $breakpoint-small) {
             //   color: var(--wpe--color--orange);
@@ -217,7 +214,7 @@
 
     .menu-name {
       padding: 0 0 0.25rem;
-      color: var(--wpe--color--orange);
+      color: var(--wpe--color--white);
       display: block;
       transition: all 0.2s ease-out;
       width: 100%;
@@ -288,7 +285,7 @@
       justify-content: space-between;
       width: 30%;
       border-top: none;
-      border-left: 1px solid var(--wpe--color--black);
+      border-left: 1px solid var(--wpe--color--white);
       padding-left: 1rem;
       padding-right: 1.25vw;
       padding-top: 0;

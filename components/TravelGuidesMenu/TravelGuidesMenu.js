@@ -107,8 +107,6 @@ export default function TravelGuidesMenu(className) {
     setLoading(false)
   }, [client, mainCategoryLabels])
 
-
-
   let menuVariable = {
     first: 1000,
     footerHeaderLocation: FOOTER_LOCATION,
@@ -154,7 +152,6 @@ export default function TravelGuidesMenu(className) {
       </div>
     )
   }
-
 
   function renderMenu(items) {
     return (
@@ -211,6 +208,9 @@ export default function TravelGuidesMenu(className) {
                     <div className={cx('navigation')}>
                       {connectedNode?.node?.children?.edges?.map((post) => (
                         <li key={post?.node?.uri} className={cx('nav-link')}>
+                          {index > 0 && (
+                            <span className={cx('separator')}>|</span>
+                          )}
                           <Link href={post?.node?.uri}>
                             <h2
                               className={cx(

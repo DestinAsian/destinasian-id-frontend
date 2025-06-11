@@ -34,10 +34,11 @@
   bottom: 7%;
   width: 100%;
   position: absolute;
-  font-family: 'Unit Slab Pro Black';
+  font-family: 'Scheherazade New';
+  text-transform: uppercase;
   font-size: 1.8rem;
   font-weight: 500;
-  text-align: left;
+  text-align: center;
   padding: 0 1rem;
   z-index: 10;
   gap: 0.5rem;
@@ -58,7 +59,7 @@
 
 .category-wrapper {
   position: relative;
-  text-align: left;
+  text-align: center;
   width: 100%;
 
   @media (min-width: $breakpoint-small) {
@@ -69,15 +70,15 @@
 }
 
 .category {
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
-  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   font-size: 1rem;
-  color: var(--wpe--color--black);
-  background-color: var(--wpe--color--white);
+  color: var(--wpe--color--white);
   padding: 0.25rem 0.75rem;
   text-transform: uppercase;
   white-space: nowrap;
-  width: fit-content;
+  // width: fit-content;
+  text-align: center;
 
   @media (min-width: $breakpoint-small) {
     transform: none;
@@ -86,13 +87,13 @@
 
 .caption {
   width: fit-content;
-  text-align: left;
+  text-align: center;
   line-height: 1.2;
 }
 
 .stand-first-wrapper {
-  position: relative;
-  text-align: left;
+  // position: relative;
+  text-align: center;
 
   @media (min-width: $breakpoint-small) {
     transform: none;
@@ -100,7 +101,7 @@
 }
 
 .stand-first {
-  font-family: var(--font--eb--garamond);
+  font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 1rem;
   color: var(--wpe--color--white);
@@ -109,6 +110,8 @@
   width: 100%;
   line-height: 1.2;
   font-size: 1.125rem;
+  text-transform: none;
+  text-align: center;
 
   @media (min-width: $breakpoint-small) {
     transform: none;

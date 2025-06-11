@@ -39,7 +39,7 @@
 
 .title,
 .parent {
-  font-family: 'Unit Slab Pro Black';
+  font-family: "Scheherazade New";
   line-height: 1.2;
   font-size: 1.7rem;
   font-weight: 500;
@@ -133,7 +133,7 @@
     align-items: flex-end;
     justify-content: flex-end;
     font-size: 0.8rem;
-    text-transform: uppercase;
+    text-transform: capitalize;
     line-height: 1;
 
     @media (min-width: $breakpoint-extra-small) {
@@ -155,6 +155,8 @@
       max-width: calc(1400px + 2rem);
       text-align: right;
       padding: 0 1rem;
+      font-style: italic;
+      font-weight: 300;
 
       @media (min-width: calc(1400px + 2rem)) {
         padding: 0;
@@ -168,6 +170,8 @@
   color: var(--wpe--color--black);
   text-align: left;
   font-size: 1.125rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 200;
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.25rem;
@@ -180,8 +184,8 @@
   }
 
   a {
-    font-family: 'Chronicle Display A', 'Chronicle Display B';
-    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
     color: var(--wpe--link--color);
     text-decoration: underline;
 

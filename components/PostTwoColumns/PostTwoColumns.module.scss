@@ -36,6 +36,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    padding: 0 1rem;
   }
 }
 
@@ -44,31 +45,38 @@
   height: fit-content;
 
   @media (min-width: $breakpoint-extra-small) {
-    padding: 0.2rem 2vw;
+    padding: 0.1rem 1rem;
   }
 }
 
 .category {
-  color: var(--wpe--color--black);
-  font-weight: 600;
+  color: var(--wpe--color--teal--light);
+  font-weight: 200;
   font-size: 0.8rem;
   text-transform: uppercase;
   line-height: 1.2;
 
   @media (min-width: $breakpoint-extra-small) {
-    color: var(--wpe--color--black);
+    color: var(--wpe--color--teal--light);
     font-size: 0.95rem;
+    font-weight: 200;
+
   }
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.15rem;
+    font-weight: 200;
+
   }
 }
 
 .title {
-  font-family: 'Unit Slab Pro Black';
+  font-family: 'Scheherazade New';
+  text-transform: uppercase;
   font-size: 1.65rem;
   line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 1.8px;
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.7rem;
@@ -99,8 +107,8 @@
 }
 
 .excerpt {
-  font-family: 'Chronicle Display A', 'Chronicle Display B';
-  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 200;
   font-size: 0.9rem;
   padding: 0 0 0.25rem;
 
@@ -118,7 +126,7 @@
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 0.5rem;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-family: 'Open Sans', sans-serif;
   font-weight: 500;
   padding-bottom: 0.75rem;
 

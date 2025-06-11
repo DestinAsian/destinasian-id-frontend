@@ -38,10 +38,10 @@
 }
 
 .title {
-  font-family: 'Unit Slab Pro Black';
+  font-family: "Scheherazade New";
   font-size: 1rem;
   line-height: 1.2;
-
+  
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.5rem;
   }
@@ -52,7 +52,7 @@
   align-items: flex-end;
   flex-wrap: wrap;
   column-gap: 0.25rem;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-family: 'Open Sans', sans-serif;
   font-weight: 500;
 
   @media (min-width: $breakpoint-extra-small) {

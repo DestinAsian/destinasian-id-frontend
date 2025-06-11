@@ -279,8 +279,32 @@ export default function Component(props) {
         setIsGuidesNavShown={setIsGuidesNavShown}
         isScrolled={isScrolled}
       />
-
       <Main>
+        <>
+          <div className="snap-y snap-mandatory">
+            <div className="snap-start">
+              {currentFeatureWell && (
+                <Container>
+                  <FeatureWell featureWells={featureWell} />
+                </Container>
+              )}
+            </div>
+            <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
+              <FrontPageLayout />
+            </div>
+            <div className="w-full" style={{ backgroundColor: '#008080' }}>
+              <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
+                <VideoFrontPage />
+              </div>
+            </div>
+          </div>
+          {/* <div id="snapStart" className="snap-start pt-16">
+      <HomepageStories pinPosts={homepagePinPosts} />
+    </div> */}
+        </>
+      </Main>
+
+      {/* <Main>
         <>
           <div className="snap-y snap-mandatory">
             <div className="snap-start">
@@ -299,11 +323,11 @@ export default function Component(props) {
               </div>
             </div>
           </div>
-          {/* <div id="snapStart" className="snap-start pt-16">
+        </>
+      </Main> */}
+      {/* <div id="snapStart" className="snap-start pt-16">
             <HomepageStories pinPosts={homepagePinPosts} />
           </div> */}
-        </>
-      </Main>
       <Footer />
     </main>
   )

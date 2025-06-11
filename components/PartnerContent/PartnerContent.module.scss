@@ -173,7 +173,7 @@ figure.image {
   padding: 0 0 0.25rem;
 
   p {
-    font-family: 'Gotham A', 'Gotham B';
+    font-family: 'Open Sans', sans-serif;
     font-weight: 500;
     line-height: 1.6;
     font-size: 0.65rem;
@@ -190,6 +190,7 @@ figure.image {
 
 .border-divider {
   width: calc(-2rem + 100vw);
+  // color: var(--wpe--color--teal--light);
   border-bottom: 0.5rem solid;
   margin: 0 auto;
   padding: 1rem 1rem 0;
