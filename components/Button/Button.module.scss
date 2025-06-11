@@ -7,21 +7,21 @@
   align-items: center;
   background-color: transparent;
   appearance: none;
-  font-family: 'Unit Slab Pro Black';
+  font-family: 'Open Sans', sans-serif;
   line-height: 1.6;
   font-size: 1.7rem;
-  font-weight: 500;
-  color: var(--wpe--color--title);
+  font-weight: 700;
+  color: var(--wpe--color--teal--deep);
   text-transform: uppercase;
 
   &.button-primary {
-    color: var(--color-black);
-    border-color: var(--color-black);
+    color: var(--wpe--color--teal--deep);
+    border-color: var(--wpe--color--teal--deep);
     background-color: var(--color-white);
   }
 
   &.button-secondary {
-    color: var(--color-white);
+    color: var(--wpe--color--teal--deep);
     border-color: var(--color-primary);
     background-color: var(--color-primary);
   }
@@ -29,11 +29,11 @@
   &:hover {
     border-color: var(--color-black);
     background-color: var(--color-black);
-    color: var(--color-white);
+    color: var(--wpe--color--teal--light);
   }
 
-  &:focus {
-    outline: 1px dotted;
-    outline: 1px auto -webkit-focus-ring-color;
-  }
+  // &:focus {
+  //   outline: 1px dotted;
+  //   outline: 1px auto -webkit-focus-ring-color;
+  // }
 }
