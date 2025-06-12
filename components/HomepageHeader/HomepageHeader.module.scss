@@ -403,5 +403,11 @@
       top: 4.5rem;
       height: calc(-4.5rem + 100vh);
     }
+    // Saat menu full aktif, header berubah warna
+    ~ .component,
+    ~ .sticky,
+    ~ .navbar {
+      background-color: var(--wpe--color--teal--light);
+    }
   }
 }

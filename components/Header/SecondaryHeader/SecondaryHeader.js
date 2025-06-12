@@ -4,7 +4,9 @@ import classNames from 'classnames/bind'
 import styles from './SecondaryHeader.module.scss'
 import dynamic from 'next/dynamic'
 
-const TravelGuidesMenu = dynamic(() => import('../../../components/TravelGuidesMenu/TravelGuidesMenu'))
+const TravelGuidesMenu = dynamic(() =>
+  import('../../../components/TravelGuidesMenu/TravelGuidesMenu'),
+)
 import Link from 'next/link'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 
@@ -17,7 +19,7 @@ export default function SecondaryHeader({
   isScrolled,
 }) {
   const { data, error } = useQuery(GetSecondaryHeaders, {
-    variables: { include: ["20", "29", "3"] },
+    variables: { include: ['20', '29', '3'] },
   })
 
   if (error) return <div>Error loading categories!</div>
@@ -30,7 +32,9 @@ export default function SecondaryHeader({
         <div className={cx('menu-wrapper')}>
           <button
             type="button"
-            className={cx('menu-button', isGuidesNavShown ? 'active' : '')}
+            className={cx('menu-button', 'menu-button-guides', {
+              active: isGuidesNavShown,
+            })}
             onClick={() => {
               setIsGuidesNavShown(!isGuidesNavShown)
               setSearchQuery('')

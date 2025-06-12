@@ -9,7 +9,7 @@
   z-index: 50;
 
   &.menu-open {
-    background-color: var(--wpe--color--teal--deep);
+    background-color: var(--wpe--color--teal--light);
   }
 }
 
@@ -49,7 +49,7 @@
   // if :no-button :on atau active
   // background-color: var(--wpe--color--teal--light);
   &.menu-open {
-    background-color: var(--wpe--color--teal--deep);
+    background-color: var(--wpe--color--teal--light);
   }
   @media (min-width: $breakpoint-extra-small) {
     padding: 0.5rem 0;
@@ -133,7 +133,7 @@
       ~ .component,
       ~ .sticky,
       ~ .navbar {
-        background-color: var(--wpe--color--teal--deep);
+        background-color: var(--wpe--color--teal--light);
       }
     }
   }
@@ -332,7 +332,7 @@
     ~ .component,
     ~ .sticky,
     ~ .navbar {
-      background-color: var(--wpe--color--teal--deep);
+      background-color: var(--wpe--color--teal--light);
     }
   }
 }

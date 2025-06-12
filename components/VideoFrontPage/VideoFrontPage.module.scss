@@ -5,7 +5,7 @@
   justify-content: center;
   background-color: var(--wpe--color--teal--deep);
   min-height: 100%;
-  padding:0 0 2rem 0;
+  padding: 0 0 2rem 0;
 }
 
 .wrapper-videos {
@@ -22,7 +22,7 @@
   font-family: 'Scheherazade New', serif;
   color: var(--wpe--color--white);
   background-color: var(--wpe--color--teal--deep);
-  padding: 1rem 0;  
+  padding: 1rem 0;
 }
 
 // ========================
@@ -58,6 +58,10 @@
     width: 73%;
     order: 1;
   }
+
+  @media (min-width: $breakpoint-medium) {
+    width: 75%;
+  }
 }
 
 .right-column {
@@ -73,6 +77,11 @@
     width: 20%;
     margin-left: 5%;
     order: 2;
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    width: 25%;
+    margin-left: 0;
   }
 
   .outnow-wrapper {

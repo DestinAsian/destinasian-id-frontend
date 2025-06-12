@@ -112,21 +112,23 @@
 }
 
 .circle-origin {
-  /* fill: transparent; */
+  fill: transparent;
   stroke: var(--wpe--color--teal--deep);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 65.6px;
   stroke-dashoffset: 65.6px;
-  padding: 1rem;
-  transition: stroke 0.3s ease; /* Tambahkan transisi untuk animasi halus */
+  transition: stroke 0.3s ease, fill 0.3s ease;
 }
 
 .circle-origin:hover,
 .circle-origin:active {
-  stroke: var(--wpe--color--teal--deep);
-  fill: transparent;
+  stroke: var(--wpe--color--white);
+  fill: var(--wpe--color--teal--deep);
+  /* stroke: rgba(255, 255, 255, 0.5);  */
+  stroke-width: 1.5;
 }
+
 
 
 .swiper-custom-pagination > .swiper-pagination-bullet-active .circle-origin {

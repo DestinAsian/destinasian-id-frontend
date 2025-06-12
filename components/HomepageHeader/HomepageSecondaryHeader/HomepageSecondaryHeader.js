@@ -4,7 +4,9 @@ import classNames from 'classnames/bind'
 import styles from './HomepageSecondaryHeader.module.scss'
 import dynamic from 'next/dynamic'
 
-const TravelGuidesMenu = dynamic(() => import('../../../components/TravelGuidesMenu/TravelGuidesMenu'))
+const TravelGuidesMenu = dynamic(() =>
+  import('../../../components/TravelGuidesMenu/TravelGuidesMenu'),
+)
 import Link from 'next/link'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 
@@ -17,7 +19,7 @@ export default function SecondaryHeader({
   isScrolled,
 }) {
   const { data, error } = useQuery(GetSecondaryHeaders, {
-    variables: { include: ["20", "29", "3"] },
+    variables: { include: ['20', '29', '3'] },
   })
 
   if (error) return <div>Error loading categories!</div>
@@ -30,7 +32,9 @@ export default function SecondaryHeader({
         <div className={cx('menu-wrapper')}>
           <button
             type="button"
-            className={cx('menu-button', isGuidesNavShown ? 'active' : '')}
+            className={cx('menu-button', 'menu-button-guides', {
+              active: isGuidesNavShown,
+            })}
             onClick={() => {
               setIsGuidesNavShown(!isGuidesNavShown)
               setSearchQuery('')
@@ -40,7 +44,6 @@ export default function SecondaryHeader({
             <div className={cx('menu-title')}>{`Guides`}</div>
           </button>
 
-          {/* Render kategori dinamis (News, Insights, Features) */}
           {categories.map((category) => {
             const { id, name, slug } = category.node
             return (
@@ -67,11 +70,6 @@ export default function SecondaryHeader({
     </>
   )
 }
-
-
-
-
-
 
 // import classNames from 'classnames/bind'
 // import styles from './HomepageSecondaryHeader.module.scss'
@@ -161,5 +159,3 @@ export default function SecondaryHeader({
 //     </>
 //   )
 // }
-
-

@@ -49,27 +49,25 @@
       z-index: 48;
     }
   }
-
   .menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0.5rem;
     margin: 0;
     min-width: 4rem;
     width: fit-content;
     height: 100%;
     color: var(--wpe--color--white--smoke);
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     @media (min-width: $breakpoint-extra-small) {
       min-width: 20%;
-      max-width: 45%;
+      max-width: 100%;
     }
 
     .menu-title {
       text-transform: uppercase;
       white-space: nowrap;
-      // overflow: hidden;
       text-overflow: ellipsis;
       font-weight: 500;
       font-size: 0.65rem;
@@ -83,9 +81,15 @@
       }
     }
 
-    // &:hover,
+    svg {
+      margin: 0;
+      padding: 0;
+      height: 2rem;
+    }
+
+    &:hover,
     &.active {
-      background-color: var(--wpe--color--black);
+      background-color: var(--wpe--color--teal--light);
       color: var(--wpe--color--white);
 
       * {
@@ -93,10 +97,33 @@
       }
     }
 
-    svg {
-      padding: 0;
-      margin: 0;
-      height: 2rem;
+    &.active-not-scrolled {
+      background-color: transparent;
+
+      * {
+        font-weight: 700;
+      }
+    }
+
+    // ===  BUTTON GUIDES ===
+    &.menu-button-guides {
+      background-color: var(--wpe--color--teal--light);
+      color: var(--wpe--color--white);
+      font-weight: bold;
+
+      .menu-title {
+        color: var(--wpe--color--white);
+      }
+
+      &:hover,
+      &.active {
+        background-color: var(--wpe--color--teal--dark);
+        color: var(--wpe--color--white);
+
+        .menu-title {
+          font-weight: bold;
+        }
+      }
     }
   }
 }
@@ -165,41 +192,5 @@
 
   * {
     color: var(--wpe--color--black);
-  }
-}
-
-.rca-menu-wrapper {
-  display: block;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  z-index: 48;
-  top: -150vh;
-  background-color: rgba(0, 0, 0, 0.3); /* Slightly transparent */
-  backdrop-filter: blur(10px); /* Apply blur */
-  color: var(--wpe--color--black);
-
-  &.show {
-    padding: 0;
-    gap: 1rem;
-    top: 4.7rem;
-    height: calc(-4.7rem + 100vh);
-    transition: backdrop-filter 0.8s ease-in-out, visibility 0.8s ease-in-out;
-
-    @media (min-width: $breakpoint-extra-small) {
-      top: 5.8rem;
-      left: 0;
-      height: calc(-5.8rem + 100vh);
-      width: 100vw;
-    }
-
-    @media (min-width: $breakpoint-large) {
-      top: 6.35rem;
-      height: calc(-6.35rem + 100vh);
-    }
-
-    * {
-      color: var(--wpe--color--black);
-    }
   }
 }
