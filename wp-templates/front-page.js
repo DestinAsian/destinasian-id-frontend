@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import dynamic from 'next/dynamic'
+import classNames from 'classnames/bind'
+import styles from '../components/VideoFrontPage/VideoFrontPage.module.scss'
+import { GetVideos } from '../queries/GetVideos'
 
+import dynamic from 'next/dynamic'
+const ContentWrapperVideo = dynamic(() =>
+  import('../components/ContentWrapperVideo/ContentWrapperVideo'),
+)
+const Outnow = dynamic(() => import('../components/Outnow/Outnow'))
 const HomepageHeader = dynamic(() =>
   import('../components/HomepageHeader/HomepageHeader'),
 )
@@ -28,6 +35,11 @@ const ContentWrapperGuide = dynamic(() =>
 const HomepageSecondaryHeader = dynamic(() =>
   import(
     '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
+  ),
+)
+const HomepageDestopHeader = dynamic(() =>
+  import(
+    '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
   ),
 )
 const FeatureWell = dynamic(() =>
@@ -198,6 +210,16 @@ export default function Component(props) {
     },
   )
 
+  const cx = classNames.bind(styles)
+  const {
+    data: videosData,
+    loading: videosLoading,
+    error: videosError,
+  } = useQuery(GetVideos, {
+    variables: { first: 10 },
+  })
+  const videos = videosData?.videos?.edges || []
+
   const posts = latestStories?.posts ?? []
   const guides = latestStories?.guides ?? []
   // const editorials = latestStories?.editorials ?? []
@@ -243,6 +265,18 @@ export default function Component(props) {
 
   // sortByDate mainCat & childCat Posts
   const allPosts = mainCatPosts.sort(sortPostsByDate)
+  // Tambahkan di atas dalam komponen
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024) // breakpoint desktop (bisa kamu sesuaikan)
+    }
+
+    handleResize() // jalankan pertama kali
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
@@ -253,32 +287,60 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       /> */}
-      <HomepageHeader
-        title={siteTitle}
-        description={siteDescription}
-        primaryMenuItems={primaryMenu}
-        secondaryMenuItems={secondaryMenu}
-        thirdMenuItems={thirdMenu}
-        fourthMenuItems={fourthMenu}
-        fifthMenuItems={fifthMenu}
-        featureMenuItems={featureMenu}
-        latestStories={allPosts}
-        home={uri}
-        menusLoading={menusLoading}
-        latestLoading={latestLoading}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isNavShown={isNavShown}
-        setIsNavShown={setIsNavShown}
-        isScrolled={isScrolled}
-      />
-      <HomepageSecondaryHeader
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isGuidesNavShown={isGuidesNavShown}
-        setIsGuidesNavShown={setIsGuidesNavShown}
-        isScrolled={isScrolled}
-      />
+      <>
+        {isDesktop ? (
+          <HomepageDestopHeader
+            title={siteTitle}
+            description={siteDescription}
+            primaryMenuItems={primaryMenu}
+            secondaryMenuItems={secondaryMenu}
+            thirdMenuItems={thirdMenu}
+            fourthMenuItems={fourthMenu}
+            fifthMenuItems={fifthMenu}
+            featureMenuItems={featureMenu}
+            latestStories={allPosts}
+            home={uri}
+            menusLoading={menusLoading}
+            latestLoading={latestLoading}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+          />
+        ) : (
+          <>
+            <HomepageHeader
+              title={siteTitle}
+              description={siteDescription}
+              primaryMenuItems={primaryMenu}
+              secondaryMenuItems={secondaryMenu}
+              thirdMenuItems={thirdMenu}
+              fourthMenuItems={fourthMenu}
+              fifthMenuItems={fifthMenu}
+              featureMenuItems={featureMenu}
+              latestStories={allPosts}
+              home={uri}
+              menusLoading={menusLoading}
+              latestLoading={latestLoading}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              isNavShown={isNavShown}
+              setIsNavShown={setIsNavShown}
+              isScrolled={isScrolled}
+            />
+            <HomepageSecondaryHeader
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              isGuidesNavShown={isGuidesNavShown}
+              setIsGuidesNavShown={setIsGuidesNavShown}
+              isScrolled={isScrolled}
+            />
+          </>
+        )}
+      </>
       <Main>
         <>
           <div className="snap-y snap-mandatory">
@@ -294,7 +356,27 @@ export default function Component(props) {
             </div>
             <div className="w-full" style={{ backgroundColor: '#008080' }}>
               <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
-                <VideoFrontPage />
+                {/* <VideoFrontPage /> */}
+                <h2 className={cx('title-videos')}>Videos</h2>
+                <div className={cx('wrapper-videos')}></div>
+                <div className={cx('component-videos')}>
+                  <div className={cx('two-columns')}>
+                    <div className={cx('left-column')}>
+                      {!videosLoading && !videosError && videos.length > 0 && (
+                        <div className={cx('category-updates-component')}>
+                          <ContentWrapperVideo data={videos} />
+                        </div>
+                      )}
+                    </div>
+                    <div className={cx('right-column')}>
+                      <aside className={cx('outnow-wrapper')}>
+                        <div className={cx('outnow-videos')}>
+                          <Outnow />
+                        </div>
+                      </aside>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -304,30 +386,6 @@ export default function Component(props) {
         </>
       </Main>
 
-      {/* <Main>
-        <>
-          <div className="snap-y snap-mandatory">
-            <div className="snap-start">
-              {currentFeatureWell && (
-                <Container>
-                  <FeatureWell featureWells={featureWell} />
-                </Container>
-              )}
-            </div>
-            <div className="mx-auto max-w-7xl px-4">
-              <FrontPageLayout />
-            </div>
-            <div className="w-full" style={{ backgroundColor: '#008080' }}>
-              <div className="mx-auto max-w-7xl px-4">
-                <VideoFrontPage />
-              </div>
-            </div>
-          </div>
-        </>
-      </Main> */}
-      {/* <div id="snapStart" className="snap-start pt-16">
-            <HomepageStories pinPosts={homepagePinPosts} />
-          </div> */}
       <Footer />
     </main>
   )

@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import Link from 'next/link'
-import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
-import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
+import destinasianLogoBlk from '../../../assets/logo/destinasian-indo-logo.png'
+import destinasianLogoWht from '../../../assets/logo/DAI_logo.png'
 import dynamic from 'next/dynamic'
 
-const Container = dynamic(() => import('../../components/Container/Container'))
-const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
-const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
-import styles from './HomepageHeader.module.scss'
+const Container = dynamic(() =>
+  import('../../../components/Container/Container'),
+)
+const FullMenu = dynamic(() => import('../../../components/FullMenu/FullMenu'))
+const SearchResults = dynamic(() =>
+  import('../../../components/SearchResults/SearchResults'),
+)
+import styles from './HomepageDestopHeader.module.scss'
 import { useMediaQuery } from 'react-responsive'
 import Image from 'next/image'
 import { useQuery } from '@apollo/client'
-import { GetSearchResults } from '../../queries/GetSearchResults'
+import { GetSearchResults } from '../../../queries/GetSearchResults'
 import { FaSearch } from 'react-icons/fa'
+
+const TravelGuidesMenu = dynamic(() =>
+  import('../../../components/TravelGuidesMenu/TravelGuidesMenu'),
+)
+import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 
 let cx = classNames.bind(styles)
 
-export default function HomepageHeader({
+export default function HomepageDestopHeader({
   primaryMenuItems,
   secondaryMenuItems,
   thirdMenuItems,
@@ -32,9 +41,12 @@ export default function HomepageHeader({
   isNavShown,
   setIsNavShown,
   isScrolled,
+  isGuidesNavShown,
+  setIsGuidesNavShown,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 })
   const postsPerPage = 1000
+
   const [isMenuOpen, setMenuOpen] = useState(false)
   // Tambahkan class "menu-open" ke <body> saat menu dibuka
   useEffect(() => {
@@ -44,9 +56,9 @@ export default function HomepageHeader({
       document.body.classList.remove('menu-open')
     }
   }, [isMenuOpen])
-  // Clear search input
+
   const clearSearch = () => {
-    setSearchQuery('') // Reset the search query
+    setSearchQuery('')
   }
 
   // Add search query function
@@ -73,7 +85,13 @@ export default function HomepageHeader({
 
   // Initialize an array to store unique posts
   const contentNodesPosts = []
+  const { data, error } = useQuery(GetSecondaryHeaders, {
+    variables: { include: ['20', '29', '3'] },
+  })
 
+  if (error) return <div>Error loading categories!</div>
+
+  const categories = data?.categories?.edges || []
   // Loop through categories (assuming similar structure)
   searchResultsData?.categories?.edges?.forEach((post) => {
     const { databaseId } = post.node
@@ -96,9 +114,7 @@ export default function HomepageHeader({
     })
   })
 
-  // Sort contentNodesPosts array by date
   contentNodesPosts.sort((a, b) => {
-    // Assuming your date is stored in 'date' property of the post objects
     const dateA = new Date(a.date)
     const dateB = new Date(b.date)
 
@@ -111,9 +127,8 @@ export default function HomepageHeader({
       {/* Responsive header */}
       {isDesktop || (!isDesktop && !isNavShown) ? (
         <Container>
-          <div className={cx('navbar', { sticky: isScrolled && !isNavShown && !isMenuOpen,})}>
-            {/* DAI logo */}
-
+          <div className={cx('navbar', { sticky: isScrolled && !isNavShown && !isMenuOpen, })}>
+            {/* DA logo */}
             <Link href="/" className={cx('title')}>
               <div className={cx('brand')}>
                 {isNavShown ? (
@@ -140,7 +155,48 @@ export default function HomepageHeader({
               </div>
             </Link>
 
-            {/* Homepage */}
+            {/* Desktop menu*/}
+            {!isNavShown && (
+              <div className={cx('navigation-wrapper-desktop')}>
+                <div className={cx('menu-wrapper-desktop')}>
+                  <button
+                    type="button"
+                    className={cx('menu-button-desktop', 'menu-button-guides', {
+                      active: isGuidesNavShown,
+                    })}
+                    onClick={() => {
+                      setIsGuidesNavShown(!isGuidesNavShown)
+                      setSearchQuery('')
+                    }}
+                    aria-label="Toggle navigation"
+                  >
+                    <div className={cx('menu-title-desktop')}>{`Guides`}</div>
+                  </button>
+
+                  {categories.map((category) => {
+                    const { id, name, slug } = category.node
+                    return (
+                      <Link key={id} href={`/${slug}`}>
+                        <div className={cx('menu-button-desktop')}>
+                          <div className={cx('menu-title-desktop')}>{name}</div>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+            <div
+              className={cx(
+                'full-menu-content-desktop',
+                isGuidesNavShown ? 'show' : undefined,
+              )}
+            >
+              <div className={cx('full-menu-wrapper-desktop')}>
+                <TravelGuidesMenu />
+              </div>
+            </div>
+
             <Container>
               {/* Menu Button */}
               {isNavShown == false ? (
@@ -270,7 +326,7 @@ export default function HomepageHeader({
                     >
                       <g
                         transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="#000000"
+                        fill="#ffffff"
                         stroke="none"
                       >
                         <path
@@ -317,7 +373,7 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
               >
                 <g
                   transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                  fill="#000000"
+                  fill="#ffffff"
                   stroke="none"
                 >
                   <path

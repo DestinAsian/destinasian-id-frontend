@@ -10,6 +10,26 @@
   width: 100%;
 }
 
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0;
+  gap: 1rem;
+  height: 3.5rem;
+  background-color: var(--wpe--color--teal--light);
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding: 0.5rem 0;
+    height: 4.5rem;
+    background-color: var(--wpe--color--teal--light);
+  }
+  @media (min-width: $breakpoint-medium) {
+    padding: 0.5rem 0;
+    height: 4.5rem;
+    background-color: var(--wpe--color--teal--light);
+  }
+}
 .full-menu-content {
   display: flex;
   height: calc(-5.5rem + 100vh);
@@ -108,7 +128,7 @@
   // Secondary Menu {Destinations Menu}
   .first-wrapper {
     display: block;
-    border-right: 1px solid var(--wpe--color--black);
+    border-right: 1px solid var(--wpe--color--white);
     width: 47%;
     padding-right: 3%;
     margin-bottom: 2rem;
@@ -276,7 +296,7 @@
     display: flex;
     flex-direction: row;
     padding-top: 1rem;
-    border-top: 1px solid var(--wpe--color--black);
+    border-top: 1px solid var(--wpe--color--white);
     width: 100%;
     gap: 0;
 
