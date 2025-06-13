@@ -99,10 +99,7 @@ export default function FeatureWell({ featureWells }) {
                       />
                       <div className={cx('caption-wrapper')}>
                         {featureWell.category && featureWell.categoryLink && (
-                          <div
-                          
-                            className={cx('category-wrapper')}
-                          >
+                          <div className={cx('category-wrapper')}>
                             <Link href={featureWell.categoryLink}>
                               <h1 className={cx('category')}>
                                 {featureWell.category}
@@ -119,10 +116,7 @@ export default function FeatureWell({ featureWells }) {
                           </h1>
                         )}
                         {featureWell.standFirst && (
-                          <div
-                          
-                            className={cx('stand-first-wrapper')}
-                          >
+                          <div className={cx('stand-first-wrapper')}>
                             <h2 className={cx('stand-first')}>
                               {featureWell.standFirst}
                             </h2>
@@ -143,10 +137,7 @@ export default function FeatureWell({ featureWells }) {
                       />
                       <div className={cx('caption-wrapper')}>
                         {featureWell.category && featureWell.categoryLink && (
-                          <div
-                            
-                            className={cx('category-wrapper')}
-                          >
+                          <div className={cx('category-wrapper')}>
                             <Link href={featureWell.categoryLink}>
                               <h1 className={cx('category')}>
                                 {featureWell.category}
