@@ -39,7 +39,7 @@
 
 .meta-wrapper {
   display: flex;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-family: "Scheherazade New";
   font-weight: 400;
   font-size: 0.8rem;
   max-width: 100vw;
@@ -54,23 +54,24 @@
 }
 
 .category-name {
-  color: var(--wpe--color--black);
-  font-weight: 600;
+  color: var(--wpe--color--teal--light);
+  font-weight: 400;
   font-size: 0.8rem;
   text-transform: uppercase;
 
   @media (min-width: $breakpoint-large) {
-    color: var(--wpe--color--black);
+    color: var(--wpe--color--teal--light);
   }
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.25rem;
+    color: var(--wpe--color--teal--light);
   }
 }
 
 .title,
 .parent {
-  font-family: 'Unit Slab Pro Black';
+  font-family: "Scheherazade New";
   line-height: 1.2;
   font-size: 1.75rem;
   font-weight: 500;

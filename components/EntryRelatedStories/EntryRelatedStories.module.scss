@@ -15,7 +15,7 @@
 
 .entry-wrapper {
   display: flex;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-family: 'Open Sans', sans-serif;
   font-weight: 500;
   width: 100%;
   flex-direction: row;
@@ -33,8 +33,8 @@
     font-size: 1rem;
     line-height: 1.2;
     text-transform: uppercase;
-    font-weight: 700;
-    color: var(--wpe--color--orange);
+    font-weight: 400;
+    color: var(--wpe--color--teal--deep);
     width: 50%;
 
     @media (min-width: $breakpoint-extra-small) {

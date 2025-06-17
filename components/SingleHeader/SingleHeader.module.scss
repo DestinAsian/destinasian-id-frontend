@@ -34,7 +34,10 @@
 
   @media (min-width: $breakpoint-extra-small) {
     padding: 0.5rem 0;
-    height: 3.5rem;
+    height: 4.5rem;
+  }
+  &.menu-active {
+    background-color: var(--wpe--color--teal--light);
   }
 }
 
@@ -74,10 +77,6 @@
   column-gap: 3vw;
   padding-right: 2vw;
   flex: 1;
-
-  // @media (min-width: $breakpoint-extra-small) {
-  //   column-gap: 3vw;
-  // }
 }
 
 .nav-link {
@@ -87,10 +86,6 @@
   &:hover,
   &:focus {
     color: var(--wpe--color--orange);
-
-    // @media (min-width: $breakpoint-small) {
-    //   color: var(--wpe--color--orange);
-    // }
   }
 }
 
@@ -101,10 +96,6 @@
   &:hover,
   &:focus {
     color: var(--wpe--color--orange);
-
-    // @media (min-width: $breakpoint-small) {
-    //   color: var(--wpe--color--orange);
-    // }
   }
 }
 
@@ -210,6 +201,7 @@
   padding-right: 1rem;
   justify-content: flex-end;
   align-items: center;
+  background-color: var(--wpe--color--teal--light);
 
   @media (min-width: $breakpoint-extra-small) {
     padding-right: 2rem;
@@ -338,5 +330,18 @@
       top: 4.5rem;
       height: calc(-4.5rem + 100vh);
     }
+  }
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 1rem;
+  background-color: #000;
+  margin: 0 1rem 0 0;
+  display: inline-block;
+
+  @media (min-width: $breakpoint-small) {
+    width: 2px;
+    height: 2rem;
   }
 }

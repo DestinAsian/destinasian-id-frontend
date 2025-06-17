@@ -2,7 +2,6 @@ import className from 'classnames/bind'
 import styles from './ContentWrapperEditorial.module.scss'
 import dynamic from 'next/dynamic'
 
-const SingleEditorialSlider = dynamic(() => import('../SingleEditorialSlider/SingleEditorialSlider'))
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
@@ -16,46 +15,49 @@ export default function ContentWrapperEditorial({ content, children, images }) {
   useEffect(() => {
     // Function to extract image data and replace <img> with <Image>
     const extractImageData = () => {
-      // Create a DOMParser
       const parser = new DOMParser()
 
-      // Parse the HTML content
-      const doc = parser.parseFromString(content, 'text/html')
+      // Ganti domain test ke testing
+      const cleanedContent = content.replaceAll(
+        'https://test.destinasian.co.id',
+        'https://testing.destinasian.co.id'
+      )
 
-      // Get only image elements with src containing BACKEND_URL
+      const doc = parser.parseFromString(cleanedContent, 'text/html')
+
       const imageElements = doc.querySelectorAll(`img[src*="${BACKEND_URL}"]`)
 
-      // Replace <img> elements with <Image> components
       imageElements.forEach((img) => {
-        const src = img.getAttribute('src')
-        const alt = img.getAttribute('alt')
-        const width = img.getAttribute('width')
-        const height = img.getAttribute('height')
+        let src = img.getAttribute('src')
+        let srcset = img.getAttribute('srcset') || ''
+        const alt = img.getAttribute('alt') || 'Image'
+        const width = img.getAttribute('width') || '500'
+        const height = img.getAttribute('height') || '500'
 
-        // Create Image component
+        // Replace domain in src & srcset if needed
+        const testDomain = 'https://test.destinasian.co.id'
+        const newDomain = 'https://testing.destinasian.co.id'
+        src = src.replace(testDomain, newDomain)
+        srcset = srcset.replaceAll(testDomain, newDomain)
+
         const imageComponent = (
           <Image
             src={src}
             alt={alt}
-            width={width ? width : '500'}
-            height={height ? height : '500'}
+            width={width}
+            height={height}
             style={{ objectFit: 'contain' }}
             priority
           />
         )
 
-        // Render the Image component to HTML string
         const imageHtmlString = renderToStaticMarkup(imageComponent)
-
-        // Replace the <img> element with the Image HTML string in the HTML content
         img.outerHTML = imageHtmlString
       })
 
-      // Set the transformed HTML content
       setTransformedContent(doc.body.innerHTML)
     }
 
-    // Call the function to extract image data and replace <img>
     extractImageData()
   }, [content])
 
@@ -63,7 +65,6 @@ export default function ContentWrapperEditorial({ content, children, images }) {
     <article className={cx('component')}>
       {images[0] != null && (
         <div className={cx('with-slider-wrapper')}>
-          <SingleEditorialSlider images={images} />
           <div
             className={cx('content-wrapper')}
             dangerouslySetInnerHTML={{ __html: transformedContent ?? '' }}

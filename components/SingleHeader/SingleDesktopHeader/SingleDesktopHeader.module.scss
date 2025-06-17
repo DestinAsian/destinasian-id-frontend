@@ -5,9 +5,15 @@
   align-items: center;
   position: relative;
   height: auto;
-  width: 100vw;
+  left: 10%;
+  width: 80%;
   z-index: 51;
-  padding: 0.75rem 0;
+  top: -2rem;
+
+
+  @media (min-width: $breakpoint-extra-small) {
+    top: -3rem;
+  }
 
   * {
     color: var(--wpe--color--black);
@@ -18,6 +24,7 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    top: -4.5rem;
     height: 100%;
     width: 100%;
     max-width: 700px;
@@ -27,18 +34,17 @@
     @media (min-width: $breakpoint-extra-small) {
       padding: 0 2rem;
       margin: 0 auto;
+      top: -4.5rem;
+
     }
 
-    @media (min-width: $breakpoint-small) {
-      padding: 0;
-    }
 
     @media (min-width: $breakpoint-large) {
       margin: 0 auto;
       padding: 0;
       position: relative;
       max-width: 700px;
-      z-index: 48;
+      top: -0.5rem;
     }
   }
   .menu-button {
@@ -122,17 +128,24 @@
 
 .sticky {
   position: fixed;
-  top: -4.25rem;
+  top: -5.5rem;
   left: 25%;
   width: 50%;
-  transform: translateY(4rem);
+  background-color: transparent;
+  transform: translateY(7rem);
 
   * {
     color: var(--wpe--color--black);
   }
 
   @media (min-width: $breakpoint-extra-small) {
-    top: -3.5rem;
+    top: 0.5rem;
+    transform: translateY(1rem);
+  }
+  @media (min-width: $breakpoint-large) {
+    top: 0.5rem;
+    transform: translateY(1rem);
+
   }
 }
 
@@ -143,24 +156,26 @@
   position: fixed;
   z-index: 48;
   top: -150vh;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3); 
   backdrop-filter: blur(10px);
 
   &.show {
     padding: 0;
     gap: 1rem;
     top: 4.7rem;
-    height: calc(4.7rem + 100vh);
+    // height: calc(-4.7rem + 100vh);
     transition: backdrop-filter 0.8s ease-in-out, visibility 0.8s ease-in-out;
 
     @media (min-width: $breakpoint-extra-small) {
-      height: calc(5.8rem + 100vh);
-      width: 100vw;
+      top:4.5rem;
+      // height: calc(1.35rem + 100vh);
     }
 
     @media (min-width: $breakpoint-large) {
-      height: calc(6.35rem + 100vh);
+      top:4.5rem;
+      // height: calc(1.35rem + 100vh);
     }
+
   }
 }
 
