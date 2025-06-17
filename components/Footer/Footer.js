@@ -1,13 +1,10 @@
-
-
 import classNames from 'classnames/bind'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from './Footer.module.scss'
-
-import daiLogo from '../../assets/logo/destinasian-indo-logo.png'
-import damanLogo from '../../assets/logo/DAMAN_logo.png'
-import prsLogo from '../../assets/logo/Prestige_logo.png'
+import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
+import daman_footer_logo from '../../assets/logo/daman_footer_logo.png'
+import prestige_logo from '../../assets/logo/prestige_logo.png'
 
 import {
   FaFacebookF,
@@ -34,30 +31,57 @@ export default function Footer() {
           {/* KIRI */}
           <div className={cx('footer-left')}>
             <div className={cx('social-icons')}>
-              <a href={facebookUri} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <a
+                href={facebookUri}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+              >
                 <FaFacebookF />
               </a>
-              <a href={linkedInUri} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <FaXTwitter />
+              <a
+                href={linkedInUri}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <FaXTwitter />
               </a>
-              <a href={instagramUri} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a
+                href={instagramUri}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
                 <FaInstagram />
               </a>
-              <a href={linkedInUri} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <a
+                href={linkedInUri}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
                 <FaLinkedinIn />
               </a>
-              <a href={linkedInUri} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <FaThreads />
+              <a
+                href={linkedInUri}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <FaThreads />
               </a>
             </div>
 
             <div className={cx('footer-text')}>
               <p>
-                © {year} DestinAsian Media Group All Rights Reserved. Use of this site constitutes
-                acceptance of our User Agreement (effective 21/12/2015) and{' '}
-                <Link href="/privacy-policy">Privacy Policy</Link> (effective 21/12/2015). The
-                material on this site may not be reproduced, distributed, transmitted, cached or
-                otherwise used, except with prior written permission of DestinAsian Media Group.
+                © {year} DestinAsian Media Group All Rights Reserved. Use of
+                this site constitutes acceptance of our User Agreement
+                (effective 21/12/2015) and{' '}
+                <Link href="/privacy-policy">Privacy Policy</Link> (effective
+                21/12/2015). The material on this site may not be reproduced,
+                distributed, transmitted, cached or otherwise used, except with
+                prior written permission of DestinAsian Media Group.
               </p>
             </div>
           </div>
@@ -70,13 +94,13 @@ export default function Footer() {
 
             <div className={cx('footer-logos')}>
               <Image
-                src={daiLogo.src}
+                src={destinasianLogoWht.src}
                 alt="DestinAsian"
                 width={120}
                 height={30}
               />
-              <Image src={prsLogo.src} alt="Prestige" width={120} height={30} />
-              <Image src={damanLogo.src} alt="Daman" width={120} height={30} />
+              <Image src={prestige_logo.src} alt="Prestige" width={120} height={30} />
+              <Image src={daman_footer_logo.src} alt="Daman" width={120} height={30} />
             </div>
           </div>
         </div>
