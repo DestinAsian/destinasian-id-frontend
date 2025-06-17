@@ -336,3 +336,16 @@
     }
   }
 }
+
+.divider-vertical {
+  width: 1px;
+  height: 1rem;
+  background-color: #000;
+  margin: 0 1rem 0 0;
+  display: inline-block;
+
+  @media (min-width: $breakpoint-small) {
+    width: 2px;
+    height: 2rem;
+  }
+}
