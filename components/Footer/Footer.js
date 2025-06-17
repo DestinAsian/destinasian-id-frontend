@@ -4,7 +4,7 @@ import Link from 'next/link'
 import styles from './Footer.module.scss'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
 import daman_footer_logo from '../../assets/logo/daman_footer_logo.png'
-import prestige_logo from '../../assets/logo/prestige_logo.png'
+import Prestige_logo from '../../assets/logo/Prestige_logo.png'
 
 import {
   FaFacebookF,
@@ -99,7 +99,7 @@ export default function Footer() {
                 width={120}
                 height={30}
               />
-              <Image src={prestige_logo.src} alt="Prestige" width={120} height={30} />
+              <Image src={Prestige_logo.src} alt="Prestige" width={120} height={30} />
               <Image src={daman_footer_logo.src} alt="Daman" width={120} height={30} />
             </div>
           </div>
