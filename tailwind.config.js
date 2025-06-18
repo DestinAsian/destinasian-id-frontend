@@ -34,6 +34,9 @@ module.exports = {
       left: {
         '45%': '45%',
       },
+      maxWidth: {
+        custom: 'calc(1400px + 2rem)',
+      },
     },
   },
   variants: {},

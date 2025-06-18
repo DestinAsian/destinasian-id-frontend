@@ -15,7 +15,7 @@ $loading-search-result-bg: #ddd;
   animation-iteration-count: infinite;
   animation-name: SearchResultLoadingAnimation;
   animation-timing-function: linear;
-  background: #f6f7f8;
+  background: var(--wpe--main--background-color);
   background: linear-gradient(
     to right,
     #eee 8%,

@@ -57,11 +57,6 @@ export default function FrontPageLayout() {
     variables: { include: ['41'] },
   })
 
-  // const { data } = useQuery(GetCategoryUpdates, {
-  //   variables: { include: ['41'] },
-  // })
-
-  // const children = data?.category?.children?.edges || []
 
   const {
     data: insightsData,

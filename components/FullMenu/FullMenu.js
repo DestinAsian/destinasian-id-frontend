@@ -100,18 +100,18 @@ export default function FullMenu({
           </div>
         </div>
         <div className={cx('menu-wrapper')}>
+        <div className={cx('second-wrapper')}>
+            {/* Primary Menu {Destination Guides Menu} */}
+            <NavigationMenu
+              className={cx('primary-navigation')}
+              menuItems={primaryMenuItems}
+            />
+          </div>
           <div className={cx('first-wrapper')}>
             {/* Secondary Menu {Destinations Menu} */}
             <NavigationMenu
               className={cx('secondary-navigation')}
               menuItems={secondaryMenuItems}
-            />
-          </div>
-          <div className={cx('second-wrapper')}>
-            {/* Primary Menu {Destination Guides Menu} */}
-            <NavigationMenu
-              className={cx('primary-navigation')}
-              menuItems={primaryMenuItems}
             />
           </div>
           <div className={cx('third-wrapper')}>

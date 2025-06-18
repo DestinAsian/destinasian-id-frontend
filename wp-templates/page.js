@@ -10,11 +10,22 @@ const Header = dynamic(() => import('../components/Header/Header'))
 const Footer = dynamic(() => import('../components/Footer/Footer'))
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
-const ContentWrapperPage = dynamic(() => import('../components/ContentWrapperPage/ContentWrapperPage'))
-const EntryHeader = dynamic(() => import('../components/EntryHeader/EntryHeader'))
+const ContentWrapperPage = dynamic(() =>
+  import('../components/ContentWrapperPage/ContentWrapperPage'),
+)
+const EntryHeader = dynamic(() =>
+  import('../components/EntryHeader/EntryHeader'),
+)
 const SEO = dynamic(() => import('../components/SEO/SEO'))
-const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
-const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'));
+const PasswordProtected = dynamic(() =>
+  import('../components/PasswordProtected/PasswordProtected'),
+)
+const SecondaryHeader = dynamic(() =>
+  import('../components/Header/SecondaryHeader/SecondaryHeader'),
+)
+const SecondaryDesktopHeader = dynamic(() =>
+  import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
+)
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -237,6 +248,18 @@ export default function Component(props) {
     }
   }
 
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024) // breakpoint desktop (bisa kamu sesuaikan)
+    }
+
+    handleResize() // jalankan pertama kali
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
@@ -266,35 +289,62 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-      <Header
-        title={siteTitle}
-        description={siteDescription}
-        primaryMenuItems={primaryMenu}
-        secondaryMenuItems={secondaryMenu}
-        thirdMenuItems={thirdMenu}
-        fourthMenuItems={fourthMenu}
-        fifthMenuItems={fifthMenu}
-        featureMenuItems={featureMenu}
-        latestStories={allPosts}
-        menusLoading={menusLoading}
-        latestLoading={latestLoading}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isNavShown={isNavShown}
-        setIsNavShown={setIsNavShown}
-        isScrolled={isScrolled}
-      />
-      <SecondaryHeader
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        rcaDatabaseId={rcaDatabaseId}
-        rcaUri={rcaUri}
-        isGuidesNavShown={isGuidesNavShown}
-        setIsGuidesNavShown={setIsGuidesNavShown}
-        isRCANavShown={isRCANavShown}
-        setIsRCANavShown={setIsRCANavShown}
-        isScrolled={isScrolled}
-      />
+      <>
+        {isDesktop ? (
+          <SecondaryDesktopHeader
+            title={siteTitle}
+            description={siteDescription}
+            primaryMenuItems={primaryMenu}
+            secondaryMenuItems={secondaryMenu}
+            thirdMenuItems={thirdMenu}
+            fourthMenuItems={fourthMenu}
+            fifthMenuItems={fifthMenu}
+            featureMenuItems={featureMenu}
+            latestStories={allPosts}
+            menusLoading={menusLoading}
+            latestLoading={latestLoading}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+          />
+        ) : (
+          <>
+            <Header
+              title={siteTitle}
+              description={siteDescription}
+              primaryMenuItems={primaryMenu}
+              secondaryMenuItems={secondaryMenu}
+              thirdMenuItems={thirdMenu}
+              fourthMenuItems={fourthMenu}
+              fifthMenuItems={fifthMenu}
+              featureMenuItems={featureMenu}
+              latestStories={allPosts}
+              menusLoading={menusLoading}
+              latestLoading={latestLoading}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              isNavShown={isNavShown}
+              setIsNavShown={setIsNavShown}
+              isScrolled={isScrolled}
+            />
+            <SecondaryHeader
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              rcaDatabaseId={rcaDatabaseId}
+              rcaUri={rcaUri}
+              isGuidesNavShown={isGuidesNavShown}
+              setIsGuidesNavShown={setIsGuidesNavShown}
+              isRCANavShown={isRCANavShown}
+              setIsRCANavShown={setIsRCANavShown}
+              isScrolled={isScrolled}
+            />
+          </>
+        )}
+      </>
       <Main>
         <>
           {headerFooterVisibility?.headerVisibility == true ? null : (

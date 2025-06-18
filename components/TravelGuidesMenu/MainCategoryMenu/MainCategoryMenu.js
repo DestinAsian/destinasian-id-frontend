@@ -27,8 +27,8 @@ export default function MainCategoryMenu(categoryName) {
   const client = useApolloClient()
   const [HonorsCircleArray, setHonorsCircle] = useState([])
 
-  const mainCategory = categoryName?.categoryName
-
+  // const mainCategory = categoryName?.categoryName
+  const mainCategory = categoryName?.categoryName ?? '' 
   const AccordionCustomIcon = () => (
     <span className={cx('custom-icon')}>{'+'}</span>
   )
