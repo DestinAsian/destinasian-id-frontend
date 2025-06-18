@@ -153,92 +153,158 @@ export default function TravelGuidesMenu(className) {
     )
   }
 
+  // function renderMenu(items) {
+  //   return (
+  //     <div
+  //       id={items?.map((item) => {
+  //         return item?.id
+  //       })}
+  //       className={cx('menu-wrapper')}
+  //     >
+  //       {/* <Accordion
+  //         collapseAll
+  //         arrowIcon={AccordionCustomIcon}
+  //         theme={AccordionCustomTheme}
+  //       > */}
+  //       {items.map((item, index) => {
+  //         const { id, path, label, parentId, children, connectedNode } = item
+
+  //         // @TODO - Remove guard clause after ghost menu items are no longer appended to array.
+  //         if (!item.hasOwnProperty('__typename')) {
+  //           return null
+  //         }
+
+  //         return (
+  //           // <Accordion.Panel>
+  //           <div key={id} id={id} className={cx('accordion-wrapper')}>
+  //             {/* Main Guides */}
+  //             {parentId === null && (
+  //               <div
+  //                 className={cx(
+  //                   'accordion-title-wrapper',
+  //                   // open
+  //                   //   ? AccordionTitleCustomTheme?.open?.on
+  //                   //   : AccordionTitleCustomTheme?.open?.off,
+  //                 )}
+  //               >
+  //                 {/* <Accordion.Title theme={AccordionTitleCustomTheme}> */}
+  //                 <div className={cx('accordion-title')}>
+  //                   {path && (
+  //                     <Link href={path}>
+  //                       <span
+  //                         className={cx(
+  //                           'title',
+  //                           className?.className === 'dark-color'
+  //                             ? 'title-dark'
+  //                             : '',
+  //                         )}
+  //                       >
+  //                         {label}
+  //                       </span>
+  //                     </Link>
+  //                   )}
+  //                 </div>
+  //                 <div className={cx('navigation-wrapper')}>
+  //                   <div className={cx('navigation')}>
+  //                     {/* {connectedNode?.node?.children?.edges?.map((post) => ( */}
+  //                     {connectedNode?.node?.children?.edges?.map(
+  //                       (post, childIndex) => (
+  //                         <li key={post?.node?.uri} className={cx('nav-link')}>
+  //                           {childIndex > 0 && (
+  //                             <span className={cx('separator')}>|</span>
+  //                           )}
+  //                           <Link href={post?.node?.uri}>
+  //                             <h2
+  //                               className={cx(
+  //                                 'nav-name',
+  //                                 className?.className === 'dark-color'
+  //                                   ? 'nav-name-dark'
+  //                                   : '',
+  //                               )}
+  //                             >
+  //                               {post?.node?.name}
+  //                             </h2>
+  //                           </Link>
+  //                         </li>
+  //                       ),
+  //                     )}
+  //                   </div>
+  //                 </div>
+  //                 {/* </Accordion.Title> */}
+  //               </div>
+  //             )}
+  //           </div>
+  //           // </Accordion.Panel>
+  //         )
+  //       })}
+  //       {/* </Accordion> */}
+  //     </div>
+  //   )
+  // }
   function renderMenu(items) {
     return (
-      <div
-        id={items?.map((item) => {
-          return item?.id
-        })}
-        className={cx('menu-wrapper')}
-      >
-        {/* <Accordion
-          collapseAll
-          arrowIcon={AccordionCustomIcon}
-          theme={AccordionCustomTheme}
-        > */}
-        {items.map((item, index) => {
-          const { id, path, label, parentId, children, connectedNode } = item
-
-          // @TODO - Remove guard clause after ghost menu items are no longer appended to array.
-          if (!item.hasOwnProperty('__typename')) {
-            return null
+      <>
+        {items?.map((item) => {
+          const menuId = item?.id
+          const parentMenu = {
+            name: item?.label,
+            uri: item?.url || item?.path || '#',
           }
-
+  
+          const childrenMenus =
+            item?.connectedNode?.node?.children?.edges?.map((edge) => ({
+              name: edge?.node?.name,
+              uri: edge?.node?.uri,
+            })) || []
+  
           return (
-            // <Accordion.Panel>
-            <div key={id} id={id} className={cx('accordion-wrapper')}>
-              {/* Main Guides */}
-              {parentId === null && (
-                <div
-                  className={cx(
-                    'accordion-title-wrapper',
-                    // open
-                    //   ? AccordionTitleCustomTheme?.open?.on
-                    //   : AccordionTitleCustomTheme?.open?.off,
-                  )}
-                >
-                  {/* <Accordion.Title theme={AccordionTitleCustomTheme}> */}
-                  <div className={cx('accordion-title')}>
-                    {path && (
-                      <Link href={path}>
-                        <span
+            <div key={menuId} id={menuId} className={cx('menu-row')}>
+              {/* ✅ Parent menu */}
+              <div className={cx('parent-menu')}>
+                <Link href={parentMenu.uri}>
+                  <span
+                    className={cx(
+                      'title',
+                      className?.className === 'dark-color' ? 'title-dark' : ''
+                    )}
+                  >
+                    {parentMenu.name}
+                  </span>
+                  <span className={cx('separator','parent-separator')}>|</span>
+                </Link>
+              </div>
+  
+              {/* ✅ Children menu (horizontal) */}
+              {childrenMenus.length > 0 && (
+                <ul className={cx('children-menu')}>
+                  {childrenMenus.map((menu, index) => (
+                    <li key={menu?.uri} className={cx('nav-link')}>
+                      {index > 0 && (
+                        <span className={cx('separator')}>|</span>
+                      )}
+                      <Link href={menu?.uri}>
+                        <h2
                           className={cx(
-                            'title',
+                            'nav-name',
                             className?.className === 'dark-color'
-                              ? 'title-dark'
-                              : '',
+                              ? 'nav-name-dark'
+                              : ''
                           )}
                         >
-                          {label}
-                        </span>
+                          {menu?.name}
+                        </h2>
                       </Link>
-                    )}
-                  </div>
-                  <div className={cx('navigation-wrapper')}>
-                    <div className={cx('navigation')}>
-                      {connectedNode?.node?.children?.edges?.map((post) => (
-                        <li key={post?.node?.uri} className={cx('nav-link')}>
-                          {index > 0 && (
-                            <span className={cx('separator')}>|</span>
-                          )}
-                          <Link href={post?.node?.uri}>
-                            <h2
-                              className={cx(
-                                'nav-name',
-                                className?.className === 'dark-color'
-                                  ? 'nav-name-dark'
-                                  : '',
-                              )}
-                            >
-                              {post?.node?.name}
-                            </h2>
-                          </Link>
-                        </li>
-                      ))}
-                    </div>
-                  </div>
-                  {/* </Accordion.Title> */}
-                </div>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
-            // </Accordion.Panel>
           )
         })}
-        {/* </Accordion> */}
-      </div>
+      </>
     )
   }
-
+  
   return (
     <div className={cx('travel-guides-menu', className)}>
       {renderMenu(hierarchicalMenuItems)}
