@@ -113,8 +113,8 @@ export default function FrontPageLayout() {
     indoData?.categories?.edges?.map((edge) => edge.node) || []
   return (
     <>
-    <HalfPage1 />
-    <MastHeadTop />
+    {/* <HalfPage1 />
+    <MastHeadTop /> */}
       <div className={cx('component-updates')}>
         {!indoLoading && !indoError && indoCategories.length > 0 && (
           <div className={cx('category-insights-component')}>

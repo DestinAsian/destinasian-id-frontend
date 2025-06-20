@@ -379,7 +379,7 @@ export default function Component(props) {
                 </div>
               </div>
             </div>
-            <HalfPage2/>
+            {/* <HalfPage2/> */}
           </div>
           {/* <div id="snapStart" className="snap-start pt-16">
       <HomepageStories pinPosts={homepagePinPosts} />
