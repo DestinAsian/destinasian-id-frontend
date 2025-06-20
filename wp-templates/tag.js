@@ -16,7 +16,6 @@ import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
-import { GetLatestRCA } from '../queries/GetLatestRCA'
 
 export default function Component(props) {
   const { title: siteTitle, description: siteDescription } =
@@ -30,7 +29,6 @@ export default function Component(props) {
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -63,14 +61,6 @@ export default function Component(props) {
     }
   }, [isNavShown])
 
-  // Stop scrolling pages when isRCANavShown
-  useEffect(() => {
-    if (isRCANavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isRCANavShown])
 
   // Stop scrolling pages when isGuidesNavShown
   useEffect(() => {
@@ -81,28 +71,6 @@ export default function Component(props) {
     }
   }, [isGuidesNavShown])
 
-  const { data: rcaData } = useQuery(GetLatestRCA, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  const [latestRCA, setLatestRCA] = useState(null)
-
-  useEffect(() => {
-    if (rcaData?.readersChoiceAwards?.edges) {
-      // Find the first RCA where parent is null
-      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
-        (edge) => !edge.node.parent,
-      )?.node
-      setLatestRCA(filteredRCA || null)
-    }
-  }, [rcaData]) // Runs whenever rcaData changes
-
-  const {
-    // title: rcaTitle,
-    databaseId: rcaDatabaseId,
-    uri: rcaUri,
-  } = latestRCA ?? []
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -225,12 +193,8 @@ export default function Component(props) {
       <SecondaryHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        rcaDatabaseId={rcaDatabaseId}
-        rcaUri={rcaUri}
         isGuidesNavShown={isGuidesNavShown}
         setIsGuidesNavShown={setIsGuidesNavShown}
-        isRCANavShown={isRCANavShown}
-        setIsRCANavShown={setIsRCANavShown}
         isScrolled={isScrolled}
       />
       <CategoryEntryHeader parent={'Tag: '} children={0} title={name} />

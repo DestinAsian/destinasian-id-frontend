@@ -41,7 +41,7 @@ export default function SecondaryHeader({
             }}
             aria-label="Toggle navigation"
           >
-            <div className={cx('menu-title')}>{`Guides`}</div>
+            <div className={cx('menu-title' , 'menu-button-guides')}>{`Guides`}</div>
           </button>
 
           {categories.map((category) => {

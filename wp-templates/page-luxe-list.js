@@ -20,7 +20,6 @@ import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
-import { GetLatestRCA } from '../queries/GetLatestRCA'
 
 export default function SingleLuxeList(props) {
   // Loading state for previews
@@ -65,7 +64,6 @@ export default function SingleLuxeList(props) {
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -97,47 +95,6 @@ export default function SingleLuxeList(props) {
       document.body.style.overflow = 'visible'
     }
   }, [isNavShown])
-
-  // Stop scrolling pages when isRCANavShown
-  useEffect(() => {
-    if (isRCANavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isRCANavShown])
-
-  // Stop scrolling pages when isGuidesNavShown
-  useEffect(() => {
-    if (isGuidesNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isGuidesNavShown])
-
-  const { data: rcaData } = useQuery(GetLatestRCA, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  const [latestRCA, setLatestRCA] = useState(null)
-
-  useEffect(() => {
-    if (rcaData?.readersChoiceAwards?.edges) {
-      // Find the first RCA where parent is null
-      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
-        (edge) => !edge.node.parent,
-      )?.node
-      setLatestRCA(filteredRCA || null)
-    }
-  }, [rcaData]) // Runs whenever rcaData changes
-
-  const {
-    // title: rcaTitle,
-    databaseId: rcaDatabaseId,
-    uri: rcaUri,
-  } = latestRCA ?? []
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -286,12 +243,8 @@ export default function SingleLuxeList(props) {
           <SecondaryHeader
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            rcaDatabaseId={rcaDatabaseId}
-            rcaUri={rcaUri}
             isGuidesNavShown={isGuidesNavShown}
             setIsGuidesNavShown={setIsGuidesNavShown}
-            isRCANavShown={isRCANavShown}
-            setIsRCANavShown={setIsRCANavShown}
             isScrolled={isScrolled}
           />
         </>
@@ -340,12 +293,8 @@ export default function SingleLuxeList(props) {
           <SecondaryHeader
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            rcaDatabaseId={rcaDatabaseId}
-            rcaUri={rcaUri}
             isGuidesNavShown={isGuidesNavShown}
             setIsGuidesNavShown={setIsGuidesNavShown}
-            isRCANavShown={isRCANavShown}
-            setIsRCANavShown={setIsRCANavShown}
             isScrolled={isScrolled}
           />
         </>

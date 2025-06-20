@@ -175,7 +175,7 @@ export default function HomepageDestopHeader({
                     }}
                     aria-label="Toggle navigation"
                   >
-                    <div className={cx('menu-title-desktop')}>{`Guides`}</div>
+                    <div className={cx('menu-title-desktop' , 'menu-button-guides')}>{`Guides`}</div>
                   </button>
 
                   {categories.map((category) => {

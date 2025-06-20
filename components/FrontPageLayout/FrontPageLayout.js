@@ -5,38 +5,42 @@ import styles from './FrontPageLayout.module.scss'
 
 import dynamic from 'next/dynamic'
 
-const Outnow = dynamic(() => 
-  import('../../components/Outnow/Outnow'),
-)
+const Outnow = dynamic(() => import('../../components/Outnow/Outnow'))
 const CategoryUpdates = dynamic(() =>
   import('../../components/CategoryUpdates/CategoryUpdates'),
 )
 const CategoryNewsUpdates = dynamic(() =>
   import('../../components/CategoryNewsUpdates/CategoryNewsUpdates'),
 )
-const CategoryInsigths = dynamic(() =>
-  import('../../components/CategoryInsigths/CategoryInsigths'),
-)
 const CategoryFeatures = dynamic(() =>
   import('../../components/CategoryFeatures/CategoryFeatures'),
-)
-const CategoryEatdrink = dynamic(() =>
-  import('../../components/CategoryEatdrink/CategoryEatdrink'),
 )
 const CategoryIndo = dynamic(() =>
   import('../../components/CategoryIndo/CategoryIndo'),
 )
-const VideoFrontPage = dynamic(() =>
-  import('../../components/VideoFrontPage/VideoFrontPage'),
+// const CategoryInsigths = dynamic(() =>
+//   import('../../components/CategoryInsigths/CategoryInsigths'),
+// )
+// const VideoFrontPage = dynamic(() =>
+//   import('../../components/VideoFrontPage/VideoFrontPage'),
+// )
+// const CategoryEatdrink = dynamic(() =>
+//   import('../../components/CategoryEatdrink/CategoryEatdrink'),
+// )
+// const ContentWrapperVideo = dynamic(() =>
+//   import('../../components/ContentWrapperVideo/ContentWrapperVideo'),
+// )
+const    HalfPage1 = dynamic(() =>
+  import('../../components/AdUnit/HalfPage1/HalfPage1'),
 )
-const ContentWrapperVideo = dynamic(() =>
-  import('../../components/ContentWrapperVideo/ContentWrapperVideo'),
+const    MastHeadTop = dynamic(() =>
+  import('../../components/AdUnit/MastHeadTop/MastHeadTop'),
 )
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
-import { GetCategoryInsights } from '../../queries/GetCategoryInsights'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
-import { GetCategoryEatdrink } from '../../queries/GetCategoryEatdrink'
+// import { GetCategoryInsights } from '../../queries/GetCategoryInsights'
+// import { GetCategoryEatdrink } from '../../queries/GetCategoryEatdrink'
 import { GetIndoCategory } from '../../queries/GetIndoCategory'
 const cx = classNames.bind(styles)
 
@@ -57,15 +61,6 @@ export default function FrontPageLayout() {
     variables: { include: ['41'] },
   })
 
-
-  const {
-    data: insightsData,
-    loading: insightsLoading,
-    error: insightsError,
-  } = useQuery(GetCategoryInsights, {
-    variables: { id: '29' },
-  })
-
   const {
     data: featuresData,
     loading: featuresLoading,
@@ -74,13 +69,21 @@ export default function FrontPageLayout() {
     variables: { id: '20' },
   })
 
-  const {
-    data: eatdrinkData,
-    loading: eatdrinkLoading,
-    error: eatdrinkError,
-  } = useQuery(GetCategoryEatdrink, {
-    variables: { id: '651' },
-  })
+  // const {
+  //   data: insightsData,
+  //   loading: insightsLoading,
+  //   error: insightsError,
+  // } = useQuery(GetCategoryInsights, {
+  //   variables: { id: '29' },
+  // })
+
+  // const {
+  //   data: eatdrinkData,
+  //   loading: eatdrinkLoading,
+  //   error: eatdrinkError,
+  // } = useQuery(GetCategoryEatdrink, {
+  //   variables: { id: '651' },
+  // })
 
   const {
     data: indoData,
@@ -102,14 +105,16 @@ export default function FrontPageLayout() {
     ? newsupdatesData.category.children.edges
     : []
 
-  const categoryInsights = insightsData?.category
   const categoryFeatures = featuresData?.category
-  const categoryEatdrink = eatdrinkData?.category
+  //   const categoryInsights = insightsData?.category
+  // const categoryEatdrink = eatdrinkData?.category
 
   const indoCategories =
     indoData?.categories?.edges?.map((edge) => edge.node) || []
   return (
     <>
+    <HalfPage1 />
+    <MastHeadTop />
       <div className={cx('component-updates')}>
         {!indoLoading && !indoError && indoCategories.length > 0 && (
           <div className={cx('category-insights-component')}>

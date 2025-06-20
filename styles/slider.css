@@ -113,7 +113,7 @@
 
 .circle-origin {
   fill: transparent;
-  stroke: var(--wpe--color--teal--deep);
+  stroke: var(--wpe--color--white);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 65.6px;

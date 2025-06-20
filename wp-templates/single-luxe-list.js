@@ -17,7 +17,6 @@ import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
-import { GetLatestRCA } from '../queries/GetLatestRCA'
 
 export default function singleLuxeList(props) {
   // Loading state for previews
@@ -63,7 +62,6 @@ export default function singleLuxeList(props) {
   const [isNavShown, setIsNavShown] = useState(false)
   const [isLLNavShown, setIsLLNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isRCANavShown, setIsRCANavShown] = useState(false)
 
   // Slider Autoplay state
   const sliderLL = useRef(null)
@@ -112,46 +110,6 @@ export default function singleLuxeList(props) {
     }
   }, [isNavShown])
 
-  // Stop scrolling pages when isRCANavShown
-  useEffect(() => {
-    if (isRCANavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isRCANavShown])
-
-  // Stop scrolling pages when isGuidesNavShown
-  useEffect(() => {
-    if (isGuidesNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isGuidesNavShown])
-
-  const { data: rcaData } = useQuery(GetLatestRCA, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  const [latestRCA, setLatestRCA] = useState(null)
-
-  useEffect(() => {
-    if (rcaData?.readersChoiceAwards?.edges) {
-      // Find the first RCA where parent is null
-      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
-        (edge) => !edge.node.parent,
-      )?.node
-      setLatestRCA(filteredRCA || null)
-    }
-  }, [rcaData]) // Runs whenever rcaData changes
-
-  const {
-    // title: rcaTitle,
-    databaseId: rcaDatabaseId,
-    uri: rcaUri,
-  } = latestRCA ?? []
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -334,13 +292,8 @@ export default function singleLuxeList(props) {
       <LLSecondaryHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        rcaDatabaseId={rcaDatabaseId}
-        rcaUri={rcaUri}
         isGuidesNavShown={isGuidesNavShown}
         setIsGuidesNavShown={setIsGuidesNavShown}
-        isRCANavShown={isRCANavShown}
-        setIsRCANavShown={setIsRCANavShown}
-        // isScrolled={isScrolled}
         isAutoplayRunning={isAutoplayRunning}
         toggleAutoplay={toggleAutoplay}
       />

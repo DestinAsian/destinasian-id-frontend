@@ -29,9 +29,6 @@ const VideoFrontPage = dynamic(() =>
   import('../components/VideoFrontPage/VideoFrontPage'),
 )
 const Footer = dynamic(() => import('../components/Footer/Footer'))
-const ContentWrapperGuide = dynamic(() =>
-  import('../components/ContentWrapperGuide/ContentWrapperGuide'),
-)
 const HomepageSecondaryHeader = dynamic(() =>
   import(
     '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
@@ -44,6 +41,9 @@ const HomepageDestopHeader = dynamic(() =>
 )
 const FeatureWell = dynamic(() =>
   import('../components/FeatureWell/FeatureWell'),
+)
+const    HalfPage2 = dynamic(() =>
+  import('../components/AdUnit/HalfPage2/HalfPage2'),
 )
 
 import { GetMenus } from '../queries/GetMenus'
@@ -379,6 +379,7 @@ export default function Component(props) {
                 </div>
               </div>
             </div>
+            <HalfPage2/>
           </div>
           {/* <div id="snapStart" className="snap-start pt-16">
       <HomepageStories pinPosts={homepagePinPosts} />

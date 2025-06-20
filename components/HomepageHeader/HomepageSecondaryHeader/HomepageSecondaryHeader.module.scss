@@ -102,10 +102,6 @@
       color: var(--wpe--color--white);
       font-weight: bold;
 
-      // .menu-title {
-      //   font-weight: bold;
-      // }
-
       &:hover,
       &.active {
         background-color: var(--wpe--color--teal--dark);
@@ -118,6 +114,39 @@
     }
   }
 }
+
+// .sticky {
+//   background-color: var(--wpe--main--background-color);
+//   position: fixed;
+//   top: -4.25rem;
+//   left: 0;
+//   width: 100%;
+//   transform: translateY(7rem);
+
+//   @media (min-width: $breakpoint-extra-small) {
+//     top: -3.5rem;
+//   }
+
+//   * {
+//     color: var(--wpe--color--black);
+//   }
+//   // ===  BUTTON GUIDES ===
+//   &.menu-button-guides {
+//     background-color: var(--wpe--color--teal--light);
+//     color: var(--wpe--color--white);
+//     font-weight: bold;
+
+//     &:hover,
+//     &.active {
+//       background-color: var(--wpe--color--teal--dark);
+//       color: var(--wpe--color--white);
+
+//       .menu-title {
+//         font-weight: bold;
+//       }
+//     }
+//   }
+// }
 
 .sticky {
   background-color: var(--wpe--main--background-color);
@@ -134,7 +163,33 @@
   * {
     color: var(--wpe--color--black);
   }
+
+  // Cegah warna putih pada button guides tertimpa
+  .menu-button-guides {
+    color: var(--wpe--color--white) !important;
+
+    .menu-title {
+      color: var(--wpe--color--white) !important;
+    }
+
+    svg {
+      color: var(--wpe--color--white) !important;
+      fill: var(--wpe--color--white) !important;
+    }
+
+    &:hover,
+    &.active {
+      background-color: var(--wpe--color--teal--dark);
+      color: var(--wpe--color--white) !important;
+
+      .menu-title {
+        font-weight: bold;
+        color: var(--wpe--color--white) !important;
+      }
+    }
+  }
 }
+
 
 .full-menu-content {
   display: block;
