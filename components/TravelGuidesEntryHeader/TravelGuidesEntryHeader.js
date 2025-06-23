@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
 const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const LLMenu = dynamic(() => import('../../components/LLMenu/LLMenu'))
 const TravelGuidesMenu = dynamic(() => import('../../components/TravelGuidesMenu/TravelGuidesMenu'))
 import styles from './TravelGuidesEntryHeader.module.scss'
 
