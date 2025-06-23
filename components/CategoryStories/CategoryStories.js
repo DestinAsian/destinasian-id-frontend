@@ -6,12 +6,10 @@ import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
 import { GetROSBannerAds } from '../../queries/GetROSBannerAds'
 import { GetSpecificBannerAds } from '../../queries/GetSpecificBannerAds'
-import { GetAdvertorialStories } from '../../queries/GetAdvertorialStories'
 import dynamic from 'next/dynamic'
 
 const Button = dynamic(() => import('../../components/Button/Button'))
 const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
-const AdvertorialPostTwoColumns = dynamic(() => import('../../components/AdvertorialPostTwoColumns/AdvertorialPostTwoColumns'))
 const ModuleAd = dynamic(() => import('../../components/ModuleAd/ModuleAd'))
 
 
@@ -58,7 +56,7 @@ export default function CategoryStories(categoryUri) {
       first: postsPerPage,
       after: null,
       id: uri,
-      contentTypes: [CONTENT_TYPES.POST, CONTENT_TYPES.UPDATE],
+      contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
     }
   }
 
@@ -109,10 +107,7 @@ export default function CategoryStories(categoryUri) {
   //   search: null,
   // }
 
-  // // Advertorial Var
-  // let queryVariables = {
-  //   search: null,
-  // }
+
 
   // // Main Category
   // if (!parent) {
@@ -147,13 +142,7 @@ export default function CategoryStories(categoryUri) {
   //   }
   // }
 
-  // // Specific Category with no sub category
-  // if (name === ('Trade Talk' || 'Airline News' || 'Travel News')) {
-  //   // Modify the variables based on the condition
-  //   bannerVariable = {
-  //     search: name,
-  //   }
-  // }
+
 
   // // Get Specific Banner
   // const { data: bannerSpecificData, error: bannerSpecificError } = useQuery(
@@ -169,19 +158,6 @@ export default function CategoryStories(categoryUri) {
   //   return <pre>{JSON.stringify(error)}</pre>
   // }
 
-  // // Get Advertorial Stories
-  // const { data: advertorialsData, error: advertorialsError } = useQuery(
-  //   GetAdvertorialStories,
-  //   {
-  //     variables: queryVariables, // Use the modified variables
-  //     fetchPolicy: 'network-only',
-  //     nextFetchPolicy: 'cache-and-network',
-  //   },
-  // )
-
-  // if (advertorialsError) {
-  //   return <pre>{JSON.stringify(error)}</pre>
-  // }
 
   // Function to shuffle the banner ads and store them in state
   // // ROS Banner
@@ -391,9 +367,6 @@ export default function CategoryStories(categoryUri) {
   //   [],
   // )
 
-  // // Declare 2 Advertorial Post
-  // const getAdvertorialPost = [...AdvertorialArray]
-  // const numberOfAdvertorial = AdvertorialArray.length
 
   // const numberOfBannerAds = sortedBannerAdsArray.length
 
@@ -429,32 +402,7 @@ export default function CategoryStories(categoryUri) {
                 />
               </div>
             )} */}
-                {/* Advertorial Stories */}
-            {/* {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
-                {numberOfAdvertorial !== 0 && (
-                  <AdvertorialPostTwoColumns
-                    title={getAdvertorialPost[0]?.title}
-                    excerpt={getAdvertorialPost[0]?.excerpt}
-                    uri={getAdvertorialPost[0]?.uri}
-                    featuredImage={getAdvertorialPost[0]?.featuredImage?.node}
-                  />
-                )}
-              </div>
-            )} */}
-                {/* Advertorial Stories */}
-            {/* {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
-                {numberOfAdvertorial !== 0 && numberOfAdvertorial > 1 && (
-                  <AdvertorialPostTwoColumns
-                    title={getAdvertorialPost[1]?.title}
-                    excerpt={getAdvertorialPost[1]?.excerpt}
-                    uri={getAdvertorialPost[1]?.uri}
-                    featuredImage={getAdvertorialPost[1]?.featuredImage?.node}
-                  />
-                )}
-              </div>
-            )} */}
+            
           </React.Fragment>
         ))}
       {mergedPosts?.length === 0 && (

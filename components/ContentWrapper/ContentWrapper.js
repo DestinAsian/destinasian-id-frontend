@@ -5,8 +5,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import dynamic from 'next/dynamic'
-const GallerySlider = dynamic(() =>
-  import('../../components/GallerySlider/GallerySlider'),
+const GallerySliderSingle = dynamic(() =>
+  import('../../components/GallerySliderSingle/GallerySliderSingle'),
 )
 
 let cx = className.bind(styles)
@@ -84,7 +84,7 @@ export default function ContentWrapper({ content, children }) {
         if (node?.nodeType === 1 && node?.matches('div.gallery')) {
           const gallerySlider = node
 
-          return <GallerySlider gallerySlider={gallerySlider} />
+          return <GallerySliderSingle gallerySlider={gallerySlider} />
         }
 
         return (
