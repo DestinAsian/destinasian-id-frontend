@@ -1,11 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GetCategoryStories = gql`
-  query GetCategoryStories(
-    $first: Int
-    $after: String
-    $id: ID!
-  ) {
+  query GetCategoryStories($first: Int, $after: String, $id: ID!) {
     category(id: $id, idType: DATABASE_ID) {
       name
       parent {
@@ -18,7 +14,7 @@ export const GetCategoryStories = gql`
         after: $after
         where: {
           status: PUBLISH
-          contentTypes: [POST]
+          contentTypes: [POST, TRAVEL_GUIDE]
           orderby: [{ field: DATE, order: DESC }]
         }
       ) {
@@ -65,9 +61,45 @@ export const GetCategoryStories = gql`
                 }
               }
             }
+            ... on TravelGuide {
+              id
+              title
+              content
+              date
+              uri
+              excerpt
+              featuredImage {
+                node {
+                  id
+                  sourceUrl
+                  altText
+                  mediaDetails {
+                    width
+                    height
+                  }
+                }
+              }
+              author {
+                node {
+                  name
+                }
+              }
+              categories(where: { childless: true }) {
+                edges {
+                  node {
+                    name
+                    uri
+                    parent {
+                      node {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
-  }
 `
