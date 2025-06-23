@@ -72,8 +72,8 @@ export default function CategoryDesktopSecondaryHeader({
                 categoryName={parent}
               />
             )}
-          {/* Single post navigation */}
-          {data?.post?.categories?.edges[0]?.node?.parent && (
+          {/* Single travelGuide navigation */}
+          {data?.travelGuide?.categories?.edges[0]?.node?.parent && (
             <SingleNavigation
               databaseId={databaseId}
               isActiveCategory={isActiveCategory}
