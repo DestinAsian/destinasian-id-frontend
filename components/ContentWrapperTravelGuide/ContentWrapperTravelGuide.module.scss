@@ -86,17 +86,36 @@
     }
   }
   
-
+  .dropcap {
+    display: inline-block;
+    font-size: 3.6rem;
+    line-height: 1;
+    font-weight: 700;
+    font-family: var(--font--eb--garamond);
+    vertical-align: top;
+    margin-right: 0.3rem;
+    transform: translateY(0.05em); // ini agar sejajar dengan baris teks
+  
+    color: var(--wpe--color--title);
+  
+    @media (min-width: $breakpoint-small) {
+      font-size: 4.2rem;
+      margin-right: 0.4rem;
+      transform: translateY(0.1em); // sesuaikan sedikit jika font besar
+    }
+  }
+   
   :global {
     // Scope WordPress block styles within ContentWrapper.
     @import 'styles/blocks';
 
-
     .dropcap {
       padding-right: 0.5rem;
+      text-transform: uppercase;
 
       @media (min-width: $breakpoint-small) {
         padding-right: 0.5rem;
+        
       }
     }
 

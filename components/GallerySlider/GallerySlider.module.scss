@@ -89,7 +89,7 @@
       object-position: center;
       padding: 0 1rem;
       @media (min-width: $breakpoint-extra-small) {
-        padding: 0 2rem;
+        padding: 0;
       }
     }
   }
@@ -126,9 +126,11 @@
   width: 100%;
 
   @media (min-width: $breakpoint-extra-small) {
-    padding: 1rem 2rem 1.8rem;
+    padding: 1rem 0 1.8rem;
   }
 }
+
+
 
 .caption {
   background-color: var(--wpe--color--white--smoke) !important;
@@ -148,6 +150,16 @@
 
   * {
     padding: 0;
+  }
+}
+
+.gallery-slider-wrapper {
+  .image-wrapper {
+    padding: 0 !important; 
+  }
+
+  .slide-wrapper {
+    padding: 0 !important;
   }
 }
 

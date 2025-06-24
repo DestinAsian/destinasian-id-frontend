@@ -1,13 +1,26 @@
 import classNames from 'classnames/bind'
 import dynamic from 'next/dynamic'
 
-const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+const FeaturedImage = dynamic(() =>
+  import('../../components/FeaturedImage/FeaturedImage'),
+)
 const Container = dynamic(() => import('../../components/Container/Container'))
 import styles from './PostTwoColumns.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 
 let cx = classNames.bind(styles)
+
+// Fungsi untuk bersihkan tag dropcap
+function stripDropcapTags(content) {
+  if (!content) return ''
+  let cleaned = content.replace(/\[\/?dropcap\]/gi, '')
+  cleaned = cleaned.replace(
+    /<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi,
+    '$1',
+  )
+  return cleaned
+}
 
 const MAX_EXCERPT_LENGTH = 150 // Adjust the maximum length as needed
 
@@ -20,7 +33,10 @@ export default function PostTwoColumns({
   uri,
   featuredImage,
 }) {
-  let trimmedExcerpt = excerpt?.substring(0, MAX_EXCERPT_LENGTH)
+  // let trimmedExcerpt = excerpt?.substring(0, MAX_EXCERPT_LENGTH)
+  let cleanedExcerpt = stripDropcapTags(excerpt)
+  let trimmedExcerpt = cleanedExcerpt?.substring(0, MAX_EXCERPT_LENGTH)
+
   const lastSpaceIndex = trimmedExcerpt?.lastIndexOf(' ')
 
   if (lastSpaceIndex !== -1) {

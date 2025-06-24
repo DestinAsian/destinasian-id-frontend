@@ -5,8 +5,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import dynamic from 'next/dynamic'
-const GallerySliderSingle = dynamic(() =>
-  import('../../components/GallerySliderSingle/GallerySliderSingle'),
+const GallerySlider = dynamic(() =>
+  import('../../components/GallerySlider/GallerySlider'),
 )
 
 let cx = className.bind(styles)
@@ -78,13 +78,52 @@ export default function ContentWrapperTravelGuide({ content, children }) {
       // Process the content's root element to find all <img> nodes and replace them
       Array.from(doc.body.childNodes).forEach(extractImagesRecursively)
 
+      //  //  [dropcap]...[/dropcap]
+      //  const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
+
+      //  const processDropcap = (node) => {
+      //    if (
+      //      node.nodeType === 1 && // ELEMENT_NODE
+      //      node.tagName === 'P' &&
+      //      node.innerHTML.includes('[dropcap]')
+      //    ) {
+      //      node.innerHTML = node.innerHTML.replace(
+      //        dropcapRegex,
+      //        '<span class="dropcap">$1</span>',
+      //      )
+      //    }
+ 
+      //    node.childNodes?.forEach(processDropcap)
+      //  }
+ 
+       const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
+
+       const processDropcap = (node) => {
+         if (
+           node.nodeType === 1 &&
+           node.tagName === 'P' &&
+           node.innerHTML.includes('[dropcap]')
+         ) {
+           node.innerHTML = node.innerHTML.replace(
+             dropcapRegex,
+             (match, p1) =>
+               `<span class="dropcap">${p1.toUpperCase()}</span>`
+           )
+         }
+       
+         node.childNodes?.forEach(processDropcap)
+       }
+       
+       
+       Array.from(doc.body.childNodes).forEach(processDropcap)
+
       // Handle Instagram blockquote
       const elements = Array.from(doc.body.childNodes).map((node, index) => {
         // Gallery Slider
         if (node?.nodeType === 1 && node?.matches('div.gallery')) {
           const gallerySlider = node
 
-          return <GallerySliderSingle gallerySlider={gallerySlider} />
+          return <GallerySlider gallerySlider={gallerySlider} />
         }
 
         return (

@@ -9,9 +9,10 @@ import { GetSpecificBannerAds } from '../../queries/GetSpecificBannerAds'
 import dynamic from 'next/dynamic'
 
 const Button = dynamic(() => import('../../components/Button/Button'))
-const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
+const PostTwoColumns = dynamic(() =>
+  import('../../components/PostTwoColumns/PostTwoColumns'),
+)
 const ModuleAd = dynamic(() => import('../../components/ModuleAd/ModuleAd'))
-
 
 let cx = classNames.bind(styles)
 
@@ -40,24 +41,50 @@ export default function CategoryStories(categoryUri) {
   const children = categoryUri?.children
   const parent = categoryUri?.parent
 
-  let storiesVariable = {
+  // let storiesVariable = {
+  //   first: postsPerPage,
+  //   after: null,
+  //   id: uri,
+  //   contentTypes: [ CONTENT_TYPES.POST],
+  // }
+
+  // // Updates Stories
+  // if (
+  //   (parent === null || parent === undefined) &&
+  //   children?.edges?.length === 0
+  // ) {
+  //   storiesVariable = {
+  //     first: postsPerPage,
+  //     after: null,
+  //     id: uri,
+  //     contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
+  //   }
+  // }
+
+  // List kategori utama travel guide
+  const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
+
+  // Dapatkan nama kategori aktif (misalnya "dining") dan parent-nya
+  const activeCategoryName = name?.toLowerCase() || ''
+  const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
+
+  // Default: pakai POST
+  let contentTypes = [CONTENT_TYPES.POST]
+
+  // Validasi apakah kategori sekarang bagian dari travel_guides
+  const isTravelGuideCategory =
+    travelGuideRoots.includes(activeCategoryName) ||
+    travelGuideRoots.includes(parentCategoryName)
+
+  if (isTravelGuideCategory) {
+    contentTypes = [CONTENT_TYPES.TRAVEL_GUIDES]
+  }
+
+  const storiesVariable = {
     first: postsPerPage,
     after: null,
     id: uri,
-    contentTypes: [ CONTENT_TYPES.POST],
-  }
-
-  // Updates Stories
-  if (
-    (parent === null || parent === undefined) &&
-    children?.edges?.length === 0
-  ) {
-    storiesVariable = {
-      first: postsPerPage,
-      after: null,
-      id: uri,
-      contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
-    }
+    contentTypes,
   }
 
   // Get Stories / Posts
@@ -107,8 +134,6 @@ export default function CategoryStories(categoryUri) {
   //   search: null,
   // }
 
-
-
   // // Main Category
   // if (!parent) {
   //   // Modify the variables based on the condition
@@ -142,8 +167,6 @@ export default function CategoryStories(categoryUri) {
   //   }
   // }
 
-
-
   // // Get Specific Banner
   // const { data: bannerSpecificData, error: bannerSpecificError } = useQuery(
   //   GetSpecificBannerAds,
@@ -157,7 +180,6 @@ export default function CategoryStories(categoryUri) {
   // if (bannerSpecificError) {
   //   return <pre>{JSON.stringify(error)}</pre>
   // }
-
 
   // Function to shuffle the banner ads and store them in state
   // // ROS Banner
@@ -338,6 +360,11 @@ export default function CategoryStories(categoryUri) {
 
   // Declare all posts
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
+  // Pisahkan konten berdasarkan tipe konten
+  const posts = allPosts?.filter((item) => item.__typename === 'Post')
+  const travelGuide = allPosts?.filter(
+    (item) => item.__typename === 'TravelGuide',
+  )
 
   // Declare Pin Posts
   const allPinPosts = pinPosts?.pinPost ? [pinPosts?.pinPost] : []
@@ -366,7 +393,6 @@ export default function CategoryStories(categoryUri) {
   //   },
   //   [],
   // )
-
 
   // const numberOfBannerAds = sortedBannerAdsArray.length
 
@@ -402,7 +428,6 @@ export default function CategoryStories(categoryUri) {
                 />
               </div>
             )} */}
-            
           </React.Fragment>
         ))}
       {mergedPosts?.length === 0 && (
@@ -426,11 +451,9 @@ export default function CategoryStories(categoryUri) {
                 className="gap-x-4	"
               >
                 {isFetchingMore ? (
-                  'Loading...' // Display loading text when fetching
+                  'Loading...'
                 ) : (
-                  <>
-                    LOAD MORE...{' '}
-                  </>
+                  <>LOAD MORE... </>
                 )}
               </Button>
             )}
