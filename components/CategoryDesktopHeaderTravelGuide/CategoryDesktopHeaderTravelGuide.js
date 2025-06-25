@@ -81,23 +81,23 @@ export default function CategoryDesktopHeaderTravelGuide({
   const contentNodesPosts = []
 
   // Loop through categories (assuming similar structure)
-  searchResultsData?.categories?.edges?.forEach((post) => {
-    const { databaseId } = post.node
+  searchResultsData?.categories?.edges?.forEach((travelGuide) => {
+    const { databaseId } = travelGuide.node
 
     if (!uniqueDatabaseIds.has(databaseId)) {
       uniqueDatabaseIds.add(databaseId)
-      contentNodesPosts.push(post.node)
+      contentNodesPosts.push(travelGuide.node)
     }
   })
 
   // Loop through tags
   searchResultsData?.tags?.edges?.forEach((contentNodes) => {
-    contentNodes.node?.contentNodes?.edges.forEach((post) => {
-      const { databaseId } = post.node
+    contentNodes.node?.contentNodes?.edges.forEach((travelGuide) => {
+      const { databaseId } = travelGuide.node
 
       if (!uniqueDatabaseIds.has(databaseId)) {
         uniqueDatabaseIds.add(databaseId)
-        contentNodesPosts.push(post.node)
+        contentNodesPosts.push(travelGuide.node)
       }
     })
   })

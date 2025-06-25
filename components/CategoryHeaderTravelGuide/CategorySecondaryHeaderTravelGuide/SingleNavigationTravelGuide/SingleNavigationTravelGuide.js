@@ -7,12 +7,12 @@ const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuid
 const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'))
 
 import { useQuery } from '@apollo/client'
-import { GetSingleNavigation } from '../../../../queries/GetSingleNavigationTravelGuide'
+import { GetSingleNavigationTravelGuide } from '../../../../queries/GetSingleNavigationTravelGuide'
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)
 
-export default function SingleNavigationTravelGuide({
+export default function SingleNavigation({
   databaseId,
   isMainNavShown,
   setIsMainNavShown,
@@ -30,7 +30,7 @@ export default function SingleNavigationTravelGuide({
   }
 
   // Get Category
-  const { data } = useQuery(GetSingleNavigation, {
+  const { data } = useQuery(GetSingleNavigationTravelGuide, {
     variables: catVariable,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',

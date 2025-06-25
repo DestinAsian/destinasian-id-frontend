@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
 import styles from './ChildrenNavigation.module.scss'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 
 const DaGuideMenu = dynamic(() => import('../../../../components/DaGuideMenu/DaGuideMenu'))
 const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'))
@@ -19,15 +20,22 @@ export default function ChildrenNavigation({
   isNavShown,
   setIsNavShown,
   isScrolled,
-  isActive,
+  // isActive,
   categoryName,
 }) {
   const catPerPage = 4
+  const router = useRouter()
 
   let catVariable = {
     first: catPerPage,
     id: databaseId,
   }
+  // Fungsi pengecekan URI aktif
+  const isActive = (uri) => {
+    const currentPath = router.asPath.replace(/\/$/, '')
+    const linkPath = uri.replace(/\/$/, '')
+    return currentPath === linkPath
+  } 
 
   // Get Category
   const { data } = useQuery(GetChildrenNavigation, {

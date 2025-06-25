@@ -4,13 +4,13 @@ import styles from './CategorySecondaryHeaderTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
 const SingleNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'))
-const ChildrenNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigation/ChildrenNavigation'))
-const ParentNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigation/ParentNavigation'))
+const ChildrenNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'))
+const ParentNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'))
 
 
 let cx = classNames.bind(styles)
 
-export default function CategorySecondaryHeader({
+export default function CategorySecondaryHeaderTravelGuide({
   data,
   databaseId,
   categoryUri,

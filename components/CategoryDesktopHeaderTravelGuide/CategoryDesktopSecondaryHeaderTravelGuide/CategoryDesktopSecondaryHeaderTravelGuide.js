@@ -4,9 +4,9 @@ import styles from './CategoryDesktopSecondaryHeaderTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
 
-const ChildrenNavigation = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigation/ChildrenNavigation'))
-const ParentNavigation = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigation/ParentNavigation'))
-const SingleNavigation = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'))
+const ChildrenNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'))
+const ParentNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'))
+const SingleNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'))
 
 let cx = classNames.bind(styles)
 
@@ -49,7 +49,7 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
         <div className={cx('navbar')}>
           {/* Parent category navigation */}
           {data?.category?.children?.edges?.length > 0 && (
-            <ParentNavigation
+            <ParentNavigationTravelGuide
               databaseId={databaseId}
               isActive={isActive}
               isMainNavShown={isMainNavShown}
@@ -62,7 +62,7 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
           {/* Children category navigation */}
           {!data?.category?.children?.edges?.length &&
             data?.category?.parent?.node?.children?.edges?.length > 0 && (
-              <ChildrenNavigation
+              <ChildrenNavigationTravelGuide
                 databaseId={databaseId}
                 isActive={isActive}
                 isMainNavShown={isMainNavShown}
@@ -74,7 +74,7 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
             )}
           {/* Single travelGuide navigation */}
           {data?.travelGuide?.categories?.edges[0]?.node?.parent && (
-            <SingleNavigation
+            <SingleNavigationTravelGuide
               databaseId={databaseId}
               isActiveCategory={isActiveCategory}
               isMainNavShown={isMainNavShown}

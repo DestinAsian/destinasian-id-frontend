@@ -13,7 +13,6 @@ const SearchResults = dynamic(() =>
 )
 import { IoSearchOutline } from 'react-icons/io5'
 import styles from './CategoryHeaderTravelGuide.module.scss'
-import { useState, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import Image from 'next/image'
 import { useQuery } from '@apollo/client'
@@ -22,7 +21,7 @@ import { FaSearch } from 'react-icons/fa'
 
 let cx = classNames.bind(styles)
 
-export default function CategoryHeader({
+export default function CategoryHeaderTravelGuide({
   primaryMenuItems,
   secondaryMenuItems,
   thirdMenuItems,
@@ -264,13 +263,13 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
 
       {/* Search Bar */}
       <div className={cx('search-bar-wrapper')}>
-        {/* <div className={cx('search-input-wrapper')}>
+        <div className={cx('search-input-wrapper')}>
           <SearchInput
             value={searchQuery}
             onChange={(newValue) => setSearchQuery(newValue)}
             clearSearch={clearSearch}
           />
-        </div> */}
+        </div>
         <div className={cx('search-result-wrapper')}>
           {searchResultsError && (
             <div className={cx('alert-error')}>

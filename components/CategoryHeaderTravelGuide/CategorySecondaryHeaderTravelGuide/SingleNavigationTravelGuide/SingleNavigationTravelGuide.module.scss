@@ -13,37 +13,40 @@
 
   &.show {
     background-color: var(--wpe--color--white--smoke);
-    height: calc(-3.5rem + 100vh);
+    min-height: 100vh; // biar muat semua konten
     display: flex;
+    flex-direction: column;
     position: fixed;
-    left: 50%;
-    width: 100%;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    max-width: none;
     z-index: 49;
-    transform: translate(-50%);
+    overflow-y: auto;
 
     @media (min-width: $breakpoint-extra-small) {
-      height: calc(-4.5rem + 100vh);
-      max-width: 700px;
+      padding-top: 3rem;
     }
   }
 }
+
 
 .navbar-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100vw;
-  margin: 0;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
   padding: 0 1rem;
   height: 2.5rem;
 
   @media (min-width: $breakpoint-extra-small) {
-    width: 700px;
-    padding: 0;
     height: 3rem;
+    padding: 0 1rem;
   }
-
 }
+
 
 .text-menu-wrapper,
 .sticky-text-menu-wrapper {
@@ -110,31 +113,24 @@
 .nav-link {
   display: flex;
 
+  a {
+    display: inline-block;
+    padding-bottom: 0.25rem;
+  }
+
   .not-active {
-    border-bottom: 3px solid transparent;
-
-    @media (min-width: $breakpoint-extra-small) {
-      border-bottom: 5px solid transparent;
-    }
-
     &:hover,
     &:focus {
       color: var(--wpe--color--teal--light);
-
-      @media (min-width: $breakpoint-extra-small) {
-        color: var(--wpe--color--teal--light);
-      }
     }
   }
 
   .active {
     color: var(--wpe--color--teal--light);
-
-    @media (min-width: $breakpoint-extra-small) {
-      color: var(--wpe--color--teal--light);
-    }
   }
 }
+
+
 
 .nav-name {
   font-size: 0.65rem;

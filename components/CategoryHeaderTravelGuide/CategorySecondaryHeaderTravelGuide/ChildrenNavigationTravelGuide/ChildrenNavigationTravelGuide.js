@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind'
-import styles from './ParentNavigation.module.scss'
+import styles from './ChildrenNavigationTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
 const DaGuideMenu = dynamic(() => import('../../../../components/DaGuideMenu/DaGuideMenu'))
@@ -7,12 +7,12 @@ const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuid
 const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'))
 
 import { useQuery } from '@apollo/client'
-import { GetParentNavigation } from '../../../../queries/GetParentNavigation'
+import { GetChildrenNavigation } from '../../../../queries/GetChildrenNavigation'
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)
 
-export default function ParentNavigation({
+export default function ChildrenNavigationTravelGuide({
   databaseId,
   isMainNavShown,
   setIsMainNavShown,
@@ -30,7 +30,7 @@ export default function ParentNavigation({
   }
 
   // Get Category
-  const { data } = useQuery(GetParentNavigation, {
+  const { data } = useQuery(GetChildrenNavigation, {
     variables: catVariable,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
@@ -49,26 +49,28 @@ export default function ParentNavigation({
           isMainNavShown || isNavShown ? 'show' : undefined,
         )}
       >
-        {/* {'parent'} */}
-
-        {data?.category && (
-          <div
+        {/* {'children'} */}
+        <div
             className={cx(
               isScrolled ? 'sticky-text-menu-wrapper' : 'text-menu-wrapper',
               isNavShown ? 'show' : undefined,
             )}
           >
-            <div className={cx('menu-button-parent')}>
-              <Link href={data.category.uri}>
-                <button type="button" className={cx('menu-icon')}>
-                  <div className={cx('da-guide-wrapper')}>
-                    <span className={cx('nav-name')}>{data.category.name}</span>
-                  </div>
-                </button>
-              </Link>
-            </div>
+        {data?.category?.parent?.node && (
+          <div className={cx('menu-button-children')}>
+            <Link href={data.category.parent.node.uri}>
+              <button type="button" className={cx('menu-icon')}>
+                <div className={cx('da-guide-wrapper')}>
+                  <span className={cx('nav-name')}>
+                    {data.category.parent.node.name}
+                  </span>
+                </div>
+              </button>
+            </Link>
           </div>
         )}
+        </div>
+
         <div
           className={cx(
             'navigation-wrapper',
@@ -76,7 +78,7 @@ export default function ParentNavigation({
           )}
         >
           <div className={cx('navigation')}>
-            {data?.category?.children?.edges?.map((travelGuide) => (
+            {data?.category?.parent?.node?.children?.edges?.map((travelGuide) => (
               <li key={travelGuide?.node?.uri} className={cx('nav-link')}>
                 {travelGuide?.node?.uri && (
                   <Link

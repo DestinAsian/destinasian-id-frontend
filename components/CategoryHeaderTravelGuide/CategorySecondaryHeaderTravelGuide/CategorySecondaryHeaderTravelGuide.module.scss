@@ -28,9 +28,7 @@
   left: 0;
   width: 100%;
   transform: translateY(2.75rem);
-  // transition: transform 0.5s ease-in-out;
   box-shadow: 0 2px 1px 0px rgba(245, 245, 245, 0.75);
-  // z-index: 1000;
 
   @media (min-width: $breakpoint-extra-small) {
     top: 0;

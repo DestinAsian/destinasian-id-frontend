@@ -2,7 +2,6 @@
 
 .component {
   color: var(--wpe--header--color);
-  // background-color: var(--wpe--main--background-color);
   background-color: var(--wpe--color--teal--light);
   position: relative;
   width: 100%;
@@ -13,24 +12,13 @@
   }
 }
 
-// .isScrolled {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   z-index: 1000;
-// }
-
 .sticky {
-  // background-color: var(--wpe--main--background-color);
   background-color: var(--wpe--color--teal--light);
   position: fixed;
   top: -60px;
   left: 0;
   width: 100%;
-  // z-index: 1000;
   transform: translateY(60px);
-  // transition: transform 0.3s ease-in-out;
 }
 
 .navShown {
@@ -46,8 +34,6 @@
   gap: 1rem;
   height: 2.75rem;
   background-color: var(--wpe--main--background-color);
-  // if :no-button :on atau active
-  // background-color: var(--wpe--color--teal--light);
   &.menu-open {
     background-color: var(--wpe--color--teal--light);
   }

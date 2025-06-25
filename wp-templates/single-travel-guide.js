@@ -28,7 +28,11 @@ const CategorySecondaryHeaderTravelGuide = dynamic(() =>
     '../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'
   ),
 )
-
+const CategoryDesktopSecondaryHeaderTravelGuide = dynamic(() =>
+  import(
+    '../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'
+  ),
+)
 const EntryMoreReviews = dynamic(() =>
   import('../components/EntryMoreReviews/EntryMoreReviews'),
 )
@@ -48,20 +52,13 @@ const RelatedStories = dynamic(() =>
 const EntryRelatedStories = dynamic(() =>
   import('../components/EntryRelatedStories/EntryRelatedStories'),
 )
-const CategoryDesktopSecondaryHeaderTravelGuide = dynamic(() =>
-  import('../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'
-  ),
-)
 
-const SingleDesktopHeader = dynamic(() =>
-  import('../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'),
-)
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
-import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
+import { GetSecondaryHeaderTravelGuide } from '../queries/GetSecondaryHeaderTravelGuide'
 
 export default function SingleTravelGuide(props) {
   // Loading state for previews
@@ -69,14 +66,12 @@ export default function SingleTravelGuide(props) {
     return <>Loading...</>
   }
 
-  console.log(props)
-
   const [enteredPassword, setEnteredPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // Check for stored password in cookies on mount
   useEffect(() => {
-    const storedPassword = Cookies.get('postPassword')
+    const storedPassword = Cookies.get('travelGuidePassword')
     if (
       storedPassword &&
       storedPassword === props?.data?.travelGuide?.passwordProtected?.password
@@ -96,9 +91,6 @@ export default function SingleTravelGuide(props) {
     seo,
     uri,
     passwordProtected,
-    guides,
-    destinationGuides,
-    name,
   } = props?.data?.travelGuide
   const categories = props?.data?.travelGuide.categories?.edges ?? []
 
@@ -108,8 +100,6 @@ export default function SingleTravelGuide(props) {
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
-
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
 
   const [isDesktop, setIsDesktop] = useState(false)
   // Stop scrolling pages when searchQuery
@@ -160,7 +150,7 @@ export default function SingleTravelGuide(props) {
   }
 
   // Get Category
-  const { data, loading } = useQuery(GetSecondaryHeader, {
+  const { data, loading } = useQuery(GetSecondaryHeaderTravelGuide, {
     variables: catVariable,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
@@ -219,26 +209,11 @@ export default function SingleTravelGuide(props) {
   )
 
   const posts = latestStories?.posts ?? []
-  const editorials = latestStories?.editorials ?? []
-  const updates = latestStories?.updates ?? []
 
   const mainPosts = []
-  const mainEditorialPosts = []
-  const mainUpdatesPosts = []
-
   // loop through all the main categories posts
   posts?.edges?.forEach((post) => {
     mainPosts.push(post.node)
-  })
-
-  // loop through all the main categories and their posts
-  editorials?.edges?.forEach((post) => {
-    mainEditorialPosts.push(post.node)
-  })
-
-  // loop through all the main categories and their posts
-  updates?.edges?.forEach((post) => {
-    mainUpdatesPosts.push(post.node)
   })
 
   // sort posts by date
@@ -302,7 +277,7 @@ export default function SingleTravelGuide(props) {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
-      Cookies.set('postPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
+      Cookies.set('travelGuidePassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
     } else {
       alert('Incorrect password. Please try again.')
     }
@@ -337,63 +312,39 @@ export default function SingleTravelGuide(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-
+      <SingleHeader
+        title={siteTitle}
+        description={siteDescription}
+        primaryMenuItems={primaryMenu}
+        secondaryMenuItems={secondaryMenu}
+        thirdMenuItems={thirdMenu}
+        fourthMenuItems={fourthMenu}
+        fifthMenuItems={fifthMenu}
+        featureMenuItems={featureMenu}
+        latestStories={allPosts}
+        menusLoading={menusLoading}
+        latestLoading={latestLoading}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isNavShown={isNavShown}
+        setIsNavShown={setIsNavShown}
+        isScrolled={isScrolled}
+      />
       {/* Header */}
       {isDesktop ? (
-        <>
-          <SingleHeader
-            title={siteTitle}
-            description={siteDescription}
-            primaryMenuItems={primaryMenu}
-            secondaryMenuItems={secondaryMenu}
-            thirdMenuItems={thirdMenu}
-            fourthMenuItems={fourthMenu}
-            fifthMenuItems={fifthMenu}
-            featureMenuItems={featureMenu}
-            // latestStories={allPosts}
-            menusLoading={menusLoading}
-            latestLoading={latestLoading}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-          <CategoryDesktopSecondaryHeaderTravelGuide
-            data={data}
-            databaseId={databaseId}
-            categoryUri={categories[0]?.node?.uri}
-            parentCategory={categories[0]?.node?.parent?.node?.name}
-          />
-        </>
+        <CategoryDesktopSecondaryHeaderTravelGuide
+          data={data}
+          databaseId={databaseId}
+          categoryUri={categories[0]?.node?.uri}
+          parentCategory={categories[0]?.node?.parent?.node?.name}
+        />
       ) : (
-        <>
-          <SingleHeader
-            title={siteTitle}
-            description={siteDescription}
-            primaryMenuItems={primaryMenu}
-            secondaryMenuItems={secondaryMenu}
-            thirdMenuItems={thirdMenu}
-            fourthMenuItems={fourthMenu}
-            fifthMenuItems={fifthMenu}
-            featureMenuItems={featureMenu}
-            latestStories={allPosts}
-            menusLoading={menusLoading}
-            latestLoading={latestLoading}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-
-          <CategorySecondaryHeaderTravelGuide
-            data={data}
-            databaseId={databaseId}
-            categoryUri={categories[0]?.node?.uri}
-            parentCategory={categories[0]?.node?.parent?.node?.name}
-          />
-        </>
+        <CategorySecondaryHeaderTravelGuide
+          data={data}
+          databaseId={databaseId}
+          categoryUri={categories[0]?.node?.uri}
+          parentCategory={categories[0]?.node?.parent?.node?.name}
+        />
       )}
       <Main>
         <SingleSliderTravelGuide images={images} />
