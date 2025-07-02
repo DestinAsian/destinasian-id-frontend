@@ -440,11 +440,11 @@ export default function Component(props) {
           {isGuidesCategory && props?.data?.category?.guidesfitur && (
             <GuideFitur guidesfitur={props?.data?.category?.guidesfitur} />
           )}
+            {props?.data?.category?.guideStorie && (
+              <GuideStories guideStories={props.data.category.guideStorie} />
+            )}
           {props?.data?.category?.guideReelIg && (
             <GuideReelIg guideReelIg={props.data.category.guideReelIg} />
-          )}
-          {props?.data?.category?.guideStorie && (
-            <GuideStories guideStories={props.data.category.guideStorie} />
           )}
           <CategoryStories
             categoryUri={databaseId}
