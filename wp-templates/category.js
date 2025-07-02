@@ -36,6 +36,13 @@ const CategoryDesktopSecondaryHeader = dynamic(() =>
     '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
   ),
 )
+const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
+const GuideStories = dynamic(() =>
+  import('../components/GuideStories/GuideStories'),
+)
+const GuideReelIg = dynamic(() =>
+  import('../components/GuideReelIg/GuideReelIg'),
+)
 const SecondaryDesktopHeader = dynamic(() =>
   import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
 )
@@ -276,7 +283,6 @@ export default function Component(props) {
         : null,
     ],
   ]
-
   if (loading) {
     return (
       <>
@@ -431,6 +437,15 @@ export default function Component(props) {
       </>
       <Main>
         <>
+          {isGuidesCategory && props?.data?.category?.guidesfitur && (
+            <GuideFitur guidesfitur={props?.data?.category?.guidesfitur} />
+          )}
+          {props?.data?.category?.guideReelIg && (
+            <GuideReelIg guideReelIg={props.data.category.guideReelIg} />
+          )}
+          {props?.data?.category?.guideStorie && (
+            <GuideStories guideStories={props.data.category.guideStorie} />
+          )}
           <CategoryStories
             categoryUri={databaseId}
             pinPosts={pinPosts}
@@ -489,6 +504,61 @@ Component.query = gql`
       destinationGuides {
         destinationGuides
         guidesTitle
+      }
+      guidesfitur {
+        linkUrlGuideFitur1
+        linkUrlGuideFitur2
+        linkUrlGuideFitur3
+        linkUrlGuideFitur4
+        titleGuideFitur1
+        titleGuideFitur2
+        titleGuideFitur3
+        titleGuideFitur4
+        featureImageGuideFitur1 {
+          mediaItemUrl
+        }
+        featureImageGuideFitur2 {
+          mediaItemUrl
+        }
+        featureImageGuideFitur3 {
+          mediaItemUrl
+        }
+        featureImageGuideFitur4 {
+          mediaItemUrl
+        }
+      }
+      guideReelIg {
+        titleReelIg
+        contentReelIg
+        imagesGuideReelIg1 {
+          mediaItemUrl
+        }
+        linkUrlReelIg1
+        imagesGuideReelIg2 {
+          mediaItemUrl
+        }
+        linkUrlReelIg2
+        videoReelIg1
+        bannerReelIg2 {
+          mediaItemUrl
+        }
+        linkUrlBannerReelIg2
+      }
+      guideStorie {
+        bannerGuideStories {
+          mediaItemUrl
+        }
+        captionImagesGuideStories
+        contentGuideStories
+        fieldGroupName
+        linkBookHereGuideStories
+        titleGuideStories
+        imageGuideStories {
+          mediaItemUrl
+        }
+        iconGuideStories {
+          mediaItemUrl
+        }
       }
       pinPosts {
         pinPost {

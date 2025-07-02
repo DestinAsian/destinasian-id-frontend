@@ -1,0 +1,127 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.guideReelIgWrap {
+  max-width: 1400px;
+  margin: 2rem auto;
+
+  @media (max-width: $breakpoint-medium) {
+    padding: 0 1rem;
+  }
+}
+
+/* TITLE UTAMA */
+.titleWrapper {
+    text-align: center;
+    margin: 0 auto 1rem auto;
+    font-family: "Unit Slab Pro", serif;
+    font-weight: bold;
+    font-size: 2rem;
+    line-height: 1.4;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+  }
+  
+
+.contentWrapper {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1,
+  h2,
+  h3,
+  p,
+  span,
+  strong,
+  em {
+    font-family: 'Unit Slab Pro', serif;
+    font-weight: normal;
+    font-size: inherit;
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+    text-transform: none;
+    text-align: inherit;
+
+    @media (max-width: $breakpoint-medium) {
+      font-size: 1rem;
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 1.1rem;
+    font-weight: normal;
+  }
+}
+
+.topSection,
+.bottomSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  // MOBILE & TABLET
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+    padding-top: 2rem;
+  }
+}
+
+.leftImage,
+.rightImage {
+  flex: 0 0 25%;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+}
+
+.rightVideo,
+.leftBanner {
+  flex: 0 0 73%;
+
+  img,
+  iframe,
+  video,
+  .videoContent {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+}
+.leftBanner {
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+    padding-top: 1rem;
+  }
+}
+.videoContent {
+  width: 100%;
+
+  iframe,
+  video,
+  embed {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    display: block;
+  }
+}
