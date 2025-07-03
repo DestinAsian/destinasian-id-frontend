@@ -1,0 +1,58 @@
+@import 'styles/breakpoints';
+
+.componentGrid {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100vw;
+  position: relative;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 2rem;
+    max-width: calc(1400px + 2rem);
+  }
+}
+
+.leftBanner30 {
+  width: 100vw;
+  max-width: 700px;
+
+  @media (min-width: $breakpoint-small) {
+    flex: 0 0 30%;
+    width: calc(30% - 1rem);
+  }
+}
+
+.rightContent70 {
+  width: 100vw;
+  max-width: 700px;
+
+  @media (min-width: $breakpoint-small) {
+    flex: 0 0 70%;
+    width: calc(70% - 1rem);
+  }
+}
+
+.guideStoriesWrap {
+  width: 100%;
+}
+
+.contentGrid {
+  width: 100%;
+}
+
+.rightBanner img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.post-wrapper {
+  margin-bottom: 2rem;
+}

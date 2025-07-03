@@ -12,6 +12,12 @@ const Button = dynamic(() => import('../../components/Button/Button'))
 const PostTwoColumns = dynamic(() =>
   import('../../components/PostTwoColumns/PostTwoColumns'),
 )
+const GuideTwoStories = dynamic(() =>
+  import('../../components/GuideTwoStories/GuideTwoStories'),
+)
+const BannerFokusDA = dynamic(() =>
+  import('../../components/BannerFokusDA/BannerFokusDA'),
+)
 const ModuleAd = dynamic(() => import('../../components/ModuleAd/ModuleAd'))
 
 let cx = classNames.bind(styles)
@@ -86,7 +92,6 @@ export default function CategoryStories(categoryUri) {
     id: uri,
     contentTypes,
   }
-
   // Get Stories / Posts
   const { data, error, loading, fetchMore } = useQuery(GetCategoryStories, {
     variables: storiesVariable,
@@ -362,9 +367,9 @@ export default function CategoryStories(categoryUri) {
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
   // Pisahkan konten berdasarkan tipe konten
   const posts = allPosts?.filter((item) => item.__typename === 'Post')
-  const travelGuide = allPosts?.filter(
-    (item) => item.__typename === 'TravelGuide',
-  )
+  const travelGuide = allPosts
+    ?.filter((item) => item.__typename === 'TravelGuide')
+    ?.slice(1, 3)
 
   // Declare Pin Posts
   const allPinPosts = pinPosts?.pinPost ? [pinPosts?.pinPost] : []
@@ -398,6 +403,26 @@ export default function CategoryStories(categoryUri) {
 
   return (
     <div className={cx('component')}>
+      {/* {travelGuide?.length > 0 &&
+        travelGuide.map((travelGuide) => (
+          <div key={travelGuide?.id} className={cx('post-wrapper')}>
+            <GuideTwoStories
+              title={travelGuide?.title}
+              excerpt={travelGuide?.excerpt}
+              content={travelGuide?.content}
+              date={travelGuide?.date}
+              author={travelGuide?.author?.node?.name}
+              uri={travelGuide?.uri}
+              parentCategory={
+                travelGuide?.categories?.edges[0]?.node?.parent?.node?.name
+              }
+              category={travelGuide?.categories?.edges[0]?.node?.name}
+              categoryUri={travelGuide?.categories?.edges[0]?.node?.uri}
+              featuredImage={travelGuide?.featuredImage?.node}
+            />
+          </div>
+        ))} */}
+
       {mergedPosts?.length !== 0 &&
         mergedPosts?.map((post, index) => (
           <React.Fragment key={post?.id}>
@@ -450,11 +475,7 @@ export default function CategoryStories(categoryUri) {
                 }}
                 className="gap-x-4	"
               >
-                {isFetchingMore ? (
-                  'Loading...'
-                ) : (
-                  <>LOAD MORE... </>
-                )}
+                {isFetchingMore ? 'Loading...' : <>LOAD MORE... </>}
               </Button>
             )}
         </div>

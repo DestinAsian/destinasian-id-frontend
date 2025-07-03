@@ -10,6 +10,9 @@ const CategoryHeader = dynamic(() =>
 const CategoryStories = dynamic(() =>
   import('../components/CategoryStories/CategoryStories'),
 )
+const CategoryStoriesGuide = dynamic(() =>
+  import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),
+)
 const Main = dynamic(() => import('../components/Main/Main'))
 const CategoryEntryHeader = dynamic(() =>
   import('../components/CategoryEntryHeader/CategoryEntryHeader'),
@@ -39,6 +42,16 @@ const CategoryDesktopSecondaryHeader = dynamic(() =>
 const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
 const GuideStories = dynamic(() =>
   import('../components/GuideStories/GuideStories'),
+)
+const BannerFokusDA = dynamic(() =>
+  import('../components/BannerFokusDA/BannerFokusDA'),
+)
+const BannerPosterGuide = dynamic(() =>
+  import('../components/BannerPosterGuide/BannerPosterGuide'),
+)
+
+const CategoryStoriesLatest = dynamic(() =>
+  import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
 )
 const GuideReelIg = dynamic(() =>
   import('../components/GuideReelIg/GuideReelIg'),
@@ -283,6 +296,9 @@ export default function Component(props) {
         : null,
     ],
   ]
+  const category = data?.category
+
+  const guideStories = category?.guideStorie
   if (loading) {
     return (
       <>
@@ -437,15 +453,36 @@ export default function Component(props) {
       </>
       <Main>
         <>
+        <CategoryStoriesLatest
+            categoryUri={databaseId}
+            pinPosts={pinPosts}
+            name={name}
+            children={children}
+            parent={parent?.node?.name}
+            guideStories={data.category.guideStorie}
+          />
           {isGuidesCategory && props?.data?.category?.guidesfitur && (
             <GuideFitur guidesfitur={props?.data?.category?.guidesfitur} />
           )}
-            {props?.data?.category?.guideStorie && (
-              <GuideStories guideStories={props.data.category.guideStorie} />
-            )}
+          {props?.data?.category?.guideStorie && (
+            <GuideStories guideStories={props.data.category.guideStorie} />
+          )}
           {props?.data?.category?.guideReelIg && (
             <GuideReelIg guideReelIg={props.data.category.guideReelIg} />
           )}
+          {props?.data?.category?.guideStorie && (
+            <BannerFokusDA bannerDa={props.data.category.guideStorie} />
+          )}
+          {/* <CategoryStoriesGuide
+            categoryUri={databaseId}
+            pinPosts={pinPosts}
+            name={name}
+            children={children}
+            parent={parent?.node?.name}
+            guideStories={data.category.guideStorie}
+          /> */}
+
+
           <CategoryStories
             categoryUri={databaseId}
             pinPosts={pinPosts}
@@ -453,6 +490,8 @@ export default function Component(props) {
             children={children}
             parent={parent?.node?.name}
           />
+          <BannerPosterGuide guideReelIg={props.data.category.guideReelIg} bannerDa={props.data.category.guideStorie} />
+
         </>
       </Main>
       <Footer footerMenu={footerMenu} />
@@ -557,6 +596,16 @@ Component.query = gql`
           mediaItemUrl
         }
         iconGuideStories {
+          mediaItemUrl
+        }
+        linkBannerFokusHubDa
+        bannerFokusHubDa {
+          mediaItemUrl
+        }
+      }
+      bannerDa {
+        linkBannerFokusHubDa
+        bannerFokusHubDa {
           mediaItemUrl
         }
       }
