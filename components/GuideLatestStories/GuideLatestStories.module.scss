@@ -33,7 +33,7 @@
     font-weight: 900;
     line-height: 1.1;
     margin: 0.5rem 0;
-    font-family: 'Unit Slab Pro', serif;
+    font-family: 'Unit Slab Pro Black';
     letter-spacing: -0.5px;
   }
   
@@ -77,6 +77,34 @@
   .mainImage {
     width: 100%;
     height: auto;
+    object-fit: cover;
+  }
+
+  .caption {
+    font-size: 0.85rem;
+    font-style: italic;
+    font-family: 'Open Sans', sans-serif;
+    margin-top: 0.5rem;
+    padding: 0 0.5rem;
+  }
+}
+
+.imageColumn {
+  width: 100%;
+
+  @media (min-width: $breakpoint-medium) {
+    flex: 0 0 60%;
+    max-width: 60%;
+  }
+
+  .imageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .mainImage {
     object-fit: cover;
   }
 
