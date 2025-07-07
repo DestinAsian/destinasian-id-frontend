@@ -5,51 +5,32 @@ import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import classNames from 'classnames/bind'
 import styles from '../components/VideoFrontPage/VideoFrontPage.module.scss'
 import { GetVideos } from '../queries/GetVideos'
+import { GetMenus } from '../queries/GetMenus'
+import { GetLatestStories } from '../queries/GetLatestStories'
+import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
+import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 import dynamic from 'next/dynamic'
-const ContentWrapperVideo = dynamic(() =>
-  import('../components/ContentWrapperVideo/ContentWrapperVideo'),
-)
-const Outnow = dynamic(() => import('../components/Outnow/Outnow'))
-const HomepageHeader = dynamic(() =>
-  import('../components/HomepageHeader/HomepageHeader'),
-)
-
+const HomepageHeader = dynamic(() => import('../components/HomepageHeader/HomepageHeader'))
+const HomepageSecondaryHeader = dynamic(() => import('../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'))
+const HomepageDestopHeader = dynamic(() => import('../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'))
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
+const FeatureWell = dynamic(() => import('../components/FeatureWell/FeatureWell'))
+const FrontPageLayout = dynamic(() => import('../components/FrontPageLayout/FrontPageLayout'))
+const ContentWrapperVideo = dynamic(() => import('../components/ContentWrapperVideo/ContentWrapperVideo'))
+const Outnow = dynamic(() => import('../components/Outnow/Outnow'))
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+const HalfPage2 = dynamic(() => import('../components/AdUnit/HalfPage2/HalfPage2'))
+
 const SEO = dynamic(() => import('../components/SEO/SEO'))
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 const HomepageStories = dynamic(() =>
   import('../components/HomepageStories/HomepageStories'),
 )
-const FrontPageLayout = dynamic(() =>
-  import('../components/FrontPageLayout/FrontPageLayout'),
-)
 const VideoFrontPage = dynamic(() =>
   import('../components/VideoFrontPage/VideoFrontPage'),
 )
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const HomepageSecondaryHeader = dynamic(() =>
-  import(
-    '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
-  ),
-)
-const HomepageDestopHeader = dynamic(() =>
-  import(
-    '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
-  ),
-)
-const FeatureWell = dynamic(() =>
-  import('../components/FeatureWell/FeatureWell'),
-)
-const    HalfPage2 = dynamic(() =>
-  import('../components/AdUnit/HalfPage2/HalfPage2'),
-)
-
-import { GetMenus } from '../queries/GetMenus'
-import { GetLatestStories } from '../queries/GetLatestStories'
-import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
-import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 export default function Component(props) {
   // Loading state for previews
@@ -68,11 +49,8 @@ export default function Component(props) {
   const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
   const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
-  // Search function content
   const [searchQuery, setSearchQuery] = useState('')
-  // Scrolled Function
   const [isScrolled, setIsScrolled] = useState(false)
-  // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   // Stop scrolling pages when searchQuery
@@ -115,46 +93,21 @@ export default function Component(props) {
     }
   }, [isGuidesNavShown])
 
-  const featureWell = [
-    {
-      type: acfHomepageSlider?.typeSlide1,
-      videoSrc: acfHomepageSlider?.video1?.mediaItemUrl,
-      desktopSrc: acfHomepageSlider?.desktopSlide1?.mediaItemUrl,
-      mobileSrc: acfHomepageSlider?.mobileSlide1?.mediaItemUrl,
-      url: acfHomepageSlider?.slideLink1,
-      category: acfHomepageSlider?.slideCategory1,
-      categoryLink: acfHomepageSlider?.slideCategoryLink1,
-      caption: acfHomepageSlider?.slideCaption1,
-      standFirst: acfHomepageSlider?.slideStandFirst1,
-    },
-    {
-      type: acfHomepageSlider?.typeSlide2,
-      videoSrc: acfHomepageSlider?.video2?.mediaItemUrl,
-      desktopSrc: acfHomepageSlider?.desktopSlide2?.mediaItemUrl,
-      mobileSrc: acfHomepageSlider?.mobileSlide2?.mediaItemUrl,
-      url: acfHomepageSlider?.slideLink2,
-      category: acfHomepageSlider?.slideCategory2,
-      categoryLink: acfHomepageSlider?.slideCategoryLink2,
-      caption: acfHomepageSlider?.slideCaption2,
-      standFirst: acfHomepageSlider?.slideStandFirst2,
-    },
-    {
-      type: acfHomepageSlider?.typeSlide3,
-      videoSrc: acfHomepageSlider?.video3?.mediaItemUrl,
-      desktopSrc: acfHomepageSlider?.desktopSlide3?.mediaItemUrl,
-      mobileSrc: acfHomepageSlider?.mobileSlide3?.mediaItemUrl,
-      url: acfHomepageSlider?.slideLink3,
-      category: acfHomepageSlider?.slideCategory3,
-      categoryLink: acfHomepageSlider?.slideCategoryLink3,
-      caption: acfHomepageSlider?.slideCaption3,
-      standFirst: acfHomepageSlider?.slideStandFirst3,
-    },
-  ]
+   // Slideshow untuk FeatureWell
+   const featureWell = [1, 2, 3].map((num) => ({
+    type: acfHomepageSlider?.[`typeSlide${num}`],
+    videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
+    desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
+    mobileSrc: acfHomepageSlider?.[`mobileSlide${num}`]?.mediaItemUrl,
+    url: acfHomepageSlider?.[`slideLink${num}`],
+    category: acfHomepageSlider?.[`slideCategory${num}`],
+    categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
+    caption: acfHomepageSlider?.[`slideCaption${num}`],
+    standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
+  }))
 
   useEffect(() => {
     const filteredFeatureWell = featureWell.filter((item) => item.type !== null)
-
-    // if (filteredFeatureWell.length > 0) {
     if (filteredFeatureWell?.[0]) {
       const randomIndex = Math.floor(
         Math.random() * filteredFeatureWell?.length,
@@ -185,16 +138,12 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
 
-  // Get pin posts stories
-  const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
-    variables: {
-      id: databaseId,
-      asPreview: asPreview,
-    },
+   // Pin posts
+   const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
+    variables: { id: databaseId, asPreview },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
-
   // State variable of homepage pin posts
   const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
 
@@ -222,13 +171,9 @@ export default function Component(props) {
 
   const posts = latestStories?.posts ?? []
   const guides = latestStories?.guides ?? []
-  // const editorials = latestStories?.editorials ?? []
-  // const updates = latestStories?.updates ?? []
 
   const mainPosts = []
   const mainGuidePosts = []
-  // const mainEditorialPosts = []
-  // const mainUpdatesPosts = []
 
   // loop through all the main categories posts
   posts?.edges?.forEach((post) => {
@@ -238,16 +183,6 @@ export default function Component(props) {
   guides?.edges?.forEach((post) => {
     mainGuidePosts.push(post.node)
   })
-
-  // // loop through all the main categories and their posts
-  // editorials?.edges?.forEach((post) => {
-  //   mainEditorialPosts.push(post.node)
-  // })
-
-  // // loop through all the main categories and their posts
-  // updates?.edges?.forEach((post) => {
-  //   mainUpdatesPosts.push(post.node)
-  // })
 
   // sort posts by date
   const sortPostsByDate = (a, b) => {
@@ -259,8 +194,6 @@ export default function Component(props) {
   // define mainCatPostCards
   const mainCatPosts = [
     ...(mainPosts != null ? mainPosts : []),
-    // ...(mainEditorialPosts != null ? mainEditorialPosts : []),
-    // ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
   ]
 
   // sortByDate mainCat & childCat Posts
@@ -270,7 +203,7 @@ export default function Component(props) {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024) // breakpoint desktop (bisa kamu sesuaikan)
+      setIsDesktop(window.innerWidth >= 1024)
     }
 
     handleResize() // jalankan pertama kali
@@ -379,7 +312,7 @@ export default function Component(props) {
                 </div>
               </div>
             </div>
-            {/* <HalfPage2/> */}
+            <HalfPage2/>
           </div>
           {/* <div id="snapStart" className="snap-start pt-16">
       <HomepageStories pinPosts={homepagePinPosts} />
