@@ -40,13 +40,6 @@ export default function GuideLatestStories({
       <div className={cx('twoColumnLayout')}>
         {/* Konten kiri */}
         <div className={cx('textColumn')}>
-          {/* {categoryUri && (
-            <Link href={categoryUri}>
-              <h5 className={cx('category')}>
-                {parentCategory} {category}
-              </h5>
-            </Link>
-          )} */}
           {uri && (
             <Link href={uri}>
               <h2 className={cx('title')}>{title}</h2>
