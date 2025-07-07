@@ -8,13 +8,14 @@ import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import { GetIndoCategory } from '../../queries/GetIndoCategory'
 
+import Outnow from '../Outnow/Outnow'
+import CategoryUpdates from '../CategoryUpdates/CategoryUpdates'
+import CategoryNewsUpdates from '../CategoryNewsUpdates/CategoryNewsUpdates'
+import CategoryFeatures from '../CategoryFeatures/CategoryFeatures'
+import CategoryIndo from '../CategoryIndo/CategoryIndo'
+
 const cx = classNames.bind(styles)
 
-const Outnow = dynamic(() => import('../../components/Outnow/Outnow'))
-const CategoryUpdates = dynamic(() => import('../../components/CategoryUpdates/CategoryUpdates'))
-const CategoryNewsUpdates = dynamic(() => import('../../components/CategoryNewsUpdates/CategoryNewsUpdates'))
-const CategoryFeatures = dynamic(() => import('../../components/CategoryFeatures/CategoryFeatures'))
-const CategoryIndo = dynamic(() => import('../../components/CategoryIndo/CategoryIndo'))
 
 // const HalfPage1 = dynamic(() => import('../../components/AdUnit/HalfPage1/HalfPage1'))
 // const MastHeadTop = dynamic(() => import('../../components/AdUnit/MastHeadTop/MastHeadTop'))
@@ -25,24 +26,17 @@ export default function FrontPageLayout() {
     variables: { include: ['14616', '14601', '14606', '14611'] },
   })
 
-  // Query: Updates & News Updates (pakai query yang sama)
   const { data: updatesData, loading: updatesLoading, error: updatesError } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
   })
 
-  const { data: newsupdatesData, loading: newsupdatesLoading, error: newsupdatesError } = useQuery(GetCategoryUpdates, {
-    variables: { include: ['41'] },
-  })
-
-  // Query: Features
   const { data: featuresData, loading: featuresLoading, error: featuresError } = useQuery(GetCategoryFeatures, {
     variables: { id: '20' },
   })
 
   // Parsing Data
   const indoCategories = indoData?.categories?.edges?.map(edge => edge.node) || []
-  const updatesCategory = updatesData?.category?.children?.edges || []
-  const newsupdatesCategory = newsupdatesData?.category?.children?.edges || []
+  const categoryEdges = updatesData?.category?.children?.edges || []
   const categoryFeatures = featuresData?.category
 
   return (
@@ -62,10 +56,10 @@ export default function FrontPageLayout() {
       <hr className={cx('divider')} />
 
       {/* CATEGORY UPDATES */}
-      {!updatesLoading && !updatesError && updatesCategory.length > 0 && (
+      {!updatesLoading && !updatesError && categoryEdges.length > 0 && (
         <div className={cx('component-updates')}>
           <div className={cx('category-updates-component')}>
-            <CategoryUpdates data={updatesCategory} />
+            <CategoryUpdates data={categoryEdges} />
           </div>
         </div>
       )}
@@ -73,7 +67,7 @@ export default function FrontPageLayout() {
       <hr className={cx('divider')} />
 
       {/* NEWS UPDATES - TITLE */}
-      {newsupdatesCategory.map(({ node: category }) => {
+      {categoryEdges.map(({ node: category }) => {
         const parentName = category?.parent?.node?.name || ''
         const childName = category.name
         return (
@@ -89,9 +83,9 @@ export default function FrontPageLayout() {
       <div className={cx('component-news-updates')}>
         <div className={cx('two-columns')}>
           <div className={cx('left-column')}>
-            {!newsupdatesLoading && !newsupdatesError && newsupdatesCategory.length > 0 && (
+            {!updatesLoading && !updatesError && categoryEdges.length > 0 && (
               <div className={cx('category-updates-component')}>
-                <CategoryNewsUpdates data={newsupdatesCategory} />
+                <CategoryNewsUpdates data={categoryEdges} />
               </div>
             )}
           </div>
