@@ -1,26 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategoryStories.module.scss'
 import { useQuery } from '@apollo/client'
 import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
-import { GetROSBannerAds } from '../../queries/GetROSBannerAds'
-import { GetSpecificBannerAds } from '../../queries/GetSpecificBannerAds'
 import dynamic from 'next/dynamic'
 
 const Button = dynamic(() => import('../../components/Button/Button'))
-const PostTwoColumns = dynamic(() =>
-  import('../../components/PostTwoColumns/PostTwoColumns'),
-)
-const GuideTwoStories = dynamic(() =>
-  import('../../components/GuideTwoStories/GuideTwoStories'),
-)
-const BannerFokusDA = dynamic(() =>
-  import('../../components/BannerFokusDA/BannerFokusDA'),
-)
-const ModuleAd = dynamic(() => import('../../components/ModuleAd/ModuleAd'))
+const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
 
-let cx = classNames.bind(styles)
+const cx = classNames.bind(styles)
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -31,60 +20,21 @@ function shuffleArray(array) {
 }
 
 export default function CategoryStories(categoryUri) {
-  // Fetching Posts
   const [isFetchingMore, setIsFetchingMore] = useState(false)
-  // Declare state for banner ads
-  const [ROSAdsArray, setROSAdsArray] = useState([])
-  const [SpecificAdsArray, setSpecificAdsArray] = useState([])
-  // const [AdvertorialArray, setAdvertorialArray] = useState([])
-  // Post per fetching
-  const postsPerPage = 4
-  // const bannerPerPage = 20
 
+  const postsPerPage = 4
   const uri = categoryUri?.categoryUri
   const pinPosts = categoryUri?.pinPosts
   const name = categoryUri?.name
   const children = categoryUri?.children
   const parent = categoryUri?.parent
 
-  // let storiesVariable = {
-  //   first: postsPerPage,
-  //   after: null,
-  //   id: uri,
-  //   contentTypes: [ CONTENT_TYPES.POST],
-  // }
-
-  // // Updates Stories
-  // if (
-  //   (parent === null || parent === undefined) &&
-  //   children?.edges?.length === 0
-  // ) {
-  //   storiesVariable = {
-  //     first: postsPerPage,
-  //     after: null,
-  //     id: uri,
-  //     contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
-  //   }
-  // }
-
-  // List kategori utama travel guide
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
-
-  // Dapatkan nama kategori aktif (misalnya "dining") dan parent-nya
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
+  const isTravelGuideCategory = travelGuideRoots.includes(activeCategoryName) || travelGuideRoots.includes(parentCategoryName)
 
-  // Default: pakai POST
-  let contentTypes = [CONTENT_TYPES.POST]
-
-  // Validasi apakah kategori sekarang bagian dari travel_guides
-  const isTravelGuideCategory =
-    travelGuideRoots.includes(activeCategoryName) ||
-    travelGuideRoots.includes(parentCategoryName)
-
-  if (isTravelGuideCategory) {
-    contentTypes = [CONTENT_TYPES.TRAVEL_GUIDES]
-  }
+  const contentTypes = isTravelGuideCategory ? [CONTENT_TYPES.TRAVEL_GUIDES] : [CONTENT_TYPES.POST]
 
   const storiesVariable = {
     first: postsPerPage,
@@ -92,7 +42,7 @@ export default function CategoryStories(categoryUri) {
     id: uri,
     contentTypes,
   }
-  // Get Stories / Posts
+
   const { data, error, loading, fetchMore } = useQuery(GetCategoryStories, {
     variables: storiesVariable,
     fetchPolicy: 'network-only',
@@ -118,366 +68,85 @@ export default function CategoryStories(categoryUri) {
     }
   }
 
-  // // Get ROS Banner
-  // const { data: bannerROSData, error: bannerROSError } = useQuery(
-  //   GetROSBannerAds,
-  //   {
-  //     variables: {
-  //       first: bannerPerPage,
-  //     },
-  //     fetchPolicy: 'network-only',
-  //     nextFetchPolicy: 'cache-and-network',
-  //   },
-  // )
+  const getFormattedUri = (post) => {
+    const categoryEdge = post?.categories?.edges?.[0]
+    const category = categoryEdge?.node?.name?.toLowerCase()
+    const parentCategory = categoryEdge?.node?.parent?.node?.name?.toLowerCase()
+    const slug = post?.slug
 
-  // if (bannerROSError) {
-  //   return <pre>{JSON.stringify(error)}</pre>
-  // }
+    const isTravelGuideParent = travelGuideRoots.includes(category)
+    const isTravelGuideChild = travelGuideRoots.includes(parentCategory)
 
-  // let bannerVariable = {
-  //   first: bannerPerPage,
-  //   search: null,
-  // }
+    if (isTravelGuideParent) return `/travel-guides/${category}/${slug}`
+    if (isTravelGuideChild) return `/travel-guides/${parentCategory}/${slug}`
 
-  // // Main Category
-  // if (!parent) {
-  //   // Modify the variables based on the condition
-  //   bannerVariable = {
-  //     search: name,
-  //   }
-  //   queryVariables = {
-  //     search: name,
-  //   }
-  // }
+    return post?.uri
+  }
 
-  // // Sub Category
-  // if (children?.edges?.length !== 0 && parent !== (null || undefined)) {
-  //   // Modify the variables based on the condition
-  //   bannerVariable = {
-  //     search: name,
-  //   }
-  //   queryVariables = {
-  //     search: name,
-  //   }
-  // }
-
-  // // Child of Sub Category
-  // if (children?.edges?.length === 0 && parent !== (null || undefined)) {
-  //   // Modify the variables based on the condition
-  //   bannerVariable = {
-  //     search: parent,
-  //   }
-  //   queryVariables = {
-  //     search: parent,
-  //   }
-  // }
-
-  // // Get Specific Banner
-  // const { data: bannerSpecificData, error: bannerSpecificError } = useQuery(
-  //   GetSpecificBannerAds,
-  //   {
-  //     variables: bannerVariable,
-  //     fetchPolicy: 'network-only',
-  //     nextFetchPolicy: 'cache-and-network',
-  //   },
-  // )
-
-  // if (bannerSpecificError) {
-  //   return <pre>{JSON.stringify(error)}</pre>
-  // }
-
-  // Function to shuffle the banner ads and store them in state
-  // // ROS Banner
-  // useEffect(() => {
-  //   const shuffleBannerAds = () => {
-  //     const bannerAdsArrayObj = Object.values(
-  //       bannerROSData?.bannerAds?.edges || [],
-  //     )
-
-  //     // Separate shuffled banner ads with <img> tags from those without
-  //     const bannerROSAdsWithImg = bannerAdsArrayObj.filter(
-  //       (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
-  //     )
-
-  //     // Shuffle only the otherBannerAds array
-  //     const ROSBannerAds = shuffleArray(bannerROSAdsWithImg)
-
-  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
-  //     const shuffledBannerAdsArray = [...ROSBannerAds]
-
-  //     setROSAdsArray(shuffledBannerAdsArray)
-  //   }
-
-  //   // Shuffle the banner ads when the component mounts
-  //   shuffleBannerAds()
-
-  //   // Shuffle the banner ads every 10 seconds
-  //   const shuffleInterval = setInterval(() => {
-  //     shuffleBannerAds()
-  //   }, 60000) // 10000 milliseconds = 10 seconds
-
-  //   // Cleanup the interval when the component unmounts
-  //   return () => {
-  //     clearInterval(shuffleInterval)
-  //   }
-  // }, [bannerROSData]) // Use bannerROSData as a dependency to trigger shuffling when new data arrives
-
-  // // Function to shuffle the banner ads and store them in state
-  // // Specific Banner
-  // useEffect(() => {
-  //   const shuffleBannerAds = () => {
-  //     const bannerAdsArrayObj = Object.values(
-  //       bannerSpecificData?.bannerAds?.edges || [],
-  //     )
-
-  //     // Separate shuffled banner ads with <img> tags from those without
-  //     const bannerSpecificAdsWithImg = bannerAdsArrayObj.filter(
-  //       (bannerAd) => !bannerAd?.node?.content.includes('<!--'),
-  //     )
-
-  //     // Shuffle only the otherBannerAds array
-  //     const SpecificBannerAds = shuffleArray(bannerSpecificAdsWithImg)
-
-  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
-  //     const shuffledBannerAdsArray = [...SpecificBannerAds]
-
-  //     setSpecificAdsArray(shuffledBannerAdsArray)
-  //   }
-
-  //   // Shuffle the banner ads when the component mounts
-  //   shuffleBannerAds()
-
-  //   // Shuffle the banner ads every 10 seconds
-  //   const shuffleInterval = setInterval(() => {
-  //     shuffleBannerAds()
-  //   }, 60000) // 10000 milliseconds = 10 seconds
-
-  //   // Cleanup the interval when the component unmounts
-  //   return () => {
-  //     clearInterval(shuffleInterval)
-  //   }
-  // }, [bannerSpecificData]) // Use bannerROSData as a dependency to trigger shuffling when new data arrives
-
-  // // Advertorial Stories
-  // useEffect(() => {
-  //   const shuffleAdvertorialPost = () => {
-  //     // Create a Set to store unique databaseId values
-  //     const uniqueDatabaseIds = new Set()
-
-  //     // Initialize an array to store unique posts
-  //     const contentAdvertorials = []
-
-  //     // Loop through all the contentNodes posts
-  //     advertorialsData?.tags?.edges?.forEach((contentNodes) => {
-  //       {
-  //         contentNodes?.node?.contentNodes?.edges?.length !== 0 &&
-  //           contentNodes.node?.contentNodes?.edges.forEach((post) => {
-  //             const { databaseId } = post.node
-
-  //             // Check if the databaseId is unique (not in the Set)
-  //             if (!uniqueDatabaseIds.has(databaseId)) {
-  //               uniqueDatabaseIds.add(databaseId) // Add the databaseId to the Set
-  //               contentAdvertorials.push(post.node) // Push the unique post to the array
-  //             }
-  //           })
-  //       }
-  //     })
-
-  //     // Sort contentNodesPosts array by date
-  //     contentAdvertorials.sort((a, b) => {
-  //       // Assuming your date is stored in 'date' property of the post objects
-  //       const dateA = new Date(a.date)
-  //       const dateB = new Date(b.date)
-
-  //       // Compare the dates
-  //       return dateB - dateA
-  //     })
-
-  //     // const advertorialArray = Object.values(contentAdvertorials || [])
-
-  //     // Shuffle only the otherBannerAds array
-  //     const shuffleAdvertorialPost = shuffleArray(contentAdvertorials)
-
-  //     // Concatenate the arrays with pinned ads first and shuffled other banner ads
-  //     const shuffledAdvertorialArray = [...shuffleAdvertorialPost]
-
-  //     // Get the last two elements
-  //     const lastTwoAdvertorials = shuffledAdvertorialArray.slice(-2)
-
-  //     setAdvertorialArray(lastTwoAdvertorials)
-  //   }
-
-  //   // Shuffle the banner ads when the component mounts
-  //   shuffleAdvertorialPost()
-  // }, [advertorialsData])
-
-  // Function to fetch more posts
   const fetchMorePosts = () => {
-    if (
-      !isFetchingMore &&
-      data?.category?.contentNodes?.pageInfo?.hasNextPage
-    ) {
+    if (!isFetchingMore && data?.category?.contentNodes?.pageInfo?.hasNextPage) {
       setIsFetchingMore(true)
       fetchMore({
-        variables: {
-          after: data?.category?.contentNodes?.pageInfo?.endCursor,
-        },
+        variables: { after: data?.category?.contentNodes?.pageInfo?.endCursor },
         updateQuery,
-      }).then(() => {
-        setIsFetchingMore(false) // Reset the flag after fetch is done
-      })
+      }).then(() => setIsFetchingMore(false))
     }
   }
 
-  // // Scroll event listener to detect when user scrolls to the bottom
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const scrolledToBottom =
-  //       window.scrollY + window.innerHeight >=
-  //       document.documentElement.scrollHeight
-
-  //     if (scrolledToBottom) {
-  //       // Call the function to fetch more when scrolled to the bottom
-  //       fetchMorePosts()
-  //     }
-  //   }
-
-  //   window.addEventListener('scroll', handleScroll)
-
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll)
-  //   }
-  // }, [fetchMorePosts])
-
-  if (error) {
-    return <pre>{JSON.stringify(error)}</pre>
-  }
-
+  if (error) return <pre>{JSON.stringify(error)}</pre>
   if (loading) {
     return (
-      <>
-        <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]	">
-          <Button className="gap-x-4	">{'Loading...'}</Button>
-        </div>
-      </>
+      <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
+        <Button className="gap-x-4">{'Loading...'}</Button>
+      </div>
     )
   }
 
-  // Declare all posts
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
-  // Pisahkan konten berdasarkan tipe konten
-  const posts = allPosts?.filter((item) => item.__typename === 'Post')
-  const travelGuide = allPosts
-    ?.filter((item) => item.__typename === 'TravelGuide')
-    ?.slice(1, 3)
-
-  // Declare Pin Posts
-  const allPinPosts = pinPosts?.pinPost ? [pinPosts?.pinPost] : []
-
-  // Merge All posts and Pin posts
-  const mergedPosts = [...allPinPosts, ...allPosts].reduce(
-    (uniquePosts, post) => {
-      if (!uniquePosts.some((uniquePost) => uniquePost?.id === post?.id)) {
-        uniquePosts.push(post)
-      }
-      return uniquePosts
-    },
-    [],
-  )
-
-  // // Concatenate the arrays to place ads specificAds first
-  // const sortedBannerAdsArray = [...SpecificAdsArray, ...ROSAdsArray].reduce(
-  //   (uniqueAds, ad) => {
-  //     if (
-  //       !uniqueAds.some((uniqueAd) => uniqueAd?.node?.id === ad?.node?.id) &&
-  //       !/(focus on|spotlight on)/i.test(ad?.node?.title || '')
-  //     ) {
-  //       uniqueAds.push(ad)
-  //     }
-  //     return uniqueAds
-  //   },
-  //   [],
-  // )
-
-  // const numberOfBannerAds = sortedBannerAdsArray.length
+  const allPinPosts = pinPosts?.pinPost ? [pinPosts.pinPost] : []
+  const mergedPosts = [...allPinPosts, ...allPosts].reduce((uniquePosts, post) => {
+    if (!uniquePosts.some((uniquePost) => uniquePost?.id === post?.id)) {
+      uniquePosts.push(post)
+    }
+    return uniquePosts
+  }, [])
 
   return (
     <div className={cx('component')}>
-      {/* {travelGuide?.length > 0 &&
-        travelGuide.map((travelGuide) => (
-          <div key={travelGuide?.id} className={cx('post-wrapper')}>
-            <GuideTwoStories
-              title={travelGuide?.title}
-              excerpt={travelGuide?.excerpt}
-              content={travelGuide?.content}
-              date={travelGuide?.date}
-              author={travelGuide?.author?.node?.name}
-              uri={travelGuide?.uri}
-              parentCategory={
-                travelGuide?.categories?.edges[0]?.node?.parent?.node?.name
-              }
-              category={travelGuide?.categories?.edges[0]?.node?.name}
-              categoryUri={travelGuide?.categories?.edges[0]?.node?.uri}
-              featuredImage={travelGuide?.featuredImage?.node}
+      {mergedPosts?.length !== 0 &&
+        mergedPosts.map((post) => (
+          <div key={post?.id} className={cx('post-wrapper')}>
+            <PostTwoColumns
+              title={post?.title}
+              excerpt={post?.excerpt}
+              content={post?.content}
+              date={post?.date}
+              author={post?.author?.node?.name}
+              uri={post?.uri}
+              parentCategory={post?.categories?.edges[0]?.node?.parent?.node?.name}
+              category={post?.categories?.edges[0]?.node?.name}
+              categoryUri={post?.categories?.edges[0]?.node?.uri}
+              featuredImage={post?.featuredImage?.node}
             />
           </div>
-        ))} */}
-
-      {mergedPosts?.length !== 0 &&
-        mergedPosts?.map((post, index) => (
-          <React.Fragment key={post?.id}>
-            <div className={cx('post-wrapper')}>
-              <PostTwoColumns
-                title={post?.title}
-                excerpt={post?.excerpt}
-                content={post?.content}
-                date={post?.date}
-                author={post?.author?.node?.name}
-                uri={post?.uri}
-                parentCategory={
-                  post?.categories?.edges[0]?.node?.parent?.node?.name
-                }
-                category={post?.categories?.edges[0]?.node?.name}
-                categoryUri={post?.categories?.edges[0]?.node?.uri}
-                featuredImage={post?.featuredImage?.node}
-              />
-            </div>
-            {/* Show 1st banner after 2 posts and then every 4 posts */}
-            {/* {(index - 1) % 4 === 0 && (
-              <div className={cx('banner-ad-wrapper')}>
-                <ModuleAd
-                  bannerAd={
-                    sortedBannerAdsArray[((index - 1) / 4) % numberOfBannerAds]
-                      ?.node?.content
-                  }
-                />
-              </div>
-            )} */}
-          </React.Fragment>
         ))}
+
       {mergedPosts?.length === 0 && (
         <div className="mx-auto my-0 flex min-h-60 max-w-[100vw] items-center justify-center md:max-w-[700px]">
           {'There is no results in this category...'}
         </div>
       )}
-      {mergedPosts?.length !== 0 && mergedPosts?.length && (
-        <div className="mx-auto my-0 flex w-[100vw] justify-center	">
-          {data?.category?.contentNodes?.pageInfo?.hasNextPage &&
-            data?.category?.contentNodes?.pageInfo?.endCursor && (
-              <Button
-                onClick={() => {
-                  if (
-                    !isFetchingMore &&
-                    data?.category?.contentNodes?.pageInfo?.hasNextPage
-                  ) {
-                    fetchMorePosts()
-                  }
-                }}
-                className="gap-x-4	"
-              >
-                {isFetchingMore ? 'Loading...' : <>LOAD MORE... </>}
-              </Button>
-            )}
+
+      {mergedPosts?.length !== 0 && (
+        <div className="mx-auto my-0 flex w-[100vw] justify-center">
+          {data?.category?.contentNodes?.pageInfo?.hasNextPage && (
+            <Button
+              onClick={fetchMorePosts}
+              className="gap-x-4"
+            >
+              {isFetchingMore ? 'Loading...' : <>LOAD MORE... </>}
+            </Button>
+          )}
         </div>
       )}
     </div>
