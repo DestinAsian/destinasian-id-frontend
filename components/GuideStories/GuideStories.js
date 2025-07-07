@@ -5,7 +5,6 @@ import classNames from 'classnames/bind'
 const cx = classNames.bind(styles)
 
 const GuideStories = ({ guideStories }) => {
-  console.log('GuideStories data:', guideStories)
   if (!guideStories) return null
 
   const {
