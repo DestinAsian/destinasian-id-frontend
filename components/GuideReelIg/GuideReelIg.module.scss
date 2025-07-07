@@ -14,7 +14,7 @@
 .titleWrapper {
     text-align: center;
     margin: 0 auto 1rem auto;
-    font-family: "Unit Slab Pro", serif;
+    font-family: 'Unit Slab Pro Black';
     font-weight: bold;
     font-size: 2rem;
     line-height: 1.4;
@@ -97,6 +97,9 @@
 .leftBanner {
   flex: 0 0 73%;
 
+  @media (min-width: $breakpoint-extra-small) {
+  }
+
   img,
   iframe,
   video,
@@ -105,16 +108,19 @@
     height: auto;
     display: block;
     object-fit: cover;
+
   }
 }
 .leftBanner {
   @media (max-width: $breakpoint-medium) {
     flex-direction: column;
     padding-top: 1rem;
+    padding-bottom: 2rem;
   }
 }
 .videoContent {
   width: 100%;
+//   background-color: var(--wpe--color--black--cow);
 
   iframe,
   video,
