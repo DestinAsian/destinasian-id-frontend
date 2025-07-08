@@ -29,6 +29,11 @@ export default function ChildrenNavigationTravelGuide({
     id: databaseId,
   }
 
+  function convertCategoryUriToTravelGuide(uri) {
+    if (!uri) return ''
+    // hapus awalan '/category/' dan tambahkan '/travel-guide/' di depannya
+    return uri.replace(/^\/category\//, '/travel-guide/')
+  }
   // Get Category
   const { data } = useQuery(GetChildrenNavigation, {
     variables: catVariable,
