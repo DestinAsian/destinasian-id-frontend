@@ -12,6 +12,7 @@ import Link from 'next/link'
 
 let cx = classNames.bind(styles)
 
+
 export default function ParentNavigationTravelGuide({
   databaseId,
   isMainNavShown,
@@ -28,6 +29,13 @@ export default function ParentNavigationTravelGuide({
     first: catPerPage,
     id: databaseId,
   }
+
+  function convertCategoryUriToTravelGuide(uri) {
+    if (!uri) return ''
+    // hapus awalan '/category/' dan tambahkan '/travel-guide/' di depannya
+    return uri.replace(/^\/category\//, '/travel-guide/')
+  }
+  
 
   // Get Category
   const { data } = useQuery(GetParentNavigation, {
@@ -59,7 +67,8 @@ export default function ParentNavigationTravelGuide({
             )}
           >
             <div className={cx('menu-button-parent')}>
-              <Link href={data.category.uri}>
+              {/* <Link href={data.category.uri}> */}
+              <Link href={convertCategoryUriToTravelGuide(data.category.uri)}>
                 <button type="button" className={cx('menu-icon')}>
                   <div className={cx('da-guide-wrapper')}>
                     <span className={cx('nav-name')}>{data.category.name}</span>
@@ -79,8 +88,9 @@ export default function ParentNavigationTravelGuide({
             {data?.category?.children?.edges?.map((travelGuide) => (
               <li key={travelGuide?.node?.uri} className={cx('nav-link')}>
                 {travelGuide?.node?.uri && (
-                  <Link
-                    href={travelGuide?.node?.uri}
+               <Link 
+               href={convertCategoryUriToTravelGuide(travelGuide?.node?.uri)}
+
                     className={cx(
                       isActive(travelGuide?.node?.uri) ? 'active' : 'not-active',
                     )}
