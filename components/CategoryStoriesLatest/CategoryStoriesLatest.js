@@ -40,7 +40,7 @@ export default function CategoryStoriesLatest(categoryUri) {
   })
 
   if (error) return <pre>{JSON.stringify(error)}</pre>
-  if (loading) return <div className="text-center">Loading...</div>
+  if (loading) return <div className="text-center"></div>
 
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
   const travelGuide = allPosts?.find(item => item.__typename === 'TravelGuide')
