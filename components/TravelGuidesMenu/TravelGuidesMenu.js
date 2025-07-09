@@ -253,22 +253,26 @@ export default function TravelGuidesMenu(className) {
       <>
         {items?.map((item) => {
           const menuId = item?.id
+          const originalUri = item?.url || item?.path || '#'
+          const rewrittenUri = rewriteCategoryUri(originalUri) // 🔁
+
           const parentMenu = {
             name: item?.label,
-            uri: rewriteCategoryUri(item?.url || item?.path || '#'), // 🔁 Pakai fungsi
+            uri: originalUri, // href
+            as: rewrittenUri, // as
           }
-  
+
           const childrenMenus =
             item?.connectedNode?.node?.children?.edges?.map((edge) => ({
               name: edge?.node?.name,
-              uri: rewriteCategoryUri(edge?.node?.uri), // 🔁 Pakai fungsi juga di sini
+              uri: edge?.node?.uri, // href
+              as: rewriteCategoryUri(edge?.node?.uri), // as
             })) || []
-  
+
           return (
             <div key={menuId} id={menuId} className={cx('menu-row')}>
-              {/* Parent menu */}
               <div className={cx('parent-menu')}>
-                <Link href={parentMenu.uri}>
+                <Link href={parentMenu.uri} as={parentMenu.as}> {/* 🔁 */}
                   <span
                     className={cx(
                       'title',
@@ -280,8 +284,7 @@ export default function TravelGuidesMenu(className) {
                   <span className={cx('separator', 'parent-separator')}>|</span>
                 </Link>
               </div>
-  
-              {/* Children menu */}
+
               {childrenMenus.length > 0 && (
                 <ul className={cx('children-menu')}>
                   {childrenMenus.map((menu, index) => (
@@ -289,7 +292,7 @@ export default function TravelGuidesMenu(className) {
                       {index > 0 && (
                         <span className={cx('separator')}>|</span>
                       )}
-                      <Link href={menu?.uri}>
+                      <Link href={menu?.uri} as={menu?.as}> {/* 🔁 */}
                         <h2
                           className={cx(
                             'nav-name',
@@ -310,7 +313,7 @@ export default function TravelGuidesMenu(className) {
         })}
       </>
     )
-  }  
+  }
   
   return (
     <div className={cx('travel-guides-menu', className)}>
