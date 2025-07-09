@@ -21,6 +21,13 @@ function shuffleArray(array) {
   return array
 }
 
+// 🔧 Fungsi ini hanya mengubah slug tertentu ke "/travel-guides/"
+function rewriteCategoryUri(originalUri) {
+  if (!originalUri) return '#'
+  return originalUri.replace('/category/', '/travel-guides/')
+}
+
+
 export default function TravelGuidesMenu(className) {
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(true)
@@ -248,18 +255,18 @@ export default function TravelGuidesMenu(className) {
           const menuId = item?.id
           const parentMenu = {
             name: item?.label,
-            uri: item?.url || item?.path || '#',
+            uri: rewriteCategoryUri(item?.url || item?.path || '#'), // 🔁 Pakai fungsi
           }
   
           const childrenMenus =
             item?.connectedNode?.node?.children?.edges?.map((edge) => ({
               name: edge?.node?.name,
-              uri: edge?.node?.uri,
+              uri: rewriteCategoryUri(edge?.node?.uri), // 🔁 Pakai fungsi juga di sini
             })) || []
   
           return (
             <div key={menuId} id={menuId} className={cx('menu-row')}>
-              {/* ✅ Parent menu */}
+              {/* Parent menu */}
               <div className={cx('parent-menu')}>
                 <Link href={parentMenu.uri}>
                   <span
@@ -270,11 +277,11 @@ export default function TravelGuidesMenu(className) {
                   >
                     {parentMenu.name}
                   </span>
-                  <span className={cx('separator','parent-separator')}>|</span>
+                  <span className={cx('separator', 'parent-separator')}>|</span>
                 </Link>
               </div>
   
-              {/* ✅ Children menu (horizontal) */}
+              {/* Children menu */}
               {childrenMenus.length > 0 && (
                 <ul className={cx('children-menu')}>
                   {childrenMenus.map((menu, index) => (
@@ -303,7 +310,7 @@ export default function TravelGuidesMenu(className) {
         })}
       </>
     )
-  }
+  }  
   
   return (
     <div className={cx('travel-guides-menu', className)}>

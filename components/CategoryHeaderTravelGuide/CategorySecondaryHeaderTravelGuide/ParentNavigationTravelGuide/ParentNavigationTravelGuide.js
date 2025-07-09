@@ -2,16 +2,23 @@ import classNames from 'classnames/bind'
 import styles from './ParentNavigationTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
-const DaGuideMenu = dynamic(() => import('../../../../components/DaGuideMenu/DaGuideMenu'))
-const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'))
-const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'))
+const DaGuideMenu = dynamic(() =>
+  import('../../../../components/DaGuideMenu/DaGuideMenu'),
+)
+const MainCategoryMenu = dynamic(() =>
+  import(
+    '../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'
+  ),
+)
+const TravelGuidesMenu = dynamic(() =>
+  import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'),
+)
 
 import { useQuery } from '@apollo/client'
 import { GetParentNavigation } from '../../../../queries/GetParentNavigation'
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)
-
 
 export default function ParentNavigationTravelGuide({
   databaseId,
@@ -30,12 +37,17 @@ export default function ParentNavigationTravelGuide({
     id: databaseId,
   }
 
-  function convertCategoryUriToTravelGuide(uri) {
+  function getCategoryLink(uri) {
     if (!uri) return ''
-    // hapus awalan '/category/' dan tambahkan '/travel-guide/' di depannya
-    return uri.replace(/^\/category\//, '/travel-guide/')
+    const specialCategories = ['bali', 'jakarta', 'bandung', 'surabaya']
+    const slug = uri.replace(/^\/category\//, '').split('/')[0]
+
+    if (specialCategories.includes(slug)) {
+      return uri.replace(/^\/category/, '/travel-guides')
+    }
+
+    return uri
   }
-  
 
   // Get Category
   const { data } = useQuery(GetParentNavigation, {
@@ -68,7 +80,7 @@ export default function ParentNavigationTravelGuide({
           >
             <div className={cx('menu-button-parent')}>
               {/* <Link href={data.category.uri}> */}
-              <Link href={convertCategoryUriToTravelGuide(data.category.uri)}>
+              <Link href={getCategoryLink(data.category.uri)}>
                 <button type="button" className={cx('menu-icon')}>
                   <div className={cx('da-guide-wrapper')}>
                     <span className={cx('nav-name')}>{data.category.name}</span>
@@ -88,14 +100,17 @@ export default function ParentNavigationTravelGuide({
             {data?.category?.children?.edges?.map((travelGuide) => (
               <li key={travelGuide?.node?.uri} className={cx('nav-link')}>
                 {travelGuide?.node?.uri && (
-               <Link 
-               href={convertCategoryUriToTravelGuide(travelGuide?.node?.uri)}
-
+                  <Link
+                    href={getCategoryLink(travelGuide?.node?.uri)}
                     className={cx(
-                      isActive(travelGuide?.node?.uri) ? 'active' : 'not-active',
+                      isActive(travelGuide?.node?.uri)
+                        ? 'active'
+                        : 'not-active',
                     )}
                   >
-                    <h2 className={cx('nav-name')}>{travelGuide?.node?.name}</h2>
+                    <h2 className={cx('nav-name')}>
+                      {travelGuide?.node?.name}
+                    </h2>
                   </Link>
                 )}
               </li>

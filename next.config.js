@@ -34,11 +34,48 @@ module.exports = withFaust({
         destination: '/partner-content/:slug*',
         permanent: true, // This indicates a 301 permanent redirect
       },
-      // {
-      //   source: '/category/:slug*', // All category slug redirect
-      //   destination: '/:slug*',
-      //   permanent: true, // This indicates a 301 permanent redirect
-      // },
+      {
+        source: '/travel-guide/bali',
+        destination: '/category/bali',
+        permanent: true,
+      },
+      {
+        source: '/travel-guide/jakarta',
+        destination: '/category/jakarta',
+        permanent: true,
+      },
+      {
+        source: '/travel-guide/bandung',
+        destination: '/category/bandung',
+        permanent: true,
+      },
+      {
+        source: '/travel-guide/surabaya',
+        destination: '/category/surabaya',
+        permanent: true,
+      },
+
+      // Redirect untuk semua anak kategori
+      {
+        source: '/travel-guide/bali/:slug*',
+        destination: '/category/bali/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/travel-guide/jakarta/:slug*',
+        destination: '/category/jakarta/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/travel-guide/bandung/:slug*',
+        destination: '/category/bandung/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/travel-guide/surabaya/:slug*',
+        destination: '/category/surabaya/:slug*',
+        permanent: true,
+      },
     ]
   },
 })
