@@ -10,7 +10,7 @@ export const GetCategoryFeatures = gql`
       categoryImages {
         categoryImagesCaption
       }
-      posts(first: 1000) {
+      posts(first: 10) {
         edges {
           node {
             id
