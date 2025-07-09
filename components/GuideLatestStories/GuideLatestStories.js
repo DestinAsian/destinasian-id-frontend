@@ -1,10 +1,7 @@
 import classNames from 'classnames/bind'
-import dynamic from 'next/dynamic'
 import styles from './GuideLatestStories.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
-
-const Container = dynamic(() => import('../../components/Container/Container'))
 
 const cx = classNames.bind(styles)
 
@@ -21,9 +18,6 @@ const MAX_EXCERPT_LENGTH = 150
 export default function GuideLatestStories({
   title,
   excerpt,
-  parentCategory,
-  category,
-  categoryUri,
   uri,
   featuredImage,
   caption,
