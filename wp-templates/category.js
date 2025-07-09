@@ -4,6 +4,10 @@ import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import dynamic from 'next/dynamic'
 
+// function rewriteCategoryUri(uri) {
+//   if (!uri) return '#'
+//   return uri.replace(/^\/category\//, '/travel-guides/')
+// }
 const CategoryHeader = dynamic(() =>
   import('../components/CategoryHeader/CategoryHeader'),
 )
@@ -61,17 +65,18 @@ const SecondaryDesktopHeader = dynamic(() =>
 )
 const SEO = dynamic(() => import('../components/SEO/SEO'))
 const Button = dynamic(() => import('../components/Button/Button'))
-
+// import { rewriteCategoryUri } from '../utilities/rewriteCategoryUri'
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
-function rewriteCategoryUri(uri) {
-  if (!uri) return '#'
-  return uri.replace(/^\/category\//, '/travel-guide/')
-}
+// function rewriteCategoryUri(uri) {
+//   if (!uri) return '#'
+//   return uri.replace(/^\/category\//, 'travel-guides/')
+// }
+
 
 export default function Component(props) {
   // console.log('FeaturedImage.fragments:', FeaturedImage.fragments)
@@ -80,9 +85,30 @@ export default function Component(props) {
   if (props.loading) {
     return <>Loading...</>
   }
-
+ 
+// 🔁 Patch URI kategori dan children (saat dibutuhkan)
+// function patchCategoryUris(category) {
+//   if (!category) return category
+//   return {
+//     ...category,
+//     uri: rewriteCategoryUri(category.uri),
+//     children: {
+//       ...category.children,
+//       edges: category.children?.edges?.map((child) => ({
+//         ...child,
+//         node: {
+//           ...child.node,
+//           uri: rewriteCategoryUri(child.node.uri),
+//         },
+//       })),
+//     },
+//   }
+// }
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
+
+      // 🔁 Terapkan patch uri untuk manipulasi tampilan slug
+  // const patchedCategoryData = patchCategoryUris(props?.data?.category)
   const {
     name,
     description,
@@ -95,12 +121,19 @@ export default function Component(props) {
     seo,
     uri,
   } = props?.data?.category ?? {}
+  // } = patchedCategoryData ?? {}
 
-  useEffect(() => {
-    if (props?.data?.category?.uri?.startsWith('/category/')) {
-      props.data.category.uri = rewriteCategoryUri(props.data.category.uri)
-    }
-  }, [props?.data?.category?.uri])
+  // useEffect(() => {
+  //   if (props?.data?.category?.uri?.startsWith('/category/')) {
+  //     props.data.category.uri = rewriteCategoryUri(props.data.category.uri)
+  //   }
+  // }, [props?.data?.category?.uri])
+
+  // useEffect(() => {
+  //   if (props?.data?.category?.uri?.startsWith('/category/')) {
+  //     props.data.category.uri = rewriteCategoryUri(props.data.category.uri)
+  //   }
+  // }, [props?.data?.category?.uri])
   
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
@@ -310,20 +343,20 @@ export default function Component(props) {
   const category = data?.category
 
   const guideStories = category?.guideStorie
-  const pinnedPostsWithRewrittenUris = pinPosts?.pinPost?.map((post) => ({
-    ...post,
-    uri: rewriteCategoryUri(post.uri),
-    categories: {
-      ...post.categories,
-      edges: post.categories.edges.map((cat) => ({
-        ...cat,
-        node: {
-          ...cat.node,
-          uri: rewriteCategoryUri(cat.node.uri),
-        },
-      })),
-    },
-  }))
+  // const pinnedPostsWithRewrittenUris = pinPosts?.pinPost?.map((post) => ({
+  //   ...post,
+  //   uri: rewriteCategoryUri(post.uri),
+  //   categories: {
+  //     ...post.categories,
+  //     edges: post.categories.edges.map((cat) => ({
+  //       ...cat,
+  //       node: {
+  //         ...cat.node,
+  //         uri: rewriteCategoryUri(cat.node.uri),
+  //       },
+  //     })),
+  //   },
+  // }))
   
   if (loading) {
     return (
@@ -391,7 +424,7 @@ export default function Component(props) {
               ))}
 
             {/* EntryHeader category name */}
-            {/* <CategoryEntryHeader
+            <CategoryEntryHeader
               parent={parent?.node?.name}
               children={children?.edges}
               title={name}
@@ -402,8 +435,8 @@ export default function Component(props) {
               image={categoryImages?.categoryImages?.mediaItemUrl}
               imageCaption={categoryImages?.categoryImagesCaption}
               description={description}
-            /> */}
-            <CategoryEntryHeader
+            />
+            {/* <CategoryEntryHeader
               parent={parent?.node?.name}
               children={children?.edges?.map((child) => ({
                 ...child,
@@ -420,7 +453,7 @@ export default function Component(props) {
               image={categoryImages?.categoryImages?.mediaItemUrl}
               imageCaption={categoryImages?.categoryImagesCaption}
               description={description}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -497,15 +530,15 @@ export default function Component(props) {
       </>
       <Main>
         <>
-          {/* <CategoryStoriesLatest
+          <CategoryStoriesLatest
             categoryUri={databaseId}
             pinPosts={pinPosts}
             name={name}
             children={children}
             parent={parent?.node?.name}
             guideStories={data.category.guideStorie}
-          /> */}
-          <CategoryStoriesLatest
+          />
+          {/* <CategoryStoriesLatest
             categoryUri={databaseId}
             pinPosts={pinPosts}
             name={name}
@@ -517,7 +550,7 @@ export default function Component(props) {
               },
             }))}
             parent={parent?.node?.name}
-          />
+          /> */}
 
           {isGuidesCategory && props?.data?.category?.guidesfitur && (
             <GuideFitur guidesfitur={props?.data?.category?.guidesfitur} />
@@ -739,519 +772,3 @@ Component.variables = ({ databaseId }) => {
     databaseId,
   }
 }
-
-// import React, { useEffect, useState } from 'react'
-// import { gql, useQuery } from '@apollo/client'
-// import * as MENUS from '../constants/menus'
-// import { BlogInfoFragment } from '../fragments/GeneralSettings'
-// import dynamic from 'next/dynamic'
-
-// const CategoryHeader = dynamic(() =>
-//   import('../components/CategoryHeader/CategoryHeader'),
-// )
-// const CategoryStories = dynamic(() =>
-//   import('../components/CategoryStories/CategoryStories'),
-// )
-// const CategoryStoriesGuide = dynamic(() =>
-//   import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),
-// )
-// const Main = dynamic(() => import('../components/Main/Main'))
-// const CategoryEntryHeader = dynamic(() =>
-//   import('../components/CategoryEntryHeader/CategoryEntryHeader'),
-// )
-// const Footer = dynamic(() => import('../components/Footer/Footer'))
-// import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-// const HomepageStories = dynamic(() =>
-//   import('../components/HomepageStories/HomepageStories'),
-// )
-// const SecondaryHeader = dynamic(() =>
-//   import('../components/Header/SecondaryHeader/SecondaryHeader'),
-// )
-// const CategorySecondaryHeader = dynamic(() =>
-//   import(
-//     '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
-//   ),
-// )
-
-// const CategoryDesktopHeader = dynamic(() =>
-//   import('../components/CategoryDesktopHeader/CategoryDesktopHeader'),
-// )
-// const CategoryDesktopSecondaryHeader = dynamic(() =>
-//   import(
-//     '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
-//   ),
-// )
-// const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
-// const GuideStories = dynamic(() =>
-//   import('../components/GuideStories/GuideStories'),
-// )
-// const BannerFokusDA = dynamic(() =>
-//   import('../components/BannerFokusDA/BannerFokusDA'),
-// )
-// const BannerPosterGuide = dynamic(() =>
-//   import('../components/BannerPosterGuide/BannerPosterGuide'),
-// )
-
-// const CategoryStoriesLatest = dynamic(() =>
-//   import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
-// )
-// const GuideReelIg = dynamic(() =>
-//   import('../components/GuideReelIg/GuideReelIg'),
-// )
-// const SecondaryDesktopHeader = dynamic(() =>
-//   import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
-// )
-// const SEO = dynamic(() => import('../components/SEO/SEO'))
-// const Button = dynamic(() => import('../components/Button/Button'))
-
-// import { GetMenus } from '../queries/GetMenus'
-// import { GetFooterMenus } from '../queries/GetFooterMenus'
-// import { GetLatestStories } from '../queries/GetLatestStories'
-// import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
-// import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
-
-// // Fungsi manipulasi URI travel-guide
-// function manipulateUri(uri) {
-//   const base = 'https://test.destinasian.co.id'
-//   const roots = ['bali', 'jakarta', 'bandung', 'surabaya']
-//   const match = roots.find((r) => uri?.includes(`/category/${r}/`))
-//   if (match) {
-//     return uri?.replace(`${base}/category/${match}`, `${base}/travel-guide/${match}`)
-//   }
-//   return uri
-// }
-
-// export default function Component(props) {
-//   if (props.loading) {
-//     return <>Loading...</>
-//   }
-
-//   const { title: siteTitle, description: siteDescription } =
-//     props?.data?.generalSettings
-//   const {
-//     name,
-//     description,
-//     children,
-//     parent,
-//     pinPosts,
-//     categoryImages,
-//     destinationGuides,
-//     databaseId,
-//     seo,
-//     uri,
-//   } = props?.data?.category ?? {}
-
-//   const manipulatedUri = manipulateUri(uri)
-
-//   const [searchQuery, setSearchQuery] = useState('')
-//   const [isScrolled, setIsScrolled] = useState(false)
-//   const [isNavShown, setIsNavShown] = useState(false)
-//   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-//   const [isDesktop, setIsDesktop] = useState(false)
-
-//   useEffect(() => {
-//     if (searchQuery !== '') {
-//       document.body.style.overflow = 'hidden'
-//     } else {
-//       document.body.style.overflow = 'visible'
-//     }
-//   }, [searchQuery])
-
-//   useEffect(() => {
-//     function handleScroll() {
-//       setIsScrolled(window.scrollY > 0)
-//     }
-
-//     window.addEventListener('scroll', handleScroll)
-//     return () => window.removeEventListener('scroll', handleScroll)
-//   }, [])
-
-//   useEffect(() => {
-//     document.body.style.overflow = isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
-//   }, [isNavShown, isGuidesNavShown])
-
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setIsDesktop(window.innerWidth >= 1024)
-//     }
-//     handleResize()
-//     window.addEventListener('resize', handleResize)
-//     return () => window.removeEventListener('resize', handleResize)
-//   }, [])
-
-//   const catVariable = { id: databaseId }
-//   const { data, loading } = useQuery(GetSecondaryHeader, {
-//     variables: catVariable,
-//     fetchPolicy: 'network-only',
-//     nextFetchPolicy: 'cache-and-network',
-//   })
-
-//   const isGuidesCategory =
-//     data?.category?.destinationGuides?.destinationGuides === 'yes'
-
-//   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-//     variables: {
-//       first: 20,
-//       headerLocation: MENUS.PRIMARY_LOCATION,
-//       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-//       thirdHeaderLocation: MENUS.THIRD_LOCATION,
-//       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-//       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-//       featureHeaderLocation: MENUS.FEATURE_LOCATION,
-//     },
-//     fetchPolicy: 'network-only',
-//     nextFetchPolicy: 'cache-and-network',
-//   })
-
-//   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
-//   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
-//   const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
-//   const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
-//   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
-//   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
-
-//   const { data: footerMenusData } = useQuery(GetFooterMenus, {
-//     variables: {
-//       first: 100,
-//       footerHeaderLocation: MENUS.FOOTER_LOCATION,
-//     },
-//     fetchPolicy: 'network-only',
-//     nextFetchPolicy: 'cache-and-network',
-//   })
-
-//   const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
-
-//   const { data: latestStories } = useQuery(GetLatestStories, {
-//     variables: { first: 5 },
-//     fetchPolicy: 'network-only',
-//     nextFetchPolicy: 'cache-and-network',
-//   })
-
-//   const latestPosts = latestStories?.posts?.edges?.map(e => e.node) ?? []
-//   const latestUpdates = latestStories?.updates?.edges?.map(e => e.node) ?? []
-//   const latestAllPosts = [...latestPosts, ...latestUpdates].sort((a, b) => new Date(b.date) - new Date(a.date))
-
-//   const categorySlider = [1,2,3,4,5].map(i => [
-//     categoryImages[`categorySlide${i}`]?.mediaItemUrl ?? null,
-//     categoryImages[`categorySlideCaption${i}`] ?? null,
-//   ])
-
-//   const category = data?.category
-//   const guideStories = category?.guideStorie
-
-//   if (loading) return <></>
-
-//   return (
-//     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-//         <>
-//         {isDesktop ? (
-//           <>
-//             <CategoryDesktopHeader
-//               title={siteTitle}
-//               description={siteDescription}
-//               primaryMenuItems={primaryMenu}
-//               secondaryMenuItems={secondaryMenu}
-//               thirdMenuItems={thirdMenu}
-//               fourthMenuItems={fourthMenu}
-//               fifthMenuItems={fifthMenu}
-//               featureMenuItems={featureMenu}
-//               latestStories={latestAllPosts}
-//               menusLoading={menusLoading}
-//               // latestLoading={latestLoading}
-//               searchQuery={searchQuery}
-//               setSearchQuery={setSearchQuery}
-//               isNavShown={isNavShown}
-//               setIsNavShown={setIsNavShown}
-//               isScrolled={isScrolled}
-//               isGuidesCategory={isGuidesCategory}
-//             />
-//             {/* {!isNavShown && (
-//               <CategoryConditionalHeader
-//                 isGuidesCategory={isGuidesCategory}
-//                 data={data}
-//                 databaseId={databaseId}
-//                 name={name}
-//                 parent={parent?.node?.name}
-//                 searchQuery={searchQuery}
-//                 setSearchQuery={setSearchQuery}
-//                 isGuidesNavShown={isGuidesNavShown}
-//                 setIsGuidesNavShown={setIsGuidesNavShown}
-//                 isScrolled={isScrolled}
-//               />
-//             )} */}
-//             {!isNavShown &&
-//               (isGuidesCategory ? (
-//                 <CategoryDesktopSecondaryHeader
-//                   data={data}
-//                   databaseId={databaseId}
-//                   name={name}
-//                   parent={parent?.node?.name}
-//                 />
-//               ) : (
-//                 <SecondaryDesktopHeader
-//                   searchQuery={searchQuery}
-//                   setSearchQuery={setSearchQuery}
-//                   isGuidesNavShown={isGuidesNavShown}
-//                   setIsGuidesNavShown={setIsGuidesNavShown}
-//                   isScrolled={isScrolled}
-//                 />
-//               ))}
-
-//             {/* EntryHeader category name */}
-//             <CategoryEntryHeader
-//               parent={parent?.node?.name}
-//               children={children?.edges}
-//               title={name}
-//               destinationGuides={destinationGuides?.destinationGuides}
-//               changeToSlider={categoryImages?.changeToSlider}
-//               guidesTitle={destinationGuides?.guidesTitle}
-//               categorySlider={categorySlider}
-//               image={categoryImages?.categoryImages?.mediaItemUrl}
-//               imageCaption={categoryImages?.categoryImagesCaption}
-//               description={description}
-//             />
-//           </>
-//         ) : (
-//           <>
-//             <CategoryHeader
-//               title={siteTitle}
-//               description={siteDescription}
-//               primaryMenuItems={primaryMenu}
-//               secondaryMenuItems={secondaryMenu}
-//               thirdMenuItems={thirdMenu}
-//               fourthMenuItems={fourthMenu}
-//               fifthMenuItems={fifthMenu}
-//               featureMenuItems={featureMenu}
-//               latestStories={latestAllPosts}
-//               menusLoading={menusLoading}
-//               latestLoading={latestLoading}
-//               searchQuery={searchQuery}
-//               setSearchQuery={setSearchQuery}
-//               isNavShown={isNavShown}
-//               setIsNavShown={setIsNavShown}
-//               isScrolled={isScrolled}
-//             />
-//             {/* Guides category */}
-//             {/* {isGuidesCategory && (
-//         <CategorySecondaryHeader
-//           data={data}
-//           databaseId={databaseId}
-//           name={name}
-//           parent={parent?.node?.name}
-//         />
-//       )} */}
-//             {/* Another category */}
-//             {/* {!isGuidesCategory && (
-//         <SecondaryHeader
-//           searchQuery={searchQuery}
-//           setSearchQuery={setSearchQuery}
-//           isGuidesNavShown={isGuidesNavShown}
-//           setIsGuidesNavShown={setIsGuidesNavShown}
-//           isScrolled={isScrolled}
-//         />
-//       )} */}
-
-//             {isGuidesCategory ? (
-//               <CategorySecondaryHeader
-//                 data={data}
-//                 databaseId={databaseId}
-//                 name={name}
-//                 parent={parent?.node?.name}
-//               />
-//             ) : (
-//               <SecondaryHeader
-//                 searchQuery={searchQuery}
-//                 setSearchQuery={setSearchQuery}
-//                 isGuidesNavShown={isGuidesNavShown}
-//                 setIsGuidesNavShown={setIsGuidesNavShown}
-//                 isScrolled={isScrolled}
-//               />
-//             )}
-
-//             {/* EntryHeader category name */}
-//             <CategoryEntryHeader
-//               parent={parent?.node?.name}
-//               children={children?.edges}
-//               title={name}
-//               destinationGuides={destinationGuides?.destinationGuides}
-//               changeToSlider={categoryImages?.changeToSlider}
-//               guidesTitle={destinationGuides?.guidesTitle}
-//               categorySlider={categorySlider}
-//               image={categoryImages?.categoryImages?.mediaItemUrl}
-//               imageCaption={categoryImages?.categoryImagesCaption}
-//               description={description}
-//             />
-//           </>
-//         )}
-//       </>
-//       <Main>
-//         <>
-//         <CategoryStoriesLatest
-//             categoryUri={databaseId}
-//             pinPosts={pinPosts}
-//             name={name}
-//             children={children}
-//             parent={parent?.node?.name}
-//             guideStories={data.category.guideStorie}
-//           />
-//           {isGuidesCategory && props?.data?.category?.guidesfitur && (
-//             <GuideFitur guidesfitur={props?.data?.category?.guidesfitur} />
-//           )}
-//           {props?.data?.category?.guideStorie && (
-//             <GuideStories guideStories={props.data.category.guideStorie} />
-//           )}
-//           {props?.data?.category?.guideReelIg && (
-//             <GuideReelIg guideReelIg={props.data.category.guideReelIg} />
-//           )}
-//           {props?.data?.category?.guideStorie && (
-//             <BannerFokusDA bannerDa={props.data.category.guideStorie} />
-//           )}
-//           {/* <CategoryStoriesGuide
-//             categoryUri={databaseId}
-//             pinPosts={pinPosts}
-//             name={name}
-//             children={children}
-//             parent={parent?.node?.name}
-//             guideStories={data.category.guideStorie}
-//           /> */}
-
-//           <CategoryStories
-//             categoryUri={databaseId}
-//             pinPosts={pinPosts}
-//             name={name}
-//             children={children}
-//             parent={parent?.node?.name}
-//           />
-//           <BannerPosterGuide guideReelIg={props.data.category.guideReelIg} bannerDa={props.data.category.guideStorie} />
-
-//         </>
-//       </Main>
-//       {/* ...komponen lainnya tidak berubah, gunakan manipulatedUri jika perlu */}
-//       <Footer footerMenu={footerMenu} />
-//     </main>
-//   )
-// }
-
-// Component.query = gql`
-//   ${BlogInfoFragment}
-//   ${FeaturedImage.fragments.entry}
-//   query GetCategoryPage($databaseId: ID!) {
-//     category(id: $databaseId, idType: DATABASE_ID) {
-//       name
-//       description
-//       databaseId
-//       uri
-//       seo {
-//         title
-//         metaDesc
-//         focuskw
-//       }
-//       categoryImages {
-//         changeToSlider
-//         categorySlide1 { mediaItemUrl }
-//         categorySlide2 { mediaItemUrl }
-//         categorySlide3 { mediaItemUrl }
-//         categorySlide4 { mediaItemUrl }
-//         categorySlide5 { mediaItemUrl }
-//         categoryImages { mediaItemUrl }
-//         categorySlideCaption1
-//         categorySlideCaption2
-//         categorySlideCaption3
-//         categorySlideCaption4
-//         categorySlideCaption5
-//         categoryImagesCaption
-//       }
-//       destinationGuides {
-//         destinationGuides
-//         guidesTitle
-//       }
-//       guidesfitur {
-//         linkUrlGuideFitur1
-//         linkUrlGuideFitur2
-//         linkUrlGuideFitur3
-//         linkUrlGuideFitur4
-//         titleGuideFitur1
-//         titleGuideFitur2
-//         titleGuideFitur3
-//         titleGuideFitur4
-//         featureImageGuideFitur1 { mediaItemUrl }
-//         featureImageGuideFitur2 { mediaItemUrl }
-//         featureImageGuideFitur3 { mediaItemUrl }
-//         featureImageGuideFitur4 { mediaItemUrl }
-//       }
-//       guideReelIg {
-//         titleReelIg
-//         contentReelIg
-//         imagesGuideReelIg1 { mediaItemUrl }
-//         linkUrlReelIg1
-//         imagesGuideReelIg2 { mediaItemUrl }
-//         linkUrlReelIg2
-//         videoReelIg1
-//         bannerReelIg2 { mediaItemUrl }
-//         linkUrlBannerReelIg2
-//       }
-//       guideStorie {
-//         bannerGuideStories { mediaItemUrl }
-//         captionImagesGuideStories
-//         contentGuideStories
-//         fieldGroupName
-//         linkBookHereGuideStories
-//         titleGuideStories
-//         imageGuideStories { mediaItemUrl }
-//         iconGuideStories { mediaItemUrl }
-//         linkBannerFokusHubDa
-//         bannerFokusHubDa { mediaItemUrl }
-//       }
-//       bannerDa {
-//         linkBannerFokusHubDa
-//         bannerFokusHubDa { mediaItemUrl }
-//       }
-//       pinPosts {
-//         pinPost {
-//           ... on Post {
-//             id
-//             title
-//             content
-//             date
-//             uri
-//             excerpt
-//             ...FeaturedImageFragment
-//             author { node { name } }
-//             categories(first: 1000, where: { childless: true }) {
-//               edges {
-//                 node {
-//                   name
-//                   uri
-//                   parent { node { name } }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//       parent {
-//         node {
-//           name
-//           uri
-//           children(first: 1000, where: { childless: true }) {
-//             edges {
-//               node { name uri }
-//             }
-//           }
-//           countryCode { countryCode }
-//           destinationGuides { destinationGuides }
-//         }
-//       }
-//       children {
-//         edges {
-//           node { name uri }
-//         }
-//       }
-//     }
-//     generalSettings {
-//       ...BlogInfoFragment
-//     }
-//   }
-// `
-
-// Component.variables = ({ databaseId }) => ({ databaseId })
