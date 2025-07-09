@@ -14,14 +14,6 @@
 
 .container-wrapper {
   height: auto;
-
-  // @media (min-width: $breakpoint-extra-small) {
-  //   min-height: 45rem;
-  // }
-
-  // @media (min-width: $breakpoint-medium) {
-  //   min-height: 50rem;
-  // }
 }
 
 .content-wrapper-image {
@@ -72,7 +64,6 @@
 
 .title {
   font-family: 'Scheherazade New';
-  text-transform: uppercase;
   font-size: 1.65rem;
   line-height: 1.2;
   font-weight: 500;
