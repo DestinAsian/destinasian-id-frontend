@@ -68,6 +68,14 @@ export const GetCategoryStories = gql`
               date
               uri
               excerpt
+              guide_book_now {
+                fieldGroupName
+                guideName
+                linkBookNow
+                guidePrice
+                linkLocation
+                guideLocation
+              }
               featuredImage {
                 node {
                   id
@@ -103,4 +111,4 @@ export const GetCategoryStories = gql`
       }
     }
   }
-`;
+`
