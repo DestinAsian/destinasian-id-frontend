@@ -3,11 +3,6 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import dynamic from 'next/dynamic'
-
-// function rewriteCategoryUri(uri) {
-//   if (!uri) return '#'
-//   return uri.replace(/^\/category\//, '/travel-guides/')
-// }
 const CategoryHeader = dynamic(() =>
   import('../components/CategoryHeader/CategoryHeader'),
 )
@@ -57,6 +52,11 @@ const BannerPosterGuide = dynamic(() =>
 const CategoryStoriesLatest = dynamic(() =>
   import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
 )
+const CategorySecondStoriesLatest = dynamic(() =>
+  import(
+    '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
+  ),
+)
 const GuideReelIg = dynamic(() =>
   import('../components/GuideReelIg/GuideReelIg'),
 )
@@ -72,12 +72,6 @@ import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
-// function rewriteCategoryUri(uri) {
-//   if (!uri) return '#'
-//   return uri.replace(/^\/category\//, 'travel-guides/')
-// }
-
-
 export default function Component(props) {
   // console.log('FeaturedImage.fragments:', FeaturedImage.fragments)
 
@@ -85,30 +79,9 @@ export default function Component(props) {
   if (props.loading) {
     return <>Loading...</>
   }
- 
-// 🔁 Patch URI kategori dan children (saat dibutuhkan)
-// function patchCategoryUris(category) {
-//   if (!category) return category
-//   return {
-//     ...category,
-//     uri: rewriteCategoryUri(category.uri),
-//     children: {
-//       ...category.children,
-//       edges: category.children?.edges?.map((child) => ({
-//         ...child,
-//         node: {
-//           ...child.node,
-//           uri: rewriteCategoryUri(child.node.uri),
-//         },
-//       })),
-//     },
-//   }
-// }
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
 
-      // 🔁 Terapkan patch uri untuk manipulasi tampilan slug
-  // const patchedCategoryData = patchCategoryUris(props?.data?.category)
   const {
     name,
     description,
@@ -120,21 +93,9 @@ export default function Component(props) {
     databaseId,
     seo,
     uri,
+    travelGuide,
   } = props?.data?.category ?? {}
-  // } = patchedCategoryData ?? {}
 
-  // useEffect(() => {
-  //   if (props?.data?.category?.uri?.startsWith('/category/')) {
-  //     props.data.category.uri = rewriteCategoryUri(props.data.category.uri)
-  //   }
-  // }, [props?.data?.category?.uri])
-
-  // useEffect(() => {
-  //   if (props?.data?.category?.uri?.startsWith('/category/')) {
-  //     props.data.category.uri = rewriteCategoryUri(props.data.category.uri)
-  //   }
-  // }, [props?.data?.category?.uri])
-  
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
   // Scrolled Function
@@ -143,8 +104,6 @@ export default function Component(props) {
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
-
-  // const { asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -185,8 +144,6 @@ export default function Component(props) {
       document.body.style.overflow = 'visible'
     }
   }, [isGuidesNavShown])
-
-  // Tambahkan setelah deklarasi `useState`
 
   useEffect(() => {
     const handleResize = () => {
@@ -343,21 +300,7 @@ export default function Component(props) {
   const category = data?.category
 
   const guideStories = category?.guideStorie
-  // const pinnedPostsWithRewrittenUris = pinPosts?.pinPost?.map((post) => ({
-  //   ...post,
-  //   uri: rewriteCategoryUri(post.uri),
-  //   categories: {
-  //     ...post.categories,
-  //     edges: post.categories.edges.map((cat) => ({
-  //       ...cat,
-  //       node: {
-  //         ...cat.node,
-  //         uri: rewriteCategoryUri(cat.node.uri),
-  //       },
-  //     })),
-  //   },
-  // }))
-  
+
   if (loading) {
     return (
       <>
@@ -391,20 +334,6 @@ export default function Component(props) {
               isScrolled={isScrolled}
               isGuidesCategory={isGuidesCategory}
             />
-            {/* {!isNavShown && (
-              <CategoryConditionalHeader
-                isGuidesCategory={isGuidesCategory}
-                data={data}
-                databaseId={databaseId}
-                name={name}
-                parent={parent?.node?.name}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                isGuidesNavShown={isGuidesNavShown}
-                setIsGuidesNavShown={setIsGuidesNavShown}
-                isScrolled={isScrolled}
-              />
-            )} */}
             {!isNavShown &&
               (isGuidesCategory ? (
                 <CategoryDesktopSecondaryHeader
@@ -436,24 +365,6 @@ export default function Component(props) {
               imageCaption={categoryImages?.categoryImagesCaption}
               description={description}
             />
-            {/* <CategoryEntryHeader
-              parent={parent?.node?.name}
-              children={children?.edges?.map((child) => ({
-                ...child,
-                node: {
-                  ...child.node,
-                  uri: rewriteCategoryUri(child.node.uri),
-                },
-              }))}
-              title={name}
-              destinationGuides={destinationGuides?.destinationGuides}
-              changeToSlider={categoryImages?.changeToSlider}
-              guidesTitle={destinationGuides?.guidesTitle}
-              categorySlider={categorySlider}
-              image={categoryImages?.categoryImages?.mediaItemUrl}
-              imageCaption={categoryImages?.categoryImagesCaption}
-              description={description}
-            /> */}
           </>
         ) : (
           <>
@@ -538,32 +449,28 @@ export default function Component(props) {
             parent={parent?.node?.name}
             guideStories={data.category.guideStorie}
           />
-          {/* <CategoryStoriesLatest
-            categoryUri={databaseId}
-            pinPosts={pinPosts}
-            name={name}
-            children={children?.edges?.map((child) => ({
-              ...child,
-              node: {
-                ...child.node,
-                uri: rewriteCategoryUri(child.node.uri),
-              },
-            }))}
-            parent={parent?.node?.name}
-          /> */}
-
           {isGuidesCategory && props?.data?.category?.guidesfitur && (
             <GuideFitur guidesfitur={props?.data?.category?.guidesfitur} />
           )}
+          <CategorySecondStoriesLatest
+            categoryUri={databaseId}
+            pinPosts={pinPosts}
+            name={name}
+            children={children}
+            parent={parent?.node?.name}
+            guideStories={data.category.guideStorie}
+            bannerDa={props.data.category.guideStorie}
+            // guide_book_now={travelGuide?.guide_book_now.acf}
+          />
           {props?.data?.category?.guideStorie && (
             <GuideStories guideStories={props.data.category.guideStorie} />
           )}
           {props?.data?.category?.guideReelIg && (
             <GuideReelIg guideReelIg={props.data.category.guideReelIg} />
           )}
-          {props?.data?.category?.guideStorie && (
+          {/* {props?.data?.category?.guideStorie && (
             <BannerFokusDA bannerDa={props.data.category.guideStorie} />
-          )}
+          )} */}
           {/* <CategoryStoriesGuide
             categoryUri={databaseId}
             pinPosts={pinPosts}
