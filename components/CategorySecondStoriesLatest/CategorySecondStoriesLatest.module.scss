@@ -1,0 +1,94 @@
+@import 'styles/breakpoints';
+
+.component {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 0 auto;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1400px;
+  }
+}
+
+.leftColumn {
+  width: 100%;
+
+  @media (min-width: $breakpoint-small) {
+    flex: 0 0 62%;
+    max-width: 62%;
+  }
+}
+
+.rightColumn {
+  width: 100%;
+
+  @media (min-width: $breakpoint-small) {
+    flex: 0 0 35%;
+    max-width: 35%;
+  }
+}
+
+.contentGrid {
+  width: 100%;
+}
+
+.rightBanner img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.post-wrapper {
+  margin-bottom: 2rem;
+}
+
+.guide-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.guide-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.guide-location {
+  color: #000000;
+  font-size: 0.95rem;
+  &:hover {
+    color: var(--wpe--color--teal--light);
+  }
+}
+.guide-price {
+  color: #000000;
+  font-size: 0.95rem;
+}
+
+.book-now-button {
+  color: rgb(0, 0, 0);
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    color: var(--wpe--color--teal--light);
+  }
+}
+
+.separator {
+  color: #999;
+}
