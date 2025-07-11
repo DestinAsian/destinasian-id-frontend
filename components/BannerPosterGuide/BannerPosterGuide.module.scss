@@ -4,8 +4,14 @@
   max-width: 1400px;
   margin: 2rem auto;
   width: 100%;
-  padding: 0 1rem;
 
+  // Mobile & Tablet: padding kiri-kanan 1rem
+  @media (max-width: ($breakpoint-medium - 1)) {
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  // Desktop: tanpa padding
   @media (min-width: $breakpoint-medium) {
     padding: 0;
   }
@@ -13,12 +19,12 @@
 
 .contentGrid {
   display: flex;
-  justify-content: space-between; // ⬅️ Jarak otomatis antara kiri-kanan
+  justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 2rem;
 
-  @media (max-width: $breakpoint-medium) {
+  @media (max-width: ($breakpoint-medium - 1)) {
     flex-direction: column;
   }
 }
@@ -63,7 +69,7 @@
     display: block;
   }
 
-  @media (max-width: $breakpoint-medium) {
+  @media (max-width: ($breakpoint-medium - 1)) {
     order: -1;
   }
 }
