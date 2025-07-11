@@ -9,9 +9,7 @@ const CategoryHeader = dynamic(() =>
 const CategoryStories = dynamic(() =>
   import('../components/CategoryStories/CategoryStories'),
 )
-const CategorySecondStories = dynamic(() =>
-  import('../components/CategoryStories/CategorySecondStories'),
-)
+
 const CategoryStoriesGuide = dynamic(() =>
   import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),
 )
@@ -483,13 +481,6 @@ export default function Component(props) {
             guideStories={data.category.guideStorie}
           /> */}
 
-          <CategorySecondStories
-            categoryUri={databaseId}
-            pinPosts={pinPosts}
-            name={name}
-            children={children}
-            parent={parent?.node?.name}
-          />
           <CategoryStories
             categoryUri={databaseId}
             pinPosts={pinPosts}
