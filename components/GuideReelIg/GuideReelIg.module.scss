@@ -159,3 +159,62 @@
     border: 1px solid #ccc;
   }
 }
+
+.guideReelIgWrap {
+  max-width: 1400px;
+  margin: 2rem auto;
+
+  @media (max-width: $breakpoint-medium) {
+    padding: 2rem 1rem; // ✅ padding atas-bawah ditambah
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding-top: 3rem; // ✅ lebih besar untuk layar sangat kecil
+    padding-bottom: 3rem;
+  }
+}
+
+/* KHUSUS REEL CONTENT (IG REEL) */
+.reelContent {
+  // display: flex;
+  justify-content: center;
+
+  iframe,
+  video,
+  embed {
+    aspect-ratio: 9 / 16;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  // ✅ DEKSTOP: gunakan ukuran penuh (100% dari parent column)
+  @media (min-width: $breakpoint-medium) {
+    iframe,
+    video,
+    embed {
+      max-width: 100%;
+    }
+  }
+
+  // ✅ TABLET
+  @media (max-width: $breakpoint-medium) {
+    iframe,
+    video,
+    embed {
+      max-width: 210px;
+    }
+  }
+
+  // ✅ MOBILE
+  @media (max-width: $breakpoint-small) {
+    iframe,
+    video,
+    embed {
+      max-width: 250px;
+    }
+  }
+}

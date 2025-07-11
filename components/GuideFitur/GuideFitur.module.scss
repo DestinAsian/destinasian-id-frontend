@@ -1,32 +1,99 @@
+// @import 'styles/breakpoints';
+// @import 'styles/fonts/typography';
+
+// .guideFiturWrap {
+//   max-width: 1400px;
+//   width: 100%;
+//   margin: 4rem auto;
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 1.5rem;
+//   justify-content: space-between;
+
+//   // Tambah padding untuk tablet & mobile
+//   @media (max-width: $breakpoint-medium) {
+//     padding-left: 1rem;
+//     padding-right: 1rem;
+//   }
+// }
+
+// .guideFiturItem {
+//   flex: 1 1 calc(25% - 1.125rem); // 4 kolom desktop
+//   text-decoration: none;
+//   color: inherit;
+//   position: relative;
+
+
+//   // Tablet dan mobile: 2 kolom
+//   @media (max-width: $breakpoint-medium) {
+//     flex: 1 1 calc(50% - 0.75rem);
+//   }
+// }
+
+// .imageWrapper {
+//   position: relative;
+//   width: 100%;
+//   overflow: hidden;
+//   aspect-ratio: 4 / 3;
+
+//   img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+//     display: block;
+//   }
+// }
+
+// .titleOverlay {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   padding: 1rem;
+//   color: #fff;
+//   font-weight: bold;
+//   font-size: 1rem;
+//   text-align: center;
+//   width: 100%;
+// }
+
+
 @import 'styles/breakpoints';
 @import 'styles/fonts/typography';
 
-.guideFiturWrap {
+.guideFiturSection {
   max-width: 1400px;
-  width: 100%;
-  margin: 2rem auto;
+  margin: 4rem auto;
+  padding: 0 1rem;
+
+  .sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}
+
+.guideFiturWrap {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
   justify-content: space-between;
-
-  // Tambah padding untuk tablet & mobile
-  @media (max-width: $breakpoint-medium) {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
 }
 
 .guideFiturItem {
-  flex: 1 1 calc(25% - 1.125rem); // 4 kolom desktop
+  flex: 1 1 calc(25% - 1.125rem); // 4 kolom di desktop
   text-decoration: none;
   color: inherit;
   position: relative;
 
-
-  // Tablet dan mobile: 2 kolom
   @media (max-width: $breakpoint-medium) {
-    flex: 1 1 calc(50% - 0.75rem);
+    flex: 1 1 calc(50% - 0.75rem); // default mobile 2 kolom
+  }
+
+  // Untuk layout 3 item mobile sejajar
+  .threeMobile & {
+    flex: 1 1 calc(33.333% - 1rem);
   }
 }
 
@@ -55,4 +122,30 @@
   font-size: 1rem;
   text-align: center;
   width: 100%;
+}
+
+
+.titleOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+
+  // Ukuran font untuk tablet
+  @media (max-width: $breakpoint-medium) {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+  }
+
+  // Ukuran font lebih kecil untuk layar hp kecil
+  @media (max-width: $breakpoint-small) {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
 }
