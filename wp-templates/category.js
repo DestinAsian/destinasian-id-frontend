@@ -9,6 +9,9 @@ const CategoryHeader = dynamic(() =>
 const CategoryStories = dynamic(() =>
   import('../components/CategoryStories/CategoryStories'),
 )
+const CategorySecondStories = dynamic(() =>
+  import('../components/CategoryStories/CategorySecondStories'),
+)
 const CategoryStoriesGuide = dynamic(() =>
   import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),
 )
@@ -480,6 +483,13 @@ export default function Component(props) {
             guideStories={data.category.guideStorie}
           /> */}
 
+          <CategorySecondStories
+            categoryUri={databaseId}
+            pinPosts={pinPosts}
+            name={name}
+            children={children}
+            parent={parent?.node?.name}
+          />
           <CategoryStories
             categoryUri={databaseId}
             pinPosts={pinPosts}
@@ -569,7 +579,7 @@ Component.query = gql`
         titleReelIg
         contentReelIg
         reelGuideIg1
-        reelGuideIg2 
+        reelGuideIg2
         videoReelIg1
         bannerReelIg2 {
           mediaItemUrl
@@ -577,30 +587,15 @@ Component.query = gql`
         linkUrlBannerReelIg2
       }
       guideStorie {
+        bannerFokusHubDa {
+          mediaItemUrl
+        }
         bannerGuideStories {
           mediaItemUrl
         }
-        captionImagesGuideStories
-        contentGuideStories
         fieldGroupName
-        linkBookHereGuideStories
-        titleGuideStories
-        imageGuideStories {
-          mediaItemUrl
-        }
-        iconGuideStories {
-          mediaItemUrl
-        }
         linkBannerFokusHubDa
-        bannerFokusHubDa {
-          mediaItemUrl
-        }
-      }
-      bannerDa {
-        linkBannerFokusHubDa
-        bannerFokusHubDa {
-          mediaItemUrl
-        }
+        linkBannerGuideStories
       }
       pinPosts {
         pinPost {

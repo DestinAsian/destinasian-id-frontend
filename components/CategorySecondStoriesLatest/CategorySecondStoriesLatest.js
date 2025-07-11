@@ -100,35 +100,61 @@ export default function CategoryStoriesLatest({
             featuredImage={travelGuide.featuredImage?.node}
             caption={travelGuide.featuredImage?.node?.caption}
           />
-          {/* ⬇️ Tambahan guide info di bawah gambar */}
           {guideInfo && (
             <div className={cx('guide-info')}>
-              <span className={cx('guide-name')}>{guideInfo?.guideName}</span>
-              {guideInfo?.linkLocation && (
-                <a
-                  href={guideInfo.linkLocation}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cx('guide-location')}
-                >
-                  {guideInfo?.guideLocation}
-                </a>
+              {guideInfo?.guideName && (
+                <span className={cx('guide-name')}>{guideInfo.guideName}</span>
               )}
-              <span className={cx('separator')}>|</span>
-              <span className={cx('guide-price')}>{guideInfo?.guidePrice}</span>
-              <span className={cx('separator')}>|</span>
+
+              {guideInfo?.linkLocation && guideInfo?.guideLocation && (
+                <>
+                  {
+                    guideInfo?.guideName && (
+                      <span className={cx('separator')}>|</span>
+                    ) /* ✅ updated logic */
+                  }
+                  <a
+                    href={guideInfo.linkLocation}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cx('guide-location')}
+                  >
+                    {guideInfo.guideLocation}
+                  </a>
+                </>
+              )}
+
+              {guideInfo?.guidePrice && (
+                <>
+                  {(guideInfo?.guideName || guideInfo?.guideLocation) && (
+                    <span className={cx('separator')}>|</span> // ✅ updated logic
+                  )}
+                  <span className={cx('guide-price')}>
+                    {guideInfo.guidePrice}
+                  </span>
+                </>
+              )}
+
               {guideInfo?.linkBookNow && (
-                <a
-                  href={guideInfo.linkBookNow}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cx('book-now-button')}
-                >
-                  Book Now
-                </a>
+                <>
+                  {(guideInfo?.guideName ||
+                    guideInfo?.guideLocation ||
+                    guideInfo?.guidePrice) && (
+                    <span className={cx('separator')}>|</span> // ✅ updated logic
+                  )}
+                  <a
+                    href={guideInfo.linkBookNow}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cx('book-now-button')}
+                  >
+                    Book Now
+                  </a>
+                </>
               )}
             </div>
           )}
+
           <GuideTextBlock
             title={travelGuide.title}
             excerpt={travelGuide.excerpt}
