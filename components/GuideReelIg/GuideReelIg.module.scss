@@ -12,20 +12,18 @@
 
 /* TITLE UTAMA */
 .titleWrapper {
-    text-align: center;
-    margin: 0 auto 1rem auto;
-    font-family: 'Unit Slab Pro Black';
-    font-weight: bold;
-    font-size: 2rem;
-    line-height: 1.4;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-
-  }
-  
+  text-align: center;
+  margin: 0 auto 1rem auto;
+  font-family: 'Unit Slab Pro Black';
+  font-weight: bold;
+  font-size: 2rem;
+  line-height: 1.4;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
 
 .contentWrapper {
   text-align: center;
@@ -81,8 +79,7 @@
   }
 }
 
-.leftImage,
-.rightImage {
+.rightReel {
   flex: 0 0 25%;
 
   img {
@@ -93,7 +90,6 @@
   }
 }
 
-.rightVideo,
 .leftBanner {
   flex: 0 0 73%;
 
@@ -107,21 +103,39 @@
     width: 100%;
     height: auto;
     display: block;
-    object-fit: cover;
+    object-fit: cover;  }
+}
+.leftReel {
+  flex: 0 0 23.5%;
 
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
   }
 }
-.leftBanner {
-  @media (max-width: $breakpoint-medium) {
-    flex-direction: column;
-    padding-top: 1rem;
-    padding-bottom: 2rem;
+
+.rightVideo {
+  flex: 0 0 74%;
+  gap: 1rem;
+  @media (min-width: $breakpoint-extra-small) {
+  }
+
+  img,
+  iframe,
+  video,
+  .videoContent {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: 0.5rem;
   }
 }
+
 .videoContent {
   width: 100%;
-//   background-color: var(--wpe--color--black--cow);
-
   iframe,
   video,
   embed {
@@ -129,5 +143,19 @@
     height: auto;
     aspect-ratio: 16 / 9;
     display: block;
+  }
+}
+
+.reelContent {
+  iframe,
+  video,
+  embed {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 9 / 16;
+    display: block;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
   }
 }

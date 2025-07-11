@@ -568,14 +568,8 @@ Component.query = gql`
       guideReelIg {
         titleReelIg
         contentReelIg
-        imagesGuideReelIg1 {
-          mediaItemUrl
-        }
-        linkUrlReelIg1
-        imagesGuideReelIg2 {
-          mediaItemUrl
-        }
-        linkUrlReelIg2
+        reelGuideIg1
+        reelGuideIg2 
         videoReelIg1
         bannerReelIg2 {
           mediaItemUrl
