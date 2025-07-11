@@ -45,13 +45,6 @@ const PartnerContent = dynamic(() =>
 const PasswordProtected = dynamic(() =>
   import('../components/PasswordProtected/PasswordProtected'),
 )
-const RelatedStories = dynamic(() =>
-  import('../components/RelatedStories/RelatedStories'),
-)
-
-const EntryRelatedStories = dynamic(() =>
-  import('../components/EntryRelatedStories/EntryRelatedStories'),
-)
 
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
@@ -397,6 +390,13 @@ SingleTravelGuide.query = gql`
         focuskw
       }
       uri
+      guide_book_now {
+        fieldGroupName
+        guideName
+        linkBookNow
+        linkLocation
+        guideLocation
+      }
       categories(where: { childless: true }) {
         edges {
           node {
