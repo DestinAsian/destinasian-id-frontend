@@ -7,7 +7,12 @@ import { GetCategoryStories } from '../../queries/GetCategoryStories'
 import dynamic from 'next/dynamic'
 
 const Button = dynamic(() => import('../../components/Button/Button'))
-const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
+const PostTwoColumns = dynamic(() =>
+  import('../../components/PostTwoColumns/PostTwoColumns'),
+)
+const TextTwoColumns = dynamic(() =>
+  import('../../components/PostTwoColumns/TextTwoColumns'),
+)
 
 const cx = classNames.bind(styles)
 
@@ -81,37 +86,99 @@ export default function CategoryStories(categoryUri) {
     )
   }
 
-  const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node) || []
+  const allPosts =
+    data?.category?.contentNodes?.edges?.map((post) => post.node) || []
   const allPinPosts = pinPosts?.pinPost ? [pinPosts.pinPost] : []
 
-  const mergedPosts = [...allPinPosts, ...allPosts].reduce((uniquePosts, post) => {
-    if (!uniquePosts.some((p) => p?.id === post?.id)) uniquePosts.push(post)
-    return uniquePosts
-  }, [])
+  const mergedPosts = [...allPinPosts, ...allPosts].reduce(
+    (uniquePosts, post) => {
+      if (!uniquePosts.some((p) => p?.id === post?.id)) uniquePosts.push(post)
+      return uniquePosts
+    },
+    [],
+  )
 
   // ⬇️ Logic tampil: potong dari index 2 jika travelGuideCategory
   const startIndex = isTravelGuideCategory ? 2 : 0
-  const postsToDisplay = mergedPosts.slice(startIndex, startIndex + visibleCount)
+  const postsToDisplay = mergedPosts.slice(
+    startIndex,
+    startIndex + visibleCount,
+  )
 
   return (
     <div className={cx('component')}>
       {postsToDisplay.length > 0 ? (
-        postsToDisplay.map((post) => (
-          <div key={post?.id} className={cx('post-wrapper')}>
-            <PostTwoColumns
-              title={post?.title}
-              excerpt={post?.excerpt}
-              content={post?.content}
-              date={post?.date}
-              author={post?.author?.node?.name}
-              uri={post?.uri}
-              parentCategory={post?.categories?.edges[0]?.node?.parent?.node?.name}
-              category={post?.categories?.edges[0]?.node?.name}
-              categoryUri={post?.categories?.edges[0]?.node?.uri}
-              featuredImage={post?.featuredImage?.node}
-            />
-          </div>
-        ))
+        postsToDisplay.map((post) => {
+          const guideInfo = post?.guide_book_now // 🔹 ADDED: Guide Info retrieval
+
+          return (
+            <div key={post?.id} className={cx('post-wrapper')}>
+              <PostTwoColumns
+                title={post?.title}
+                uri={post?.uri}
+                featuredImage={post?.featuredImage?.node}
+              />
+
+              {guideInfo && (
+                <div className={cx('guide-info')}>
+                  {guideInfo?.guideName && (
+                    <span className={cx('guide-name')}>
+                      {guideInfo.guideName}
+                    </span>
+                  )}
+
+                  {guideInfo?.guideLocation && guideInfo?.linkLocation && (
+                    <>
+                      {/* <span className={cx('separator')}>|</span> */}
+                      <a
+                        href={guideInfo.linkLocation}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cx('guide-location')}
+                      >
+                        {guideInfo.guideLocation}
+                      </a>
+                    </>
+                  )}
+
+                  {guideInfo?.guidePrice && (
+                    <>
+                      <span className={cx('separator')}>|</span>
+                      <span className={cx('guide-price')}>
+                        {guideInfo.guidePrice}
+                      </span>
+                    </>
+                  )}
+
+                  {guideInfo?.linkBookNow && (
+                    <>
+                      <span className={cx('separator')}>|</span>
+                      <a
+                        href={guideInfo.linkBookNow}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cx('book-now-button')}
+                      >
+                        Book Now
+                      </a>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <TextTwoColumns
+                title={post?.title}
+                excerpt={post?.excerpt}
+                uri={post?.uri}
+                parentCategory={
+                  post?.categories?.edges[0]?.node?.parent?.node?.name
+                }
+                category={post?.categories?.edges[0]?.node?.name}
+                categoryUri={post?.categories?.edges[0]?.node?.uri}
+              />
+            </div>
+          )
+        })
       ) : (
         <div className="mx-auto my-0 flex min-h-60 max-w-[100vw] items-center justify-center md:max-w-[700px]">
           There is no results in this category...
@@ -127,4 +194,81 @@ export default function CategoryStories(categoryUri) {
       )}
     </div>
   )
+  // return (
+  //   <div className={cx('component')}>
+  //     {postsToDisplay.length > 0 ? (
+  //       postsToDisplay.map((post) => (
+
+  //         <div key={post?.id} className={cx('post-wrapper')}>
+  //           {/* <PostTwoColumns
+  //             title={post?.title}
+  //             excerpt={post?.excerpt}
+  //             content={post?.content}
+  //             date={post?.date}
+  //             author={post?.author?.node?.name}
+  //             uri={post?.uri}
+  //             parentCategory={post?.categories?.edges[0]?.node?.parent?.node?.name}
+  //             category={post?.categories?.edges[0]?.node?.name}
+  //             categoryUri={post?.categories?.edges[0]?.node?.uri}
+  //             featuredImage={post?.featuredImage?.node}
+  //           /> */}
+  //           <PostTwoColumns
+  //             title={post?.title}
+  //             uri={post?.uri}
+  //             featuredImage={post?.featuredImage?.node}
+  //           />
+  //           {/* ⬇️ Tambahan guide info di bawah gambar */}
+  //         {guideInfo && (
+  //           <div className={cx('guide-info')}>
+  //             <span className={cx('guide-name')}>{guideInfo?.guideName}</span>
+  //             {guideInfo?.linkLocation && (
+  //               <a
+  //                 href={guideInfo.linkLocation}
+  //                 target="_blank"
+  //                 rel="noopener noreferrer"
+  //                 className={cx('guide-location')}
+  //               >
+  //                 {guideInfo?.guideLocation}
+  //               </a>
+  //             )}
+  //             <span className={cx('separator')}>|</span>
+  //             <span className={cx('guide-price')}>{guideInfo?.guidePrice}</span>
+  //             <span className={cx('separator')}>|</span>
+  //             {guideInfo?.linkBookNow && (
+  //               <a
+  //                 href={guideInfo.linkBookNow}
+  //                 target="_blank"
+  //                 rel="noopener noreferrer"
+  //                 className={cx('book-now-button')}
+  //               >
+  //                 Book Now
+  //               </a>
+  //             )}
+  //           </div>
+  //         )}
+  //           <TextTwoColumns
+  //             title={post?.title}
+  //             excerpt={post?.excerpt}
+  //             uri={post?.uri}
+  //             parentCategory={post?.categories?.edges[0]?.node?.parent?.node?.name}
+  //             category={post?.categories?.edges[0]?.node?.name}
+  //             categoryUri={post?.categories?.edges[0]?.node?.uri}
+  //           />
+  //         </div>
+  //       ))
+  //     ) : (
+  //       <div className="mx-auto my-0 flex min-h-60 max-w-[100vw] items-center justify-center md:max-w-[700px]">
+  //         There is no results in this category...
+  //       </div>
+  //     )}
+
+  //     {mergedPosts.length - startIndex > visibleCount && (
+  //       <div className="mx-auto my-0 flex w-[100vw] justify-center">
+  //         <Button onClick={fetchMorePosts} className="gap-x-4">
+  //           {loading ? 'Loading...' : 'LOAD MORE...'}
+  //         </Button>
+  //       </div>
+  //     )}
+  //   </div>
+  // )
 }
