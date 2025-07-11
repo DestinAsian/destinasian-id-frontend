@@ -49,3 +49,58 @@
 .rightContent70 {
   flex: 0 0 70%;
 }
+
+
+.guide-info {
+  margin: 1rem;
+  font-size: 0.95rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-family: 'Inter', sans-serif;
+
+  .separator {
+    color: #888;
+    font-weight: bold;
+  }
+
+
+
+// .guide-info {
+//   display: flex;
+//   align-items: center;
+//   gap: 0.5rem;
+//   margin-top: 1rem;
+//   flex-wrap: wrap;
+// }
+
+.guide-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.guide-location {
+  color: #000000;
+  font-size: 0.95rem;
+  &:hover {
+    color: var(--wpe--color--teal--light);
+  }
+}
+.guide-price {
+  color: #000000;
+  font-size: 0.95rem;
+}
+
+.book-now-button {
+  color: rgb(0, 0, 0);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    color: var(--wpe--color--teal--light);
+  }
+}
+}
