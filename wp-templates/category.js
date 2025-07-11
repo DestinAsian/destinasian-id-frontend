@@ -463,9 +463,9 @@ export default function Component(props) {
             bannerDa={props.data.category.guideStorie}
             // guide_book_now={travelGuide?.guide_book_now.acf}
           />
-          {props?.data?.category?.guideStorie && (
+          {/* {props?.data?.category?.guideStorie && (
             <GuideStories guideStories={props.data.category.guideStorie} />
-          )}
+          )} */}
           {props?.data?.category?.guideReelIg && (
             <GuideReelIg guideReelIg={props.data.category.guideReelIg} />
           )}
@@ -488,10 +488,11 @@ export default function Component(props) {
             children={children}
             parent={parent?.node?.name}
           />
-          <BannerPosterGuide
+          {/* <BannerPosterGuide
             guideReelIg={props.data.category.guideReelIg}
             bannerDa={props.data.category.guideStorie}
-          />
+          /> */}
+          <BannerPosterGuide guideStorie={props.data.category.guideStorie} />
         </>
       </Main>
       <Footer footerMenu={footerMenu} />
@@ -587,6 +588,10 @@ Component.query = gql`
         fieldGroupName
         linkBannerFokusHubDa
         linkBannerGuideStories
+        linkBannerLandscape
+        bannerLandscape {
+          mediaItemUrl
+        }
       }
       pinPosts {
         pinPost {
