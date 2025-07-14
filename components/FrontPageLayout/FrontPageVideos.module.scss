@@ -32,7 +32,6 @@
     max-width: var(--wpe--container--max--width);
     position: relative;
     z-index: 3;
-    padding: 0 1rem;
 
     @media (min-width: $breakpoint-small) {
       flex-direction: row;
