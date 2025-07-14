@@ -4,69 +4,90 @@ import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const SingleHeader = dynamic(() =>
-  import('../components/SingleHeader/SingleHeader'),
-)
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const Main = dynamic(() => import('../components/Main/Main'))
-const Container = dynamic(() => import('../components/Container/Container'))
-const SingleEntryHeader = dynamic(() =>
-  import('../components/SingleEntryHeader/SingleEntryHeader'),
-)
-const ContentWrapper = dynamic(() =>
-  import('../components/ContentWrapper/ContentWrapper'),
-)
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-const SEO = dynamic(() => import('../components/SEO/SEO'))
-const SingleSlider = dynamic(() =>
-  import('../components/SingleSlider/SingleSlider'),
-)
-const CategorySecondaryHeader = dynamic(() =>
-  import(
-    '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
-  ),
-)
-const SecondaryHeader = dynamic(() =>
-  import('../components/Header/SecondaryHeader/SecondaryHeader'),
-)
-const EntryMoreReviews = dynamic(() =>
-  import('../components/EntryMoreReviews/EntryMoreReviews'),
-)
-const MoreReviews = dynamic(() =>
-  import('../components/MoreReviews/MoreReviews'),
-)
-const PartnerContent = dynamic(() =>
-  import('../components/PartnerContent/PartnerContent'),
-)
-const PasswordProtected = dynamic(() =>
-  import('../components/PasswordProtected/PasswordProtected'),
-)
-const RelatedStories = dynamic(() =>
-  import('../components/RelatedStories/RelatedStories'),
-)
-const SingleEditorialEntryHeader = dynamic(() =>
-  import('../components/SingleEditorialEntryHeader/SingleEditorialEntryHeader'),
-)
-const SingleEditorialFeaturedImage = dynamic(() =>
-  import(
-    '../components/SingleEditorialFeaturedImage/SingleEditorialFeaturedImage'
-  ),
-)
+
+// const CategoryDesktopSecondaryHeader = dynamic(() =>
+//   import(
+//     '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
+//   ),
+// )
+
+// const CategorySecondaryHeader = dynamic(() =>
+//   import(
+//     '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
+//   ),
+// )
+
+const Container = dynamic(() => import('../components/Container/Container'))
+
+// const ContentWrapper = dynamic(() =>
+//   import('../components/ContentWrapper/ContentWrapper'),
+// )
+
 const ContentWrapperEditorial = dynamic(() =>
   import('../components/ContentWrapperEditorial/ContentWrapperEditorial'),
 )
+
+// const EntryMoreReviews = dynamic(() =>
+//   import('../components/EntryMoreReviews/EntryMoreReviews'),
+// )
+
 const EntryRelatedStories = dynamic(() =>
   import('../components/EntryRelatedStories/EntryRelatedStories'),
 )
-const CategoryDesktopSecondaryHeader = dynamic(() =>
-  import(
-    '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
-  ),
+
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+
+const Main = dynamic(() => import('../components/Main/Main'))
+
+// const MoreReviews = dynamic(() =>
+//   import('../components/MoreReviews/MoreReviews'),
+// )
+
+// const PartnerContent = dynamic(() =>
+//   import('../components/PartnerContent/PartnerContent'),
+// )
+
+const PasswordProtected = dynamic(() =>
+  import('../components/PasswordProtected/PasswordProtected'),
+)
+
+const RelatedStories = dynamic(() =>
+  import('../components/RelatedStories/RelatedStories'),
+)
+
+const SEO = dynamic(() => import('../components/SEO/SEO'))
+
+const SecondaryHeader = dynamic(() =>
+  import('../components/Header/SecondaryHeader/SecondaryHeader'),
 )
 
 const SingleDesktopHeader = dynamic(() =>
   import('../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'),
 )
+
+const SingleEditorialEntryHeader = dynamic(() =>
+  import('../components/SingleEditorialEntryHeader/SingleEditorialEntryHeader'),
+)
+
+const SingleEditorialFeaturedImage = dynamic(() =>
+  import(
+    '../components/SingleEditorialFeaturedImage/SingleEditorialFeaturedImage'
+  ),
+)
+
+// const SingleEntryHeader = dynamic(() =>
+//   import('../components/SingleEntryHeader/SingleEntryHeader'),
+// )
+
+const SingleHeader = dynamic(() =>
+  import('../components/SingleHeader/SingleHeader'),
+)
+
+// const SingleSlider = dynamic(() =>
+//   import('../components/SingleSlider/SingleSlider'),
+// )
+
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -97,17 +118,18 @@ export default function Component(props) {
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
   const {
-    title,
-    content,
-    featuredImage,
-    databaseId,
     acfPostSlider,
-    seo,
-    uri,
-    passwordProtected,
-    guides,
+    content,
+    databaseId,
     destinationGuides,
+    featuredImage,
+    guides,
     name,
+    passwordProtected,
+    seo,
+    slug,
+    title,
+    uri,
   } = props?.data?.post
   const categories = props?.data?.post.categories?.edges ?? []
 
@@ -336,7 +358,7 @@ export default function Component(props) {
       </main>
     )
   }
- 
+
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       <SEO
@@ -368,7 +390,14 @@ export default function Component(props) {
             setIsNavShown={setIsNavShown}
             isScrolled={isScrolled}
           />
-          {!isNavShown &&
+          <SingleDesktopHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
+          {/* {!isNavShown &&
             (guides?.guidesPost === 'yes' ||
             categories?.[0]?.node?.parent?.node?.destinationGuides
               ?.destinationGuides === 'yes' ? (
@@ -386,7 +415,7 @@ export default function Component(props) {
                 setIsGuidesNavShown={setIsGuidesNavShown}
                 isScrolled={isScrolled}
               />
-            ))}
+            ))} */}
         </>
       ) : (
         <>
@@ -408,7 +437,14 @@ export default function Component(props) {
             setIsNavShown={setIsNavShown}
             isScrolled={isScrolled}
           />
-          {guides?.guidesPost === 'yes' ||
+          <SecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
+          {/* {guides?.guidesPost === 'yes' ||
           categories?.[0]?.node?.parent?.node?.destinationGuides
             ?.destinationGuides === 'yes' ? (
             <CategorySecondaryHeader
@@ -425,19 +461,46 @@ export default function Component(props) {
               setIsGuidesNavShown={setIsGuidesNavShown}
               isScrolled={isScrolled}
             />
-          )}
+          )} */}
         </>
       )}
-
+      <Main className="relative top-[-0.75rem] sm:top-[-1rem]">
+        <SingleEditorialFeaturedImage image={featuredImage?.node} />
+        <SingleEditorialEntryHeader
+          image={featuredImage?.node}
+          title={title}
+          categoryUri={categories?.[0]?.node?.uri}
+          parentCategory={categories?.[0]?.node?.parent?.node?.name}
+          categoryName={categories?.[0]?.node?.name}
+          author={props?.data?.post?.author?.node?.name}
+          date={props?.data?.post?.date}
+        />
+        <ContentWrapperEditorial content={content} images={images} />
+        <EntryRelatedStories />
+        {props?.shuffledRelatedStories?.map((post) =>
+          post.node.title !== title ? (
+            <Container key={post.node.id}>
+              <RelatedStories
+                title={post.node.title}
+                excerpt={post.node.excerpt}
+                uri={post.node.uri}
+                category={post.node.categories.edges[0]?.node?.name}
+                categoryUri={post.node.categories.edges[0]?.node?.uri}
+                featuredImage={post.node.featuredImage?.node}
+              />
+            </Container>
+          ) : null,
+        )}
+      </Main>
       {/* Validasi: apakah ini post dengan tipe Guide */}
-      {guides?.guidesPost === 'yes' ||
+      {/* {guides?.guidesPost === 'yes' ||
       categories?.[0]?.node?.parent?.node?.destinationGuides
         ?.destinationGuides === 'yes' ? (
         <Main>
           <SingleSlider images={images} />
           <SingleEntryHeader
             title={title}
-            categoryUri={categories?.[0]?.node?.uri}
+            categoryUri={categories?.[0]?.node?.slug}
             parentCategory={categories?.[0]?.node?.parent?.node?.name}
             categoryName={categories?.[0]?.node?.name}
           />
@@ -483,7 +546,7 @@ export default function Component(props) {
             ) : null,
           )}
         </Main>
-      )}
+      )} */}
 
       <Footer footerMenu={footerMenu} />
     </main>
@@ -517,6 +580,7 @@ Component.query = gql`
         focuskw
       }
       uri
+      slug
       categories(where: { childless: true }) {
         edges {
           node {
