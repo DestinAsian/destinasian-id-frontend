@@ -6,52 +6,67 @@ import dynamic from 'next/dynamic'
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
-import { GetIndoCategory } from '../../queries/GetIndoCategory'
+import { GetChildrenTravelGuides } from '../../queries/GetChildrenTravelGuides'
+import TravelGuideCategories from '../TravelGuideCategories/TravelGuideCategories'
 
-import Outnow from '../Outnow/Outnow'
-import CategoryUpdates from '../CategoryUpdates/CategoryUpdates'
-import CategoryNewsUpdates from '../CategoryNewsUpdates/CategoryNewsUpdates'
-import CategoryFeatures from '../CategoryFeatures/CategoryFeatures'
-import CategoryIndo from '../CategoryIndo/CategoryIndo'
+const Outnow = dynamic(() => import('../Outnow/Outnow'))
+
+const CategoryUpdates = dynamic(() =>
+  import('../CategoryUpdates/CategoryUpdates'),
+)
+
+const CategoryNewsUpdates = dynamic(() =>
+  import('../CategoryNewsUpdates/CategoryNewsUpdates'),
+)
+
+const CategoryFeatures = dynamic(() =>
+  import('../CategoryFeatures/CategoryFeatures'),
+)
+
 
 const cx = classNames.bind(styles)
 
-
-// const HalfPage1 = dynamic(() => import('../../components/AdUnit/HalfPage1/HalfPage1'))
-// const MastHeadTop = dynamic(() => import('../../components/AdUnit/MastHeadTop/MastHeadTop'))
-
 export default function FrontPageLayout() {
-  // Query: Indo Category
-  const { data: indoData, loading: indoLoading, error: indoError } = useQuery(GetIndoCategory, {
-    variables: { include: ['14616', '14601', '14606', '14611'] },
-  })
-
-  const { data: updatesData, loading: updatesLoading, error: updatesError } = useQuery(GetCategoryUpdates, {
+  const {
+    data: updatesData,
+    loading: updatesLoading,
+    error: updatesError,
+  } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
   })
 
-  const { data: featuresData, loading: featuresLoading, error: featuresError } = useQuery(GetCategoryFeatures, {
+  const {
+    data: featuresData,
+    loading: featuresLoading,
+    error: featuresError,
+  } = useQuery(GetCategoryFeatures, {
     variables: { id: '20' },
   })
 
   // Parsing Data
-  const indoCategories = indoData?.categories?.edges?.map(edge => edge.node) || []
   const categoryEdges = updatesData?.category?.children?.edges || []
   const categoryFeatures = featuresData?.category
 
+  const {
+    data: travelGuideData,
+    loading: travelGuideLoading,
+    error: travelGuideError,
+  } = useQuery(GetChildrenTravelGuides)
   return (
     <>
       {/* <HalfPage1 />
       <MastHeadTop /> */}
 
-      {/* INDONESIA SECTION */}
-      {!indoLoading && !indoError && indoCategories.length > 0 && (
-        <div className={cx('component-updates')}>
-          <div className={cx('category-insights-component')}>
-            <CategoryIndo data={indoCategories} />
+      {/* TRAVEL GUIDES CHILDREN */}
+      {!travelGuideLoading &&
+        !travelGuideError &&
+        travelGuideData?.category?.children?.edges?.length > 0 && (
+          <div className={cx('component-updates')}>
+            <div className={cx('category-insights-component')}>
+              <TravelGuideCategories data={travelGuideData} />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       <hr className={cx('divider')} />
 

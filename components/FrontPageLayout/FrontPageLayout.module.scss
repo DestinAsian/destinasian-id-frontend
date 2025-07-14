@@ -9,7 +9,6 @@
 
 // Category Updates Component
 .category-updates-component {
-  padding: 0 0 1rem 0;
 
   .category-updates-title {
     font-size: 1.5rem;
@@ -68,44 +67,6 @@
   }
 }
 
-.wrapper-videos {
-  width: 100%;
-  background-color: var(--wpe--color--teal--deep);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.component-videos {
-  display: flex;
-  justify-content: center;
-  background-color: var(--wpe--color--teal--deep);
-  min-height: 100%;
-}
-
-.title-videos {
-  font-size: 2rem;
-  background-color: var(--wpe--color--teal--deep);
-  font-weight: bold;
-  font-family: 'Scheherazade New', serif;
-  text-align: start !important;
-}
-
-// Outnow Component
-.outnow-videos {
-  background-color: var(--wpe--color--teal--deep);
-  padding: 0 1rem;
-
-  .outnow-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  .outnow-content {
-    font-size: 1rem;
-    color: var(--wpe--color--dark);
-  }
-}
 .component-news-updates {
   display: flex;
   justify-content: center;
@@ -173,18 +134,5 @@
   // OUTNOW SECTION
   // ========================
 
-  .outnow-videos {
-    background-color: var(--wpe--color--teal--deep);
-    padding: 0 1rem;
-
-    .outnow-title {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    .outnow-content {
-      font-size: 1rem;
-      color: var(--wpe--color--dark);
-    }
-  }
+  
 }

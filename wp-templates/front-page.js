@@ -9,28 +9,39 @@ import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
+import { GetChildrenTravelGuides } from '../queries/GetChildrenTravelGuides'
 
 import dynamic from 'next/dynamic'
-const HomepageHeader = dynamic(() => import('../components/HomepageHeader/HomepageHeader'))
-const HomepageSecondaryHeader = dynamic(() => import('../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'))
-const HomepageDestopHeader = dynamic(() => import('../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'))
+const HomepageHeader = dynamic(() =>
+  import('../components/HomepageHeader/HomepageHeader'),
+)
+const HomepageSecondaryHeader = dynamic(() =>
+  import(
+    '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
+  ),
+)
+const HomepageDestopHeader = dynamic(() =>
+  import(
+    '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
+  ),
+)
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
-const FeatureWell = dynamic(() => import('../components/FeatureWell/FeatureWell'))
-const FrontPageLayout = dynamic(() => import('../components/FrontPageLayout/FrontPageLayout'))
-const ContentWrapperVideo = dynamic(() => import('../components/ContentWrapperVideo/ContentWrapperVideo'))
-const Outnow = dynamic(() => import('../components/Outnow/Outnow'))
+const FeatureWell = dynamic(() =>
+  import('../components/FeatureWell/FeatureWell'),
+)
+const FrontPageLayout = dynamic(() =>
+  import('../components/FrontPageLayout/FrontPageLayout'),
+)
+const FrontPageVideos = dynamic(() =>
+  import('../components/FrontPageLayout/FrontPageVideos'),
+)
 const Footer = dynamic(() => import('../components/Footer/Footer'))
-const HalfPage2 = dynamic(() => import('../components/AdUnit/HalfPage2/HalfPage2'))
-
+const HalfPage2 = dynamic(() =>
+  import('../components/AdUnit/HalfPage2/HalfPage2'),
+)
 const SEO = dynamic(() => import('../components/SEO/SEO'))
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-const HomepageStories = dynamic(() =>
-  import('../components/HomepageStories/HomepageStories'),
-)
-const VideoFrontPage = dynamic(() =>
-  import('../components/VideoFrontPage/VideoFrontPage'),
-)
 
 export default function Component(props) {
   // Loading state for previews
@@ -93,8 +104,8 @@ export default function Component(props) {
     }
   }, [isGuidesNavShown])
 
-   // Slideshow untuk FeatureWell
-   const featureWell = [1, 2, 3].map((num) => ({
+  // Slideshow untuk FeatureWell
+  const featureWell = [1, 2, 3].map((num) => ({
     type: acfHomepageSlider?.[`typeSlide${num}`],
     videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
     desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
@@ -127,8 +138,8 @@ export default function Component(props) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first', // Cepat karena data jarang berubah
+    nextFetchPolicy: 'cache-first',
   })
 
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
@@ -138,11 +149,11 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.footerMenuItems?.nodes ?? []
 
-   // Pin posts
-   const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
+  // Pin posts
+  const { data: pinPostsStories } = useQuery(GetHomepagePinPosts, {
     variables: { id: databaseId, asPreview },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network', // Cepat + tetap segar
+    nextFetchPolicy: 'cache-first',
   })
   // State variable of homepage pin posts
   const homepagePinPosts = pinPostsStories?.page?.homepagePinPosts ?? []
@@ -154,8 +165,8 @@ export default function Component(props) {
       variables: {
         first: 5,
       },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'cache-first',
     },
   )
 
@@ -165,7 +176,9 @@ export default function Component(props) {
     loading: videosLoading,
     error: videosError,
   } = useQuery(GetVideos, {
-    variables: { first: 10 },
+    variables: { first: 2 },
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
   })
   const videos = videosData?.videos?.edges || []
 
@@ -192,15 +205,18 @@ export default function Component(props) {
   }
 
   // define mainCatPostCards
-  const mainCatPosts = [
-    ...(mainPosts != null ? mainPosts : []),
-  ]
+  const mainCatPosts = [...(mainPosts != null ? mainPosts : [])]
 
   // sortByDate mainCat & childCat Posts
   const allPosts = mainCatPosts.sort(sortPostsByDate)
   // Tambahkan di atas dalam komponen
   const [isDesktop, setIsDesktop] = useState(false)
 
+  const {
+    data: travelGuideData,
+    loading: travelGuideLoading,
+    error: travelGuideError,
+  } = useQuery(GetChildrenTravelGuides)
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024)
@@ -284,35 +300,19 @@ export default function Component(props) {
                 </Container>
               )}
             </div>
+
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
               <FrontPageLayout />
             </div>
-            <div className="w-full" style={{ backgroundColor: '#008080' }}>
+            <div
+              className="component-videos w-full"
+              style={{ backgroundColor: '#008080' }}
+            >
               <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
-                {/* <VideoFrontPage /> */}
-                <h2 className={cx('title-videos')}>Videos</h2>
-                <div className={cx('wrapper-videos')}></div>
-                <div className={cx('component-videos')}>
-                  <div className={cx('two-columns')}>
-                    <div className={cx('left-column')}>
-                      {!videosLoading && !videosError && videos.length > 0 && (
-                        <div className={cx('category-updates-component')}>
-                          <ContentWrapperVideo data={videos} />
-                        </div>
-                      )}
-                    </div>
-                    <div className={cx('right-column')}>
-                      <aside className={cx('outnow-wrapper')}>
-                        <div className={cx('outnow-videos')}>
-                          <Outnow />
-                        </div>
-                      </aside>
-                    </div>
-                  </div>
-                </div>
+                <FrontPageVideos />
               </div>
             </div>
-            <HalfPage2/>
+            <HalfPage2 />
           </div>
           {/* <div id="snapStart" className="snap-start pt-16">
       <HomepageStories pinPosts={homepagePinPosts} />
