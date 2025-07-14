@@ -14,7 +14,7 @@ import 'swiper/css/navigation'
 const CategoryNewsUpdates = React.memo(() => {
   const { data, loading, error } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
-    fetchPolicy: 'cache-first', // ⏱️ cepatkan query
+    fetchPolicy: 'cache-first',
   })
 
   const children = useMemo(

@@ -39,7 +39,9 @@ const CategoryFeatures = () => {
   return (
     <div className={cx('CategoryFeaturesWrapper')}>
       <div className={cx('childCategory')}>
-        <h2 className={cx('title')}>{category?.name}</h2>
+        <Link href={category.uri}>
+          <h2 className={cx('title')}>{category?.name}</h2>
+        </Link>
 
         {category?.categoryImages?.categoryImagesCaption && (
           <p className={cx('description')}>
