@@ -1,0 +1,97 @@
+@import 'styles/breakpoints';
+
+.componentVideos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--wpe--color--teal--deep);
+  padding: 2rem 0;
+}
+
+.titleVideos {
+  font-size: 2rem;
+  color: var(--wpe--color--white);
+  font-weight: bold;
+  font-family: 'Scheherazade New', serif;
+  text-align: left;
+  width: 100%;
+  max-width: var(--wpe--container--max--width);
+  padding: 0 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.newsUpdates {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .twoColumns {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--wpe--container--max--width);
+    position: relative;
+    z-index: 3;
+    padding: 0 1rem;
+
+    @media (min-width: $breakpoint-small) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  .leftColumn {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    order: 1;
+    z-index: 2;
+
+    @media (min-width: $breakpoint-small) {
+      width: 73%;
+    }
+  }
+
+  .rightColumn {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    order: 2;
+    position: relative;
+
+    @media (min-width: $breakpoint-small) {
+      width: 20%;
+      margin-left: 5%;
+    }
+
+    .outnowWrapper {
+      margin-top: 2rem;
+
+      @media (min-width: $breakpoint-small) {
+        position: sticky;
+        top: 5rem;
+        margin-top: 0;
+      }
+    }
+
+    .outnowVideos {
+      background-color: var(--wpe--color--teal--deep);
+      padding: 0 1rem;
+
+      .outnow-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .outnow-content {
+        font-size: 1rem;
+        color: var(--wpe--color--dark);
+      }
+    }
+  }
+}
+
+.videoWrapper {
+  width: 100%;
+}
