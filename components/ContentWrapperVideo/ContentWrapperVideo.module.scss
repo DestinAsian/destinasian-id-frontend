@@ -332,3 +332,17 @@
     position: absolute;
   }
 }
+
+
+.loadingMessage {
+  display: flex;
+  font-family: 'Scheherazade New', serif;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 60vh; // atau 100vh jika ingin full screen
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.5rem;
+}

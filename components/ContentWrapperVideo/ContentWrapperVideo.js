@@ -16,7 +16,8 @@ export default function ContentWrapperVideo() {
     fetchPolicy: 'network-only', // untuk selalu ambil video terbaru
   })
 
-  if (loading) return <p>Loading video...</p>
+  // if (loading) return <p>Loading video...</p>
+  if (loading) return <p className={cx('loadingMessage')}>Loading video...</p>
   if (error) return <p>Error loading video: {error.message}</p>
 
   const videoNode = data?.videos?.edges?.[0]?.node
