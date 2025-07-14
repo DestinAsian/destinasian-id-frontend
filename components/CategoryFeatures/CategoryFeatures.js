@@ -1,12 +1,12 @@
-// export default CategoryFeatures
-import React, { useState, useEffect } from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import classNames from 'classnames/bind'
 import styles from './CategoryFeatures.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { format } from 'date-fns'
 
 const cx = classNames.bind(styles)
@@ -14,48 +14,27 @@ const cx = classNames.bind(styles)
 const CategoryFeatures = () => {
   const { data, loading, error } = useQuery(GetCategoryFeatures, {
     variables: { id: '20' },
+    fetchPolicy: 'cache-first',
   })
 
-  const [clickCount, setClickCount] = useState(0)
-  const [visibleCount, setVisibleCount] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
-
-  const router = useRouter()
+  const [visibleCount, setVisibleCount] = useState(3)
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+    // Optional: bisa ubah jumlah default berdasarkan screen size
+    const checkWidth = () => {
+      setVisibleCount(window.innerWidth < 768 ? 2 : 3)
     }
 
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    checkWidth()
+    window.addEventListener('resize', checkWidth)
+    return () => window.removeEventListener('resize', checkWidth)
   }, [])
 
-  useEffect(() => {
-    setVisibleCount(isMobile ? 2 : 3)
-  }, [isMobile])
-
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
+  if (loading) return null
+  if (error) return <p className={cx('error')}>Error: {error.message}</p>
 
   const category = data?.category
-  const posts = Array.isArray(category?.posts?.edges)
-    ? category.posts.edges
-    : []
-
-  const handleViewMore = () => {
-    const newClickCount = clickCount + 1
-    setClickCount(newClickCount)
-
-    if (newClickCount >= 3) {
-      router.push(category?.uri || '/')
-    } else {
-      setVisibleCount((prev) =>
-        Math.min(prev + (isMobile ? 2 : 3), posts.length),
-      )
-    }
-  }
+  const posts = category?.posts?.edges || []
 
   return (
     <div className={cx('CategoryFeaturesWrapper')}>
@@ -70,28 +49,28 @@ const CategoryFeatures = () => {
 
         <div className={cx('gridSection')}>
           {posts.slice(0, visibleCount).map(({ node: post }) => {
+            const featuredImage = post.featuredImage?.node
             const firstCategory = post.categories?.edges?.[0]?.node
-            const categoryName = firstCategory?.name || ''
             const parentCategoryName = firstCategory?.parent?.node?.name || ''
+            const categoryName = firstCategory?.name || ''
 
             return (
               <Link key={post.id} href={post.uri || `/${post.slug}`}>
                 <div className={cx('card')}>
                   <div className={cx('cardInner')}>
-                    {/* Gambar */}
-                    {post.featuredImage?.node?.mediaItemUrl && (
+                    {featuredImage?.mediaItemUrl && (
                       <div className={cx('imageWrapper')}>
                         <Image
-                          src={post.featuredImage.node.mediaItemUrl}
+                          src={featuredImage.mediaItemUrl}
                           alt={post.slug}
                           width={600}
                           height={400}
                           className={cx('thumbnail')}
+                          loading="lazy"
                         />
                       </div>
                     )}
 
-                    {/* Parent category (per post) */}
                     {parentCategoryName && (
                       <p className={cx('parentCategory')}>
                         {parentCategoryName}
@@ -109,7 +88,7 @@ const CategoryFeatures = () => {
                     <div
                       className={cx('excerpt')}
                       dangerouslySetInnerHTML={{ __html: post.excerpt }}
-                    ></div>
+                    />
 
                     <div className={cx('readMore')}>
                       <span>Read More →</span>
@@ -124,14 +103,6 @@ const CategoryFeatures = () => {
             )
           })}
         </div>
-
-        {/* {visibleCount < posts.length && (
-          <div className={cx('viewMoreWrapper')}>
-            <button onClick={handleViewMore} className={cx('viewMoreButton')}>
-              View More
-            </button>
-          </div>
-        )} */}
       </div>
     </div>
   )
