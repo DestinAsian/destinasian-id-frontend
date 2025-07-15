@@ -88,8 +88,10 @@ export default function HomepageDestopHeader({
   const contentNodesPosts = []
   const { data, error } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-and-network',
   })
-
+  
   if (error) return <div>Error loading categories!</div>
 
   const categories = data?.categories?.edges || []
@@ -179,9 +181,9 @@ export default function HomepageDestopHeader({
                   </button>
 
                   {categories.map((category) => {
-                    const { id, name, slug } = category.node
+                    const { id, name, uri } = category.node
                     return (
-                      <Link key={id} href={`/${slug}`}>
+                      <Link key={id} href={`${uri}`}>
                         <div className={cx('menu-button-desktop')}>
                           <div className={cx('menu-title-desktop')}>{name}</div>
                         </div>
