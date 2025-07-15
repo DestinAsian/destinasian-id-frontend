@@ -14,10 +14,12 @@ import { GetChildrenTravelGuides } from '../../queries/GetChildrenTravelGuides'
 import TravelGuideCategories from '../TravelGuideCategories/TravelGuideCategories'
 
 // Dynamic Imports
-const Outnow = dynamic(() => import('../Outnow/Outnow'))
-const CategoryUpdates = dynamic(() => import('../CategoryUpdates/CategoryUpdates'))
-const CategoryNewsUpdates = dynamic(() => import('../CategoryNewsUpdates/CategoryNewsUpdates'))
-const CategoryFeatures = dynamic(() => import('../CategoryFeatures/CategoryFeatures'))
+// Dynamic Imports (dengan ssr: false)
+const Outnow = dynamic(() => import('../Outnow/Outnow'), { ssr: false })
+const CategoryUpdates = dynamic(() => import('../CategoryUpdates/CategoryUpdates'), { ssr: false })
+const CategoryNewsUpdates = dynamic(() => import('../CategoryNewsUpdates/CategoryNewsUpdates'), { ssr: false })
+const CategoryFeatures = dynamic(() => import('../CategoryFeatures/CategoryFeatures'), { ssr: false })
+
 
 const cx = classNames.bind(styles)
 

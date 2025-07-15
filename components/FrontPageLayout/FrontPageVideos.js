@@ -8,7 +8,7 @@ import { GetVideos } from '../../queries/GetVideos'
 import Outnow from '../Outnow/Outnow'
 
 const ContentWrapperVideo = dynamic(() =>
-  import('../ContentWrapperVideo/ContentWrapperVideo'),
+  import('../ContentWrapperVideo/ContentWrapperVideo'),{ ssr: false }
 )
 
 const cx = classNames.bind(styles)
