@@ -43,6 +43,14 @@
     // Scope WordPress block styles within ContentWrapper.
     @import 'styles/blocks';
 
+    .dropcap {
+      padding-right: 0.5rem;
+
+      @media (min-width: $breakpoint-small) {
+        padding-right: 0.5rem;
+      }
+    }
+
     * {
       max-width: 100%;
       padding: 0 1rem 1rem;

@@ -1,3 +1,5 @@
+'use client'
+
 import className from 'classnames/bind'
 import styles from './ContentWrapperEditorial.module.scss'
 import dynamic from 'next/dynamic'
@@ -13,11 +15,9 @@ export default function ContentWrapperEditorial({ content, children, images }) {
   const [transformedContent, setTransformedContent] = useState('')
 
   useEffect(() => {
-    // Function to extract image data and replace <img> with <Image>
     const extractImageData = () => {
       const parser = new DOMParser()
 
-      // Ganti domain test ke testing
       const cleanedContent = content.replaceAll(
         'https://test.destinasian.co.id',
         'https://testing.destinasian.co.id'
@@ -25,8 +25,8 @@ export default function ContentWrapperEditorial({ content, children, images }) {
 
       const doc = parser.parseFromString(cleanedContent, 'text/html')
 
+      // === REPLACE <img> DENGAN <Image /> ===
       const imageElements = doc.querySelectorAll(`img[src*="${BACKEND_URL}"]`)
-
       imageElements.forEach((img) => {
         let src = img.getAttribute('src')
         let srcset = img.getAttribute('srcset') || ''
@@ -34,7 +34,7 @@ export default function ContentWrapperEditorial({ content, children, images }) {
         const width = img.getAttribute('width') || '500'
         const height = img.getAttribute('height') || '500'
 
-        // Replace domain in src & srcset if needed
+        // Replace domain
         const testDomain = 'https://test.destinasian.co.id'
         const newDomain = 'https://testing.destinasian.co.id'
         src = src.replace(testDomain, newDomain)
@@ -55,6 +55,26 @@ export default function ContentWrapperEditorial({ content, children, images }) {
         img.outerHTML = imageHtmlString
       })
 
+      // === PROSES DROP CAP ===
+      const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
+      const processDropcap = (node) => {
+        if (
+          node.nodeType === 1 &&
+          node.tagName === 'P' &&
+          node.innerHTML.includes('[dropcap]')
+        ) {
+          node.innerHTML = node.innerHTML.replace(
+            dropcapRegex,
+            (match, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`
+          )
+        }
+
+        node.childNodes?.forEach(processDropcap)
+      }
+
+      Array.from(doc.body.childNodes).forEach(processDropcap)
+
+      // Simpan hasil ke state
       setTransformedContent(doc.body.innerHTML)
     }
 
@@ -63,25 +83,13 @@ export default function ContentWrapperEditorial({ content, children, images }) {
 
   return (
     <article className={cx('component')}>
-      {images[0] != null && (
-        <div className={cx('with-slider-wrapper')}>
-          <div
-            className={cx('content-wrapper')}
-            dangerouslySetInnerHTML={{ __html: transformedContent ?? '' }}
-          />
-          {children}
-        </div>
-      )}
-
-      {images[0] == null && (
-        <div className={cx('with-slider-wrapper')}>
-          <div
-            className={cx('content-wrapper')}
-            dangerouslySetInnerHTML={{ __html: transformedContent ?? '' }}
-          />
-          {children}
-        </div>
-      )}
+      <div className={cx('with-slider-wrapper')}>
+        <div
+          className={cx('content-wrapper')}
+          dangerouslySetInnerHTML={{ __html: transformedContent ?? '' }}
+        />
+        {children}
+      </div>
     </article>
   )
 }
