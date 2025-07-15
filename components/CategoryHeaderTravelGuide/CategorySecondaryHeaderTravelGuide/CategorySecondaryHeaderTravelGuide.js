@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
-import styles from './CategoryDesktopSecondaryHeaderTravelGuide.module.scss'
+import styles from './CategorySecondaryHeaderTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
 
