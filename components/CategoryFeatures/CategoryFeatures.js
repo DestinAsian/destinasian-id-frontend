@@ -82,12 +82,7 @@ const CategoryFeatures = () => {
                     {categoryName && (
                       <p className={cx('postCategory')}>{categoryName}</p>
                     )}
-
-                    <h4 className={cx('slug')}>
-                      {post.slug.replace(/-/g, ' ')}
-                    </h4>
-
-                    <div
+                    <p
                       className={cx('excerpt')}
                       dangerouslySetInnerHTML={{ __html: post.excerpt }}
                     />

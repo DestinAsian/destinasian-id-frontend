@@ -51,7 +51,7 @@ const CategoryUpdates = React.memo(({ data = [] }) => {
                             />
                           </div>
                         )}
-                        <h4 className={cx('uri')}>{post.title}</h4>
+                        <p className={cx('uri')}>{post.title}</p>
                       </div>
                     </Link>
                   </div>
