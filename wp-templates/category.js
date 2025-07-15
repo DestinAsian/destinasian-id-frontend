@@ -6,9 +6,11 @@ import dynamic from 'next/dynamic'
 const CategoryHeader = dynamic(() =>
   import('../components/CategoryHeader/CategoryHeader'),
 )
-const CategoryStories = dynamic(() =>
-  import('../components/CategoryStories/CategoryStories'),
-)
+// const CategoryStories = dynamic(() =>
+//   import('../components/CategoryStories/CategoryStories'),
+// )
+const CategoryStories = dynamic(() => import('../components/CategoryStories/CategoryStories'), { ssr: false })
+
 
 const CategoryStoriesGuide = dynamic(() =>
   import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),

@@ -6,31 +6,13 @@ import dynamic from 'next/dynamic'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
-// const CategoryDesktopSecondaryHeader = dynamic(() =>
-//   import(
-//     '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
-//   ),
-// )
-
-// const CategorySecondaryHeader = dynamic(() =>
-//   import(
-//     '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
-//   ),
-// )
-
 const Container = dynamic(() => import('../components/Container/Container'))
 
-// const ContentWrapper = dynamic(() =>
-//   import('../components/ContentWrapper/ContentWrapper'),
-// )
 
 const ContentWrapperEditorial = dynamic(() =>
   import('../components/ContentWrapperEditorial/ContentWrapperEditorial'),
 )
 
-// const EntryMoreReviews = dynamic(() =>
-//   import('../components/EntryMoreReviews/EntryMoreReviews'),
-// )
 
 const EntryRelatedStories = dynamic(() =>
   import('../components/EntryRelatedStories/EntryRelatedStories'),
@@ -39,7 +21,22 @@ const EntryRelatedStories = dynamic(() =>
 const Footer = dynamic(() => import('../components/Footer/Footer'))
 
 const Main = dynamic(() => import('../components/Main/Main'))
-
+// const CategoryDesktopSecondaryHeader = dynamic(() =>
+//   import(
+//     '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
+//   ),
+// )
+// const CategorySecondaryHeader = dynamic(() =>
+//   import(
+//     '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
+//   ),
+// )
+// const ContentWrapper = dynamic(() =>
+//   import('../components/ContentWrapper/ContentWrapper'),
+// )
+// const EntryMoreReviews = dynamic(() =>
+//   import('../components/EntryMoreReviews/EntryMoreReviews'),
+// )
 // const MoreReviews = dynamic(() =>
 //   import('../components/MoreReviews/MoreReviews'),
 // )

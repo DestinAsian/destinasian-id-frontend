@@ -31,7 +31,7 @@ const FeatureWell = dynamic(() =>
   import('../components/FeatureWell/FeatureWell'),
 )
 const FrontPageLayout = dynamic(() =>
-  import('../components/FrontPageLayout/FrontPageLayout'),
+  import('../components/FrontPageLayout/FrontPageLayout'), { ssr: false }
 )
 const FrontPageVideos = dynamic(() =>
   import('../components/FrontPageLayout/FrontPageVideos'),
