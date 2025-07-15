@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
-import styles from './CategorySecondaryHeaderTravelGuide.module.scss'
+import styles from './CategoryDesktopSecondaryHeaderTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
-const SingleNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'))
+
 const ChildrenNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'))
 const ParentNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'))
-
+const SingleNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'))
 
 let cx = classNames.bind(styles)
 
-export default function CategorySecondaryHeaderTravelGuide({
+export default function CategoryDesktopSecondaryHeaderTravelGuide({
   data,
   databaseId,
   categoryUri,
@@ -22,91 +22,46 @@ export default function CategorySecondaryHeaderTravelGuide({
   const [categoryUrl, setCategoryUrl] = useState('')
   const [isMainNavShown, setIsMainNavShown] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [prevScrollY, setPrevScrollY] = useState(0) 
 
-  // Add currentUrl function
   useEffect(() => {
     setCurrentUrl(window.location.pathname)
   }, [])
+
+  useEffect(() => {
+    setCategoryUrl(categoryUri)
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = isMainNavShown || isNavShown ? 'hidden' : 'visible'
+  }, [isMainNavShown, isNavShown])
+
   function isActive(uri) {
     return currentUrl + '/' === uri
   }
 
-  // Add currentCategoryUrl function
-  useEffect(() => {
-    setCategoryUrl(categoryUri)
-  }, [])
   function isActiveCategory(uri) {
     return categoryUrl === uri
   }
 
-  // Stop scrolling pages when isNavShown
-  useEffect(() => {
-    if (isMainNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isMainNavShown])
-
-  // Stop scrolling pages when isNavShown
-  useEffect(() => {
-    if (isNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isNavShown])
-
-  // Show sticky header when scroll down, Hide it when scroll up
-  useEffect(() => {
-    function handleScroll() {
-      const currentScrollY = window.scrollY
-      setIsScrolled(
-        currentScrollY > 0,
-        // && currentScrollY < prevScrollY
-      )
-      setPrevScrollY(currentScrollY)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [prevScrollY])
-
   return (
     <nav className={cx('component')}>
-      <div
-        className={cx(
-          'container-wrapper',
-          { sticky: isScrolled },
-          isMainNavShown || isNavShown ? 'show' : undefined,
-        )}
-      >
+      <div className={cx('container-wrapper', 'sticky')}>
         <div className={cx('navbar')}>
           {/* Parent category navigation */}
-          {data?.category?.children?.edges?.length != 0 &&
-            data?.category?.children != null &&
-            data?.category?.children != undefined && (
-              <ParentNavigationTravelGuide
-                databaseId={databaseId}
-                isActive={isActive}
-                isMainNavShown={isMainNavShown}
-                setIsMainNavShown={setIsMainNavShown}
-                isNavShown={isNavShown}
-                setIsNavShown={setIsNavShown}
-                isScrolled={isScrolled}
-                categoryName={name}
-              />
-            )}
+          {data?.category?.children?.edges?.length > 0 && (
+            <ParentNavigationTravelGuide
+              databaseId={databaseId}
+              isActive={isActive}
+              isMainNavShown={isMainNavShown}
+              setIsMainNavShown={setIsMainNavShown}
+              isNavShown={isNavShown}
+              setIsNavShown={setIsNavShown}
+              categoryName={name}
+            />
+          )}
           {/* Children category navigation */}
           {!data?.category?.children?.edges?.length &&
-            data?.category?.parent?.node?.children?.edges?.length != 0 &&
-            data?.category?.parent != null &&
-            data?.category?.parent != undefined && (
+            data?.category?.parent?.node?.children?.edges?.length > 0 && (
               <ChildrenNavigationTravelGuide
                 databaseId={databaseId}
                 isActive={isActive}
@@ -114,7 +69,6 @@ export default function CategorySecondaryHeaderTravelGuide({
                 setIsMainNavShown={setIsMainNavShown}
                 isNavShown={isNavShown}
                 setIsNavShown={setIsNavShown}
-                isScrolled={isScrolled}
                 categoryName={parent}
               />
             )}
@@ -127,7 +81,6 @@ export default function CategorySecondaryHeaderTravelGuide({
               setIsMainNavShown={setIsMainNavShown}
               isNavShown={isNavShown}
               setIsNavShown={setIsNavShown}
-              isScrolled={isScrolled}
               categoryName={parentCategory}
             />
           )}

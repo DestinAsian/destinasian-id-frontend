@@ -29,11 +29,7 @@ export default function ChildrenNavigationTravelGuide({
     id: databaseId,
   }
 
-  function convertCategoryUriToTravelGuide(uri) {
-    if (!uri) return ''
-    // hapus awalan '/category/' dan tambahkan '/travel-guide/' di depannya
-    return uri.replace(/^\/category\//, '/travel-guide/')
-  }
+
   // Get Category
   const { data } = useQuery(GetChildrenNavigation, {
     variables: catVariable,
@@ -63,8 +59,7 @@ export default function ChildrenNavigationTravelGuide({
           >
         {data?.category?.parent?.node && (
           <div className={cx('menu-button-children')}>
-            {/* <Link href={data.category.parent.node.uri}> */}
-            <Link href={convertCategoryUriToTravelGuide(data.category.node.uri)}>
+            <Link href={data.category.parent.node.uri}>
               <button type="button" className={cx('menu-icon')}>
                 <div className={cx('da-guide-wrapper')}>
                   <span className={cx('nav-name')}>
@@ -88,8 +83,7 @@ export default function ChildrenNavigationTravelGuide({
               <li key={travelGuide?.node?.uri} className={cx('nav-link')}>
                 {travelGuide?.node?.uri && (
                   <Link
-                    // href={travelGuide?.node?.uri}
-                    href={convertCategoryUriToTravelGuide(travelGuide?.node?.uri)}
+                    href={travelGuide?.node?.uri}
                     className={cx(
                       isActive(travelGuide?.node?.uri) ? 'active' : 'not-active',
                     )}
