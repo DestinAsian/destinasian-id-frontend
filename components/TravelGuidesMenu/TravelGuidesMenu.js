@@ -21,12 +21,6 @@ function shuffleArray(array) {
   return array
 }
 
-// 🔧 Fungsi ini hanya mengubah slug tertentu ke "/travel-guides/"
-function rewriteCategoryUri(originalUri) {
-  if (!originalUri) return '#'
-  return originalUri.replace('/category/', '/travel-guides/')
-}
-
 
 export default function TravelGuidesMenu(className) {
   const [results, setResults] = useState([])
@@ -91,28 +85,40 @@ export default function TravelGuidesMenu(className) {
   }
 
   useEffect(() => {
+    let isMounted = true
     const fetchData = async () => {
       setLoading(true)
+  
       try {
-        const allResults = []
-        for (let i = 0; i < mainCategoryLabels.length; i++) {
-          const category = mainCategoryLabels[i]
-          const response = await client.query({
-            query: GetTravelGuides,
-            variables: { search: category },
-            fetchPolicy: 'network-only',
+        const allResults = await Promise.all(
+          mainCategoryLabels.map(async (category) => {
+            const response = await client.query({
+              query: GetTravelGuides,
+              variables: { search: category },
+              fetchPolicy: 'cache-first',
+              nextFetchPolicy: 'cache-and-network',
+            })
+            const processedData = response?.data?.tags?.edges ?? []
+            return { category, data: processedData }
           })
-          const processedData = processResults(response.data.tags.edges)
-          allResults.push({ category, data: processedData })
-        }
-        setResults(allResults)
+        )
+        if (isMounted) setResults(allResults)
       } catch (error) {
-        return <pre>{JSON.stringify(error)}</pre>
+        console.error('Failed fetching guides:', error)
+      } finally {
+        if (isMounted) setLoading(false)
       }
     }
-    fetchData()
-    setLoading(false)
-  }, [client, mainCategoryLabels])
+  
+    if (mainCategoryLabels.length > 0) {
+      fetchData()
+    }
+  
+    return () => {
+      isMounted = false
+    }
+  }, [mainCategoryLabels, client])
+  
 
   let menuVariable = {
     first: 1000,
@@ -159,153 +165,56 @@ export default function TravelGuidesMenu(className) {
       </div>
     )
   }
-
-  // function renderMenu(items) {
-  //   return (
-  //     <div
-  //       id={items?.map((item) => {
-  //         return item?.id
-  //       })}
-  //       className={cx('menu-wrapper')}
-  //     >
-  //       {/* <Accordion
-  //         collapseAll
-  //         arrowIcon={AccordionCustomIcon}
-  //         theme={AccordionCustomTheme}
-  //       > */}
-  //       {items.map((item, index) => {
-  //         const { id, path, label, parentId, children, connectedNode } = item
-
-  //         // @TODO - Remove guard clause after ghost menu items are no longer appended to array.
-  //         if (!item.hasOwnProperty('__typename')) {
-  //           return null
-  //         }
-
-  //         return (
-  //           // <Accordion.Panel>
-  //           <div key={id} id={id} className={cx('accordion-wrapper')}>
-  //             {/* Main Guides */}
-  //             {parentId === null && (
-  //               <div
-  //                 className={cx(
-  //                   'accordion-title-wrapper',
-  //                   // open
-  //                   //   ? AccordionTitleCustomTheme?.open?.on
-  //                   //   : AccordionTitleCustomTheme?.open?.off,
-  //                 )}
-  //               >
-  //                 {/* <Accordion.Title theme={AccordionTitleCustomTheme}> */}
-  //                 <div className={cx('accordion-title')}>
-  //                   {path && (
-  //                     <Link href={path}>
-  //                       <span
-  //                         className={cx(
-  //                           'title',
-  //                           className?.className === 'dark-color'
-  //                             ? 'title-dark'
-  //                             : '',
-  //                         )}
-  //                       >
-  //                         {label}
-  //                       </span>
-  //                     </Link>
-  //                   )}
-  //                 </div>
-  //                 <div className={cx('navigation-wrapper')}>
-  //                   <div className={cx('navigation')}>
-  //                     {/* {connectedNode?.node?.children?.edges?.map((post) => ( */}
-  //                     {connectedNode?.node?.children?.edges?.map(
-  //                       (post, childIndex) => (
-  //                         <li key={post?.node?.uri} className={cx('nav-link')}>
-  //                           {childIndex > 0 && (
-  //                             <span className={cx('separator')}>|</span>
-  //                           )}
-  //                           <Link href={post?.node?.uri}>
-  //                             <h2
-  //                               className={cx(
-  //                                 'nav-name',
-  //                                 className?.className === 'dark-color'
-  //                                   ? 'nav-name-dark'
-  //                                   : '',
-  //                               )}
-  //                             >
-  //                               {post?.node?.name}
-  //                             </h2>
-  //                           </Link>
-  //                         </li>
-  //                       ),
-  //                     )}
-  //                   </div>
-  //                 </div>
-  //                 {/* </Accordion.Title> */}
-  //               </div>
-  //             )}
-  //           </div>
-  //           // </Accordion.Panel>
-  //         )
-  //       })}
-  //       {/* </Accordion> */}
-  //     </div>
-  //   )
-  // }
   function renderMenu(items) {
     return (
       <>
         {items?.map((item) => {
           const menuId = item?.id
-          const originalUri = item?.url || item?.path || '#'
-          const rewrittenUri = rewriteCategoryUri(originalUri) // 🔁
-
-          const parentMenu = {
-            name: item?.label,
-            uri: originalUri, // href
-            as: rewrittenUri, // as
-          }
-
-          const childrenMenus =
-            item?.connectedNode?.node?.children?.edges?.map((edge) => ({
-              name: edge?.node?.name,
-              uri: edge?.node?.uri, // href
-              as: rewriteCategoryUri(edge?.node?.uri), // as
-            })) || []
-
+          const parentName = item?.label
+          const parentUri = item?.url || item?.path || '#'
+  
+          const childrenMenus = item?.connectedNode?.node?.children?.edges || []
+  
           return (
             <div key={menuId} id={menuId} className={cx('menu-row')}>
               <div className={cx('parent-menu')}>
-                <Link href={parentMenu.uri} as={parentMenu.as}> {/* 🔁 */}
+                <Link href={parentUri}>
                   <span
                     className={cx(
                       'title',
                       className?.className === 'dark-color' ? 'title-dark' : ''
                     )}
                   >
-                    {parentMenu.name}
+                    {parentName}
                   </span>
                   <span className={cx('separator', 'parent-separator')}>|</span>
                 </Link>
               </div>
-
+  
               {childrenMenus.length > 0 && (
                 <ul className={cx('children-menu')}>
-                  {childrenMenus.map((menu, index) => (
-                    <li key={menu?.uri} className={cx('nav-link')}>
-                      {index > 0 && (
-                        <span className={cx('separator')}>|</span>
-                      )}
-                      <Link href={menu?.uri} as={menu?.as}> {/* 🔁 */}
-                        <h2
-                          className={cx(
-                            'nav-name',
-                            className?.className === 'dark-color'
-                              ? 'nav-name-dark'
-                              : ''
-                          )}
-                        >
-                          {menu?.name}
-                        </h2>
-                      </Link>
-                    </li>
-                  ))}
+                  {childrenMenus.map((edge, index) => {
+                    const childName = edge?.node?.name
+                    const childUri = edge?.node?.uri
+  
+                    return (
+                      <li key={childUri} className={cx('nav-link')}>
+                        {index > 0 && <span className={cx('separator')}>|</span>}
+                        <Link href={childUri}>
+                          <h2
+                            className={cx(
+                              'nav-name',
+                              className?.className === 'dark-color'
+                                ? 'nav-name-dark'
+                                : ''
+                            )}
+                          >
+                            {childName}
+                          </h2>
+                        </Link>
+                      </li>
+                    )
+                  })}
                 </ul>
               )}
             </div>
