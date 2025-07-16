@@ -21,7 +21,9 @@ export const rubik = Rubik({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font--rubik',
+  fallback: ['system-ui', 'sans-serif'], // tambahkan fallback
 })
+
 
 export const open_sans = Open_Sans({
   weight: ['400', '500', '600', '700', '800'],
