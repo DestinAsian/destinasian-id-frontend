@@ -19,7 +19,6 @@ export default function BackToTop({ onClickSection, onClickContent }) {
         <button
           onClick={scrollToSection1}
           aria-label="Scroll to the top"
-          // className="h-full min-h-full w-1/2 p-[1rem] text-left"
         >
           <span className={cx('content')}>{'Back To Top'}</span>
         </button>

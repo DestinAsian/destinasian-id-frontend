@@ -15,6 +15,7 @@ const CategoryNewsUpdates = React.memo(() => {
   const { data, loading, error } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
     fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-and-network',
   })
 
   const children = useMemo(
@@ -44,6 +45,7 @@ const CategoryNewsUpdates = React.memo(() => {
               className={styles.swiperContainer}
               preloadImages={false}
               lazy="true"
+              shouldSwiperUpdate={false} 
             >
               {posts.map(({ node: post }) => {
                 const featuredImage = post.featuredImage?.node

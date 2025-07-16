@@ -58,8 +58,6 @@
   position: relative;
   width: 100%;
   text-align: center;
-  // display: flex;
-  // justify-content: center;
 
   @media (min-width: $breakpoint-small) {
     margin-top: -1.5rem;
@@ -70,7 +68,7 @@
 
 .category {
   font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
+  font-weight: 300;
   font-size: 1rem;
   color: var(--wpe--color--white);
   padding: 0.25rem 0.75rem;
@@ -102,7 +100,7 @@
 
 .stand-first {
   font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--wpe--color--white);
   padding: 0.25rem 0;
   white-space: normal;

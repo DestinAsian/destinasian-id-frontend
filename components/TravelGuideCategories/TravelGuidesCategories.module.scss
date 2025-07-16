@@ -1,61 +1,39 @@
+@import 'styles/variables';
+@import 'styles/fonts/typography';
 @import 'styles/breakpoints';
 
-// .categoryIndoWrapper {
-//   padding: 1rem 0 3rem;
-//   background-color: var(--wpe--color--white--smoke);
-//   width: 100%;
-//   max-width: 1280px;
-//   margin: 0 auto;
-//   overflow-x: hidden;
-// }
+$font-main: 'Open Sans', sans-serif;
+$font-title: 'Scheherazade New', serif;
 
-.categoryIndoWrapper {
-  padding: 1rem 0 3rem;
-  background-color: var(--wpe--color--white--smoke);
+.wrapper {
   width: 100%;
-  max-width: 1280px; // default mobile & tablet
+  max-width: 1400px;
   margin: 0 auto;
-  overflow-x: hidden;
-  
-  @media (min-width: $breakpoint-small) {
-    max-width: 1280px; // default mobile & tablet
-  }
-  
-  @media (min-width: $breakpoint-large) {
-    max-width: calc(1400px + 2rem); // lebih lebar di desktop
-  }
+  padding: 2rem 1rem 3rem;
+  background-color: var(--wpe--color--white--smoke);
 }
+
 .title {
+  font-family: $font-title;
   font-size: 2rem;
-  font-weight: bold;
-  font-family: 'Scheherazade New', serif;
   text-align: center;
-  color: var(--wpe--color-black);
-  margin-bottom: 1rem;
-  padding: 1rem 0;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: var(--wpe--color--black);
 
   @media (min-width: $breakpoint-small) {
     font-size: 2.5rem;
-    padding: 1rem 0;
   }
 
   @media (min-width: $breakpoint-large) {
     font-size: 2rem;
-    padding: 1rem 0;
   }
 }
-
 
 .grid {
   display: grid;
   gap: 1rem;
-
-  // Mobile default: 2 kolom
   grid-template-columns: repeat(2, 1fr);
-
-  @media (min-width: $breakpoint-small) {
-    grid-template-columns: repeat(2, 1fr);
-  }
 
   @media (min-width: $breakpoint-large) {
     grid-template-columns: repeat(4, 1fr);
@@ -63,27 +41,21 @@
 }
 
 .card {
-  position: relative;
   display: block;
+  position: relative;
   overflow: hidden;
-  background-color: var(--wpe--color--white--smoke);
   text-decoration: none;
   transition: transform 0.2s ease;
-  // border-radius: 4px;
 
   &:hover {
     transform: scale(1.02);
   }
 }
 
-.cardInner {
-  padding: 0.5rem 0.75rem;
-}
-
 .imageWrapper {
-  position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
+  position: relative;
   overflow: hidden;
 }
 
@@ -100,20 +72,18 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
+  font-family: $font-main;
   font-weight: 400;
-  font-family: 'Open Sans', sans-serif;
-
+  font-size: 1.75rem;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
   text-align: center;
   padding: 0 1rem;
-  line-height: 1.2;
-  font-size: 2rem;
 
   @media (min-width: $breakpoint-small) {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
   }
 
   @media (min-width: $breakpoint-large) {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 }

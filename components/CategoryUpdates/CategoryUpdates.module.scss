@@ -2,76 +2,53 @@
 @import 'styles/fonts/typography';
 @import 'styles/breakpoints';
 
+$font-main: 'Open Sans', sans-serif;
+$font-serif: 'Scheherazade New', serif;
+
 .categoryUpdatesWrapper {
   width: 100%;
 }
 
-.title,
-.description,
-.uri {
-  font-size: 1rem;
-  color: var(--wpe--color--black);
-  font-weight: 300;
-  font-family: 'Open Sans', sans-serif;
-  text-align: left;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  line-height: 1.4;
+.childCategory {
+  margin-bottom: 2rem;
 }
 
+.title {
+  font-family: $font-main;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--wpe--color--black);
+  margin-bottom: 0.5rem;
+}
 
+.description {
+  font-family: $font-main;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--wpe--color--black);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
 
 .postsWrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  @media (min-width: $breakpoint-extra-small) {
-    gap: 1rem;
-  }
-
-  @media (min-width: $breakpoint-medium) {
-    gap: 1rem;
-  }
 }
 
 .card {
   flex: 1 1 calc(25% - 1rem);
-  text-decoration: none;
   overflow: hidden;
-  display: block;
-}
 
-@media screen and (max-width: $breakpoint-medium) {
-  .card {
+  @media (max-width: $breakpoint-medium) {
     flex: 1 1 calc(50% - 0.5rem);
   }
 }
 
 .cardInner {
+  display: block;
   padding: 0.25rem;
-}
-
-.slug {
-  font-size: 1rem;
-  font-weight: 300;
-  font-family: 'Open Sans', sans-serif;
-  color: var(--wpe--color--black);
-  line-height: 1.4;
-  text-align: start;
-  padding: 1rem 0;
-
-  text-transform: capitalize;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.excerpt {
-  font-size: 0.9rem;
-  color: var(--wpe--color--black);
-  margin-top: 5px;
+  text-decoration: none;
 }
 
 .imageWrapper {
@@ -88,32 +65,43 @@
   object-position: center;
 }
 
-.categoryList {
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
+.uri {
+  font-family: $font-main;
+  font-size: 1rem;
+  font-weight: 300;
   color: var(--wpe--color--black);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: start;
+  text-transform: capitalize;
 }
 
 .viewMoreWrapper {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .viewMoreButton {
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  background-color: transparent;
-  font-family: 'Scheherazade New', serif;
+  font-family: $font-serif;
   font-size: 1.5rem;
   font-weight: 500;
   color: var(--wpe--color--title);
+  background-color: transparent;
   text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: var(--wpe--color--black);
-    padding: 0 0.5rem;
     color: var(--wpe--color--white);
+    padding: 0 0.5rem;
   }
 
   &:focus {

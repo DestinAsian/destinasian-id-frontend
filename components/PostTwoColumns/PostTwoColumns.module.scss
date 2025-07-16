@@ -52,29 +52,28 @@
     color: var(--wpe--color--teal--light);
     font-size: 0.95rem;
     font-weight: 200;
-
   }
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.15rem;
     font-weight: 200;
-
   }
 }
 
 .title {
   font-family: 'Scheherazade New';
-  font-size: 1.65rem;
+  font-size: 1.3rem;
   line-height: 1.2;
   font-weight: 500;
   letter-spacing: 1.8px;
+  text-transform: uppercase;
 
   @media (min-width: $breakpoint-extra-small) {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
   }
 
   @media (min-width: $breakpoint-extra-small) {
-    font-size: 2.4rem;
+    font-size: 2rem;
   }
 }
 

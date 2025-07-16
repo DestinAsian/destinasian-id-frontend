@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { useQuery } from '@apollo/client'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import classNames from 'classnames/bind'
@@ -15,55 +15,62 @@ const CategoryFeatures = () => {
   const { data, loading, error } = useQuery(GetCategoryFeatures, {
     variables: { id: '20' },
     fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-and-network',
   })
 
   const [visibleCount, setVisibleCount] = useState(3)
 
+  // Ubah jumlah visibleCount berdasarkan lebar layar
   useEffect(() => {
-    // Optional: bisa ubah jumlah default berdasarkan screen size
-    const checkWidth = () => {
-      setVisibleCount(window.innerWidth < 768 ? 2 : 3)
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768
+      setVisibleCount(isMobile ? 2 : 3)
     }
 
-    checkWidth()
-    window.addEventListener('resize', checkWidth)
-    return () => window.removeEventListener('resize', checkWidth)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   if (loading) return null
   if (error) return <p className={cx('error')}>Error: {error.message}</p>
 
   const category = data?.category
-  const posts = category?.posts?.edges || []
+  if (!category) return null
+
+  const posts = category.posts?.edges || []
+
+  // Memoisasi post yang ditampilkan untuk efisiensi
+  const visiblePosts = useMemo(() => posts.slice(0, visibleCount), [posts, visibleCount])
 
   return (
     <div className={cx('CategoryFeaturesWrapper')}>
       <div className={cx('childCategory')}>
         <Link href={category.uri}>
-          <h2 className={cx('title')}>{category?.name}</h2>
+          <h2 className={cx('title')}>{category.name}</h2>
         </Link>
 
-        {category?.categoryImages?.categoryImagesCaption && (
+        {category.categoryImages?.categoryImagesCaption && (
           <p className={cx('description')}>
             {category.categoryImages.categoryImagesCaption}
           </p>
         )}
 
         <div className={cx('gridSection')}>
-          {posts.slice(0, visibleCount).map(({ node: post }) => {
-            const featuredImage = post.featuredImage?.node
+          {visiblePosts.map(({ node: post }) => {
+            const image = post.featuredImage?.node
             const firstCategory = post.categories?.edges?.[0]?.node
-            const parentCategoryName = firstCategory?.parent?.node?.name || ''
-            const categoryName = firstCategory?.name || ''
+            const parentCategory = firstCategory?.parent?.node?.name || ''
+            const subCategory = firstCategory?.name || ''
 
             return (
               <Link key={post.id} href={post.uri || `/${post.slug}`}>
                 <div className={cx('card')}>
                   <div className={cx('cardInner')}>
-                    {featuredImage?.mediaItemUrl && (
+                    {image?.mediaItemUrl && (
                       <div className={cx('imageWrapper')}>
                         <Image
-                          src={featuredImage.mediaItemUrl}
+                          src={image.mediaItemUrl}
                           alt={post.slug}
                           width={600}
                           height={400}
@@ -73,15 +80,14 @@ const CategoryFeatures = () => {
                       </div>
                     )}
 
-                    {parentCategoryName && (
-                      <p className={cx('parentCategory')}>
-                        {parentCategoryName}
-                      </p>
+                    {parentCategory && (
+                      <p className={cx('parentCategory')}>{parentCategory}</p>
                     )}
 
-                    {categoryName && (
-                      <p className={cx('postCategory')}>{categoryName}</p>
+                    {subCategory && (
+                      <p className={cx('postCategory')}>{subCategory}</p>
                     )}
+
                     <p
                       className={cx('excerpt')}
                       dangerouslySetInnerHTML={{ __html: post.excerpt }}
