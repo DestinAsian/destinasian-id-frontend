@@ -114,14 +114,25 @@ export default function Component({ loading, data: initialData }) {
     }
   }, [handleResize, handleScroll])
 
-  const { data } = useQuery(GetSecondaryHeader, {
-    variables: { id: databaseId },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
+  // const { data } = useQuery(GetSecondaryHeader, {
+  //   variables: { id: databaseId },
+  //   fetchPolicy: 'network-only',
+  //   nextFetchPolicy: 'cache-and-network',
+  // })
+
+  // const isGuidesCategory =
+  //   data?.category?.destinationGuides?.destinationGuides === 'yes'
+
+  const { data: dataSecondaryHeader, loading: loadingSecondaryHeader } =
+    useQuery(GetSecondaryHeader, {
+      variables: { id: databaseId },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    })
 
   const isGuidesCategory =
-    data?.category?.destinationGuides?.destinationGuides === 'yes'
+    dataSecondaryHeader?.category?.destinationGuides?.destinationGuides ===
+    'yes'
 
   const { data: menusData } = useQuery(GetMenus, {
     variables: {
@@ -198,10 +209,26 @@ export default function Component({ loading, data: initialData }) {
       {isDesktop ? (
         <>
           <CategoryDesktopHeader {...sharedHeaderProps} />
-          {!isNavShown &&
+          {/* {!isNavShown &&
             (isGuidesCategory ? (
               <CategoryDesktopSecondaryHeader
                 data={data}
+                databaseId={databaseId}
+                name={name}
+                parent={parent?.node?.name}
+              />
+            ) : (
+              <SecondaryDesktopHeader
+                {...sharedHeaderProps}
+                isGuidesNavShown={isGuidesNavShown}
+                setIsGuidesNavShown={setIsGuidesNavShown}
+              />
+            ))} */}
+          {!isNavShown &&
+            !loadingSecondaryHeader &&
+            (isGuidesCategory ? (
+              <CategoryDesktopSecondaryHeader
+                data={dataSecondaryHeader}
                 databaseId={databaseId}
                 name={name}
                 parent={parent?.node?.name}
@@ -217,20 +244,21 @@ export default function Component({ loading, data: initialData }) {
       ) : (
         <>
           <CategoryHeader {...sharedHeaderProps} />
-          {isGuidesCategory ? (
-            <CategorySecondaryHeader
-              data={data}
-              databaseId={databaseId}
-              name={name}
-              parent={parent?.node?.name}
-            />
-          ) : (
-            <SecondaryHeader
-              {...sharedHeaderProps}
-              isGuidesNavShown={isGuidesNavShown}
-              setIsGuidesNavShown={setIsGuidesNavShown}
-            />
-          )}
+          {!loadingSecondaryHeader &&
+            (isGuidesCategory ? (
+              <CategorySecondaryHeader
+                data={dataSecondaryHeader}
+                databaseId={databaseId}
+                name={name}
+                parent={parent?.node?.name}
+              />
+            ) : (
+              <SecondaryHeader
+                {...sharedHeaderProps}
+                isGuidesNavShown={isGuidesNavShown}
+                setIsGuidesNavShown={setIsGuidesNavShown}
+              />
+            ))}
         </>
       )}
 
