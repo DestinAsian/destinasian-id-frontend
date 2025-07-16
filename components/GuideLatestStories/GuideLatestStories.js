@@ -5,63 +5,54 @@ import Image from 'next/image'
 
 const cx = classNames.bind(styles)
 
-// Fungsi untuk hapus tag dropcap
-function stripDropcapTags(content) {
-  if (!content) return ''
-  let cleaned = content.replace(/\[\/?dropcap\]/gi, '')
-  cleaned = cleaned.replace(/<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi, '$1')
-  return cleaned
-}
-
 const MAX_EXCERPT_LENGTH = 150
 
-export default function GuideLatestStories({
-  title,
-  excerpt,
-  uri,
-  featuredImage,
-  caption,
-}) {
-  const cleanedExcerpt = stripDropcapTags(excerpt)
-  let trimmedExcerpt = cleanedExcerpt?.substring(0, MAX_EXCERPT_LENGTH)
-  const lastSpaceIndex = trimmedExcerpt?.lastIndexOf(' ')
-  if (lastSpaceIndex !== -1) {
-    trimmedExcerpt = trimmedExcerpt?.substring(0, lastSpaceIndex) + '...'
-  }
+const stripDropcapTags = (content = '') =>
+  content
+    .replace(/\[\/?dropcap\]/gi, '')
+    .replace(/<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi, '$1')
+
+export default function GuideLatestStories({ title, excerpt, uri, featuredImage, caption }) {
+  const text = stripDropcapTags(excerpt)
+  const trimmed = text.slice(0, MAX_EXCERPT_LENGTH)
+  const lastSpace = trimmed.lastIndexOf(' ')
+  const finalExcerpt = lastSpace !== -1 ? trimmed.slice(0, lastSpace) + '...' : trimmed
 
   return (
     <article className={cx('component')}>
       <div className={cx('twoColumnLayout')}>
-        {/* Konten kiri */}
+        {/* Kolom teks */}
         <div className={cx('textColumn')}>
-          {uri && (
-            <Link href={uri}>
-              <h2 className={cx('title')}>{title}</h2>
-            </Link>
-          )}
-          <div className={cx('excerpt')} dangerouslySetInnerHTML={{ __html: trimmedExcerpt }} />
+          <Link href={uri} passHref>
+            <h2 className={cx('title')}>{title}</h2>
+          </Link>
+          <div
+            className={cx('excerpt')}
+            dangerouslySetInnerHTML={{ __html: finalExcerpt }}
+          />
           <div className={cx('buttonWrapper')}>
-            <Link href={uri}>
+            <Link href={uri} passHref>
               <button className={cx('readMoreButton')}>Baca Selanjutnya</button>
             </Link>
           </div>
         </div>
 
-        {/* Gambar kanan */}
-        <div className={cx('imageColumn')}>
-          {featuredImage && (
-            <Link href={uri}>
+        {/* Kolom gambar */}
+        {featuredImage && (
+          <div className={cx('imageColumn')}>
+            <Link href={uri} passHref>
               <Image
-                src={featuredImage?.sourceUrl}
-                alt={title + ' Featured Image'}
+                src={featuredImage.sourceUrl}
+                alt={`${title} Featured Image`}
                 width={600}
                 height={400}
                 className={cx('mainImage')}
+                loading="lazy"
               />
             </Link>
-          )}
-          {caption && <div className={cx('caption')}>{caption}</div>}
-        </div>
+            {caption && <div className={cx('caption')}>{caption}</div>}
+          </div>
+        )}
       </div>
     </article>
   )

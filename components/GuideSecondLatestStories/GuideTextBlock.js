@@ -1,31 +1,24 @@
-// components/GuideSecondLatestStories/GuideTextBlock.js
-
 import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './GuideSecondLatestStories.module.scss'
 import Link from 'next/link'
 
 const cx = classNames.bind(styles)
+const MAX_LENGTH = 150
 
-function stripDropcapTags(content) {
-  if (!content) return ''
-  let cleaned = content.replace(/\[\/?dropcap\]/gi, '')
-  cleaned = cleaned.replace(
-    /<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi,
-    '$1'
-  )
-  return cleaned
+const stripDropcapTags = (text) =>
+  text
+    ?.replace(/\[\/?dropcap\]/gi, '')
+    .replace(/<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi, '$1') || ''
+
+const trimExcerpt = (text, maxLength) => {
+  const trimmed = text.slice(0, maxLength)
+  const lastSpace = trimmed.lastIndexOf(' ')
+  return lastSpace !== -1 ? trimmed.slice(0, lastSpace) + '...' : trimmed
 }
 
-const MAX_EXCERPT_LENGTH = 150
-
 export default function GuideTextBlock({ title, excerpt, uri }) {
-  const cleanedExcerpt = stripDropcapTags(excerpt)
-  let trimmedExcerpt = cleanedExcerpt?.substring(0, MAX_EXCERPT_LENGTH)
-  const lastSpaceIndex = trimmedExcerpt?.lastIndexOf(' ')
-  if (lastSpaceIndex !== -1) {
-    trimmedExcerpt = trimmedExcerpt?.substring(0, lastSpaceIndex) + '...'
-  }
+  const cleanedExcerpt = trimExcerpt(stripDropcapTags(excerpt), MAX_LENGTH)
 
   return (
     <div className={cx('textWrapper')}>
@@ -36,7 +29,7 @@ export default function GuideTextBlock({ title, excerpt, uri }) {
       )}
       <div
         className={cx('excerpt')}
-        dangerouslySetInnerHTML={{ __html: trimmedExcerpt }}
+        dangerouslySetInnerHTML={{ __html: cleanedExcerpt }}
       />
     </div>
   )
