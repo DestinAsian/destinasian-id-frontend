@@ -31,7 +31,7 @@ export default function FrontPageLayout() {
     error: travelGuideError,
   } = useQuery(GetChildrenTravelGuides, {
     fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    // nextFetchPolicy: 'cache-and-network',
   })
 
   // Get Updates
@@ -42,7 +42,7 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
     fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    // nextFetchPolicy: 'cache-and-network',
   })
 
   // Get Features
@@ -53,7 +53,7 @@ export default function FrontPageLayout() {
   } = useQuery(GetCategoryFeatures, {
     variables: { id: '20' },
     fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    // nextFetchPolicy: 'cache-and-network',
   })
 
   // Prepare Data

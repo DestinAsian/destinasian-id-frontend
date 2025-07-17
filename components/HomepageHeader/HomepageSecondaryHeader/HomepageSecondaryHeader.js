@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
 import classNames from 'classnames/bind'
 import styles from './HomepageSecondaryHeader.module.scss'
 import dynamic from 'next/dynamic'
+import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 
 const TravelGuidesMenu = dynamic(() =>
   import('../../../components/TravelGuidesMenu/TravelGuidesMenu'),
 )
-import Link from 'next/link'
-import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 
-let cx = classNames.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function SecondaryHeader({
   setSearchQuery,
@@ -18,18 +18,33 @@ export default function SecondaryHeader({
   setIsGuidesNavShown,
   isScrolled,
 }) {
-  const { data, error } = useQuery(GetSecondaryHeaders, {
+  const router = useRouter()
+
+  const { data, loading, error } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
   })
 
-  if (error) return <div>Error loading categories!</div>
+  // Default fallback categories
+  const defaultCategories = [
+    { id: '20', name: 'News', uri: '/news' },
+    { id: '29', name: 'Features', uri: '/features' },
+    { id: '3', name: 'Insights', uri: '/insights' },
+  ]
 
-  const categories = data?.categories?.edges || []
+  // Gunakan memo untuk mencegah render ulang tidak perlu
+  const categories = useMemo(() => {
+    if (loading) return defaultCategories
+    if (data?.categories?.edges?.length > 0) {
+      return data.categories.edges.map((cat) => cat.node)
+    }
+    return defaultCategories // fallback jika data kosong atau error
+  }, [loading, data])
 
   return (
     <>
       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
         <div className={cx('menu-wrapper')}>
+          {/* Tombol Guides */}
           <button
             type="button"
             className={cx('menu-button', 'menu-button-guides', {
@@ -41,28 +56,27 @@ export default function SecondaryHeader({
             }}
             aria-label="Toggle navigation"
           >
-            <div className={cx('menu-title' , 'menu-button-guides')}>{`Guides`}</div>
+            <div className={cx('menu-title', 'menu-button-guides')}>Guides</div>
           </button>
 
-          {categories.map((category) => {
-            const { id, name, slug } = category.node
-            return (
-              <Link key={id} href={`/${slug}`}>
-                <div className={cx('menu-button')}>
-                  <div className={cx('menu-title')}>{name}</div>
-                </div>
-              </Link>
-            )
-          })}
+          {/* Tombol Kategori */}
+          {categories.map(({ id, name, uri }) => (
+            <div
+              key={id}
+              className={cx('menu-button')}
+              role="button"
+              tabIndex={0}
+              onClick={() => router.push(uri)}
+              onKeyPress={(e) => e.key === 'Enter' && router.push(uri)}
+            >
+              <div className={cx('menu-title')}>{name}</div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div
-        className={cx(
-          'full-menu-content',
-          isGuidesNavShown ? 'show' : undefined,
-        )}
-      >
+      {/* Navigasi Penuh untuk Guides */}
+      <div className={cx('full-menu-content', isGuidesNavShown ? 'show' : undefined)}>
         <div className={cx('full-menu-wrapper')}>
           <TravelGuidesMenu />
         </div>
@@ -70,92 +84,3 @@ export default function SecondaryHeader({
     </>
   )
 }
-
-// import classNames from 'classnames/bind'
-// import styles from './HomepageSecondaryHeader.module.scss'
-// import { TravelGuidesMenu } from '../../../components'
-
-// let cx = classNames.bind(styles)
-
-// export default function HomepageSecondaryHeader({
-//   searchQuery,
-//   setSearchQuery,
-//   isGuidesNavShown,
-//   setIsGuidesNavShown,
-//   isScrolled,
-// }) {
-//   return (
-//     <>
-//       <div
-//         className={cx(
-//           'navigation-wrapper',
-//           { sticky: isScrolled },
-//         )}
-//       >
-//         <div className={cx('menu-wrapper')}>
-//           {/* Tombol Travel Stories */}
-//           <button
-//             type="button"
-//             className={cx(
-//               'menu-button',
-//               searchQuery ? 'active' : '',
-//               searchQuery && !isScrolled && 'active-not-scrolled',
-//             )}
-//             onClick={() => {
-//               searchQuery ? setSearchQuery('') : setSearchQuery('travel')
-//               if (isGuidesNavShown) setIsGuidesNavShown(false)
-//             }}
-//             aria-label="Toggle Travel Stories"
-//           >
-//             <div className={cx('menu-title')}>{`Travel Stories`}</div>
-//           </button>
-
-//           {/* Tombol Guides */}
-//           <button
-//             type="button"
-//             className={cx(
-//               'menu-button',
-//               isGuidesNavShown ? 'active' : '',
-//               isGuidesNavShown && !isScrolled && 'active-not-scrolled',
-//             )}
-//             onClick={() => {
-//               setIsGuidesNavShown(!isGuidesNavShown)
-//               setSearchQuery('')
-//             }}
-//             aria-label="Toggle Guides"
-//           >
-//             <div className={cx('menu-title')}>{`Guides`}</div>
-//           </button>
-//           {/* Tombol Guides */}
-//           <button
-//             type="button"
-//             className={cx(
-//               'menu-button',
-//               isGuidesNavShown ? 'active' : '',
-//               isGuidesNavShown && !isScrolled && 'active-not-scrolled',
-//             )}
-//             onClick={() => {
-//               setIsGuidesNavShown(!isGuidesNavShown)
-//               setSearchQuery('')
-//             }}
-//             aria-label="Toggle Guides"
-//           >
-//             <div className={cx('menu-title')}>{`Guides`}</div>
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Konten Menu Guides */}
-//       <div
-//         className={cx(
-//           'full-menu-content',
-//           isGuidesNavShown ? 'show' : undefined,
-//         )}
-//       >
-//         <div className={cx('full-menu-wrapper')}>
-//           <TravelGuidesMenu />
-//         </div>
-//       </div>
-//     </>
-//   )
-// }

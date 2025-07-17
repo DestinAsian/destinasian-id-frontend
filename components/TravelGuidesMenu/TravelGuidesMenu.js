@@ -58,7 +58,8 @@ export default function TravelGuidesMenu(className) {
       first: 20,
       headerLocation: PRIMARY_LOCATION,
     },
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
@@ -76,7 +77,8 @@ export default function TravelGuidesMenu(className) {
     error: travelGuidesError,
   } = useQuery(GetTravelGuides, {
     variables: { search: 'null' },
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
@@ -129,7 +131,8 @@ export default function TravelGuidesMenu(className) {
     GetTravelGuidesMenu,
     {
       variables: menuVariable,
-      fetchPolicy: 'network-only',
+      // fetchPolicy: 'network-only',
+      fetchPolicy: 'cache-first',
       nextFetchPolicy: 'cache-and-network',
     },
   )

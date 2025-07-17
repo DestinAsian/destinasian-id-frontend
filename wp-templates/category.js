@@ -108,8 +108,9 @@ export default function Category({ loading, data: initialData }) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    // fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
+    // nextFetchPolicy: 'cache-and-network',
   })
 
   // Get footer menu
