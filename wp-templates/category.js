@@ -30,7 +30,7 @@ import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
-export default function Component({ loading, data: initialData }) {
+export default function Category({ loading, data: initialData }) {
   if (loading) return <>Loading...</>
 
   const {
@@ -255,7 +255,7 @@ export default function Component({ loading, data: initialData }) {
   )
 }
 
-Component.query = gql`
+Category.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}
   query GetCategoryPage($databaseId: ID!) {
@@ -414,7 +414,7 @@ Component.query = gql`
   }
 `
 
-Component.variables = ({ databaseId }) => {
+Category.variables = ({ databaseId }) => {
   return {
     databaseId,
   }
