@@ -18,52 +18,64 @@ export default function SecondaryHeader({
   setIsGuidesNavShown,
   isScrolled,
 }) {
-  // Query untuk mengambil kategori dinamis (misalnya: News, Insights, Features)
   const { data, error, loading } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
   })
 
   if (error) return <div>Error loading categories!</div>
 
-  // Gunakan useMemo agar kategori tidak dihitung ulang kecuali data berubah
-  const categories = useMemo(() => data?.categories?.edges || [], [data])
+  // Fallback cepat jika loading
+  const defaultCategories = [
+    { id: '20', name: 'News', uri: '/news' },
+    { id: '29', name: 'Features', uri: '/features' },
+    { id: '3', name: 'Insights', uri: '/insights' },
+  ]
 
-  // Fungsi toggle untuk guides navigation
-  const toggleGuidesNav = () => {
-    setIsGuidesNavShown((prev) => !prev)
-    setSearchQuery('')
-  }
+  const categories = loading
+    ? defaultCategories
+    : data?.categories?.edges.map((edge) => ({
+        id: edge.node.id,
+        name: edge.node.name,
+        uri: edge.node.uri,
+      }))
 
   return (
     <>
       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
         <div className={cx('menu-wrapper')}>
+          {/* Tombol untuk Guides */}
           <button
             type="button"
             className={cx('menu-button', 'menu-button-guides', {
               active: isGuidesNavShown,
             })}
-            onClick={toggleGuidesNav}
+            onClick={() => {
+              setIsGuidesNavShown(!isGuidesNavShown)
+              setSearchQuery('')
+            }}
             aria-label="Toggle navigation"
           >
             <div className={cx('menu-title')}>Guides</div>
           </button>
 
-          {/* Render kategori dinamis */}
-          {categories.map(({ node: category }) => {
-            const { id, name, uri } = category
-            return (
-              <Link key={id} href={`/${uri}`}>
-                <div className={cx('menu-button')}>
-                  <div className={cx('menu-title')}>{name}</div>
-                </div>
-              </Link>
-            )
-          })}
+          {/* Kategori dari query atau fallback */}
+          {categories.map(({ id, name, uri }) => (
+            <Link key={id} href={uri} legacyBehavior>
+              <a className={cx('menu-button')}>
+                <div className={cx('menu-title')}>{name}</div>
+              </a>
+            </Link>
+          ))}
         </div>
       </div>
 
-      <div className={cx('full-menu-content', { show: isGuidesNavShown })}>
+      {/* Menu penuh untuk Travel Guides */}
+      <div
+        className={cx(
+          'full-menu-content',
+          isGuidesNavShown ? 'show' : undefined,
+        )}
+      >
         <div className={cx('full-menu-wrapper')}>
           <TravelGuidesMenu />
         </div>
