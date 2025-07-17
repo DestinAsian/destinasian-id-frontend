@@ -40,7 +40,8 @@ export default function CategorySecondStories(categoryUri) {
       id: uri,
       contentTypes,
     },
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 

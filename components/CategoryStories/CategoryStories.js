@@ -55,7 +55,8 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
       id: uri,
       contentTypes,
     },
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
