@@ -98,7 +98,7 @@ export default function Component({ loading, data: initialData }) {
   const isGuidesCategory =
     dataSecondaryHeader?.category?.destinationGuides?.destinationGuides === 'yes'
   // Get menu header
-  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
+  const { data: menusData } = useQuery(GetMenus, {
     variables: {
       first: 20,
       headerLocation: MENUS.PRIMARY_LOCATION,
