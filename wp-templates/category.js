@@ -1,87 +1,55 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { gql, useQuery } from '@apollo/client'
-import dynamic from 'next/dynamic'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
+import dynamic from 'next/dynamic'
+
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+
+// Dynamic Imports
+const CategoryHeader = dynamic(() => import('../components/CategoryHeader/CategoryHeader'))
+const CategoryStories = dynamic(() => import('../components/CategoryStories/CategoryStories'), { ssr: false })
+const CategoryStoriesGuide = dynamic(() => import('../components/CategoryStoriesGuide/CategoryStoriesGuide'))
+const CategoryEntryHeader = dynamic(() => import('../components/CategoryEntryHeader/CategoryEntryHeader'))
+const Footer = dynamic(() => import('../components/Footer/Footer'))
+const Main = dynamic(() => import('../components/Main/Main'))
+const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
+const GuideReelIg = dynamic(() => import('../components/GuideReelIg/GuideReelIg'))
+const BannerPosterGuide = dynamic(() => import('../components/BannerPosterGuide/BannerPosterGuide'))
+const CategoryStoriesLatest = dynamic(() => import('../components/CategoryStoriesLatest/CategoryStoriesLatest'))
+const CategorySecondStoriesLatest = dynamic(() => import('../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'))
+const CategoryDesktopHeader = dynamic(() => import('../components/CategoryDesktopHeader/CategoryDesktopHeader'))
+const CategoryDesktopSecondaryHeader = dynamic(() => import('../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'))
+const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'))
+const CategorySecondaryHeader = dynamic(() => import('../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'))
+const SecondaryDesktopHeader = dynamic(() => import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'))
+
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
-// Dynamic imports
-const CategoryHeader = dynamic(() =>
-  import('../components/CategoryHeader/CategoryHeader'),
-)
-const CategoryStories = dynamic(
-  () => import('../components/CategoryStories/CategoryStories'),
-  { ssr: false },
-)
-const CategoryStoriesGuide = dynamic(() =>
-  import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),
-)
-const CategoryStoriesLatest = dynamic(() =>
-  import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
-)
-const CategorySecondStoriesLatest = dynamic(() =>
-  import(
-    '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
-  ),
-)
-const CategoryEntryHeader = dynamic(() =>
-  import('../components/CategoryEntryHeader/CategoryEntryHeader'),
-)
-const CategorySecondaryHeader = dynamic(() =>
-  import(
-    '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
-  ),
-)
-const CategoryDesktopHeader = dynamic(() =>
-  import('../components/CategoryDesktopHeader/CategoryDesktopHeader'),
-)
-const CategoryDesktopSecondaryHeader = dynamic(() =>
-  import(
-    '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
-  ),
-)
-const SecondaryHeader = dynamic(() =>
-  import('../components/Header/SecondaryHeader/SecondaryHeader'),
-)
-const SecondaryDesktopHeader = dynamic(() =>
-  import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
-)
-const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
-const GuideReelIg = dynamic(() =>
-  import('../components/GuideReelIg/GuideReelIg'),
-)
-const BannerPosterGuide = dynamic(() =>
-  import('../components/BannerPosterGuide/BannerPosterGuide'),
-)
-const Main = dynamic(() => import('../components/Main/Main'))
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-
-export default function Component(props) {
-  // Loading state for previews
-  if (props.loading) {
-    return <>Loading...</>
-  }
-  const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings
+export default function Component({ loading, data: initialData }) {
+  if (loading) return <>Loading...</>
 
   const {
-    name,
-    description,
-    children,
-    parent,
-    pinPosts,
-    categoryImages,
-    destinationGuides,
-    databaseId,
-    seo,
-    uri,
-    travelGuide,
-  } = props?.data?.category ?? {}
+    generalSettings,
+    category: {
+      name,
+      description,
+      children,
+      parent,
+      pinPosts,
+      categoryImages,
+      destinationGuides,
+      databaseId,
+      guideStorie,
+      guideReelIg,
+      guidesfitur,
+      travelGuide,
+    },
+  } = initialData || {}
 
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
@@ -89,38 +57,46 @@ export default function Component(props) {
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
 
-  // Cek ukuran layar (desktop)
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+  const handleResize = useCallback(() => {
+    setIsDesktop(window.innerWidth >= 1024)
   }, [])
 
-  // Sticky scroll
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+  const handleScroll = useCallback(() => {
+    setIsScrolled(window.scrollY > 0)
   }, [])
+
 
   // Control overflow (scroll lock)
   useEffect(() => {
-    const isLocked = searchQuery || isNavShown || isGuidesNavShown
-    document.body.style.overflow = isLocked ? 'hidden' : 'visible'
+    document.body.style.overflow =
+      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
+  useEffect(() => {
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [handleResize, handleScroll])
+
   // Get data kategori (secondary header)
-  const { data, loading } = useQuery(GetSecondaryHeader, {
+  const {
+    data: dataSecondaryHeader,
+    loading: loadingSecondaryHeader,
+  } = useQuery(GetSecondaryHeader, {
     variables: { id: databaseId },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
 
   // Deteksi apakah kategori adalah travel guides
+  // const isGuidesCategory =
+  //   data?.category?.destinationGuides?.destinationGuides === 'yes'
   const isGuidesCategory =
-    data?.category?.destinationGuides?.destinationGuides === 'yes'
-
+    dataSecondaryHeader?.category?.destinationGuides?.destinationGuides === 'yes'
   // Get menu header
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
@@ -139,217 +115,142 @@ export default function Component(props) {
   // Get footer menu
   const { data: footerMenusData } = useQuery(GetFooterMenus, {
     variables: { first: 100, footerHeaderLocation: MENUS.FOOTER_LOCATION },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })
 
   const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
 
-  // Get latest travel stories
-  const { data: latestStories, loading: latestLoading } = useQuery(
-    GetLatestStories,
-    {
-      variables: { first: 5 },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
+  const { data: latestStories } = useQuery(GetLatestStories, {
+    variables: { first: 5 },
+    fetchPolicy: 'cache-first',
+  })
 
   // Gabungkan dan urutkan post terbaru
-  const latestAllPosts = useMemo(() => {
-    const posts = [
-      ...(latestStories?.posts?.edges || []),
-      ...(latestStories?.updates?.edges || []),
-    ].map((edge) => edge.node)
-
-    return posts.sort((a, b) => new Date(b.date) - new Date(a.date))
+  const latestPosts = useMemo(() => {
+    return [
+      ...(latestStories?.posts?.edges?.map((p) => p.node) || []),
+      ...(latestStories?.updates?.edges?.map((p) => p.node) || []),
+    ].sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [latestStories])
 
   // Category Slider
   const categorySlider = useMemo(() => {
     return [1, 2, 3, 4, 5].map((i) => [
-      categoryImages?.[`categorySlide${i}`]?.mediaItemUrl ?? null,
-      categoryImages?.[`categorySlideCaption${i}`] ?? null,
+      categoryImages[`categorySlide${i}`]?.mediaItemUrl || null,
+      categoryImages[`categorySlideCaption${i}`] || null,
     ])
   }, [categoryImages])
 
-  const category = data?.category
-
-  const guideStories = category?.guideStorie
-
-  if (loading) {
-    return (
-      <>
-        <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]	">
-          {/* <Button className="gap-x-4	">{'Loading...'}</Button> */}
-        </div>
-      </>
-    )
+  const categoryComponentProps = {
+    parent: parent?.node?.name,
+    children: children?.edges,
+    title: name,
+    destinationGuides: destinationGuides?.destinationGuides,
+    changeToSlider: categoryImages?.changeToSlider,
+    guidesTitle: destinationGuides?.guidesTitle,
+    categorySlider,
+    image: categoryImages?.categoryImages?.mediaItemUrl,
+    imageCaption: categoryImages?.categoryImagesCaption,
+    description,
   }
+
+  const sharedHeaderProps = {
+    title: generalSettings?.title,
+    description: generalSettings?.description,
+    primaryMenuItems: menusData?.headerMenuItems?.nodes ?? [],
+    secondaryMenuItems: menusData?.secondHeaderMenuItems?.nodes ?? [],
+    thirdMenuItems: menusData?.thirdHeaderMenuItems?.nodes ?? [],
+    fourthMenuItems: menusData?.fourthHeaderMenuItems?.nodes ?? [],
+    fifthMenuItems: menusData?.fifthHeaderMenuItems?.nodes ?? [],
+    featureMenuItems: menusData?.featureHeaderMenuItems?.nodes ?? [],
+    latestStories: latestPosts,
+    searchQuery,
+    setSearchQuery,
+    isNavShown,
+    setIsNavShown,
+    isScrolled,
+    isGuidesCategory,
+  }
+
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      <>
-        {isDesktop ? (
-          <>
-            <CategoryDesktopHeader
-              title={siteTitle}
-              description={siteDescription}
-              primaryMenuItems={menusData?.headerMenuItems?.nodes ?? []}
-              secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes ?? []}
-              thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes ?? []}
-              fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes ?? []}
-              fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes ?? []}
-              featureMenuItems={menusData?.featureHeaderMenuItems?.nodes ?? []}
-              latestStories={latestAllPosts}
-              menusLoading={menusLoading}
-              latestLoading={latestLoading}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              isNavShown={isNavShown}
-              setIsNavShown={setIsNavShown}
-              isScrolled={isScrolled}
-            />
-            {!isNavShown &&
-              (isGuidesCategory ? (
-                <CategoryDesktopSecondaryHeader
-                  data={data}
-                  databaseId={databaseId}
-                  name={name}
-                  parent={parent?.node?.name}
-                />
-              ) : (
-                <SecondaryDesktopHeader
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  isGuidesNavShown={isGuidesNavShown}
-                  setIsGuidesNavShown={setIsGuidesNavShown}
-                  isScrolled={isScrolled}
-                />
-              ))}
-
-            {/* EntryHeader category name */}
-            <CategoryEntryHeader
-              parent={parent?.node?.name}
-              children={children?.edges}
-              title={name}
-              destinationGuides={destinationGuides?.destinationGuides}
-              changeToSlider={categoryImages?.changeToSlider}
-              guidesTitle={destinationGuides?.guidesTitle}
-              categorySlider={categorySlider}
-              image={categoryImages?.categoryImages?.mediaItemUrl}
-              imageCaption={categoryImages?.categoryImagesCaption}
-              description={description}
-            />
-          </>
-        ) : (
-          <>
-            <CategoryHeader
-              title={siteTitle}
-              description={siteDescription}
-              primaryMenuItems={menusData?.headerMenuItems?.nodes ?? []}
-              secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes ?? []}
-              thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes ?? []}
-              fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes ?? []}
-              fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes ?? []}
-              featureMenuItems={menusData?.featureHeaderMenuItems?.nodes ?? []}
-              latestStories={latestAllPosts}
-              menusLoading={menusLoading}
-              latestLoading={latestLoading}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              isNavShown={isNavShown}
-              setIsNavShown={setIsNavShown}
-              isScrolled={isScrolled}
-            />
-            {isGuidesCategory ? (
+      {isDesktop ? (
+        <>
+          <CategoryDesktopHeader {...sharedHeaderProps} />
+          {!isNavShown && !loadingSecondaryHeader && (
+            isGuidesCategory ? (
+              <CategoryDesktopSecondaryHeader
+                data={dataSecondaryHeader}
+                databaseId={databaseId}
+                name={name}
+                parent={parent?.node?.name}
+              />
+            ) : (
+              <SecondaryDesktopHeader
+                {...sharedHeaderProps}
+                isGuidesNavShown={isGuidesNavShown}
+                setIsGuidesNavShown={setIsGuidesNavShown}
+              />
+            )
+          )}
+        </>
+      ) : (
+        <>
+          <CategoryHeader {...sharedHeaderProps} />
+          {!loadingSecondaryHeader && (
+            isGuidesCategory ? (
               <CategorySecondaryHeader
-                data={data}
+                data={dataSecondaryHeader}
                 databaseId={databaseId}
                 name={name}
                 parent={parent?.node?.name}
               />
             ) : (
               <SecondaryHeader
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
+                {...sharedHeaderProps}
                 isGuidesNavShown={isGuidesNavShown}
                 setIsGuidesNavShown={setIsGuidesNavShown}
-                isScrolled={isScrolled}
               />
-            )}
-
-            {/* EntryHeader category name */}
-            <CategoryEntryHeader
-              parent={parent?.node?.name}
-              children={children?.edges}
-              title={name}
-              destinationGuides={destinationGuides?.destinationGuides}
-              changeToSlider={categoryImages?.changeToSlider}
-              guidesTitle={destinationGuides?.guidesTitle}
-              categorySlider={categorySlider}
-              image={categoryImages?.categoryImages?.mediaItemUrl}
-              imageCaption={categoryImages?.categoryImagesCaption}
-              description={description}
-            />
-          </>
-        )}
-      </>
-      <Main>
-        <>
-          <CategoryStoriesLatest
-            categoryUri={databaseId}
-            pinPosts={pinPosts}
-            name={name}
-            children={children}
-            parent={parent?.node?.name}
-            guideStories={data.category.guideStorie}
-          />
-          {isGuidesCategory && props?.data?.category?.guidesfitur && (
-            <GuideFitur guidesfitur={props?.data?.category?.guidesfitur} />
+            )
           )}
-          <CategorySecondStoriesLatest
-            categoryUri={databaseId}
-            pinPosts={pinPosts}
-            name={name}
-            children={children}
-            parent={parent?.node?.name}
-            guideStories={data.category.guideStorie}
-            bannerDa={props.data.category.guideStorie}
-            // guide_book_now={travelGuide?.guide_book_now.acf}
-          />
-          {/* {props?.data?.category?.guideStorie && (
-            <GuideStories guideStories={props.data.category.guideStorie} />
-          )} */}
-          {props?.data?.category?.guideReelIg && (
-            <GuideReelIg guideReelIg={props.data.category.guideReelIg} />
-          )}
-          {/* {props?.data?.category?.guideStorie && (
-            <BannerFokusDA bannerDa={props.data.category.guideStorie} />
-          )} */}
-          {/* <CategoryStoriesGuide
-            categoryUri={databaseId}
-            pinPosts={pinPosts}
-            name={name}
-            children={children}
-            parent={parent?.node?.name}
-            guideStories={data.category.guideStorie}
-          /> */}
-
-          <CategoryStories
-            categoryUri={databaseId}
-            pinPosts={pinPosts}
-            name={name}
-            children={children}
-            parent={parent?.node?.name}
-          />
-          {/* <BannerPosterGuide
-            guideReelIg={props.data.category.guideReelIg}
-            bannerDa={props.data.category.guideStorie}
-          /> */}
-          <BannerPosterGuide guideStorie={props.data.category.guideStorie} />
         </>
+      )}
+
+      <CategoryEntryHeader {...categoryComponentProps} />
+
+      <Main>
+        <CategoryStoriesLatest
+          categoryUri={databaseId}
+          pinPosts={pinPosts}
+          name={name}
+          children={children}
+          parent={parent?.node?.name}
+          guideStories={guideStorie}
+        />
+        {isGuidesCategory && guidesfitur && (
+          <GuideFitur guidesfitur={guidesfitur} />
+        )}
+        <CategorySecondStoriesLatest
+          categoryUri={databaseId}
+          pinPosts={pinPosts}
+          name={name}
+          children={children}
+          parent={parent?.node?.name}
+          guideStories={guideStorie}
+          bannerDa={guideStorie}
+        />
+        {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
+        <CategoryStories
+          categoryUri={databaseId}
+          pinPosts={pinPosts}
+          name={name}
+          children={children}
+          parent={parent?.node?.name}
+        />
+        <BannerPosterGuide guideStorie={guideStorie} />
       </Main>
-      <Footer footerMenu={footerMenu} />
+
+      <Footer footerMenu={footerMenusData?.footerHeaderMenuItems?.nodes ?? []} />
     </main>
   )
 }
