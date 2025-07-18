@@ -7,12 +7,10 @@ let cx = classNames.bind(styles);
 
 export default function HalfPage1() {
   useEffect(() => {
-    console.log("HalfPage1 dimount, mencoba memuat iklan...");
   }, []);
   return (
     <div className={cx("halfpage-wrapper")}>
       <div className={cx("halfpage-banner")}>
-        <p>test HalfPage 1</p>
         {/* HalfPage Banner */}
         <Ad
           adUnit="/6808792/DAI_HALFPAGE_01"
