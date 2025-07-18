@@ -1,4 +1,5 @@
-import React from 'react'
+// import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './FrontPageLayout.module.scss'
@@ -16,10 +17,43 @@ import TravelGuideCategories from '../TravelGuideCategories/TravelGuideCategorie
 // Dynamic Imports
 // Dynamic Imports (dengan ssr: false)
 const Outnow = dynamic(() => import('../Outnow/Outnow'), { ssr: false })
-const CategoryUpdates = dynamic(() => import('../CategoryUpdates/CategoryUpdates'), { ssr: false })
-const CategoryNewsUpdates = dynamic(() => import('../CategoryNewsUpdates/CategoryNewsUpdates'), { ssr: false })
-const CategoryFeatures = dynamic(() => import('../CategoryFeatures/CategoryFeatures'), { ssr: false })
-
+const CategoryUpdates = dynamic(
+  () => import('../CategoryUpdates/CategoryUpdates'),
+  { ssr: false },
+)
+const CategoryNewsUpdates = dynamic(
+  () => import('../CategoryNewsUpdates/CategoryNewsUpdates'),
+  { ssr: false },
+)
+const CategoryFeatures = dynamic(
+  () => import('../CategoryFeatures/CategoryFeatures'),
+  { ssr: false },
+)
+const HalfPage1 = dynamic(() =>
+  import('../../components/AdUnit/HalfPage1/HalfPage1'),
+)
+const MastHeadTop = dynamic(() =>
+  import('../../components/AdUnit/MastHeadTop/MastHeadTop'),
+)
+const MastHeadTopMobile = dynamic(() =>
+  import('../../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
+)
+const MastHeadBottom = dynamic(() =>
+  import('../../components/AdUnit/MastHeadBottom/MastHeadBottom'),
+)
+const MastHeadBottomMobile = dynamic(() =>
+  import('../../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'),
+)
+const PreviewMastHeadBottom = dynamic(() =>
+  import(
+    '../../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'
+  ),
+)
+const PreviewMastHeadBottomMobile = dynamic(() =>
+  import(
+    '../../components/AdUnit/Preview/PreviewMastHeadBottomMobile/PreviewMastHeadBottomMobile'
+  ),
+)
 
 const cx = classNames.bind(styles)
 
@@ -60,8 +94,21 @@ export default function FrontPageLayout() {
   const categoryEdges = updatesData?.category?.children?.edges || []
   const categoryFeatures = featuresData?.category
 
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <>
+      <div>{isMobile ? <MastHeadTopMobile /> : <MastHeadTop />}</div>
       {/* TRAVEL GUIDES CHILDREN */}
       {!travelGuideLoading &&
         !travelGuideError &&
@@ -83,7 +130,12 @@ export default function FrontPageLayout() {
           </div>
         </div>
       )}
+      <hr className={cx('divider')} />
+      {/* <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div> */}
 
+      <div>
+        {isMobile ? <PreviewMastHeadBottomMobile /> : <PreviewMastHeadBottom />}
+      </div>
       <hr className={cx('divider')} />
 
       {/* CATEGORY UPDATES - TITLE */}
@@ -114,7 +166,8 @@ export default function FrontPageLayout() {
           <div className={cx('right-column')}>
             <aside className={cx('outnow-wrapper')}>
               <div className={cx('outnow-component')}>
-                <Outnow />
+                {/* <Outnow /> */}
+                <HalfPage1 />
               </div>
             </aside>
           </div>

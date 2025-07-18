@@ -7,8 +7,12 @@ import dynamic from 'next/dynamic'
 import { GetVideos } from '../../queries/GetVideos'
 import Outnow from '../Outnow/Outnow'
 
-const ContentWrapperVideo = dynamic(() =>
-  import('../ContentWrapperVideo/ContentWrapperVideo'),{ ssr: false }
+const ContentWrapperVideo = dynamic(
+  () => import('../ContentWrapperVideo/ContentWrapperVideo'),
+  { ssr: false },
+)
+const HalfPage2 = dynamic(() =>
+  import('../../components/AdUnit/HalfPage2/HalfPage2'),
 )
 
 const cx = classNames.bind(styles)
@@ -35,11 +39,14 @@ export default function FrontPageVideos() {
             </div>
           </div>
           <div className={cx('rightColumn')}>
-            <aside className={cx('outnowWrapper')}>
+            <HalfPage2 />
+
+            {/* <aside className={cx('outnowWrapper')}>
               <div className={cx('outnowVideos')}>
                 <Outnow />
+                <HalfPage2 />
               </div>
-            </aside>
+            </aside> */}
           </div>
         </div>
       </div>

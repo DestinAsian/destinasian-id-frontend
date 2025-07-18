@@ -208,7 +208,7 @@ export default function Component(props) {
               <FrontPageVideos />
             </div>
           </div>
-          <HalfPage2 />
+          {/* <HalfPage2 /> */}
         </div>
       </Main>
 
