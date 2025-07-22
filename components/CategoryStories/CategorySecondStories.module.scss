@@ -78,7 +78,7 @@
     color: #000000;
     font-size: 0.95rem;
     &:hover {
-      color: var(--wpe--color--teal--light);
+      color: var(--wpe--color--teal--deep);
     }
   }
 
@@ -94,7 +94,7 @@
     transition: background 0.2s;
 
     &:hover {
-      color: var(--wpe--color--teal--light);
+      color: var(--wpe--color--teal--deep);
     }
   }
 }

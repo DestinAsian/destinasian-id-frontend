@@ -6,7 +6,6 @@
   position: relative;
   overflow: hidden;
   line-height: 1;
-  // border-bottom: 1px solid var(--wpe--color--black--cow);
 }
 
 .container-wrapper {
@@ -171,7 +170,7 @@
   text-align: left;
   font-size: 1.125rem;
   font-family: 'Open Sans', sans-serif;
-  font-weight: 200;
+  font-weight: 300;
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.25rem;

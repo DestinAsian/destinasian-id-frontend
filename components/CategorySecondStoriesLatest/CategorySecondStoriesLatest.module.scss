@@ -3,7 +3,7 @@
 .component {
   width: 100%;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 1rem;
 }
 
 .gridWrapper {
@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  padding-top: 1.5rem;
   flex-wrap: wrap;
 }
 
@@ -69,7 +69,7 @@
   color: #000000;
   font-size: 0.95rem;
   &:hover {
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 }
 .guide-price {
@@ -85,7 +85,7 @@
   transition: background 0.2s;
 
   &:hover {
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 }
 

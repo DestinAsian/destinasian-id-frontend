@@ -52,7 +52,7 @@
 
 
 .guide-info {
-  margin: 1rem;
+  margin: 1.5rem 1rem 0 1rem;
   font-size: 0.95rem;
   display: flex;
   flex-wrap: wrap;
@@ -85,7 +85,7 @@
   color: #000000;
   font-size: 0.95rem;
   &:hover {
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 }
 .guide-price {
@@ -100,7 +100,7 @@
   transition: background 0.2s;
 
   &:hover {
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 }
 }

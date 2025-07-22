@@ -41,7 +41,8 @@ const CategoryFeatures = () => {
   const posts = category.posts?.edges || []
 
   // Memoisasi post yang ditampilkan untuk efisiensi
-  const visiblePosts = useMemo(() => posts.slice(0, visibleCount), [posts, visibleCount])
+  // const visiblePosts = useMemo(() => posts.slice(0, visibleCount), [posts, visibleCount])
+  const visiblePosts = posts
 
   return (
     <div className={cx('CategoryFeaturesWrapper')}>

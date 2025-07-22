@@ -67,7 +67,8 @@ export default function CategoryDesktopHeader({
       search: searchQuery,
     },
     skip: searchQuery === '',
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
