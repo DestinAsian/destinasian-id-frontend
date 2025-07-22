@@ -11,14 +11,17 @@
 .titleVideos {
   font-size: 2rem;
   color: var(--wpe--color--white);
-  // font-weight: bold;
   font-family: 'Scheherazade New', serif;
   text-align: left;
   width: 100%;
   max-width: var(--wpe--container--max--width);
   margin-bottom: 1.5rem;
   font-weight: 600;
-  letter-spacing: 1px;
+
+  @media (min-width: $breakpoint-small) {
+    font-size: 3rem;
+    letter-spacing: 0.05em;
+  }
 }
 
 .newsUpdates {

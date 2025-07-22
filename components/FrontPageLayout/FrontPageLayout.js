@@ -130,13 +130,11 @@ export default function FrontPageLayout() {
           </div>
         </div>
       )}
-      <hr className={cx('divider')} />
       {/* <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div> */}
 
       <div>
         {isMobile ? <PreviewMastHeadBottomMobile /> : <PreviewMastHeadBottom />}
       </div>
-      <hr className={cx('divider')} />
 
       {/* CATEGORY UPDATES - TITLE */}
       {categoryEdges.map(({ node: category }) => {
@@ -173,8 +171,8 @@ export default function FrontPageLayout() {
           </div>
         </div>
       </div>
+      <hr className={cx('divider-news-updates')} />
 
-      <hr className={cx('divider')} />
 
       {/* CATEGORY FEATURES */}
       {!featuresLoading && !featuresError && categoryFeatures && (
