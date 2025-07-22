@@ -80,12 +80,12 @@ iframe {
   margin: 0;
   padding: 0;
   padding-right: 0.5rem;
-  font-size: 7rem;
+  font-size: 3rem;
   float: left;
   line-height: 1;
 
   @media (min-width: $breakpoint-extra-small) {
-    font-size: 10rem;
+    font-size: 4rem;
   }
 }
 

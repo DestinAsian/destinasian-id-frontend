@@ -9,10 +9,14 @@
   appearance: none;
   font-family: 'Open Sans', sans-serif;
   line-height: 1.6;
-  font-size: 1.7rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--wpe--color--teal--deep);
   text-transform: uppercase;
+
+  @media (min-width: $breakpoint-small) {
+    font-size: 1.5rem;
+  }
 
   &.button-primary {
     color: var(--wpe--color--teal--deep);
@@ -29,7 +33,7 @@
   &:hover {
     border-color: var(--color-black);
     background-color: var(--color-black);
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 
   // &:focus {
