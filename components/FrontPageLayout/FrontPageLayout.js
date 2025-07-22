@@ -29,8 +29,8 @@ const CategoryFeatures = dynamic(
   () => import('../CategoryFeatures/CategoryFeatures'),
   { ssr: false },
 )
-const HalfPage1 = dynamic(() =>
-  import('../../components/AdUnit/HalfPage1/HalfPage1'),
+const PreviewHalfPage1 = dynamic(() =>
+  import('../../components/AdUnit/Preview/PreviewHalfPage1/PreviewHalfPage1'),
 )
 const MastHeadTop = dynamic(() =>
   import('../../components/AdUnit/MastHeadTop/MastHeadTop'),
@@ -167,7 +167,7 @@ export default function FrontPageLayout() {
             <aside className={cx('outnow-wrapper')}>
               <div className={cx('outnow-component')}>
                 {/* <Outnow /> */}
-                <HalfPage1 />
+                <PreviewHalfPage1 />
               </div>
             </aside>
           </div>
