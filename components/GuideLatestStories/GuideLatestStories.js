@@ -32,7 +32,7 @@ export default function GuideLatestStories({ title, excerpt, uri, featuredImage,
           />
           <div className={cx('buttonWrapper')}>
             <Link href={uri} passHref>
-              <button className={cx('readMoreButton')}>Baca Selanjutnya</button>
+              <button className={cx('readMoreButton')}>Read More →</button>
             </Link>
           </div>
         </div>

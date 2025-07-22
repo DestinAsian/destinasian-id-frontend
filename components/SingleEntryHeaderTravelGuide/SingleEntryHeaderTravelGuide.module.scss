@@ -24,14 +24,14 @@
 }
 
 .category-name {
-  color: var(--wpe--color--teal--light);
+  color: var(--wpe--color--teal--deep);
   font-weight: 200;
   font-size: 0.8rem;
   text-transform: uppercase;
   text-align: center;
 
   @media (min-width: $breakpoint-extra-small) {
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 
   @media (min-width: $breakpoint-medium) {

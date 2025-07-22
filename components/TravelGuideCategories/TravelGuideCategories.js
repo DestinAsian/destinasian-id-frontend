@@ -14,7 +14,7 @@ const TravelGuideCategories = ({ data }) => {
 
   return (
     <div className={cx('wrapper')}>
-      <h2 className={cx('title')}>Guide</h2>
+      <h2 className={cx('title')}>Guides</h2>
       <div className={cx('grid')}>
         {categories.map(({ id, name, uri, categoryImages }) => {
           const imageUrl = categoryImages?.categorySlide1?.mediaItemUrl

@@ -14,15 +14,20 @@
 .titleWrapper {
   text-align: center;
   margin: 0 auto 1rem auto;
-  font-family: 'Unit Slab Pro Black';
-  font-weight: bold;
-  font-size: 2rem;
+  // font-family: 'Unit Slab Pro Black';
+  font-family: "Scheherazade New";
+  font-weight: 500;
+  font-size: 2.5rem;
   line-height: 1.4;
   width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: $breakpoint-small) {
+    font-size: 2rem;
+  }
 }
 
 .contentWrapper {
@@ -36,8 +41,9 @@
   span,
   strong,
   em {
-    font-family: 'Unit Slab Pro', serif;
-    font-weight: normal;
+    // font-family: 'Unit Slab Pro', serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     font-size: inherit;
     margin: 0 0 1rem 0;
     line-height: 1.6;
@@ -61,7 +67,7 @@
 
   p {
     font-size: 1.1rem;
-    font-weight: normal;
+    font-weight: 300;
   }
 }
 
