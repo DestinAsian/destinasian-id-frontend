@@ -235,13 +235,12 @@
       font-family: 'Open Sans', sans-serif;
       font-weight: 600;
       color: var(--wpe--color--teal--deep);
-      text-decoration: underline;
+    
       text-align: center;
 
       &:hover,
       &:focus {
-        color: var(--wpe--color--teal--light);
-        text-decoration: none;
+        text-decoration: underline;
       }
     }
 

@@ -28,7 +28,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    padding: 0 1rem;
+    padding: 2rem 1rem 0 1rem;
   }
 }
 
@@ -42,14 +42,15 @@
 }
 
 .category {
-  color: var(--wpe--color--teal--light);
+  color: var(--wpe--color--teal--deep);
   font-weight: 200;
   font-size: 0.8rem;
   text-transform: uppercase;
   line-height: 1.2;
+  padding: 1rem 0;
 
   @media (min-width: $breakpoint-extra-small) {
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
     font-size: 0.95rem;
     font-weight: 200;
   }
@@ -67,10 +68,11 @@
   font-weight: 500;
   letter-spacing: 1.8px;
   text-transform: uppercase;
+  padding: 0 0 1rem 0;
 
-  @media (min-width: $breakpoint-extra-small) {
-    font-size: 1.5rem;
-  }
+  // @media (min-width: $breakpoint-extra-small) {
+  //   font-size: 1.5rem;
+  // }
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 2rem;

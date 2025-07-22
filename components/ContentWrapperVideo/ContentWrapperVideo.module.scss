@@ -48,7 +48,7 @@ $font-main: 'Open Sans', sans-serif;
   }
 
   .first-title-wrapper {
-    padding: 0.5rem 0;
+    padding: 2rem 0 1rem 0;
     text-align: left;
     font: 500 1.75rem 'Scheherazade New', serif;
     text-transform: uppercase;
@@ -58,6 +58,7 @@ $font-main: 'Open Sans', sans-serif;
     max-width: 1400px;
     margin: 0 auto;
     font-size: 1rem;
+    letter-spacing: 0.05em;
 
     @media (min-width: $breakpoint-medium) {
       font-size: 2rem;
