@@ -680,6 +680,12 @@ const SingleEditorialEntryHeader = dynamic(() => import('../components/SingleEdi
 const SingleEditorialFeaturedImage = dynamic(() => import('../components/SingleEditorialFeaturedImage/SingleEditorialFeaturedImage'))
 const SingleHeader = dynamic(() => import('../components/SingleHeader/SingleHeader'))
 
+const MastHeadTop = dynamic(() =>
+  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
+)
+const PreviewMastHeadBottom= dynamic(() =>
+  import('../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'),
+)
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
@@ -870,6 +876,7 @@ export default function Component(props) {
 
       <Main className="relative top-[-0.75rem] sm:top-[-1rem]">
         <SingleEditorialFeaturedImage image={post?.featuredImage?.node} />
+        {/* <MastHeadTop /> */}
         <SingleEditorialEntryHeader
           image={post?.featuredImage?.node}
           title={post?.title}
@@ -880,6 +887,7 @@ export default function Component(props) {
           date={post?.date}
         />
         <ContentWrapperEditorial content={post?.content} images={images} />
+        <PreviewMastHeadBottom/>
         <EntryRelatedStories />
         {props?.shuffledRelatedStories?.map((related) =>
           related.node.title !== post.title ? (

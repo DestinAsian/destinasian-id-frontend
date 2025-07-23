@@ -76,12 +76,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-top: 3rem;
 
   // MOBILE & TABLET
   @media (max-width: $breakpoint-medium) {
     flex-direction: column;
-    padding-top: 2rem;
+    // padding-top: 2rem;
   }
 }
 
@@ -169,6 +169,7 @@
 .guideReelIgWrap {
   max-width: 1400px;
   margin: 2rem auto;
+  
 
   @media (max-width: $breakpoint-medium) {
     padding: 2rem 1rem; // ✅ padding atas-bawah ditambah

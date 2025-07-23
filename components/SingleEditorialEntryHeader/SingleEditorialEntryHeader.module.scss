@@ -54,18 +54,18 @@
 }
 
 .category-name {
-  color: var(--wpe--color--teal--light);
+  color: var(--wpe--color--teal--deep);
   font-weight: 400;
   font-size: 0.8rem;
   text-transform: uppercase;
 
   @media (min-width: $breakpoint-large) {
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1.25rem;
-    color: var(--wpe--color--teal--light);
+    color: var(--wpe--color--teal--deep);
   }
 }
 

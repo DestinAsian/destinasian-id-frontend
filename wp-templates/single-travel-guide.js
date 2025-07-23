@@ -29,6 +29,15 @@ const SingleSliderTravelGuide = dynamic(() => import('../components/SingleSlider
 const CategorySecondaryHeaderTravelGuide = dynamic(() => import('../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'))
 const CategoryDesktopSecondaryHeaderTravelGuide = dynamic(() => import('../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'))
 
+const MastHeadTop = dynamic(() =>
+  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
+)
+const PreviewMastHeadBottom= dynamic(() =>
+  import('../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'),
+)
+const MastHeadTopMobile = dynamic(() =>
+  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
+)
 export default function SingleTravelGuide(props) {
  // Loading state for previews
  if (props.loading) {
@@ -112,6 +121,8 @@ export default function SingleTravelGuide(props) {
    window.addEventListener('resize', handleResize)
    return () => window.removeEventListener('resize', handleResize)
  }, [])
+
+ 
 
  let catVariable = {
    first: 1,
@@ -277,6 +288,8 @@ export default function SingleTravelGuide(props) {
        />
      )}
      <Main>
+     <MastHeadTop />
+     {/* <div>{isMobile ? <MastHeadTopMobile /> : <MastHeadTop />}</div> */}
        <SingleSliderTravelGuide images={images} />
        <SingleEntryHeaderTravelGuide
          title={title}
@@ -287,6 +300,7 @@ export default function SingleTravelGuide(props) {
        <Container>
          <ContentWrapperTravelGuide content={content} />
        </Container>
+       <PreviewMastHeadBottom/>
        <EntryMoreReviews
          parentName={categories?.[0]?.node?.parent?.node?.name}
          categoryName={categories?.[0]?.node?.name}

@@ -131,11 +131,12 @@ export default function FrontPageLayout() {
         </div>
       )}
       {/* <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div> */}
+      <hr className={cx('divider')} />
 
       <div>
         {isMobile ? <PreviewMastHeadBottomMobile /> : <PreviewMastHeadBottom />}
       </div>
-
+      <hr className={cx('divider')} />
       {/* CATEGORY UPDATES - TITLE */}
       {categoryEdges.map(({ node: category }) => {
         const parentName = category?.parent?.node?.name || ''

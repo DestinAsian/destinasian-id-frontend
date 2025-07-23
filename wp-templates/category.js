@@ -24,6 +24,14 @@ const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHead
 const CategorySecondaryHeader = dynamic(() => import('../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'))
 const SecondaryDesktopHeader = dynamic(() => import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'))
 
+
+const MastHeadTop = dynamic(() =>
+  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
+)
+const PreviewMastHeadBottom= dynamic(() =>
+  import('../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'),
+)
+
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -47,7 +55,6 @@ export default function Category({ loading, data: initialData }) {
       guideStorie,
       guideReelIg,
       guidesfitur,
-      travelGuide,
     },
   } = initialData || {}
 
@@ -57,20 +64,8 @@ export default function Category({ loading, data: initialData }) {
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
 
-  const handleResize = useCallback(() => {
-    setIsDesktop(window.innerWidth >= 1024)
-  }, [])
-
-  const handleScroll = useCallback(() => {
-    setIsScrolled(window.scrollY > 0)
-  }, [])
-
-
-  // Control overflow (scroll lock)
-  useEffect(() => {
-    document.body.style.overflow =
-      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
-  }, [searchQuery, isNavShown, isGuidesNavShown])
+  const handleResize = useCallback(() => setIsDesktop(window.innerWidth >= 1024), [])
+  const handleScroll = useCallback(() => setIsScrolled(window.scrollY > 0), [])
 
   useEffect(() => {
     handleResize()
@@ -82,22 +77,11 @@ export default function Category({ loading, data: initialData }) {
     }
   }, [handleResize, handleScroll])
 
-  // Get data kategori (secondary header)
-  const {
-    data: dataSecondaryHeader,
-    loading: loadingSecondaryHeader,
-  } = useQuery(GetSecondaryHeader, {
-    variables: { id: databaseId },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
+  useEffect(() => {
+    document.body.style.overflow = searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
+  }, [searchQuery, isNavShown, isGuidesNavShown])
 
-  // Deteksi apakah kategori adalah travel guides
-  // const isGuidesCategory =
-  //   data?.category?.destinationGuides?.destinationGuides === 'yes'
-  const isGuidesCategory =
-    dataSecondaryHeader?.category?.destinationGuides?.destinationGuides === 'yes'
-  // Get menu header
+  // Fetch queries
   const { data: menusData } = useQuery(GetMenus, {
     variables: {
       first: 20,
@@ -108,39 +92,41 @@ export default function Category({ loading, data: initialData }) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    // fetchPolicy: 'network-only',
     fetchPolicy: 'cache-first',
-    // nextFetchPolicy: 'cache-and-network',
   })
 
-  // Get footer menu
   const { data: footerMenusData } = useQuery(GetFooterMenus, {
     variables: { first: 100, footerHeaderLocation: MENUS.FOOTER_LOCATION },
     fetchPolicy: 'cache-first',
   })
-
-  const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
 
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
     fetchPolicy: 'cache-first',
   })
 
-  // Gabungkan dan urutkan post terbaru
+  const { data: dataSecondaryHeader, loading: loadingSecondaryHeader } = useQuery(GetSecondaryHeader, {
+    variables: { id: databaseId },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
+
+  const isGuidesCategory = dataSecondaryHeader?.category?.destinationGuides?.destinationGuides === 'yes'
+
   const latestPosts = useMemo(() => {
-    return [
-      ...(latestStories?.posts?.edges?.map((p) => p.node) || []),
-      ...(latestStories?.updates?.edges?.map((p) => p.node) || []),
-    ].sort((a, b) => new Date(b.date) - new Date(a.date))
+    const posts = latestStories?.posts?.edges || []
+    const updates = latestStories?.updates?.edges || []
+    return [...posts, ...updates]
+      .map(edge => edge.node)
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [latestStories])
 
-  // Category Slider
-  const categorySlider = useMemo(() => {
-    return [1, 2, 3, 4, 5].map((i) => [
-      categoryImages[`categorySlide${i}`]?.mediaItemUrl || null,
-      categoryImages[`categorySlideCaption${i}`] || null,
+  const categorySlider = useMemo(() => (
+    [1, 2, 3, 4, 5].map(i => [
+      categoryImages?.[`categorySlide${i}`]?.mediaItemUrl || null,
+      categoryImages?.[`categorySlideCaption${i}`] || null,
     ])
-  }, [categoryImages])
+  ), [categoryImages])
 
   const categoryComponentProps = {
     parent: parent?.node?.name,
@@ -220,6 +206,7 @@ export default function Category({ loading, data: initialData }) {
       <CategoryEntryHeader {...categoryComponentProps} />
 
       <Main>
+      {/* <MastHeadTop /> */}
         <CategoryStoriesLatest
           categoryUri={databaseId}
           pinPosts={pinPosts}
@@ -249,6 +236,7 @@ export default function Category({ loading, data: initialData }) {
           parent={parent?.node?.name}
         />
         <BannerPosterGuide guideStorie={guideStorie} />
+        <PreviewMastHeadBottom/>
       </Main>
 
       <Footer footerMenu={footerMenusData?.footerHeaderMenuItems?.nodes ?? []} />
