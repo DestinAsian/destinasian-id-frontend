@@ -48,6 +48,7 @@
   text-transform: uppercase;
   line-height: 1.2;
   padding: 1rem 0;
+  letter-spacing: 0.2em;
 
   @media (min-width: $breakpoint-extra-small) {
     color: var(--wpe--color--teal--deep);

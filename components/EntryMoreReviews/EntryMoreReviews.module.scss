@@ -10,6 +10,7 @@
 
   @media (min-width: $breakpoint-extra-small) {
     padding-bottom: 0.5rem;
+    
   }
 }
 
@@ -25,8 +26,8 @@
   margin: 0 auto;
 
   @media (min-width: $breakpoint-extra-small) {
-    max-width: 700px;
-    padding: 1rem 0 1rem;
+    max-width: 1200px;
+    padding: 1rem 0;
     row-gap: 1rem;
   }
 
@@ -34,7 +35,8 @@
     font-size: 0.75rem;
     line-height: 1.2;
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 300;
+    letter-spacing: 0.2em;
     color: var(--wpe--color--white);
     background-color: var(--wpe--color--teal--deep);
     padding: 0.65rem 1.25rem;
@@ -61,8 +63,8 @@
   width: 100%;
 
   @media (min-width: $breakpoint-extra-small) {
-    padding: 0 0 0.75rem;
-    max-width: 700px;
+    padding: 0 1rem 0 0;
+    max-width: 1200px;
   }
 }
 
@@ -73,6 +75,8 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   line-height: 1.2;
+  letter-spacing: 0.2em;
+  font-weight: 30;
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1rem;

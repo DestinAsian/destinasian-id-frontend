@@ -27,7 +27,7 @@
   align-items: flex-start;
 
   @media (min-width: $breakpoint-extra-small) {
-    max-width: 700px;
+    max-width: 1200px;
     padding: 1rem 0;
   }
 }
@@ -196,7 +196,7 @@ figure.image {
   padding: 1rem 1rem 0;
 
   @media (min-width: $breakpoint-extra-small) {
-    max-width: 700px;
-    padding: 1rem 0 0;
+    max-width: 1200px;
+    padding: 1rem;
   }
 }
