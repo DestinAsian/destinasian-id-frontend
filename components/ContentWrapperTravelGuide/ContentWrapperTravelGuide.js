@@ -1,6 +1,6 @@
+import { useEffect, useState, useRef } from 'react'
 import className from 'classnames/bind'
 import styles from './ContentWrapperTravelGuide.module.scss'
-import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
@@ -8,11 +8,68 @@ import dynamic from 'next/dynamic'
 const GallerySlider = dynamic(() =>
   import('../../components/GallerySlider/GallerySlider'),
 )
+const PreviewHalfPageGuides1 = dynamic(() =>
+  import(
+    '../../components/AdUnit/Preview/PreviewHalfPage1/PreviewHalfPageGuides1'
+  ),
+)
+const PreviewHalfPageGuides2 = dynamic(() =>
+  import(
+    '../../components/AdUnit/Preview/PreviewHalfPage2/PreviewHalfPageGuides2'
+  ),
+)
 
 let cx = className.bind(styles)
 
 export default function ContentWrapperTravelGuide({ content, children }) {
   const [transformedContent, setTransformedContent] = useState('')
+  const [isMobile, setIsMobile] = useState(false)
+  const contentRef = useRef(null)
+  const stickyRef = useRef(null)
+  const stopRef = useRef(null)
+
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
+    return () => window.removeEventListener('resize', checkIsMobile)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!stickyRef.current || !contentRef.current || !stopRef.current) return
+
+      const sticky = stickyRef.current
+      const content = contentRef.current
+      const stop = stopRef.current
+
+      const contentRect = content.getBoundingClientRect()
+      const stopRect = stop.getBoundingClientRect()
+
+      const maxTranslateY = stopRect.top - sticky.offsetHeight - 32 // 32 = top offset (2rem)
+      const stickyTop = 32 // sticky top
+
+      if (contentRect.top < stickyTop && maxTranslateY > stickyTop) {
+        sticky.style.position = 'fixed'
+        sticky.style.top = `${stickyTop}px`
+      } else {
+        sticky.style.position = 'static'
+      }
+
+      if (stopRect.top <= sticky.offsetHeight + stickyTop) {
+        sticky.style.position = 'absolute'
+        sticky.style.top = 'unset'
+        sticky.style.bottom = '0'
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     const extractHTMLData = () => {
@@ -78,44 +135,24 @@ export default function ContentWrapperTravelGuide({ content, children }) {
       // Process the content's root element to find all <img> nodes and replace them
       Array.from(doc.body.childNodes).forEach(extractImagesRecursively)
 
-      //  //  [dropcap]...[/dropcap]
-      //  const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
+      const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
 
-      //  const processDropcap = (node) => {
-      //    if (
-      //      node.nodeType === 1 && // ELEMENT_NODE
-      //      node.tagName === 'P' &&
-      //      node.innerHTML.includes('[dropcap]')
-      //    ) {
-      //      node.innerHTML = node.innerHTML.replace(
-      //        dropcapRegex,
-      //        '<span class="dropcap">$1</span>',
-      //      )
-      //    }
- 
-      //    node.childNodes?.forEach(processDropcap)
-      //  }
- 
-       const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
+      const processDropcap = (node) => {
+        if (
+          node.nodeType === 1 &&
+          node.tagName === 'P' &&
+          node.innerHTML.includes('[dropcap]')
+        ) {
+          node.innerHTML = node.innerHTML.replace(
+            dropcapRegex,
+            (match, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`,
+          )
+        }
 
-       const processDropcap = (node) => {
-         if (
-           node.nodeType === 1 &&
-           node.tagName === 'P' &&
-           node.innerHTML.includes('[dropcap]')
-         ) {
-           node.innerHTML = node.innerHTML.replace(
-             dropcapRegex,
-             (match, p1) =>
-               `<span class="dropcap">${p1.toUpperCase()}</span>`
-           )
-         }
-       
-         node.childNodes?.forEach(processDropcap)
-       }
-       
-       
-       Array.from(doc.body.childNodes).forEach(processDropcap)
+        node.childNodes?.forEach(processDropcap)
+      }
+
+      Array.from(doc.body.childNodes).forEach(processDropcap)
 
       // Handle Instagram blockquote
       const elements = Array.from(doc.body.childNodes).map((node, index) => {
@@ -141,10 +178,35 @@ export default function ContentWrapperTravelGuide({ content, children }) {
   }, [content])
 
   return (
-    <article className={cx('component')}>
-      <div className={cx('content-wrapper')}>{transformedContent}</div>
+    // <>
+    //   <article className={cx('component')}>
+    //     <div className={cx('content-wrapper')}>{transformedContent}</div>
 
-      {children}
+    //     {children}
+    //   </article>
+    //   <div>
+    //     <PreviewHalfPageGuides1 />
+    //     <PreviewHalfPageGuides2 />
+    //   </div>
+    // </>
+
+    <article className={cx('component')}>
+      <div className={cx('layout-wrapper')} ref={contentRef}>
+        <div className={cx('content-wrapper')}>
+          {transformedContent}
+          {children}
+          {/* Penanda akhir konten */}
+          <div ref={stopRef} style={{ height: '1px' }} />
+        </div>
+
+        {!isMobile && (
+          <aside className={cx('ads-wrapper')}>
+            <div className={cx('sticky-ads')} ref={stickyRef}>
+              <PreviewHalfPageGuides1 />
+            </div>
+          </aside>
+        )}
+      </div>
     </article>
   )
 }

@@ -10,7 +10,7 @@
   @media (min-width: $breakpoint-extra-small) {
     margin: 0 auto 5rem;
     background-color: var(--wpe--main--background-color);
-    max-width: 700px;
+    max-width: 1100px;
     padding: 1rem;
     position: relative;
   }
@@ -24,7 +24,7 @@
     padding: 1.125rem 0;
 
     @media (min-width: $breakpoint-extra-small) {
-      padding: 0 1rem;
+      padding: 0 9rem;
     }
   }
 
@@ -75,6 +75,7 @@
       min-width: 100%;
       padding: 0;
       font-style: italic;
+      font-size: 0.8rem;
 
     }
 
