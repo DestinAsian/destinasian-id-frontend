@@ -7,29 +7,97 @@ import dynamic from 'next/dynamic'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
 // Dynamic Imports
-const CategoryHeader = dynamic(() => import('../components/CategoryHeader/CategoryHeader'))
-const CategoryStories = dynamic(() => import('../components/CategoryStories/CategoryStories'), { ssr: false })
-const CategoryStoriesGuide = dynamic(() => import('../components/CategoryStoriesGuide/CategoryStoriesGuide'))
-const CategoryEntryHeader = dynamic(() => import('../components/CategoryEntryHeader/CategoryEntryHeader'))
+const CategoryHeader = dynamic(() =>
+  import('../components/CategoryHeader/CategoryHeader'),
+)
+const CategoryStories = dynamic(
+  () => import('../components/CategoryStories/CategoryStories'),
+  { ssr: false },
+)
+const CategoryStoriesGuide = dynamic(() =>
+  import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),
+)
+const CategoryEntryHeader = dynamic(() =>
+  import('../components/CategoryEntryHeader/CategoryEntryHeader'),
+)
 const Footer = dynamic(() => import('../components/Footer/Footer'))
 const Main = dynamic(() => import('../components/Main/Main'))
 const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
-const GuideReelIg = dynamic(() => import('../components/GuideReelIg/GuideReelIg'))
-const BannerPosterGuide = dynamic(() => import('../components/BannerPosterGuide/BannerPosterGuide'))
-const CategoryStoriesLatest = dynamic(() => import('../components/CategoryStoriesLatest/CategoryStoriesLatest'))
-const CategorySecondStoriesLatest = dynamic(() => import('../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'))
-const CategoryDesktopHeader = dynamic(() => import('../components/CategoryDesktopHeader/CategoryDesktopHeader'))
-const CategoryDesktopSecondaryHeader = dynamic(() => import('../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'))
-const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'))
-const CategorySecondaryHeader = dynamic(() => import('../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'))
-const SecondaryDesktopHeader = dynamic(() => import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'))
+const GuideReelIg = dynamic(() =>
+  import('../components/GuideReelIg/GuideReelIg'),
+)
+const BannerPosterGuide = dynamic(() =>
+  import('../components/BannerPosterGuide/BannerPosterGuide'),
+)
+const CategoryStoriesLatest = dynamic(() =>
+  import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
+)
+const CategorySecondStoriesLatest = dynamic(() =>
+  import(
+    '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
+  ),
+)
+const CategoryDesktopHeader = dynamic(() =>
+  import('../components/CategoryDesktopHeader/CategoryDesktopHeader'),
+)
+const CategoryDesktopSecondaryHeader = dynamic(() =>
+  import(
+    '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
+  ),
+)
+const SecondaryHeader = dynamic(() =>
+  import('../components/Header/SecondaryHeader/SecondaryHeader'),
+)
+const CategorySecondaryHeader = dynamic(() =>
+  import(
+    '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
+  ),
+)
+const SecondaryDesktopHeader = dynamic(() =>
+  import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
+)
 
+const PreviewMastHeadTop = dynamic(() =>
+  import('../components/AdUnit/Preview/PreviewMastHeadTop/PreviewMastHeadTop'),
+)
+const PreviewMastHeadTopMobile = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadTopMobile/PreviewMastHeadTopMobile'
+  ),
+)
+const PreviewMastHeadBottom = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'
+  ),
+)
+const PreviewMastHeadBottomMobile = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadBottomMobile/PreviewMastHeadBottomMobile'
+  ),
+)
+const PreviewMastHeadTopGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadTop/PreviewMastHeadTopGuides'
+  ),
+)
+const PreviewMastHeadTopMobileGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadTopMobile/PreviewMastHeadTopMobileGuides'
+  ),
+)
+const PreviewMastHeadBottomGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottomGuides'
+  ),
+)
+const PreviewMastHeadBottomMobileGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadBottomMobile/PreviewMastHeadBottomMobileGuides'
+  ),
+)
 
 const MastHeadTop = dynamic(() =>
   import('../components/AdUnit/MastHeadTop/MastHeadTop'),
-)
-const PreviewMastHeadBottom= dynamic(() =>
-  import('../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'),
 )
 
 import { GetMenus } from '../queries/GetMenus'
@@ -63,8 +131,19 @@ export default function Category({ loading, data: initialData }) {
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  const handleResize = useCallback(() => setIsDesktop(window.innerWidth >= 1024), [])
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768)
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const handleResize = useCallback(
+    () => setIsDesktop(window.innerWidth >= 1024),
+    [],
+  )
   const handleScroll = useCallback(() => setIsScrolled(window.scrollY > 0), [])
 
   useEffect(() => {
@@ -78,8 +157,25 @@ export default function Category({ loading, data: initialData }) {
   }, [handleResize, handleScroll])
 
   useEffect(() => {
-    document.body.style.overflow = searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
+    document.body.style.overflow =
+      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
+
+  // const renderMastheadTopAd = () => {
+  //   if (isGuidesCategory) {
+  //     return isMobile ? <PreviewMastHeadTopMobileGuides /> : <PreviewMastHeadTopGuides />
+  //   } else {
+  //     return isMobile ? <PreviewMastHeadTopMobile /> : <PreviewMastHeadTop />
+  //   }
+  // }
+
+  // const renderMastheadBottomAd = () => {
+  //   if (isGuidesCategory) {
+  //     return isMobile ? <PreviewMastHeadBottomMobileGuides /> : <PreviewMastHeadBottomGuides />
+  //   } else {
+  //     return isMobile ? <PreviewMastHeadBottomMobile /> : <PreviewMastHeadBottom />
+  //   }
+  // }
 
   // Fetch queries
   const { data: menusData } = useQuery(GetMenus, {
@@ -105,28 +201,33 @@ export default function Category({ loading, data: initialData }) {
     fetchPolicy: 'cache-first',
   })
 
-  const { data: dataSecondaryHeader, loading: loadingSecondaryHeader } = useQuery(GetSecondaryHeader, {
-    variables: { id: databaseId },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
+  const { data: dataSecondaryHeader, loading: loadingSecondaryHeader } =
+    useQuery(GetSecondaryHeader, {
+      variables: { id: databaseId },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    })
 
-  const isGuidesCategory = dataSecondaryHeader?.category?.destinationGuides?.destinationGuides === 'yes'
+  const isGuidesCategory =
+    dataSecondaryHeader?.category?.destinationGuides?.destinationGuides ===
+    'yes'
 
   const latestPosts = useMemo(() => {
     const posts = latestStories?.posts?.edges || []
     const updates = latestStories?.updates?.edges || []
     return [...posts, ...updates]
-      .map(edge => edge.node)
+      .map((edge) => edge.node)
       .sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [latestStories])
 
-  const categorySlider = useMemo(() => (
-    [1, 2, 3, 4, 5].map(i => [
-      categoryImages?.[`categorySlide${i}`]?.mediaItemUrl || null,
-      categoryImages?.[`categorySlideCaption${i}`] || null,
-    ])
-  ), [categoryImages])
+  const categorySlider = useMemo(
+    () =>
+      [1, 2, 3, 4, 5].map((i) => [
+        categoryImages?.[`categorySlide${i}`]?.mediaItemUrl || null,
+        categoryImages?.[`categorySlideCaption${i}`] || null,
+      ]),
+    [categoryImages],
+  )
 
   const categoryComponentProps = {
     parent: parent?.node?.name,
@@ -159,13 +260,38 @@ export default function Category({ loading, data: initialData }) {
     isGuidesCategory,
   }
 
+  const renderAdComponent = (position) => {
+    const isTop = position === 'top'
+    if (isGuidesCategory) {
+      if (isMobile)
+        return isTop ? (
+          <PreviewMastHeadTopMobileGuides />
+        ) : (
+          <PreviewMastHeadBottomMobileGuides />
+        )
+      return isTop ? (
+        <PreviewMastHeadTopGuides />
+      ) : (
+        <PreviewMastHeadBottomGuides />
+      )
+    } else {
+      if (isMobile)
+        return isTop ? (
+          <PreviewMastHeadTopMobile />
+        ) : (
+          <PreviewMastHeadBottomMobile />
+        )
+      return isTop ? <PreviewMastHeadTop /> : <PreviewMastHeadBottom />
+    }
+  }
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       {isDesktop ? (
         <>
           <CategoryDesktopHeader {...sharedHeaderProps} />
-          {!isNavShown && !loadingSecondaryHeader && (
-            isGuidesCategory ? (
+          {!isNavShown &&
+            !loadingSecondaryHeader &&
+            (isGuidesCategory ? (
               <CategoryDesktopSecondaryHeader
                 data={dataSecondaryHeader}
                 databaseId={databaseId}
@@ -178,14 +304,13 @@ export default function Category({ loading, data: initialData }) {
                 isGuidesNavShown={isGuidesNavShown}
                 setIsGuidesNavShown={setIsGuidesNavShown}
               />
-            )
-          )}
+            ))}
         </>
       ) : (
         <>
           <CategoryHeader {...sharedHeaderProps} />
-          {!loadingSecondaryHeader && (
-            isGuidesCategory ? (
+          {!loadingSecondaryHeader &&
+            (isGuidesCategory ? (
               <CategorySecondaryHeader
                 data={dataSecondaryHeader}
                 databaseId={databaseId}
@@ -198,15 +323,34 @@ export default function Category({ loading, data: initialData }) {
                 isGuidesNavShown={isGuidesNavShown}
                 setIsGuidesNavShown={setIsGuidesNavShown}
               />
-            )
-          )}
+            ))}
         </>
       )}
 
       <CategoryEntryHeader {...categoryComponentProps} />
 
       <Main>
-      {/* <MastHeadTop /> */}
+        {isGuidesCategory && (
+          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+            <hr
+              style={{
+                border: 'none',
+                borderTop: '1px solid black',
+                margin: '2rem 0',
+              }}
+            />
+          </div>
+        )}
+        {renderAdComponent('top')}
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <hr
+            style={{
+              border: 'none',
+              borderTop: '1px solid black',
+              margin: '0',
+            }}
+          />
+        </div>
         <CategoryStoriesLatest
           categoryUri={databaseId}
           pinPosts={pinPosts}
@@ -215,6 +359,17 @@ export default function Category({ loading, data: initialData }) {
           parent={parent?.node?.name}
           guideStories={guideStorie}
         />
+        {isGuidesCategory && (
+          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+            <hr
+              style={{
+                border: 'none',
+                borderTop: '1px solid black',
+                margin: '0',
+              }}
+            />
+          </div>
+        )}
         {isGuidesCategory && guidesfitur && (
           <GuideFitur guidesfitur={guidesfitur} />
         )}
@@ -226,7 +381,7 @@ export default function Category({ loading, data: initialData }) {
           parent={parent?.node?.name}
           guideStories={guideStorie}
           bannerDa={guideStorie}
-        />
+        />      
         {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
         <CategoryStories
           categoryUri={databaseId}
@@ -236,10 +391,22 @@ export default function Category({ loading, data: initialData }) {
           parent={parent?.node?.name}
         />
         <BannerPosterGuide guideStorie={guideStorie} />
-        <PreviewMastHeadBottom/>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <hr
+            style={{
+              border: 'none',
+              borderTop: '1px solid black',
+              margin: '2rem 0',
+            }}
+          />
+        </div>
+
+        {renderAdComponent('bottom')}
       </Main>
 
-      <Footer footerMenu={footerMenusData?.footerHeaderMenuItems?.nodes ?? []} />
+      <Footer
+        footerMenu={footerMenusData?.footerHeaderMenuItems?.nodes ?? []}
+      />
     </main>
   )
 }

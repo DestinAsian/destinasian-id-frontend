@@ -15,7 +15,7 @@ body {
   margin: 0;
   // font-family: 'Ringside Regular A', 'Ringside Regular B';
   font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
+  font-weight: 300;
   font-size: 1.125rem;
 
   @media (min-width: $breakpoint-extra-small) {
@@ -48,9 +48,9 @@ p {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   margin: 0 0 1rem;
-  letter-spacing: 1.15px;
-  line-height: 1.4;
-  font-size: 1.125rem;
+  letter-spacing: 0.05px;
+  line-height: 1.2;
+  font-size: 0.9rem;
   
   @media (min-width: $breakpoint-extra-small) {
     font-size: 1rem;

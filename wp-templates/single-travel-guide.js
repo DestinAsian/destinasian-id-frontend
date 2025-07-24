@@ -18,404 +18,465 @@ const SEO = dynamic(() => import('../components/SEO/SEO'))
 const Footer = dynamic(() => import('../components/Footer/Footer'))
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
-const SingleHeader = dynamic(() => import('../components/SingleHeader/SingleHeader'))
-const EntryMoreReviews = dynamic(() => import('../components/EntryMoreReviews/EntryMoreReviews'))
-const MoreReviews = dynamic(() => import('../components/MoreReviews/MoreReviews'))
-const PartnerContent = dynamic(() => import('../components/PartnerContent/PartnerContent'))
-const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
-const SingleEntryHeaderTravelGuide = dynamic(() => import('../components/SingleEntryHeaderTravelGuide/SingleEntryHeaderTravelGuide'))
-const ContentWrapperTravelGuide = dynamic(() => import('../components/ContentWrapperTravelGuide/ContentWrapperTravelGuide'))
-const SingleSliderTravelGuide = dynamic(() => import('../components/SingleSliderTravelGuide/SingleSliderTravelGuide'))
-const CategorySecondaryHeaderTravelGuide = dynamic(() => import('../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'))
-const CategoryDesktopSecondaryHeaderTravelGuide = dynamic(() => import('../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'))
+const SingleHeader = dynamic(() =>
+  import('../components/SingleHeader/SingleHeader'),
+)
+const EntryMoreReviews = dynamic(() =>
+  import('../components/EntryMoreReviews/EntryMoreReviews'),
+)
+const MoreReviews = dynamic(() =>
+  import('../components/MoreReviews/MoreReviews'),
+)
+const PartnerContent = dynamic(() =>
+  import('../components/PartnerContent/PartnerContent'),
+)
+const PasswordProtected = dynamic(() =>
+  import('../components/PasswordProtected/PasswordProtected'),
+)
+const SingleEntryHeaderTravelGuide = dynamic(() =>
+  import(
+    '../components/SingleEntryHeaderTravelGuide/SingleEntryHeaderTravelGuide'
+  ),
+)
+const ContentWrapperTravelGuide = dynamic(() =>
+  import('../components/ContentWrapperTravelGuide/ContentWrapperTravelGuide'),
+)
+const SingleSliderTravelGuide = dynamic(() =>
+  import('../components/SingleSliderTravelGuide/SingleSliderTravelGuide'),
+)
+const CategorySecondaryHeaderTravelGuide = dynamic(() =>
+  import(
+    '../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'
+  ),
+)
+const CategoryDesktopSecondaryHeaderTravelGuide = dynamic(() =>
+  import(
+    '../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'
+  ),
+)
 
 const MastHeadTop = dynamic(() =>
   import('../components/AdUnit/MastHeadTop/MastHeadTop'),
 )
-const PreviewMastHeadBottom= dynamic(() =>
-  import('../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'),
+const PreviewMastHeadTopGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadTop/PreviewMastHeadTopGuides'
+  ),
+)
+const PreviewMastHeadTopMobileGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadTopMobile/PreviewMastHeadTopMobileGuides'
+  ),
+)
+const PreviewMastHeadBottomGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottomGuides'
+  ),
+)
+const PreviewMastHeadBottomMobileGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/Preview/PreviewMastHeadBottomMobile/PreviewMastHeadBottomMobileGuides'
+  ),
 )
 const MastHeadTopMobile = dynamic(() =>
   import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
 )
 export default function SingleTravelGuide(props) {
- // Loading state for previews
- if (props.loading) {
-   return <>Loading...</>
- }
+  // Loading state for previews
+  if (props.loading) {
+    return <>Loading...</>
+  }
 
- const [enteredPassword, setEnteredPassword] = useState('')
- const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [enteredPassword, setEnteredPassword] = useState('')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
- // Check for stored password in cookies on mount
- useEffect(() => {
-   const storedPassword = Cookies.get('travelGuidePassword')
-   if (
-     storedPassword &&
-     storedPassword === props?.data?.travelGuide?.passwordProtected?.password
-   ) {
-     setIsAuthenticated(true)
-   }
- }, [props?.data?.travelGuide?.passwordProtected?.password])
+  // Check for stored password in cookies on mount
+  useEffect(() => {
+    const storedPassword = Cookies.get('travelGuidePassword')
+    if (
+      storedPassword &&
+      storedPassword === props?.data?.travelGuide?.passwordProtected?.password
+    ) {
+      setIsAuthenticated(true)
+    }
+  }, [props?.data?.travelGuide?.passwordProtected?.password])
 
- const { title: siteTitle, description: siteDescription } =
-   props?.data?.generalSettings
- const {
-   title,
-   content,
-   featuredImage,
-   databaseId,
-   acfPostSlider,
-   seo,
-   uri,
-   passwordProtected,
- } = props?.data?.travelGuide
- const categories = props?.data?.travelGuide.categories?.edges ?? []
+  const { title: siteTitle, description: siteDescription } =
+    props?.data?.generalSettings
+  const {
+    title,
+    content,
+    featuredImage,
+    databaseId,
+    acfPostSlider,
+    seo,
+    uri,
+    passwordProtected,
+    author,
+    date,
+  } = props?.data?.travelGuide
+  const categories = props?.data?.travelGuide.categories?.edges ?? []
 
- // Search function content
- const [searchQuery, setSearchQuery] = useState('')
- // Scrolled Function
- const [isScrolled, setIsScrolled] = useState(false)
- // NavShown Function
- const [isNavShown, setIsNavShown] = useState(false)
+  // Search function content
+  const [searchQuery, setSearchQuery] = useState('')
+  // Scrolled Function
+  const [isScrolled, setIsScrolled] = useState(false)
+  // NavShown Function
+  const [isNavShown, setIsNavShown] = useState(false)
 
- const [isDesktop, setIsDesktop] = useState(false)
- // Stop scrolling pages when searchQuery
- useEffect(() => {
-   if (searchQuery !== '') {
-     document.body.style.overflow = 'hidden'
-   } else {
-     document.body.style.overflow = 'visible'
-   }
- }, [searchQuery])
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
- // Add sticky header on scroll
- useEffect(() => {
-   function handleScroll() {
-     setIsScrolled(window.scrollY > 0)
-   }
+  // Stop scrolling pages when searchQuery
+  useEffect(() => {
+    if (searchQuery !== '') {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [searchQuery])
 
-   window.addEventListener('scroll', handleScroll)
+  // Add sticky header on scroll
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 0)
+    }
 
-   return () => {
-     window.removeEventListener('scroll', handleScroll)
-   }
- }, [])
+    window.addEventListener('scroll', handleScroll)
 
- // Stop scrolling pages when isNavShown
- useEffect(() => {
-   if (isNavShown) {
-     document.body.style.overflow = 'hidden'
-   } else {
-     document.body.style.overflow = 'visible'
-   }
- }, [isNavShown])
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
- // desktop
- useEffect(() => {
-   const handleResize = () => {
-     setIsDesktop(window.innerWidth >= 1024) // breakpoint desktop
-   }
+  // Stop scrolling pages when isNavShown
+  useEffect(() => {
+    if (isNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isNavShown])
 
-   handleResize() // cek saat mount
-   window.addEventListener('resize', handleResize)
-   return () => window.removeEventListener('resize', handleResize)
- }, [])
+  // desktop
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth
+      setIsDesktop(width >= 1024)
+      setIsMobile(width <= 768)
+    }
 
- 
+    handleResize() // cek saat mount
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
- let catVariable = {
-   first: 1,
-   id: databaseId,
- }
+  let catVariable = {
+    first: 1,
+    id: databaseId,
+  }
 
- // Get Category
- const { data, loading } = useQuery(GetSecondaryHeaderTravelGuide, {
-   variables: catVariable,
-   fetchPolicy: 'network-only',
-   nextFetchPolicy: 'cache-and-network',
- })
+  // Get Category
+  const { data, loading } = useQuery(GetSecondaryHeaderTravelGuide, {
+    variables: catVariable,
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
 
- // Get menus
- const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-   variables: {
-     first: 20,
-     headerLocation: MENUS.PRIMARY_LOCATION,
-     secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-     thirdHeaderLocation: MENUS.THIRD_LOCATION,
-     fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-     fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-     featureHeaderLocation: MENUS.FEATURE_LOCATION,
-   },
-   fetchPolicy: 'network-only',
-   nextFetchPolicy: 'cache-and-network',
- })
+  // Get menus
+  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
+    variables: {
+      first: 20,
+      headerLocation: MENUS.PRIMARY_LOCATION,
+      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+      thirdHeaderLocation: MENUS.THIRD_LOCATION,
+      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+    },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
 
- // Header Menu
- const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
- const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
- const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
- const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
- const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
- const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
+  // Header Menu
+  const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
+  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
+  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
+  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
+  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
+  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
- // Get Footer menus
- const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
-   GetFooterMenus,
-   {
-     variables: {
-       first: 100,
-       footerHeaderLocation: MENUS.FOOTER_LOCATION,
-     },
-     fetchPolicy: 'network-only',
-     nextFetchPolicy: 'cache-and-network',
-   },
- )
+  // Get Footer menus
+  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
+    GetFooterMenus,
+    {
+      variables: {
+        first: 100,
+        footerHeaderLocation: MENUS.FOOTER_LOCATION,
+      },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    },
+  )
 
- // Logic for Guides Category
- // Footer Menu
- const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
+  // Logic for Guides Category
+  // Footer Menu
+  const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
 
- // Get latest travel stories
- const { data: latestStories, loading: latestLoading } = useQuery(
-   GetLatestStories,
-   {
-     variables: {
-       first: 5,
-     },
-     fetchPolicy: 'network-only',
-     nextFetchPolicy: 'cache-and-network',
-   },
- )
+  // Get latest travel stories
+  const { data: latestStories, loading: latestLoading } = useQuery(
+    GetLatestStories,
+    {
+      variables: {
+        first: 5,
+      },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    },
+  )
 
- const posts = latestStories?.posts ?? []
+  const posts = latestStories?.posts ?? []
 
- const mainPosts = []
- // loop through all the main categories posts
- posts?.edges?.forEach((post) => {
-   mainPosts.push(post.node)
- })
+  const mainPosts = []
+  // loop through all the main categories posts
+  posts?.edges?.forEach((post) => {
+    mainPosts.push(post.node)
+  })
 
- // sort posts by date
- const sortPostsByDate = (a, b) => {
-   const dateA = new Date(a.date)
-   const dateB = new Date(b.date)
-   return dateB - dateA // Sort in descending order
- }
+  // sort posts by date
+  const sortPostsByDate = (a, b) => {
+    const dateA = new Date(a.date)
+    const dateB = new Date(b.date)
+    return dateB - dateA // Sort in descending order
+  }
 
- // define mainCatPostCards
- const mainCatPosts = [...(mainPosts != null ? mainPosts : [])]
+  // define mainCatPostCards
+  const mainCatPosts = [...(mainPosts != null ? mainPosts : [])]
 
- // sortByDate mainCat & childCat Posts
- const allPosts = mainCatPosts.sort(sortPostsByDate)
+  // sortByDate mainCat & childCat Posts
+  const allPosts = mainCatPosts.sort(sortPostsByDate)
 
- const images = [1, 2, 3, 4, 5].map((n) => [
-   acfPostSlider?.[`slide${n}`]?.mediaItemUrl || null,
-   acfPostSlider?.[`slideCaption${n}`] || null,
- ])
+  const images = [1, 2, 3, 4, 5].map((n) => [
+    acfPostSlider?.[`slide${n}`]?.mediaItemUrl || null,
+    acfPostSlider?.[`slideCaption${n}`] || null,
+  ])
 
- const handlePasswordSubmit = (e) => {
-   e.preventDefault()
-   if (enteredPassword === passwordProtected?.password) {
-     setIsAuthenticated(true)
-     Cookies.set('travelGuidePassword', enteredPassword, { expires: 1 })
-   } else {
-     alert('Incorrect password. Please try again.')
-   }
- }
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault()
+    if (enteredPassword === passwordProtected?.password) {
+      setIsAuthenticated(true)
+      Cookies.set('travelGuidePassword', enteredPassword, { expires: 1 })
+    } else {
+      alert('Incorrect password. Please try again.')
+    }
+  }
 
- const category = categories?.[0]?.node
+  const category = categories?.[0]?.node
 
- if (passwordProtected?.onOff && !isAuthenticated) {
-   return (
-     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable} ${rubik.variable}`}>
-       <form onSubmit={handlePasswordSubmit}>
-         <PasswordProtected
-           enteredPassword={enteredPassword}
-           setEnteredPassword={setEnteredPassword}
-           title={seo?.title}
-           description={seo?.metaDesc}
-           imageUrl={featuredImage?.node?.sourceUrl}
-           url={uri}
-           focuskw={seo?.focuskw}
-         />
-       </form>
-     </main>
-   )
- }
+  if (passwordProtected?.onOff && !isAuthenticated) {
+    return (
+      <main
+        className={`${eb_garamond.variable} ${rubik_mono_one.variable} ${rubik.variable}`}
+      >
+        <form onSubmit={handlePasswordSubmit}>
+          <PasswordProtected
+            enteredPassword={enteredPassword}
+            setEnteredPassword={setEnteredPassword}
+            title={seo?.title}
+            description={seo?.metaDesc}
+            imageUrl={featuredImage?.node?.sourceUrl}
+            url={uri}
+            focuskw={seo?.focuskw}
+          />
+        </form>
+      </main>
+    )
+  }
 
- return (
-   <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-     <SEO
-       title={seo?.title}
-       description={seo?.metaDesc}
-       imageUrl={featuredImage?.node?.sourceUrl}
-       url={uri}
-       focuskw={seo?.focuskw}
-     />
-     <SingleHeader
-       title={siteTitle}
-       description={siteDescription}
-       primaryMenuItems={primaryMenu}
-       secondaryMenuItems={secondaryMenu}
-       thirdMenuItems={thirdMenu}
-       fourthMenuItems={fourthMenu}
-       fifthMenuItems={fifthMenu}
-       featureMenuItems={featureMenu}
-       latestStories={allPosts}
-       menusLoading={menusLoading}
-       latestLoading={latestLoading}
-       searchQuery={searchQuery}
-       setSearchQuery={setSearchQuery}
-       isNavShown={isNavShown}
-       setIsNavShown={setIsNavShown}
-       isScrolled={isScrolled}
-     />
-     {/* Header */}
-     {isDesktop ? (
-       <CategoryDesktopSecondaryHeaderTravelGuide
-         data={data}
-         databaseId={databaseId}
-         categoryUri={categories[0]?.node?.uri}
-         parentCategory={categories[0]?.node?.parent?.node?.name}
-       />
-     ) : (
-       <CategorySecondaryHeaderTravelGuide
-         data={data}
-         databaseId={databaseId}
-         categoryUri={categories[0]?.node?.uri}
-         parentCategory={categories[0]?.node?.parent?.node?.name}
-       />
-     )}
-     <Main>
-     <MastHeadTop />
-     {/* <div>{isMobile ? <MastHeadTopMobile /> : <MastHeadTop />}</div> */}
-       <SingleSliderTravelGuide images={images} />
-       <SingleEntryHeaderTravelGuide
-         title={title}
-         categoryUri={categories?.[0]?.node?.uri}
-         parentCategory={categories?.[0]?.node?.parent?.node?.name}
-         categoryName={categories?.[0]?.node?.name}
-       />
-       <Container>
-         <ContentWrapperTravelGuide content={content} />
-       </Container>
-       <PreviewMastHeadBottom/>
-       <EntryMoreReviews
-         parentName={categories?.[0]?.node?.parent?.node?.name}
-         categoryName={categories?.[0]?.node?.name}
-         categoryUri={categories?.[0]?.node?.uri}
-       />
-       <MoreReviews databaseId={databaseId} />
-       <PartnerContent
-         parentName={categories?.[0]?.node?.parent?.node?.name}
-       />
-     </Main>
+  return (
+    <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
+      <SEO
+        title={seo?.title}
+        description={seo?.metaDesc}
+        imageUrl={featuredImage?.node?.sourceUrl}
+        url={uri}
+        focuskw={seo?.focuskw}
+      />
+      <SingleHeader
+        title={siteTitle}
+        description={siteDescription}
+        primaryMenuItems={primaryMenu}
+        secondaryMenuItems={secondaryMenu}
+        thirdMenuItems={thirdMenu}
+        fourthMenuItems={fourthMenu}
+        fifthMenuItems={fifthMenu}
+        featureMenuItems={featureMenu}
+        latestStories={allPosts}
+        menusLoading={menusLoading}
+        latestLoading={latestLoading}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isNavShown={isNavShown}
+        setIsNavShown={setIsNavShown}
+        isScrolled={isScrolled}
+      />
+      {/* Header */}
+      {isDesktop ? (
+        <CategoryDesktopSecondaryHeaderTravelGuide
+          data={data}
+          databaseId={databaseId}
+          categoryUri={categories[0]?.node?.uri}
+          parentCategory={categories[0]?.node?.parent?.node?.name}
+        />
+      ) : (
+        <CategorySecondaryHeaderTravelGuide
+          data={data}
+          databaseId={databaseId}
+          categoryUri={categories[0]?.node?.uri}
+          parentCategory={categories[0]?.node?.parent?.node?.name}
+        />
+      )}
+      <Main>
+        <div>
+          {isMobile ? (
+            <PreviewMastHeadTopMobileGuides />
+          ) : (
+            <PreviewMastHeadTopGuides />
+          )}
+        </div>
+        <SingleSliderTravelGuide images={images} />
+        <SingleEntryHeaderTravelGuide
+          title={title}
+          categoryUri={categories?.[0]?.node?.uri}
+          parentCategory={categories?.[0]?.node?.parent?.node?.name}
+          categoryName={categories?.[0]?.node?.name}
+          author={author?.node?.name}
+          date={date}
+        />
+        <Container>
+          <ContentWrapperTravelGuide content={content} />
+        </Container>
+        <div>
+          {isMobile ? (
+            <PreviewMastHeadBottomMobileGuides />
+          ) : (
+            <PreviewMastHeadBottomGuides />
+          )}
+        </div>
 
-     <Footer footerMenu={footerMenu} />
-   </main>
- )
+        <EntryMoreReviews
+          parentName={categories?.[0]?.node?.parent?.node?.name}
+          categoryName={categories?.[0]?.node?.name}
+          categoryUri={categories?.[0]?.node?.uri}
+        />
+        <MoreReviews databaseId={databaseId} />
+        <PartnerContent
+          parentName={categories?.[0]?.node?.parent?.node?.name}
+        />
+      </Main>
+
+      <Footer footerMenu={footerMenu} />
+    </main>
+  )
 }
 
 SingleTravelGuide.query = gql`
- ${BlogInfoFragment}
- ${FeaturedImage.fragments.entry}
- query GettravelGuide($databaseId: ID!, $asPreview: Boolean = false) {
-   travelGuide(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
-     title
-     databaseId
-     content
-     date
-     passwordProtected {
-       onOff
-       password
-     }
-     author {
-       node {
-         name
-       }
-     }
-     seo {
-       title
-       metaDesc
-       focuskw
-     }
-     uri
-     guide_book_now {
-       fieldGroupName
-       guideName
-       linkBookNow
-       linkLocation
-       guideLocation
-     }
-     categories(where: { childless: true }) {
-       edges {
-         node {
-           name
-           uri
-           parent {
-             node {
-               name
-               uri
-               countryCode {
-                 countryCode
-               }
-               children {
-                 edges {
-                   node {
-                     name
-                     uri
-                   }
-                 }
-               }
-             }
-           }
-           children {
-             edges {
-               node {
-                 name
-                 uri
-               }
-             }
-           }
-         }
-       }
-     }
-     acfPostSlider {
-       slide1 {
-         mediaItemUrl
-       }
-       slide2 {
-         mediaItemUrl
-       }
-       slide3 {
-         mediaItemUrl
-       }
-       slide4 {
-         mediaItemUrl
-       }
-       slide5 {
-         mediaItemUrl
-       }
-       slideCaption1
-       slideCaption3
-       slideCaption2
-       slideCaption4
-       slideCaption5
-     }
-     ...FeaturedImageFragment
-   }
-   generalSettings {
-     ...BlogInfoFragment
-   }
- }
+  ${BlogInfoFragment}
+  ${FeaturedImage.fragments.entry}
+  query GettravelGuide($databaseId: ID!, $asPreview: Boolean = false) {
+    travelGuide(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      title
+      databaseId
+      content
+      date
+      passwordProtected {
+        onOff
+        password
+      }
+      author {
+        node {
+          name
+        }
+      }
+      seo {
+        title
+        metaDesc
+        focuskw
+      }
+      uri
+      guide_book_now {
+        fieldGroupName
+        guideName
+        linkBookNow
+        linkLocation
+        guideLocation
+      }
+      categories(where: { childless: true }) {
+        edges {
+          node {
+            name
+            uri
+            parent {
+              node {
+                name
+                uri
+                countryCode {
+                  countryCode
+                }
+                children {
+                  edges {
+                    node {
+                      name
+                      uri
+                    }
+                  }
+                }
+              }
+            }
+            children {
+              edges {
+                node {
+                  name
+                  uri
+                }
+              }
+            }
+          }
+        }
+      }
+      acfPostSlider {
+        slide1 {
+          mediaItemUrl
+        }
+        slide2 {
+          mediaItemUrl
+        }
+        slide3 {
+          mediaItemUrl
+        }
+        slide4 {
+          mediaItemUrl
+        }
+        slide5 {
+          mediaItemUrl
+        }
+        slideCaption1
+        slideCaption3
+        slideCaption2
+        slideCaption4
+        slideCaption5
+      }
+      ...FeaturedImageFragment
+    }
+    generalSettings {
+      ...BlogInfoFragment
+    }
+  }
 `
 
 SingleTravelGuide.variables = ({ databaseId }, ctx) => {
- return {
-   databaseId,
-   asPreview: ctx?.asPreview,
- }
+  return {
+    databaseId,
+    asPreview: ctx?.asPreview,
+  }
 }
-
-
