@@ -2,7 +2,12 @@ import className from 'classnames/bind'
 import dynamic from 'next/dynamic'
 
 const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const FormatDate = dynamic(() => import('../../components/FormatDate/FormatDate'))
+const FormatDate = dynamic(() =>
+  import('../../components/FormatDate/FormatDate'),
+)
+const MastHeadTop = dynamic(() =>
+  import('../../components/AdUnit/MastHeadTop/MastHeadTop'),
+)
 import styles from './SingleEditorialEntryHeader.module.scss'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -31,9 +36,10 @@ export default function SingleEditorialEntryHeader({
 
   return (
     <div className={cx('component', { maximized: isMaximized })}>
+      <MastHeadTop />
       <div className={cx('header-wrapper')}>
         {parentCategory !== 'Rest of World' &&
-          categoryName !== 'Rest of World' && 
+          categoryName !== 'Rest of World' &&
           categoryUri && (
             <Link href={categoryUri}>
               <div className={cx('category-name')}>
@@ -45,7 +51,12 @@ export default function SingleEditorialEntryHeader({
           {parent || null} {title}
         </Heading>
         <time className={cx('meta-wrapper')} dateTime={date}>
-          {'By '} {author} {'-'} <FormatDate date={date} />
+          <span className={cx('meta-author')}>
+            {'By '}
+            {author}{' '}
+          </span>{' '}
+          &nbsp; | &nbsp;
+          <FormatDate date={date} />
         </time>
       </div>
     </div>

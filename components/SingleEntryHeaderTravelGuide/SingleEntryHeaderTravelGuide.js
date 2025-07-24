@@ -1,9 +1,15 @@
 import className from 'classnames/bind'
+import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
 const Heading = dynamic(() => import('../../components/Heading/Heading'))
+const FormatDate = dynamic(() =>
+  import('../../components/FormatDate/FormatDate'),
+)
 const Container = dynamic(() => import('../../components/Container/Container'))
-const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
+const CategoryIcon = dynamic(() =>
+  import('../../components/CategoryIcon/CategoryIcon'),
+)
 import styles from './SingleEntryHeaderTravelGuide.module.scss'
 import Link from 'next/link'
 
@@ -17,10 +23,21 @@ export default function SingleEntryHeaderTravelGuide({
   categoryUri,
   categoryName,
   categoryLabel,
-
+  author,
+  date,
 }) {
+  const [isMaximized, setIsMaximized] = useState(false)
+
+  // Maximized EntryHeader when page load
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsMaximized(true)
+    }, 2000) // Change the timeframe (in milliseconds) as per your requirement
+
+    return () => clearTimeout(timeout)
+  }, [])
   return (
-    <div className={cx(['component', className])}>
+    <div className={cx('component', { maximized: isMaximized })}>
       <Container>
         <div className={cx('header-wrapper')}>
           {parentCategory !== 'Rest of World' &&
@@ -33,9 +50,17 @@ export default function SingleEntryHeaderTravelGuide({
               </Link>
             )}
           <Heading className={cx('title')}>
-            {/* {parent || null} */}
-            {title}
+          {parent || null} {title}
+            {/* {title} */}
           </Heading>
+          <time className={cx('meta-wrapper')} dateTime={date}>
+            <span className={cx('meta-author')}>
+              {'By '}
+              {author}{' '}
+            </span>{' '}
+            &nbsp; | &nbsp;
+            <FormatDate date={date} />
+          </time>
         </div>
       </Container>
     </div>
