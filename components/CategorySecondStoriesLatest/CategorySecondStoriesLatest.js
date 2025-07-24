@@ -165,6 +165,11 @@ export default function CategoryStoriesLatest({
           <BannerFokusDA bannerDa={bannerDa} />
         </div>
       </div>
+      {travelGuide && (
+        <div style={{ maxWidth: '1400px', margin: '1rem auto', }}>
+          <hr style={{ border: 'none', borderTop: '1px solid black' }} />
+        </div>
+      )}
     </div>
   )
 }

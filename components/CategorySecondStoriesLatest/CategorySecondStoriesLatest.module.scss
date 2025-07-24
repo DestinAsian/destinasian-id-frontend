@@ -3,7 +3,11 @@
 .component {
   width: 100%;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0 1rem;
+
+  @media (min-width: $breakpoint-small) {
+    padding: 1rem;
+  }
 }
 
 .gridWrapper {
@@ -11,12 +15,14 @@
   flex-direction: column;
   gap: 2rem;
   margin: 0 auto;
+  padding: 0 0 2rem;
 
   @media (min-width: $breakpoint-small) {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
     max-width: 1400px;
+    padding: 0 0 2rem;
   }
 }
 
