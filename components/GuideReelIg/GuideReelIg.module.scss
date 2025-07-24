@@ -16,7 +16,7 @@
   margin: 0 auto 1rem auto;
   // font-family: 'Unit Slab Pro Black';
   font-family: "Scheherazade New";
-  font-weight: 500;
+  font-weight: 600;
   font-size: 2.5rem;
   line-height: 1.4;
   width: 100%;
@@ -71,17 +71,30 @@
   }
 }
 
-.topSection,
-.bottomSection {
+.topSection {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
   margin-top: 3rem;
+  margin-bottom: 4rem;
 
-  // MOBILE & TABLET
   @media (max-width: $breakpoint-medium) {
     flex-direction: column;
-    // padding-top: 2rem;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+}
+
+.bottomSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 4rem;
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 2rem;
   }
 }
 
@@ -168,16 +181,16 @@
 
 .guideReelIgWrap {
   max-width: 1400px;
-  margin: 2rem auto;
-  
-
-  @media (max-width: $breakpoint-medium) {
-    padding: 2rem 1rem; // ✅ padding atas-bawah ditambah
-  }
+  margin: 0 auto;
+  padding: 1rem 1rem 3rem; 
+  // @media (max-width: $breakpoint-medium) {
+  //   padding: 2rem 1rem;
+  // }
 
   @media (max-width: $breakpoint-small) {
-    padding-top: 3rem; // ✅ lebih besar untuk layar sangat kecil
-    padding-bottom: 3rem;
+    padding-top: 1rem; 
+    padding-bottom: 1rem;
+
   }
 }
 
@@ -198,7 +211,6 @@
     border: 1px solid #ccc;
   }
 
-  // ✅ DEKSTOP: gunakan ukuran penuh (100% dari parent column)
   @media (min-width: $breakpoint-medium) {
     iframe,
     video,
@@ -207,7 +219,6 @@
     }
   }
 
-  // ✅ TABLET
   @media (max-width: $breakpoint-medium) {
     iframe,
     video,
@@ -216,7 +227,6 @@
     }
   }
 
-  // ✅ MOBILE
   @media (max-width: $breakpoint-small) {
     iframe,
     video,
