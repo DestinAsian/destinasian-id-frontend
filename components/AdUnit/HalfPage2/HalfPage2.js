@@ -15,7 +15,7 @@ export default function HalfPage2() {
         {/* HalfPage Banner */}
         <Ad
           adUnit="/6808792/PREVIEW_DAI_HALFPAGE_02"
-          name="div-gpt-ad-1751599794573-0"
+          name="div-gpt-ad-1753426152320-0"
           size={[300, 600]}
         />
       </div>

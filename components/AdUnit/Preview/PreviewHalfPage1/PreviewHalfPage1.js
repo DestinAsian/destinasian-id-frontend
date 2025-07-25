@@ -11,7 +11,7 @@ export default function PreviewHalfPage1() {
         {/* HalfPage Banner */}
         <Ad
           adUnit="/6808792/PREVIEW_DAI_HALFPAGE_01"
-          name="div-gpt-ad-1753153741837-0"
+          name="iv-gpt-ad-1753426084554-0"
           size={[300, 600]}
         />
       </div>
