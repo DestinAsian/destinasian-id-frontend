@@ -8,8 +8,9 @@
   margin-bottom: 0;
 
   @media (min-width: $breakpoint-extra-small) {
-    max-width: 700px;
+    max-width: 800px;
     margin-bottom: 0.5rem;
+    padding: 0 1rem;
   }
 }
 
@@ -33,9 +34,10 @@
     font-size: 1rem;
     line-height: 1.2;
     text-transform: uppercase;
-    font-weight: 400;
+    font-weight: 200;
     color: var(--wpe--color--teal--deep);
     width: 50%;
+    letter-spacing: 0.2rem;
 
     @media (min-width: $breakpoint-extra-small) {
       font-size: 1.2rem;
