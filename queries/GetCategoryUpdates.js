@@ -5,37 +5,28 @@ export const GetCategoryUpdates = gql`
     category(id: "3", idType: DATABASE_ID) {
       id
       name
-      slug
       children(where: { include: $include }) {
         edges {
           node {
             id
             name
-            slug
-            description
             uri
             parent {
               node {
                 name
               }
             }
-            contentNodes(first: 20) {
+            contentNodes(first: 10) {
               edges {
                 cursor
                 node {
                   id
-                  databaseId
-                  date
-                  link
-                  slug
                   uri
                   contentTypeName
                   ... on Post {
                     id
-                    slug
                     title
                     uri
-                    excerpt
                     featuredImage {
                       node {
                         mediaItemUrl

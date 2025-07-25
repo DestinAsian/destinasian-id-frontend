@@ -5,7 +5,6 @@ export const GetCategoryFeatures = gql`
     category(id: $id, idType: DATABASE_ID) {
       id
       name
-      slug
       uri
       categoryImages {
         categoryImagesCaption
@@ -14,7 +13,6 @@ export const GetCategoryFeatures = gql`
         edges {
           node {
             id
-            slug
             uri
             date
             excerpt
@@ -32,8 +30,6 @@ export const GetCategoryFeatures = gql`
             featuredImage {
               node {
                 mediaItemUrl
-                slug
-                title
               }
             }
           }
