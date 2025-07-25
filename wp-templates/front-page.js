@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
@@ -16,16 +15,35 @@ import styles from '../components/VideoFrontPage/VideoFrontPage.module.scss'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-const HomepageHeader = dynamic(() => import('../components/HomepageHeader/HomepageHeader'))
-const HomepageSecondaryHeader = dynamic(() => import('../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'))
-const HomepageDestopHeader = dynamic(() => import('../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'))
+const HomepageHeader = dynamic(() =>
+  import('../components/HomepageHeader/HomepageHeader'),
+)
+const HomepageSecondaryHeader = dynamic(() =>
+  import(
+    '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
+  ),
+)
+const HomepageDestopHeader = dynamic(() =>
+  import(
+    '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
+  ),
+)
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
-const FeatureWell = dynamic(() => import('../components/FeatureWell/FeatureWell'))
-const FrontPageLayout = dynamic(() => import('../components/FrontPageLayout/FrontPageLayout'), { ssr: false })
-const FrontPageVideos = dynamic(() => import('../components/FrontPageLayout/FrontPageVideos'))
+const FeatureWell = dynamic(() =>
+  import('../components/FeatureWell/FeatureWell'),
+)
+const FrontPageLayout = dynamic(
+  () => import('../components/FrontPageLayout/FrontPageLayout'),
+  { ssr: false },
+)
+const FrontPageVideos = dynamic(() =>
+  import('../components/FrontPageLayout/FrontPageVideos'),
+)
 const Footer = dynamic(() => import('../components/Footer/Footer'))
-const HalfPage2 = dynamic(() => import('../components/AdUnit/HalfPage2/HalfPage2'))
+const HalfPage2 = dynamic(() =>
+  import('../components/AdUnit/HalfPage2/HalfPage2'),
+)
 // const SEO = dynamic(() => import('../components/SEO/SEO'))
 
 const cx = classNames.bind(styles)
@@ -33,12 +51,12 @@ const cx = classNames.bind(styles)
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
-  const { title: siteTitle, description: siteDescription } = props?.data?.generalSettings || {}
+  const { title: siteTitle, description: siteDescription } =
+    props?.data?.generalSettings || {}
   const { featuredImage, uri, seo } = props?.data?.page || {}
-  const { content } = props?.data?.guide || {}
+  const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
-  const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
   const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
@@ -47,45 +65,45 @@ export default function Component(props) {
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
 
-  // Unified overflow control for modals & search
+  // Detect scroll + desktop + overflow
   useEffect(() => {
-    const isBlocking = searchQuery || isNavShown || isGuidesNavShown
-    document.body.style.overflow = isBlocking ? 'hidden' : 'visible'
+    const onScroll = () => setIsScrolled(window.scrollY > 0)
+    const onResize = () => setIsDesktop(window.innerWidth >= 1024)
+
+    window.addEventListener('scroll', onScroll)
+    window.addEventListener('resize', onResize)
+    onResize()
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow =
+      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
-  // Scroll listener
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // Detect desktop
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  // Feature Well Slides
-  const featureWell = [1, 2, 3].map((num) => ({
-    type: acfHomepageSlider?.[`typeSlide${num}`],
-    videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
-    desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
-    mobileSrc: acfHomepageSlider?.[`mobileSlide${num}`]?.mediaItemUrl,
-    url: acfHomepageSlider?.[`slideLink${num}`],
-    category: acfHomepageSlider?.[`slideCategory${num}`],
-    categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
-    caption: acfHomepageSlider?.[`slideCaption${num}`],
-    standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
-  }))
+  // Generate & pick random slide
+  const featureWell = [1, 2, 3]
+    .map((num) => ({
+      type: acfHomepageSlider?.[`typeSlide${num}`],
+      videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
+      desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
+      mobileSrc: acfHomepageSlider?.[`mobileSlide${num}`]?.mediaItemUrl,
+      url: acfHomepageSlider?.[`slideLink${num}`],
+      category: acfHomepageSlider?.[`slideCategory${num}`],
+      categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
+      caption: acfHomepageSlider?.[`slideCaption${num}`],
+      standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
+    }))
+    .filter((slide) => slide.type)
 
   useEffect(() => {
-    const validSlides = featureWell.filter((item) => item.type)
-    if (validSlides.length) {
-      const randomIndex = Math.floor(Math.random() * validSlides.length)
-      setCurrentFeatureWell(validSlides[randomIndex])
+    if (featureWell.length) {
+      const randomIndex = Math.floor(Math.random() * featureWell.length)
+      setCurrentFeatureWell(featureWell[randomIndex])
     }
   }, [])
 
@@ -103,9 +121,7 @@ export default function Component(props) {
     fetchPolicy: 'cache-first',
   })
 
-  const {
-    data: pinPostsData
-  } = useQuery(GetHomepagePinPosts, {
+  const { data: pinPostsData } = useQuery(GetHomepagePinPosts, {
     variables: { id: databaseId, asPreview },
     fetchPolicy: 'cache-and-network',
   })
@@ -122,72 +138,53 @@ export default function Component(props) {
 
   useQuery(GetChildrenTravelGuides)
 
-  // Extract & sort posts
   const mainPosts = latestStories?.posts?.edges?.map((p) => p.node) || []
-  const sortedPosts = mainPosts.sort((a, b) => new Date(b.date) - new Date(a.date))
+  const sortedPosts = mainPosts.sort(
+    (a, b) => new Date(b.date) - new Date(a.date),
+  )
   const homepagePinPosts = pinPostsData?.page?.homepagePinPosts ?? []
 
-  // Menu destructuring
-  const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
-  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
-  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
-  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
-  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
-  const featureMenu = menusData?.footerMenuItems?.nodes ?? []
+  const menuProps = {
+    title: siteTitle,
+    description: siteDescription,
+    primaryMenuItems: menusData?.headerMenuItems?.nodes ?? [],
+    secondaryMenuItems: menusData?.secondHeaderMenuItems?.nodes ?? [],
+    thirdMenuItems: menusData?.thirdHeaderMenuItems?.nodes ?? [],
+    fourthMenuItems: menusData?.fourthHeaderMenuItems?.nodes ?? [],
+    fifthMenuItems: menusData?.fifthHeaderMenuItems?.nodes ?? [],
+    featureMenuItems: menusData?.footerMenuItems?.nodes ?? [],
+    latestStories: sortedPosts,
+    home: uri,
+    menusLoading,
+    latestLoading: !latestStories,
+    searchQuery,
+    setSearchQuery,
+    isNavShown,
+    setIsNavShown,
+    isScrolled,
+  }
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
+      {/* SEO Component is optional and commented out */}
       {/* <SEO title={seo?.title} description={seo?.metaDesc} imageUrl={featuredImage?.node?.sourceUrl} url={uri} focuskw={seo?.focuskw} /> */}
+
       {isDesktop ? (
-        <HomepageDestopHeader {...{
-          title: siteTitle,
-          description: siteDescription,
-          primaryMenuItems: primaryMenu,
-          secondaryMenuItems: secondaryMenu,
-          thirdMenuItems: thirdMenu,
-          fourthMenuItems: fourthMenu,
-          fifthMenuItems: fifthMenu,
-          featureMenuItems: featureMenu,
-          latestStories: sortedPosts,
-          home: uri,
-          menusLoading,
-          latestLoading: !latestStories,
-          searchQuery,
-          setSearchQuery,
-          isNavShown,
-          setIsNavShown,
-          isScrolled,
-          isGuidesNavShown,
-          setIsGuidesNavShown,
-        }} />
+        <HomepageDestopHeader
+          {...menuProps}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+        />
       ) : (
         <>
-          <HomepageHeader {...{
-            title: siteTitle,
-            description: siteDescription,
-            primaryMenuItems: primaryMenu,
-            secondaryMenuItems: secondaryMenu,
-            thirdMenuItems: thirdMenu,
-            fourthMenuItems: fourthMenu,
-            fifthMenuItems: fifthMenu,
-            featureMenuItems: featureMenu,
-            latestStories: sortedPosts,
-            home: uri,
-            menusLoading,
-            latestLoading: !latestStories,
-            searchQuery,
-            setSearchQuery,
-            isNavShown,
-            setIsNavShown,
-            isScrolled,
-          }} />
-          <HomepageSecondaryHeader {...{
-            searchQuery,
-            setSearchQuery,
-            isGuidesNavShown,
-            setIsGuidesNavShown,
-            isScrolled,
-          }} />
+          <HomepageHeader {...menuProps} />
+          <HomepageSecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
         </>
       )}
 
@@ -203,12 +200,14 @@ export default function Component(props) {
           <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
             <FrontPageLayout />
           </div>
-          <div className="component-videos w-full" style={{ backgroundColor: '#008080' }}>
+          <div
+            className="component-videos w-full"
+            style={{ backgroundColor: '#008080' }}
+          >
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
               <FrontPageVideos />
             </div>
           </div>
-          {/* <HalfPage2 /> */}
         </div>
       </Main>
 
@@ -231,15 +230,33 @@ Component.query = gql`
       }
       ...FeaturedImageFragment
       acfHomepageSlider {
-        desktopSlide1 { mediaItemUrl }
-        desktopSlide2 { mediaItemUrl }
-        desktopSlide3 { mediaItemUrl }
-        mobileSlide1 { mediaItemUrl }
-        mobileSlide2 { mediaItemUrl }
-        mobileSlide3 { mediaItemUrl }
-        video1 { mediaItemUrl }
-        video2 { mediaItemUrl }
-        video3 { mediaItemUrl }
+        desktopSlide1 {
+          mediaItemUrl
+        }
+        desktopSlide2 {
+          mediaItemUrl
+        }
+        desktopSlide3 {
+          mediaItemUrl
+        }
+        mobileSlide1 {
+          mediaItemUrl
+        }
+        mobileSlide2 {
+          mediaItemUrl
+        }
+        mobileSlide3 {
+          mediaItemUrl
+        }
+        video1 {
+          mediaItemUrl
+        }
+        video2 {
+          mediaItemUrl
+        }
+        video3 {
+          mediaItemUrl
+        }
         slideCaption1
         slideCaption2
         slideCaption3

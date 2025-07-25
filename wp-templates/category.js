@@ -57,47 +57,43 @@ const SecondaryDesktopHeader = dynamic(() =>
   import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
 )
 
-const PreviewMastHeadTop = dynamic(() =>
-  import('../components/AdUnit/Preview/PreviewMastHeadTop/PreviewMastHeadTop'),
-)
-const PreviewMastHeadTopMobile = dynamic(() =>
-  import(
-    '../components/AdUnit/Preview/PreviewMastHeadTopMobile/PreviewMastHeadTopMobile'
-  ),
-)
-const PreviewMastHeadBottom = dynamic(() =>
-  import(
-    '../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottom'
-  ),
-)
-const PreviewMastHeadBottomMobile = dynamic(() =>
-  import(
-    '../components/AdUnit/Preview/PreviewMastHeadBottomMobile/PreviewMastHeadBottomMobile'
-  ),
-)
-const PreviewMastHeadTopGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/Preview/PreviewMastHeadTop/PreviewMastHeadTopGuides'
-  ),
-)
-const PreviewMastHeadTopMobileGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/Preview/PreviewMastHeadTopMobile/PreviewMastHeadTopMobileGuides'
-  ),
-)
-const PreviewMastHeadBottomGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottomGuides'
-  ),
-)
-const PreviewMastHeadBottomMobileGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/Preview/PreviewMastHeadBottomMobile/PreviewMastHeadBottomMobileGuides'
-  ),
-)
-
 const MastHeadTop = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
+  import('../components/AdUnit//MastHeadTop/MastHeadTop'),
+)
+const MastHeadTopMobile = dynamic(() =>
+  import(
+    '../components/AdUnit//MastHeadTopMobile/MastHeadTopMobile'
+  ),
+)
+const MastHeadBottom = dynamic(() =>
+  import(
+    '../components/AdUnit/MastHeadBottom/MastHeadBottom'
+  ),
+)
+const MastHeadBottomMobile = dynamic(() =>
+  import(
+    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'
+  ),
+)
+const MastHeadTopGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
+  ),
+)
+const MastHeadTopMobileGuides = dynamic(() =>
+  import(
+    '../components/AdUnit//MastHeadTopMobile/MastHeadTopMobileGuides'
+  ),
+)
+const MastHeadBottomGuides = dynamic(() =>
+  import(
+    '../components/AdUnit//MastHeadBottom/MastHeadBottomGuides'
+  ),
+)
+const MastHeadBottomMobileGuides = dynamic(() =>
+  import(
+    '../components/AdUnit//MastHeadBottomMobile/MastHeadBottomMobileGuides'
+  ),
 )
 
 import { GetMenus } from '../queries/GetMenus'
@@ -163,17 +159,17 @@ export default function Category({ loading, data: initialData }) {
 
   // const renderMastheadTopAd = () => {
   //   if (isGuidesCategory) {
-  //     return isMobile ? <PreviewMastHeadTopMobileGuides /> : <PreviewMastHeadTopGuides />
+  //     return isMobile ? <MastHeadTopMobileGuides /> : <MastHeadTopGuides />
   //   } else {
-  //     return isMobile ? <PreviewMastHeadTopMobile /> : <PreviewMastHeadTop />
+  //     return isMobile ? <MastHeadTopMobile /> : <MastHeadTop />
   //   }
   // }
 
   // const renderMastheadBottomAd = () => {
   //   if (isGuidesCategory) {
-  //     return isMobile ? <PreviewMastHeadBottomMobileGuides /> : <PreviewMastHeadBottomGuides />
+  //     return isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />
   //   } else {
-  //     return isMobile ? <PreviewMastHeadBottomMobile /> : <PreviewMastHeadBottom />
+  //     return isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />
   //   }
   // }
 
@@ -265,23 +261,23 @@ export default function Category({ loading, data: initialData }) {
     if (isGuidesCategory) {
       if (isMobile)
         return isTop ? (
-          <PreviewMastHeadTopMobileGuides />
+          <MastHeadTopMobileGuides />
         ) : (
-          <PreviewMastHeadBottomMobileGuides />
+          <MastHeadBottomMobileGuides />
         )
       return isTop ? (
-        <PreviewMastHeadTopGuides />
+        <MastHeadTopGuides />
       ) : (
-        <PreviewMastHeadBottomGuides />
+        <MastHeadBottomGuides />
       )
     } else {
       if (isMobile)
         return isTop ? (
-          <PreviewMastHeadTopMobile />
+          <MastHeadTopMobile />
         ) : (
-          <PreviewMastHeadBottomMobile />
+          <MastHeadBottomMobile />
         )
-      return isTop ? <PreviewMastHeadTop /> : <PreviewMastHeadBottom />
+      return isTop ? <MastHeadTop /> : <MastHeadBottom />
     }
   }
   return (
