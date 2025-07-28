@@ -36,27 +36,55 @@
     }
   }
   
+  // .ads-mobile {
+  //   display: block;
+  //   width: 100%;
+  //   margin-top: 2rem;
+  //   padding: 0 1rem;
+  
+  //   @media (min-width: $breakpoint-small) {
+  //     display: none;
+  //   }
+  // }
+
+  // .ads-wrapper {
+  //   flex: 0 0 300px;
+  //   max-width: 300px;
+  //   position: relative;
+  // }
+  
+  // .sticky-ads {
+  //   position: sticky;
+  //   top: 2rem;
+  // }
+
+  .ads-wrapper {
+    flex: 0 0 300px;
+    max-width: 300px;
+    position: relative;
+  
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+  
   .ads-mobile {
     display: block;
     width: 100%;
     margin-top: 2rem;
     padding: 0 1rem;
   
-    @media (min-width: $breakpoint-small) {
+    @media (min-width: 769px) {
       display: none;
     }
-  }
-
-  .ads-wrapper {
-    flex: 0 0 300px;
-    max-width: 300px;
-    position: relative;
   }
   
   .sticky-ads {
     position: sticky;
     top: 2rem;
   }
+  
+  
 
   /* Swiper styles */
   .swiper-container {

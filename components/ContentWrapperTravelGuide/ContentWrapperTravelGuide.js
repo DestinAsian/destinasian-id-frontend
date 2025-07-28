@@ -9,9 +9,7 @@ const GallerySlider = dynamic(() =>
   import('../../components/GallerySlider/GallerySlider'),
 )
 const HalfPageGuides1 = dynamic(() =>
-  import(
-    '../../components/AdUnit/HalfPage1/HalfPageGuides1'
-  ),
+  import('../../components/AdUnit/HalfPage1/HalfPageGuides1'),
 )
 
 let cx = className.bind(styles)
@@ -23,7 +21,6 @@ export default function ContentWrapperTravelGuide({ content, children }) {
   const stickyRef = useRef(null)
   const stopRef = useRef(null)
 
-
   // useEffect(() => {
   //   const checkIsMobile = () => {
   //     setIsMobile(window.innerWidth < 768)
@@ -33,20 +30,24 @@ export default function ContentWrapperTravelGuide({ content, children }) {
   //   window.addEventListener('resize', checkIsMobile)
   //   return () => window.removeEventListener('resize', checkIsMobile)
   // }, [])
-  
+
   // NOTE: Perbaiki cara deteksi mobile
   useEffect(() => {
-    const isMobileUserAgent = () =>
-      typeof navigator !== 'undefined' &&
-      /Mobi|Android/i.test(navigator.userAgent)
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
 
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768 || isMobileUserAgent())
+    const handleMediaChange = (e) => {
+      setIsMobile(e.matches)
     }
 
-    checkIsMobile()
-    window.addEventListener('resize', checkIsMobile)
-    return () => window.removeEventListener('resize', checkIsMobile)
+    // Set awal
+    setIsMobile(mediaQuery.matches)
+
+    // Listener untuk perubahan ukuran layar
+    mediaQuery.addEventListener('change', handleMediaChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange)
+    }
   }, [])
 
   useEffect(() => {
@@ -205,7 +206,6 @@ export default function ContentWrapperTravelGuide({ content, children }) {
         <div className={cx('content-wrapper')}>
           {transformedContent}
           {children}
-          {/* Penanda akhir konten */}
           <div ref={stopRef} style={{ height: '1px' }} />
           {isMobile && (
             <div className={cx('ads-mobile')}>
