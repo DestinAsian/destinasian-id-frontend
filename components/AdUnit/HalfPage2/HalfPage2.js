@@ -14,8 +14,8 @@ export default function HalfPage2() {
       <div className={cx("halfpage-banner")}>
         {/* HalfPage Banner */}
         <Ad
-          adUnit="/6808792/PREVIEW_DAI_HALFPAGE_02"
-          name="div-gpt-ad-1753426152320-0"
+          adUnit="/6808792/REVAMP_DAI_HALF_PAGE_2_ROS"
+          name="div-gpt-ad-1753692936259-0"
           size={[300, 600]}
         />
       </div>

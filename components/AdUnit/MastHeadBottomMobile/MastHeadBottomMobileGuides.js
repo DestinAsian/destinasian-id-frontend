@@ -10,8 +10,8 @@ export default function MastHeadBottomMobileGuides() {
       {/* Masthead Top Mobile */}
       <div className={cx("masthead-banner")}>
         <Ad
-          adUnit="/6808792/DAI_MASTHEAD_BOTTOM_MOBILE"
-          name="div-gpt-ad-1737101226800-0"
+          adUnit="/6808792/REVAMP_DAI_MASTHEAD_BOTTOM_MOBILE_GUIDE"
+          name="div-gpt-ad-1753693088090-0"
           size={[
             [320, 330],
             [300, 250],
