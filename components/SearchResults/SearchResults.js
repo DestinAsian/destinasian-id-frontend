@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic'
 const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
 const Container = dynamic(() => import('../../components/Container/Container'))
 const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
-const LocationIcon = dynamic(() => import('../../components/LocationIcon/LocationIcon'))
+// const LocationIcon = dynamic(() => import('../../components/LocationIcon/LocationIcon'))
 const PostInfo = dynamic(() => import('../../components/PostInfo/PostInfo'))
 let cx = className.bind(styles)
 

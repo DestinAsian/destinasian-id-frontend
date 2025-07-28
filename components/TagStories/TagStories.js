@@ -12,7 +12,7 @@ import dynamic from 'next/dynamic'
 const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
 const ModuleAd = dynamic(() => import('../../components/ModuleAd/ModuleAd'))
 const Button = dynamic(() => import('../../components/Button/Button'))
-const AdvertorialPostTwoColumns = dynamic(() => import('../../components/AdvertorialPostTwoColumns/AdvertorialPostTwoColumns'))
+// const AdvertorialPostTwoColumns = dynamic(() => import('../../components/AdvertorialPostTwoColumns/AdvertorialPostTwoColumns'))
 
 
 let cx = classNames.bind(styles)
@@ -356,32 +356,6 @@ export default function TagStories(tagUri) {
                       ?.node?.content
                   }
                 />
-              </div>
-            )}
-            {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
-                {/* Advertorial Stories */}
-                {numberOfAdvertorial !== 0 && (
-                  <AdvertorialPostTwoColumns
-                    title={getAdvertorialPost[0]?.title}
-                    excerpt={getAdvertorialPost[0]?.excerpt}
-                    uri={getAdvertorialPost[0]?.uri}
-                    featuredImage={getAdvertorialPost[0]?.featuredImage?.node}
-                  />
-                )}
-              </div>
-            )}
-            {index - 1 === 2 && (
-              <div className={cx('advertorial-wrapper')}>
-                {/* Advertorial Stories */}
-                {numberOfAdvertorial !== 0 && numberOfAdvertorial > 1 && (
-                  <AdvertorialPostTwoColumns
-                    title={getAdvertorialPost[1]?.title}
-                    excerpt={getAdvertorialPost[1]?.excerpt}
-                    uri={getAdvertorialPost[1]?.uri}
-                    featuredImage={getAdvertorialPost[1]?.featuredImage?.node}
-                  />
-                )}
               </div>
             )}
           </React.Fragment>
