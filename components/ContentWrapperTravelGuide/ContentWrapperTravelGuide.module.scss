@@ -36,6 +36,17 @@
     }
   }
   
+  .ads-mobile {
+    display: block;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 0 1rem;
+  
+    @media (min-width: $breakpoint-small) {
+      display: none;
+    }
+  }
+
   .ads-wrapper {
     flex: 0 0 300px;
     max-width: 300px;

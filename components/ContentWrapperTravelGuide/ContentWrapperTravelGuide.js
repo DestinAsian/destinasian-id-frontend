@@ -8,14 +8,9 @@ import dynamic from 'next/dynamic'
 const GallerySlider = dynamic(() =>
   import('../../components/GallerySlider/GallerySlider'),
 )
-const PreviewHalfPageGuides1 = dynamic(() =>
+const HalfPageGuides1 = dynamic(() =>
   import(
-    '../../components/AdUnit/Preview/PreviewHalfPage1/PreviewHalfPageGuides1'
-  ),
-)
-const PreviewHalfPageGuides2 = dynamic(() =>
-  import(
-    '../../components/AdUnit/Preview/PreviewHalfPage2/PreviewHalfPageGuides2'
+    '../../components/AdUnit/HalfPage1/HalfPageGuides1'
   ),
 )
 
@@ -29,9 +24,24 @@ export default function ContentWrapperTravelGuide({ content, children }) {
   const stopRef = useRef(null)
 
 
+  // useEffect(() => {
+  //   const checkIsMobile = () => {
+  //     setIsMobile(window.innerWidth < 768)
+  //   }
+
+  //   checkIsMobile()
+  //   window.addEventListener('resize', checkIsMobile)
+  //   return () => window.removeEventListener('resize', checkIsMobile)
+  // }, [])
+  
+  // NOTE: Perbaiki cara deteksi mobile
   useEffect(() => {
+    const isMobileUserAgent = () =>
+      typeof navigator !== 'undefined' &&
+      /Mobi|Android/i.test(navigator.userAgent)
+
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      setIsMobile(window.innerWidth < 768 || isMobileUserAgent())
     }
 
     checkIsMobile()
@@ -197,12 +207,17 @@ export default function ContentWrapperTravelGuide({ content, children }) {
           {children}
           {/* Penanda akhir konten */}
           <div ref={stopRef} style={{ height: '1px' }} />
+          {isMobile && (
+            <div className={cx('ads-mobile')}>
+              <HalfPageGuides1 />
+            </div>
+          )}
         </div>
 
         {!isMobile && (
           <aside className={cx('ads-wrapper')}>
             <div className={cx('sticky-ads')} ref={stickyRef}>
-              <PreviewHalfPageGuides1 />
+              <HalfPageGuides1 />
             </div>
           </aside>
         )}
