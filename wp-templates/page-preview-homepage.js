@@ -3,7 +3,6 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import classNames from 'classnames/bind'
-import styles from '../components/VideoFrontPage/VideoFrontPage.module.scss'
 import { GetVideos } from '../queries/GetVideos'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -19,7 +18,6 @@ const Container = dynamic(() => import('../components/Container/Container'))
 const FeatureWell = dynamic(() => import('../components/FeatureWell/FeatureWell'))
 const FrontPageLayout = dynamic(() => import('../components/FrontPageLayout/FrontPageLayout'))
 const ContentWrapperVideo = dynamic(() => import('../components/ContentWrapperVideo/ContentWrapperVideo'))
-const Outnow = dynamic(() => import('../components/Outnow/Outnow'))
 const Footer = dynamic(() => import('../components/Footer/Footer'))
 const HalfPage2 = dynamic(() => import('../components/AdUnit/HalfPage2/HalfPage2'))
 const SEO = dynamic(() => import('../components/SEO/SEO'))
@@ -164,7 +162,7 @@ export default function Preview_homepage(props) {
                   <div className={cx('right-column')}>
                     <aside className={cx('outnow-wrapper')}>
                       <div className={cx('outnow-videos')}>
-                        <Outnow />
+                        {/* <Outnow /> */}
                       </div>
                     </aside>
                   </div>

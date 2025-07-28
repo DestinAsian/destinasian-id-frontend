@@ -11,7 +11,6 @@ import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 import { GetChildrenTravelGuides } from '../queries/GetChildrenTravelGuides'
 
-import styles from '../components/VideoFrontPage/VideoFrontPage.module.scss'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
@@ -46,7 +45,7 @@ const HalfPage2 = dynamic(() =>
 )
 // const SEO = dynamic(() => import('../components/SEO/SEO'))
 
-const cx = classNames.bind(styles)
+// const cx = classNames.bind(styles)
 
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
