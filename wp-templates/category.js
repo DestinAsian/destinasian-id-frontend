@@ -343,7 +343,7 @@ export default function Category({ loading, data: initialData }) {
             style={{
               border: 'none',
               borderTop: '1px solid black',
-              margin: '0',
+              padding: '0 0 2rem',
             }}
           />
         </div>

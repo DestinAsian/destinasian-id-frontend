@@ -55,31 +55,25 @@ const CategoryDesktopSecondaryHeaderTravelGuide = dynamic(() =>
   ),
 )
 
-const MastHeadTop = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
-)
-const PreviewMastHeadTopGuides = dynamic(() =>
+const MastHeadTopGuides = dynamic(() =>
   import(
-    '../components/AdUnit/Preview/PreviewMastHeadTop/PreviewMastHeadTopGuides'
+    '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
   ),
 )
-const PreviewMastHeadTopMobileGuides = dynamic(() =>
+const MastHeadTopMobileSingleGuides = dynamic(() =>
   import(
-    '../components/AdUnit/Preview/PreviewMastHeadTopMobile/PreviewMastHeadTopMobileGuides'
+    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
   ),
 )
-const PreviewMastHeadBottomGuides = dynamic(() =>
+const MastHeadBottomGuides = dynamic(() =>
   import(
-    '../components/AdUnit/Preview/PreviewMastHeadBottom/PreviewMastHeadBottomGuides'
+    '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
   ),
 )
-const PreviewMastHeadBottomMobileGuides = dynamic(() =>
+const MastHeadBottomMobileGuides = dynamic(() =>
   import(
-    '../components/AdUnit/Preview/PreviewMastHeadBottomMobile/PreviewMastHeadBottomMobileGuides'
+    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
   ),
-)
-const MastHeadTopMobile = dynamic(() =>
-  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
 )
 export default function SingleTravelGuide(props) {
   // Loading state for previews
@@ -339,9 +333,9 @@ export default function SingleTravelGuide(props) {
       <Main>
         <div>
           {isMobile ? (
-            <PreviewMastHeadTopMobileGuides />
+            <MastHeadTopMobileSingleGuides />
           ) : (
-            <PreviewMastHeadTopGuides />
+            <MastHeadTopGuides />
           )}
         </div>
         <SingleSliderTravelGuide images={images} />
@@ -358,9 +352,9 @@ export default function SingleTravelGuide(props) {
         </Container>
         <div>
           {isMobile ? (
-            <PreviewMastHeadBottomMobileGuides />
+            <MastHeadBottomMobileGuides />
           ) : (
-            <PreviewMastHeadBottomGuides />
+            <MastHeadBottomGuides />
           )}
         </div>
 
