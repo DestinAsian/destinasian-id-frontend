@@ -4,13 +4,9 @@ import styles from './ContentWrapperTravelGuide.module.scss'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
-import dynamic from 'next/dynamic'
-const GallerySlider = dynamic(() =>
-  import('../../components/GallerySlider/GallerySlider'),
-)
-const HalfPageGuides1 = dynamic(() =>
-  import('../../components/AdUnit/HalfPage1/HalfPageGuides1'),
-)
+import GallerySlider from '../../components/GallerySlider/GallerySlider'
+import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
+
 
 let cx = className.bind(styles)
 

@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
-import dynamic from 'next/dynamic'
-
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetVideos } from '../queries/GetVideos'
@@ -14,38 +12,16 @@ import { GetChildrenTravelGuides } from '../queries/GetChildrenTravelGuides'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-const HomepageHeader = dynamic(() =>
-  import('../components/HomepageHeader/HomepageHeader'),
-)
-const HomepageSecondaryHeader = dynamic(() =>
-  import(
-    '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
-  ),
-)
-const HomepageDestopHeader = dynamic(() =>
-  import(
-    '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
-  ),
-)
-// const Main = dynamic(() => import('../components/Main/Main'))
+import HomepageHeader from '../components/HomepageHeader/HomepageHeader'
+import HomepageSecondaryHeader from '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
+import HomepageDestopHeader from '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
 import FeatureWell from '../components/FeatureWell/FeatureWell'
 import Main from '../components/Main/Main'
 import FrontPageLayout from '../components/FrontPageLayout/FrontPageLayout'
-const Container = dynamic(() => import('../components/Container/Container'))
-// const FeatureWell = dynamic(() =>
-//   import('../components/FeatureWell/FeatureWell'),
-// )
-// const FrontPageLayout = dynamic(
-//   () => import('../components/FrontPageLayout/FrontPageLayout'),
-//   { ssr: false },
-// )
-const FrontPageVideos = dynamic(() =>
-  import('../components/FrontPageLayout/FrontPageVideos'),
-)
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const HalfPage2 = dynamic(() =>
-  import('../components/AdUnit/HalfPage2/HalfPage2'),
-)
+import Container from '../components/Container/Container'
+import Footer from '../components/Footer/Footer'
+import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
+
 // const SEO = dynamic(() => import('../components/SEO/SEO'))
 
 // const cx = classNames.bind(styles)
@@ -200,8 +176,11 @@ export default function Component(props) {
             )}
           </div>
           <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
-            <FrontPageLayout />
+            <Suspense fallback={<div>Loading section...</div>}>
+              <FrontPageLayout />
+            </Suspense>
           </div>
+
           <div
             className="component-videos w-full"
             style={{ backgroundColor: '#008080' }}

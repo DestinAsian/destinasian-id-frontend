@@ -1,3 +1,4 @@
+
 import { useQuery, useApolloClient } from '@apollo/client'
 import { FOOTER_LOCATION, PRIMARY_LOCATION } from '../../constants/menus'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -11,7 +12,7 @@ import { GetTravelGuides } from '../../queries/GetTravelGuides'
 import { GetTravelGuidesMenu } from '../../queries/GetTravelGuidesMenu'
 import Image from 'next/image'
 
-let cx = classNames.bind(styles)
+const cx = classNames.bind(styles)
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -21,46 +22,19 @@ function shuffleArray(array) {
   return array
 }
 
-
 export default function TravelGuidesMenu(className) {
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(true)
-  const client = useApolloClient()
   const [HonorsCircleArray, setHonorsCircle] = useState([])
 
-  const AccordionCustomIcon = () => (
-    <span className={cx('custom-icon')}>{'+'}</span>
-  )
-
-  const AccordionCustomTheme = {
-    base: 'text-white dark:text-white divide-y divide-transparent border-transparent dark:divide-transparent dark:border-transparent rounded-lg border',
-    flush: {
-      off: '',
-      on: 'text-white bg-transparent dark:bg-transparent',
-    },
-  }
-
-  const AccordionTitleCustomTheme = {
-    base: 'flex w-full items-center justify-between pr-4',
-    flush: {
-      off: '',
-      on: 'text-white bg-transparent dark:bg-transparent',
-    },
-    heading: '',
-    open: {
-      off: 'visible text-black dark:text-black',
-      on: 'text-transparent',
-    },
-  }
+  const client = useApolloClient()
 
   const { data: menusData, loading: menusLoading } = useQuery(GetPrimaryMenu, {
     variables: {
       first: 20,
       headerLocation: PRIMARY_LOCATION,
     },
-    // fetchPolicy: 'network-only',
     fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
   })
 
   const primaryMenu = menusData?.headerMenuItems?.edges ?? []
@@ -71,78 +45,66 @@ export default function TravelGuidesMenu(className) {
       .filter(Boolean)
   }, [primaryMenu])
 
-  const {
-    data: travelGuidesData,
-    loading: travelGuidesloading,
-    error: travelGuidesError,
-  } = useQuery(GetTravelGuides, {
-    variables: { search: 'null' },
-    // fetchPolicy: 'network-only',
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  if (travelGuidesError) {
-    return <pre>{JSON.stringify(error)}</pre>
-  }
+  const { data: travelGuidesData, loading: travelGuidesloading, error: travelGuidesError } = useQuery(
+    GetTravelGuides,
+    {
+      variables: { search: 'null' },
+      fetchPolicy: 'cache-first',
+    }
+  )
 
   useEffect(() => {
     let isMounted = true
     const fetchData = async () => {
       setLoading(true)
-  
       try {
+        const topCategories = mainCategoryLabels.slice(0, 6) // HANYA ambil 6 kategori teratas
+
         const allResults = await Promise.all(
-          mainCategoryLabels.map(async (category) => {
+          topCategories.map(async (category) => {
             const response = await client.query({
               query: GetTravelGuides,
               variables: { search: category },
               fetchPolicy: 'cache-first',
-              nextFetchPolicy: 'cache-and-network',
             })
             const processedData = response?.data?.tags?.edges ?? []
             return { category, data: processedData }
           })
         )
-        if (isMounted) setResults(allResults)
+
+        if (isMounted) {
+          setResults(allResults)
+          // Delay ringan agar menu tampil duluan
+          setTimeout(() => {
+            setHonorsCircle(allResults)
+          }, 300)
+        }
       } catch (error) {
         console.error('Failed fetching guides:', error)
       } finally {
         if (isMounted) setLoading(false)
       }
     }
-  
+
     if (mainCategoryLabels.length > 0) {
       fetchData()
     }
-  
+
     return () => {
       isMounted = false
     }
   }, [mainCategoryLabels, client])
-  
 
-  let menuVariable = {
-    first: 1000,
-    footerHeaderLocation: FOOTER_LOCATION,
-  }
-  // Get Footer menus
-  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
-    GetTravelGuidesMenu,
-    {
-      variables: menuVariable,
-      // fetchPolicy: 'network-only',
-      fetchPolicy: 'cache-first',
-      nextFetchPolicy: 'cache-and-network',
+  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(GetTravelGuidesMenu, {
+    variables: {
+      first: 1000,
+      footerHeaderLocation: FOOTER_LOCATION,
     },
-  )
+    fetchPolicy: 'cache-first',
+  })
+
   const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
-
-  const mainMenu = useMemo(() => {
-    return footerMenu
-  }, [footerMenu])
-
-  const hierarchicalMenuItems = flatListToHierarchical(mainMenu)
+  const hierarchicalMenuItems = flatListToHierarchical(footerMenu)
 
   if (loading || menusLoading || travelGuidesloading || footerMenusLoading) {
     return (
@@ -168,6 +130,7 @@ export default function TravelGuidesMenu(className) {
       </div>
     )
   }
+
   function renderMenu(items) {
     return (
       <>
@@ -175,9 +138,9 @@ export default function TravelGuidesMenu(className) {
           const menuId = item?.id
           const parentName = item?.label
           const parentUri = item?.url || item?.path || '#'
-  
+
           const childrenMenus = item?.connectedNode?.node?.children?.edges || []
-  
+
           return (
             <div key={menuId} id={menuId} className={cx('menu-row')}>
               <div className={cx('parent-menu')}>
@@ -193,13 +156,13 @@ export default function TravelGuidesMenu(className) {
                   <span className={cx('separator', 'parent-separator')}>|</span>
                 </Link>
               </div>
-  
+
               {childrenMenus.length > 0 && (
                 <ul className={cx('children-menu')}>
                   {childrenMenus.map((edge, index) => {
                     const childName = edge?.node?.name
                     const childUri = edge?.node?.uri
-  
+
                     return (
                       <li key={childUri} className={cx('nav-link')}>
                         {index > 0 && <span className={cx('separator')}>|</span>}
@@ -226,11 +189,11 @@ export default function TravelGuidesMenu(className) {
       </>
     )
   }
-  
+
   return (
     <div className={cx('travel-guides-menu', className)}>
       {renderMenu(hierarchicalMenuItems)}
-      {/* Tampilkan HonorsCircle di sini */}
+      {/* Kamu bisa menambahkan render HonorsCircleArray di sini jika diperlukan */}
     </div>
   )
 }

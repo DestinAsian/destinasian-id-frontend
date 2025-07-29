@@ -3,11 +3,8 @@ import styles from './CategoryStoriesLatest.module.scss'
 import { useQuery } from '@apollo/client'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
 import * as CONTENT_TYPES from '../../constants/contentTypes'
-import dynamic from 'next/dynamic'
+import GuideLatestStories from '../../components/GuideLatestStories/GuideLatestStories'
 
-const GuideLatestStories = dynamic(() =>
-  import('../../components/GuideLatestStories/GuideLatestStories')
-)
 
 const cx = classNames.bind(styles)
 

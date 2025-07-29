@@ -4,98 +4,45 @@ import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import dynamic from 'next/dynamic'
 
-import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
-// Dynamic Imports
-const CategoryHeader = dynamic(() =>
-  import('../components/CategoryHeader/CategoryHeader'),
-)
-const CategoryStories = dynamic(
-  () => import('../components/CategoryStories/CategoryStories'),
-  { ssr: false },
-)
-const CategoryStoriesGuide = dynamic(() =>
-  import('../components/CategoryStoriesGuide/CategoryStoriesGuide'),
-)
-const CategoryEntryHeader = dynamic(() =>
-  import('../components/CategoryEntryHeader/CategoryEntryHeader'),
-)
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-// const Main = dynamic(() => import('../components/Main/Main'))
-import Main from '../components/Main/Main'
-const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
-const GuideReelIg = dynamic(() =>
-  import('../components/GuideReelIg/GuideReelIg'),
-)
-const BannerPosterGuide = dynamic(() =>
-  import('../components/BannerPosterGuide/BannerPosterGuide'),
-)
-const CategoryStoriesLatest = dynamic(() =>
-  import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
-)
-const CategorySecondStoriesLatest = dynamic(() =>
-  import(
-    '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
-  ),
-)
-const CategoryDesktopHeader = dynamic(() =>
-  import('../components/CategoryDesktopHeader/CategoryDesktopHeader'),
-)
 const CategoryDesktopSecondaryHeader = dynamic(() =>
   import(
     '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
   ),
 )
-const SecondaryHeader = dynamic(() =>
-  import('../components/Header/SecondaryHeader/SecondaryHeader'),
-)
-const CategorySecondaryHeader = dynamic(() =>
-  import(
-    '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
-  ),
-)
+
 const SecondaryDesktopHeader = dynamic(() =>
   import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
 )
 
-const MastHeadTop = dynamic(() =>
-  import('../components/AdUnit//MastHeadTop/MastHeadTop'),
-)
-const MastHeadTopMobile = dynamic(() =>
-  import(
-    '../components/AdUnit//MastHeadTopMobile/MastHeadTopMobile'
-  ),
-)
-const MastHeadBottom = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadBottom/MastHeadBottom'
-  ),
-)
-const MastHeadBottomMobile = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'
-  ),
-)
-const MastHeadTopGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
-  ),
-)
-const MastHeadTopMobileGuides = dynamic(() =>
-  import(
-    '../components/AdUnit//MastHeadTopMobile/MastHeadTopMobileGuides'
-  ),
-)
-const MastHeadBottomGuides = dynamic(() =>
-  import(
-    '../components/AdUnit//MastHeadBottom/MastHeadBottomGuides'
-  ),
-)
-const MastHeadBottomMobileGuides = dynamic(() =>
-  import(
-    '../components/AdUnit//MastHeadBottomMobile/MastHeadBottomMobileGuides'
-  ),
-)
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+import Main from '../components/Main/Main'
+import CategoryStoriesLatest from '../components/CategoryStoriesLatest/CategoryStoriesLatest'
+import BannerPosterGuide from '../components/BannerPosterGuide/BannerPosterGuide'
+import GuideReelIg from '../components/GuideReelIg/GuideReelIg'
+import GuideFitur from '../components/GuideFitur/GuideFitur'
+
+import CategoryHeader  from '../components/CategoryHeader/CategoryHeader'
+import CategoryEntryHeader  from '../components/CategoryEntryHeader/CategoryEntryHeader'
+import CategoryStories from '../components/CategoryStories/CategoryStories'
+import CategoryDesktopHeader from '../components/CategoryDesktopHeader/CategoryDesktopHeader'
+import CategorySecondStoriesLatest from '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
+import CategorySecondaryHeader from '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+// import CategoryDesktopSecondaryHeader from '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
+// import SecondaryDesktopHeader from '../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'
+
+
+import MastHeadTop from '../components/AdUnit/MastHeadTop/MastHeadTop'
+import MastHeadTopMobile from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'
+import MastHeadBottom from '../components/AdUnit/MastHeadBottom/MastHeadBottom'
+import MastHeadBottomMobile from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'
+import MastHeadTopGuides from '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
+import MastHeadTopMobileGuides from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'
+import MastHeadBottomGuides from '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
+import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+
+import Footer from '../components/Footer/Footer'
 
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
