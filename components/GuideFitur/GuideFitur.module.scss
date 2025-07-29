@@ -4,15 +4,15 @@
 .guideFiturSection {
   max-width: 1400px;
   margin: 2rem 0 3rem;
-  padding: 0 1rem;
+  // padding: 0 1rem;
 
   @media (min-width: $breakpoint-small) {
     padding: 0;
     margin: 4rem auto;
   }
   .sectionTitle {
-    font-size: 1.7rem;
-    font-weight: 400;
+    font-size: 2rem;
+    font-weight: 600;
     line-height: 1.1;
     margin: 0 0 0.5rem ;
     text-align: center;
@@ -21,7 +21,7 @@
     padding: 0 0 1rem 0;
 
     @media (min-width: $breakpoint-small) {
-      font-size: 2rem;
+      font-size: 2.5rem;
       padding: 0 0 3rem 0;
       font-weight: 600;
       margin: 0.5rem 0;
@@ -35,6 +35,12 @@
   flex-wrap: wrap;
   gap: 1.5rem;
   justify-content: space-between;
+  padding: 0 1rem;
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0 auto;
+  }
+
 }
 
 .guideFiturItem {
@@ -47,7 +53,7 @@
     flex: 1 1 calc(50% - 0.75rem); // default mobile 2 kolom
   }
 
-  // Untuk layout 3 item mobile sejajar
+
   .threeMobile & {
     flex: 1 1 calc(33.333% - 1rem);
   }
@@ -80,13 +86,11 @@
   text-align: center;
   width: 100%;
 
-  // Ukuran font untuk tablet
   @media (max-width: $breakpoint-medium) {
     font-size: 0.875rem;
     padding: 0.75rem;
   }
 
-  // Ukuran font lebih kecil untuk layar hp kecil
   @media (max-width: $breakpoint-small) {
     font-size: 0.75rem;
     padding: 0.5rem;

@@ -51,13 +51,16 @@
   //   letter-spacing: -0.5px;
   // }
   .title {
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 500;
     line-height: 1.1;
     margin: 0.5rem 0;
     // font-family: 'Unit Slab Pro Black';
     font-family: "Scheherazade New";
     letter-spacing: -0.5px;
+    @media (min-width: $breakpoint-small) {
+      font-size: 2rem;
+    }
   }
 
   .excerpt {

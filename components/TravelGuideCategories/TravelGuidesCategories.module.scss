@@ -9,8 +9,12 @@ $font-title: 'Scheherazade New', serif;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 1rem 4rem 0;
+  padding: 0 0 3rem 0;
   background-color: var(--wpe--color--white--smoke);
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0 0 4rem 0;
+  }
 }
 
 .title {

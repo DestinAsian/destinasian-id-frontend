@@ -7,7 +7,7 @@
 }
 
 .title {
-  font-size: 1.5rem; // lebih kecil di mobile
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
   padding: 0 0 1rem 0;
@@ -87,6 +87,7 @@
   width: 100%;        
   letter-spacing: -0.5px;
   text-transform: uppercase;
+  line-height: 2rem;
 
   @media (min-width: $breakpoint-medium) {
     font-size: 1.5rem;
@@ -98,6 +99,7 @@
     font-size: 2rem;
     width: 70%;
     padding: 0.4rem 2rem;
+    line-height: 2rem;
   }
 }
 
