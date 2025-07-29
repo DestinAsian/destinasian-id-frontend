@@ -12,19 +12,15 @@
   }
   .sectionTitle {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.1;
-    margin: 0 0 0.5rem ;
     text-align: center;
     font-family: "Scheherazade New";
-    letter-spacing: 0.05em;
     padding: 0 0 1rem 0;
 
     @media (min-width: $breakpoint-small) {
       font-size: 2.5rem;
       padding: 0 0 3rem 0;
-      font-weight: 600;
-      margin: 0.5rem 0;
     }
 
   }
