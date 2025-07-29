@@ -6,7 +6,18 @@ const cx = classNames.bind(styles)
 
 const GuideReelIg = ({ guideReelIg }) => {
   // Exit early if no data to prevent unnecessary render
-  if (!guideReelIg) return null
+  if (
+    !guideReelIg ||
+    (!guideReelIg.titleReelIg &&
+      !guideReelIg.contentReelIg &&
+      !guideReelIg.videoReelIg1 &&
+      !guideReelIg.reelGuideIg1 &&
+      !guideReelIg.bannerReelIg2?.mediaItemUrl &&
+      !guideReelIg.reelGuideIg2)
+  ) {
+    return null
+  }
+  
 
   const {
     titleReelIg,
