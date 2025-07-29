@@ -27,15 +27,18 @@ const HomepageDestopHeader = dynamic(() =>
     '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
   ),
 )
-const Main = dynamic(() => import('../components/Main/Main'))
+// const Main = dynamic(() => import('../components/Main/Main'))
+import FeatureWell from '../components/FeatureWell/FeatureWell'
+import Main from '../components/Main/Main'
+import FrontPageLayout from '../components/FrontPageLayout/FrontPageLayout'
 const Container = dynamic(() => import('../components/Container/Container'))
-const FeatureWell = dynamic(() =>
-  import('../components/FeatureWell/FeatureWell'),
-)
-const FrontPageLayout = dynamic(
-  () => import('../components/FrontPageLayout/FrontPageLayout'),
-  { ssr: false },
-)
+// const FeatureWell = dynamic(() =>
+//   import('../components/FeatureWell/FeatureWell'),
+// )
+// const FrontPageLayout = dynamic(
+//   () => import('../components/FrontPageLayout/FrontPageLayout'),
+//   { ssr: false },
+// )
 const FrontPageVideos = dynamic(() =>
   import('../components/FrontPageLayout/FrontPageVideos'),
 )

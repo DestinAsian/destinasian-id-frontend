@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
 import styles from './FrontPageLayout.module.scss'
@@ -10,16 +9,14 @@ import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import { GetChildrenTravelGuides } from '../../queries/GetChildrenTravelGuides'
 
 import TravelGuideCategories from '../TravelGuideCategories/TravelGuideCategories'
-
-// Dynamic Imports
-const CategoryUpdates = dynamic(() => import('../CategoryUpdates/CategoryUpdates'), { ssr: false })
-const CategoryNewsUpdates = dynamic(() => import('../CategoryNewsUpdates/CategoryNewsUpdates'), { ssr: false })
-const CategoryFeatures = dynamic(() => import('../CategoryFeatures/CategoryFeatures'), { ssr: false })
-const HalfPageHome1 = dynamic(() => import('../AdUnit/HalfPage1/HalfPageHome1'))
-const MastHeadTopHome= dynamic(() => import('../AdUnit/MastHeadTop/MastHeadTopHome'))
-const MastHeadTopMobileHome = dynamic(() => import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'))
-const MastHeadBottomHome= dynamic(() => import('../AdUnit/MastHeadBottom/MastHeadBottomHome'))
-const MastHeadBottomMobileHome = dynamic(() => import('../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'))
+import CategoryUpdates from '../CategoryUpdates/CategoryUpdates'
+import CategoryNewsUpdates from '../CategoryNewsUpdates/CategoryNewsUpdates'
+import CategoryFeatures from '../CategoryFeatures/CategoryFeatures'
+import HalfPageHome1 from '../AdUnit/HalfPage1/HalfPageHome1'
+import MastHeadTopHome from '../AdUnit/MastHeadTop/MastHeadTopHome'
+import MastHeadTopMobileHome from '../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'
+import MastHeadBottomHome from '../AdUnit/MastHeadBottom/MastHeadBottomHome'
+import MastHeadBottomMobileHome from '../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'
 
 const cx = classNames.bind(styles)
 
@@ -77,7 +74,7 @@ export default function FrontPageLayout() {
       <hr className={cx('divider')} />
 
       <div>
-        {isMobile ? <MastHeadBottomMobileHome/> : <MastHeadBottomHome />}
+        {isMobile ? <MastHeadBottomMobileHome /> : <MastHeadBottomHome />}
       </div>
 
       <hr className={cx('divider')} />

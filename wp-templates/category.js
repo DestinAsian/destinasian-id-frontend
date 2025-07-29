@@ -21,7 +21,8 @@ const CategoryEntryHeader = dynamic(() =>
   import('../components/CategoryEntryHeader/CategoryEntryHeader'),
 )
 const Footer = dynamic(() => import('../components/Footer/Footer'))
-const Main = dynamic(() => import('../components/Main/Main'))
+// const Main = dynamic(() => import('../components/Main/Main'))
+import Main from '../components/Main/Main'
 const GuideFitur = dynamic(() => import('../components/GuideFitur/GuideFitur'))
 const GuideReelIg = dynamic(() =>
   import('../components/GuideReelIg/GuideReelIg'),

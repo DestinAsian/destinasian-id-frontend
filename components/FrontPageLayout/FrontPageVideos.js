@@ -4,12 +4,10 @@ import React from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './FrontPageVideos.module.scss'
-import dynamic from 'next/dynamic'
 import { GetVideos } from '../../queries/GetVideos'
 
-// Import dinamis (lazy-load) untuk komponen berat
-const ContentWrapperVideo = dynamic(() => import('../ContentWrapperVideo/ContentWrapperVideo'), { ssr: false })
-const HalfPageHome2= dynamic(() => import('../../components/AdUnit/HalfPage2/HalfPageHome2'), { ssr: false })
+import ContentWrapperVideo from '../ContentWrapperVideo/ContentWrapperVideo'
+import HalfPageHome2 from '../../components/AdUnit/HalfPage2/HalfPageHome2'
 
 const cx = classNames.bind(styles)
 
