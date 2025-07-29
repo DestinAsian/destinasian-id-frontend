@@ -1,16 +1,13 @@
 import className from 'classnames/bind'
 import dynamic from 'next/dynamic'
-
-const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const FormatDate = dynamic(() =>
-  import('../../components/FormatDate/FormatDate'),
-)
-const MastHeadTop = dynamic(() =>
-  import('../../components/AdUnit/MastHeadTop/MastHeadTop'),
-)
-import styles from './SingleEditorialEntryHeader.module.scss'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import styles from './SingleEditorialEntryHeader.module.scss'
+
+const Heading = dynamic(() => import('../../components/Heading/Heading'))
+const FormatDate = dynamic(() => import('../../components/FormatDate/FormatDate'))
+const MastHeadTop = dynamic(() => import('../../components/AdUnit/MastHeadTop/MastHeadTop'))
+const MastHeadTopMobile = dynamic(() => import('../../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'))
 
 let cx = className.bind(styles)
 
@@ -24,6 +21,7 @@ export default function SingleEditorialEntryHeader({
   date,
 }) {
   const [isMaximized, setIsMaximized] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   // Maximized EntryHeader when page load
   useEffect(() => {
@@ -34,9 +32,20 @@ export default function SingleEditorialEntryHeader({
     return () => clearTimeout(timeout)
   }, [])
 
+    // Detect mobile or desktop on resize
+    useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth <= 768)
+      }
+  
+      checkMobile() // initial check
+      window.addEventListener('resize', checkMobile)
+      return () => window.removeEventListener('resize', checkMobile)
+    }, [])
+
   return (
     <div className={cx('component', { maximized: isMaximized })}>
-      <MastHeadTop />
+       {isMobile ? <MastHeadTopMobile /> : <MastHeadTop />}
       <div className={cx('header-wrapper')}>
         {parentCategory !== 'Rest of World' &&
           categoryName !== 'Rest of World' &&
