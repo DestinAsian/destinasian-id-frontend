@@ -14,6 +14,13 @@ const BannerPosterGuide = ({ guideStorie }) => {
     linkBannerGuideStories,
   } = guideStorie
 
+  // ✅ Cek jika semua data kosong
+  const isAllEmpty =
+    !bannerLandscape?.mediaItemUrl &&
+    !bannerGuideStories?.mediaItemUrl
+
+  if (isAllEmpty) return null
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('contentGrid')}>
