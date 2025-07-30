@@ -1,13 +1,11 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, Suspense, useMemo } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import { GetVideos } from '../queries/GetVideos'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
-import { GetChildrenTravelGuides } from '../queries/GetChildrenTravelGuides'
 
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
@@ -33,25 +31,21 @@ export default function Preview_homepage(props) {
     props?.data?.generalSettings || {}
   const { featuredImage, uri, seo } = props?.data?.page || {}
   const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
-
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
 
-  const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
 
-  // Detect scroll + desktop + overflow
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 0)
     const onResize = () => setIsDesktop(window.innerWidth >= 1024)
 
+    onResize()
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', onResize)
-    onResize()
-
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
@@ -63,29 +57,30 @@ export default function Preview_homepage(props) {
       searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
-  // Generate & pick random slide
-  const featureWell = [1, 2, 3]
-    .map((num) => ({
-      type: acfHomepageSlider?.[`typeSlide${num}`],
-      videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
-      desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
-      mobileSrc: acfHomepageSlider?.[`mobileSlide${num}`]?.mediaItemUrl,
-      url: acfHomepageSlider?.[`slideLink${num}`],
-      category: acfHomepageSlider?.[`slideCategory${num}`],
-      categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
-      caption: acfHomepageSlider?.[`slideCaption${num}`],
-      standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
-    }))
-    .filter((slide) => slide.type)
+  const featureWell = useMemo(() => {
+    return [1, 2, 3]
+      .map((num) => ({
+        type: acfHomepageSlider?.[`typeSlide${num}`],
+        videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
+        desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
+        mobileSrc: acfHomepageSlider?.[`mobileSlide${num}`]?.mediaItemUrl,
+        url: acfHomepageSlider?.[`slideLink${num}`],
+        category: acfHomepageSlider?.[`slideCategory${num}`],
+        categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
+        caption: acfHomepageSlider?.[`slideCaption${num}`],
+        standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
+      }))
+      .filter((slide) => slide.type)
+  }, [acfHomepageSlider])
 
+  const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
   useEffect(() => {
     if (featureWell.length) {
       const randomIndex = Math.floor(Math.random() * featureWell.length)
       setCurrentFeatureWell(featureWell[randomIndex])
     }
-  }, [])
+  }, [featureWell])
 
-  // Queries
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
       first: 20,
@@ -101,25 +96,20 @@ export default function Preview_homepage(props) {
 
   const { data: pinPostsData } = useQuery(GetHomepagePinPosts, {
     variables: { id: databaseId, asPreview },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })
 
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   })
-
-  const { data: videosData } = useQuery(GetVideos, {
-    variables: { first: 2 },
-    fetchPolicy: 'cache-and-network',
-  })
-
-  useQuery(GetChildrenTravelGuides)
 
   const mainPosts = latestStories?.posts?.edges?.map((p) => p.node) || []
-  const sortedPosts = mainPosts.sort(
-    (a, b) => new Date(b.date) - new Date(a.date),
+  const sortedPosts = useMemo(
+    () => mainPosts.sort((a, b) => new Date(b.date) - new Date(a.date)),
+    [mainPosts],
   )
+
   const homepagePinPosts = pinPostsData?.page?.homepagePinPosts ?? []
 
   const menuProps = {
@@ -144,8 +134,13 @@ export default function Preview_homepage(props) {
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      {/* SEO Preview_homepage is optional and commented out */}
-      {/* <SEO title={seo?.title} description={seo?.metaDesc} imageUrl={featuredImage?.node?.sourceUrl} url={uri} focuskw={seo?.focuskw} /> */}
+      {/* <SEO
+        title={seo?.title}
+        description={seo?.metaDesc}
+        imageUrl={featuredImage?.node?.sourceUrl}
+        url={uri}
+        focuskw={seo?.focuskw}
+      /> */}
 
       {isDesktop ? (
         <HomepageDestopHeader
