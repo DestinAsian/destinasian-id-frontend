@@ -19,16 +19,12 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
   parentCategory,
 }) {
   const [currentUrl, setCurrentUrl] = useState('')
-  const [categoryUrl, setCategoryUrl] = useState('')
   const [isMainNavShown, setIsMainNavShown] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
 
+  // Ambil current URL dan atur body overflow
   useEffect(() => {
     setCurrentUrl(window.location.pathname)
-  }, [])
-
-  useEffect(() => {
-    setCategoryUrl(categoryUri)
   }, [])
 
   useEffect(() => {
@@ -36,12 +32,13 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
   }, [isMainNavShown, isNavShown])
 
   function isActive(uri) {
-    return currentUrl + '/' === uri
+    return `${currentUrl}/` === uri
   }
 
   function isActiveCategory(uri) {
-    return categoryUrl === uri
+    return categoryUri === uri
   }
+
 
   return (
     <nav className={cx('component')}>

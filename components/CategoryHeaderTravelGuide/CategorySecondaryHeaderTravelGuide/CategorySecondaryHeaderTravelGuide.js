@@ -3,12 +3,17 @@ import classNames from 'classnames/bind'
 import styles from './CategorySecondaryHeaderTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
+const ChildrenNavigationTravelGuide = dynamic(() =>
+  import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide')
+)
+const ParentNavigationTravelGuide = dynamic(() =>
+  import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide')
+)
+const SingleNavigationTravelGuide = dynamic(() =>
+  import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide')
+)
 
-const ChildrenNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'))
-const ParentNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'))
-const SingleNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'))
-
-let cx = classNames.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function CategoryDesktopSecondaryHeaderTravelGuide({
   data,
@@ -19,16 +24,12 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
   parentCategory,
 }) {
   const [currentUrl, setCurrentUrl] = useState('')
-  const [categoryUrl, setCategoryUrl] = useState('')
   const [isMainNavShown, setIsMainNavShown] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
 
+  // Ambil current URL dan atur body overflow
   useEffect(() => {
     setCurrentUrl(window.location.pathname)
-  }, [])
-
-  useEffect(() => {
-    setCategoryUrl(categoryUri)
   }, [])
 
   useEffect(() => {
@@ -36,12 +37,13 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
   }, [isMainNavShown, isNavShown])
 
   function isActive(uri) {
-    return currentUrl + '/' === uri
+    return `${currentUrl}/` === uri
   }
 
   function isActiveCategory(uri) {
-    return categoryUrl === uri
+    return categoryUri === uri
   }
+
 
   return (
     <nav className={cx('component')}>

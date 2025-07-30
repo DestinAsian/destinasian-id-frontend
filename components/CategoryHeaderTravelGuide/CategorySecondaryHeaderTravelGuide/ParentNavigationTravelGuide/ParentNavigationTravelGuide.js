@@ -1,22 +1,12 @@
 import classNames from 'classnames/bind'
 import styles from './ParentNavigationTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
-
-const DaGuideMenu = dynamic(() =>
-  import('../../../../components/DaGuideMenu/DaGuideMenu'),
-)
-const MainCategoryMenu = dynamic(() =>
-  import(
-    '../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'
-  ),
-)
-const TravelGuidesMenu = dynamic(() =>
-  import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'),
-)
-
 import { useQuery } from '@apollo/client'
 import { GetParentNavigation } from '../../../../queries/GetParentNavigation'
 import Link from 'next/link'
+
+const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'), { ssr: false })
+const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'), { ssr: false })
 
 let cx = classNames.bind(styles)
 
@@ -30,93 +20,53 @@ export default function ParentNavigationTravelGuide({
   isActive,
   categoryName,
 }) {
-  const catPerPage = 4
-
-  let catVariable = {
-    first: catPerPage,
-    id: databaseId,
-  }
-
-  function getCategoryLink(uri) {
-    if (!uri) return ''
-    const specialCategories = ['bali', 'jakarta', 'bandung', 'surabaya']
-    const slug = uri.replace(/^\/category\//, '').split('/')[0]
-
-    if (specialCategories.includes(slug)) {
-      return uri.replace(/^\/category/, '/travel-guides')
-    }
-
-    return uri
-  }
 
   // Get Category
   const { data } = useQuery(GetParentNavigation, {
-    variables: catVariable,
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
+    variables: { first: 4, id: databaseId },
+    fetchPolicy: 'cache-first',
+  })  
 
   return (
-    <div
-      className={cx(
-        'component',
-        isMainNavShown || isNavShown ? 'show' : undefined,
-      )}
-    >
-      <div
-        className={cx(
-          'navbar-wrapper',
-          isMainNavShown || isNavShown ? 'show' : undefined,
-        )}
-      >
-        {/* {'parent'} */}
-
-        {data?.category && (
-          <div
-            className={cx(
-              isScrolled ? 'sticky-text-menu-wrapper' : 'text-menu-wrapper',
-              isNavShown ? 'show' : undefined,
-            )}
-          >
-            <div className={cx('menu-button-parent')}>
-              {/* <Link href={data.category.uri}> */}
-              <Link href={getCategoryLink(data.category.uri)}>
-                <button type="button" className={cx('menu-icon')}>
-                  <div className={cx('da-guide-wrapper')}>
-                    <span className={cx('nav-name')}>{data.category.name}</span>
-                  </div>
-                </button>
-              </Link>
-            </div>
-          </div>
-        )}
+    <div className={cx('component', isMainNavShown || isNavShown ? 'show' : undefined)}>
+    <div className={cx('navbar-wrapper', isMainNavShown || isNavShown ? 'show' : undefined)}>
+      {data?.category && (
         <div
           className={cx(
-            'navigation-wrapper',
-            isMainNavShown || isNavShown ? 'show' : undefined,
+            isScrolled ? 'sticky-text-menu-wrapper' : 'text-menu-wrapper',
+            isNavShown ? 'show' : undefined
           )}
         >
-          <div className={cx('navigation')}>
-            {data?.category?.children?.edges?.map((travelGuide) => (
-              <li key={travelGuide?.node?.uri} className={cx('nav-link')}>
-                {travelGuide?.node?.uri && (
-                  <Link
-                    href={getCategoryLink(travelGuide?.node?.uri)}
-                    className={cx(
-                      isActive(travelGuide?.node?.uri)
-                        ? 'active'
-                        : 'not-active',
-                    )}
-                  >
-                    <h2 className={cx('nav-name')}>
-                      {travelGuide?.node?.name}
-                    </h2>
-                  </Link>
-                )}
-              </li>
-            ))}
+          <div className={cx('menu-button-parent')}>
+            <Link href={data.category.uri}>
+              <button type="button" className={cx('menu-icon')}>
+                <div className={cx('da-guide-wrapper')}>
+                  <span className={cx('nav-name')}>{data.category.name}</span>
+                </div>
+              </button>
+            </Link>
           </div>
         </div>
+      )}
+
+      <div className={cx('navigation-wrapper', isMainNavShown || isNavShown ? 'show' : undefined)}>
+        <div className={cx('navigation')}>
+          {data?.category?.children?.edges?.map((travelGuide) => (
+            <li key={travelGuide?.node?.uri} className={cx('nav-link')}>
+              {travelGuide?.node?.uri && (
+                <Link
+                  href={travelGuide.node.uri}
+                  className={cx(
+                    isActive(travelGuide?.node?.uri) ? 'active' : 'not-active'
+                  )}
+                >
+                  <h2 className={cx('nav-name')}>{travelGuide?.node?.name}</h2>
+                </Link>
+              )}
+            </li>
+          ))}
+        </div>
+      </div>
 
         {/* isMainNavShown button */}
         {!isMainNavShown ? null : (

@@ -1,14 +1,13 @@
 import classNames from 'classnames/bind'
 import styles from './SingleNavigationTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
+import { useQuery } from '@apollo/client'
+import { GetSingleNavigationTravelGuide } from '../../../../queries/GetSingleNavigationTravelGuide'
+import Link from 'next/link'
 
 const DaGuideMenu = dynamic(() => import('../../../../components/DaGuideMenu/DaGuideMenu'))
 const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'))
 const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'))
-
-import { useQuery } from '@apollo/client'
-import { GetSingleNavigationTravelGuide } from '../../../../queries/GetSingleNavigationTravelGuide'
-import Link from 'next/link'
 
 let cx = classNames.bind(styles)
 
@@ -22,129 +21,62 @@ export default function SingleNavigation({
   isActiveCategory,
   categoryName,
 }) {
-  const catPerPage = 4
-
-  let catVariable = {
-    first: catPerPage,
-    id: databaseId,
-  }
-
-  // Get Category
   const { data } = useQuery(GetSingleNavigationTravelGuide, {
-    variables: catVariable,
-    fetchPolicy: 'network-only',
+    variables: { first: 4, id: databaseId },
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
-  return (
-    <div
-      className={cx(
-        'component',
-        isMainNavShown || isNavShown ? 'show' : undefined,
-      )}
-    >
-      <div
-        className={cx(
-          'navbar-wrapper',
-          isMainNavShown || isNavShown ? 'show' : undefined,
-        )}
-      >
-        {/* {'categories'} */}
-        {!isScrolled && (
-          <div
-            className={cx('text-menu-wrapper', isNavShown ? 'show' : undefined)}
-          >
-            {/* Menu Button */}
-            <div className={cx('menu-button')}>
-              {/* menu button */}
-          
-                {data?.travelGuide?.categories?.edges[0]?.node?.parent?.node && (
-                  <div className={cx('menu-button-single')}>
-                    <Link
-                      href={data.travelGuide.categories.edges[0].node.parent.node.uri}
-                    >
-                      <button type="button" className={cx('menu-icon')}>
-                        <div className={cx('da-guide-wrapper')}>
-                          <span className={cx('nav-name')}>
-                            {
-                              data.travelGuide.categories.edges[0].node.parent.node
-                                .name
-                            }
-                          </span>
-                        </div>
-                      </button>
-                    </Link>
-                  </div>
-                )}
-            </div>
-          </div>
-        )}
-        {!!isScrolled && (
-          <div
-            className={cx(
-              'sticky-text-menu-wrapper',
-              isNavShown ? 'show' : undefined,
-            )}
-          >
-            <div className={cx('menu-button')}>
-              {/* menu button */}
-              
-                <div
-                  key={'sticky-text-menu'}
-                  className={cx('da-guide-wrapper')}
-                >
-                  {data?.travelGuide?.categories?.edges[0]?.node?.parent?.node && (
-                    <div className={cx('menu-button-single')}>
-                      <Link
-                        href={
-                          data.travelGuide.categories.edges[0].node.parent.node.uri
-                        }
-                      >
-                        <button type="button" className={cx('menu-icon')}>
-                          <div className={cx('da-guide-wrapper')}>
-                            <span className={cx('nav-name')}>
-                              {
-                                data.travelGuide.categories.edges[0].node.parent.node
-                                  .name
-                              }
-                            </span>
-                          </div>
-                        </button>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-            </div>
-          </div>
-        )}
+  const parentNode = data?.travelGuide?.categories?.edges?.[0]?.node?.parent?.node
+  const children = parentNode?.children?.edges || []
 
-        <div
-          className={cx(
-            'navigation-wrapper',
-            isMainNavShown || isNavShown ? 'show' : undefined,
-          )}
-        >
-          <div className={cx('navigation')}>
-            {data?.travelGuide?.categories?.edges[0]?.node?.parent?.node?.children?.edges?.map(
-              (travelGuide) => (
-                <li key={travelGuide?.node?.uri} className={cx('nav-link')}>
-                  {travelGuide?.node?.uri && (
-                    <Link
-                      href={travelGuide?.node?.uri}
-                      className={cx(
-                        isActiveCategory(travelGuide?.node?.uri)
-                          ? 'active'
-                          : 'not-active',
-                      )}
-                    >
-                      <h2 className={cx('nav-name')}>{travelGuide?.node?.name}</h2>
-                    </Link>
-                  )}
-                </li>
-              ),
-            )}
+  return (
+    <div className={cx('component', (isMainNavShown || isNavShown) && 'show')}>
+    <div className={cx('navbar-wrapper', (isMainNavShown || isNavShown) && 'show')}>
+      {!isScrolled && parentNode && (
+        <div className={cx('text-menu-wrapper', isNavShown && 'show')}>
+          <div className={cx('menu-button-single')}>
+            <Link href={parentNode.uri}>
+              <button type="button" className={cx('menu-icon')}>
+                <div className={cx('da-guide-wrapper')}>
+                  <span className={cx('nav-name')}>{parentNode.name}</span>
+                </div>
+              </button>
+            </Link>
           </div>
         </div>
+      )}
+
+      {isScrolled && parentNode && (
+        <div className={cx('sticky-text-menu-wrapper', isNavShown && 'show')}>
+          <div className={cx('menu-button-single')}>
+            <Link href={parentNode.uri}>
+              <button type="button" className={cx('menu-icon')}>
+                <div className={cx('da-guide-wrapper')}>
+                  <span className={cx('nav-name')}>{parentNode.name}</span>
+                </div>
+              </button>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      <div className={cx('navigation-wrapper', (isMainNavShown || isNavShown) && 'show')}>
+        <ul className={cx('navigation')}>
+          {children.map(({ node }) => (
+            <li key={node?.uri} className={cx('nav-link')}>
+              {node?.uri && (
+                <Link
+                  href={node.uri}
+                  className={cx(isActiveCategory(node.uri) ? 'active' : 'not-active')}
+                >
+                  <h2 className={cx('nav-name')}>{node.name}</h2>
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
 
         {/* isMainNavShown button */}
         {!isMainNavShown ? null : (

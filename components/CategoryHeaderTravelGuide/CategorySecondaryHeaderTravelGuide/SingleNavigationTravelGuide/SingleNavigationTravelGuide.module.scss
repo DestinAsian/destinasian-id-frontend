@@ -111,10 +111,8 @@
   display: flex;
 
   .not-active {
-    border-bottom: 3px solid transparent;
 
     @media (min-width: $breakpoint-extra-small) {
-      border-bottom: 5px solid transparent;
     }
 
     &:hover,

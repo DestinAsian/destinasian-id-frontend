@@ -1,27 +1,22 @@
 import classNames from 'classnames/bind'
+import styles from './CategoryDesktopHeaderTravelGuide.module.scss'
+import { useState, useEffect, useMemo } from 'react'
+import { useMediaQuery } from 'react-responsive'
+import { useQuery } from '@apollo/client'
 import Link from 'next/link'
-import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
-import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
-import { IoSearchOutline } from "react-icons/io5";
+import Image from 'next/image'
+import { IoSearchOutline } from 'react-icons/io5'
 import dynamic from 'next/dynamic'
 
-const Container = dynamic(() => import('../../components/Container/Container'))
-const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
-const SearchInput = dynamic(() =>
-  import('../../components/SearchInput/SearchInput'),
-)
-const SearchResults = dynamic(() =>
-  import('../../components/SearchResults/SearchResults'),
-)
-
-import styles from './CategoryDesktopHeaderTravelGuide.module.scss'
-import { useState, useEffect } from 'react'
-import { useMediaQuery } from 'react-responsive'
-import Image from 'next/image'
-import { useQuery } from '@apollo/client'
 import { GetSearchResults } from '../../queries/GetSearchResults'
-import { FaSearch } from 'react-icons/fa'
-let cx = classNames.bind(styles)
+import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
+import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
+
+const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
+const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
+
+const cx = classNames.bind(styles)
+const POSTS_PER_PAGE = 1000
 
 export default function CategoryDesktopHeaderTravelGuide({
   primaryMenuItems,
@@ -40,278 +35,134 @@ export default function CategoryDesktopHeaderTravelGuide({
   isScrolled,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 })
-  const postsPerPage = 1000
   const [isMenuOpen, setMenuOpen] = useState(false)
-  // Tambahkan class "menu-open" ke <body> saat menu dibuka
+
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.classList.add('menu-open')
-    } else {
-      document.body.classList.remove('menu-open')
-    }
+    document.body.classList.toggle('menu-open', isMenuOpen)
   }, [isMenuOpen])
-  // Clear search input
-  const clearSearch = () => {
-    setSearchQuery('') // Reset the search query
+
+  const toggleNav = () => {
+    setIsNavShown(!isNavShown)
+    setSearchQuery('')
   }
 
-  // Add search query function
-  const {
-    data: searchResultsData,
-    loading: searchResultsLoading,
-    error: searchResultsError,
-  } = useQuery(GetSearchResults, {
-    variables: {
-      first: postsPerPage,
-      after: null,
-      search: searchQuery,
-    },
-    skip: searchQuery === '',
+  const { data, loading, error } = useQuery(GetSearchResults, {
+    variables: { first: POSTS_PER_PAGE, after: null, search: searchQuery },
+    skip: !searchQuery,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
 
-  // Check if the search query is empty and no search results are loading, then hide the SearchResults component
   const isSearchResultsVisible = !!searchQuery
 
-  // Create a Set to store unique databaseId values
-  const uniqueDatabaseIds = new Set()
+  const contentNodesPosts = useMemo(() => {
+    const result = []
+    const seenIds = new Set()
 
-  // Initialize an array to store unique posts
-  const contentNodesPosts = []
-
-  // Loop through categories (assuming similar structure)
-  searchResultsData?.categories?.edges?.forEach((travelGuide) => {
-    const { databaseId } = travelGuide.node
-
-    if (!uniqueDatabaseIds.has(databaseId)) {
-      uniqueDatabaseIds.add(databaseId)
-      contentNodesPosts.push(travelGuide.node)
-    }
-  })
-
-  // Loop through tags
-  searchResultsData?.tags?.edges?.forEach((contentNodes) => {
-    contentNodes.node?.contentNodes?.edges.forEach((travelGuide) => {
-      const { databaseId } = travelGuide.node
-
-      if (!uniqueDatabaseIds.has(databaseId)) {
-        uniqueDatabaseIds.add(databaseId)
-        contentNodesPosts.push(travelGuide.node)
+    data?.categories?.edges?.forEach(({ node }) => {
+      if (!seenIds.has(node.databaseId)) {
+        seenIds.add(node.databaseId)
+        result.push(node)
       }
     })
-  })
 
-  // Sort contentNodesPosts array by date
-  contentNodesPosts.sort((a, b) => {
-    // Assuming your date is stored in 'date' property of the post objects
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
+    data?.tags?.edges?.forEach(({ node }) => {
+      node.contentNodes?.edges?.forEach(({ node }) => {
+        if (!seenIds.has(node.databaseId)) {
+          seenIds.add(node.databaseId)
+          result.push(node)
+        }
+      })
+    })
 
-    // Compare the dates
-    return dateB - dateA
-  })
+    return result.sort((a, b) => new Date(b.date) - new Date(a.date))
+  }, [data])
+
+  const logoImage = isNavShown ? destinasianLogoWht : destinasianLogoBlk
 
   return (
-    <header
-      className={cx('component', {
-        sticky: isScrolled,
-        navShown: isNavShown,
-        'menu-active': isNavShown,
-      })}
-    >
-      {/* Responsive header */}
+    <header className={cx('component', { sticky: isScrolled, navShown: isNavShown, 'menu-active': isNavShown })}>
       {isDesktop || (!isDesktop && !isNavShown) ? (
-        <>
-          <div
-            className={cx('navbar', {
-              sticky: isScrolled && !isNavShown && !isMenuOpen,
-              'menu-active': isNavShown,
-            })}
-          >
-            {/* DAI logo */}
-            <Link href="/" className={cx('title')}>
-              <div className={cx('brand')}>
-                {isNavShown ? (
-                  <Image
-                    src={destinasianLogoWht.src}
-                    alt="Destinasian Logo"
-                    fill
-                    sizes="100%"
-                    priority
-                  />
-                ) : (
-                  <Image
-                    src={destinasianLogoBlk.src}
-                    alt="Destinasian Logo"
-                    fill
-                    sizes="100%"
-                    priority
-                  />
-                )}
-              </div>
-            </Link>
+        <div className={cx('navbar', { sticky: isScrolled && !isNavShown && !isMenuOpen, 'menu-active': isNavShown })}>
+          <Link href="/" className={cx('title')}>
+            <div className={cx('brand')}>
+              <Image src={logoImage} alt="Destinasian Logo" fill sizes="auto" priority />
+            </div>
+          </Link>
 
-            {/* Menu Button */}
-            {isNavShown == false ? (
-              <div className={cx('menu-button-wrapper')}>
-                <div className={cx('search-button')}>
-                  {/* search button */}
-                  <button
-                    type="button"
-                    className={cx('search-icon')}
-                    onClick={() => {
-                      setIsNavShown(!isNavShown)
-                      setSearchQuery('')
-                    }}
-                    aria-label="Toggle navigation"
-                    aria-controls={cx('full-menu-wrapper')}
-                    aria-expanded={!isNavShown}
-                  >
-                    <IoSearchOutline className={cx('search-icon')}  />
-                    </button>
-                </div>
-                <div className={cx('menu-button')}>
-                  <div className={cx('divider-vertical')} />
-                  {/* menu button */}
-                  <button
-                    type="button"
-                    className={cx('menu-icon')}
-                    onClick={() => {
-                      setIsNavShown(!isNavShown)
-                      setSearchQuery('')
-                    }}
-                    aria-label="Toggle navigation"
-                    aria-controls={cx('full-menu-wrapper')}
-                    aria-expanded={!isNavShown}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="200"
-                      height="200"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <rect x="1" y="3" width="100" height="2" fill="black" />
-                      <rect x="1" y="11" width="100" height="2" fill="black" />
-                      <rect x="1" y="19" width="100" height="2" fill="black" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className={cx('menu-button')}>
-                {/* close button */}
+          {!isNavShown ? (
+            <div className={cx('menu-button-wrapper')}>
+              <div className={cx('search-button')}>
                 <button
                   type="button"
-                  className={cx('close-icon')}
-                  onClick={() => {
-                    setIsNavShown(!isNavShown)
-                    setSearchQuery('')
-                  }}
+                  className={cx('search-icon')}
+                  onClick={toggleNav}
                   aria-label="Toggle navigation"
                   aria-controls={cx('full-menu-wrapper')}
                   aria-expanded={!isNavShown}
                 >
-                  <svg
-                    version="1.0"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="512.000000pt"
-                    height="512.000000pt"
-                    viewBox="0 0 512.000000 512.000000"
-                    preserveAspectRatio="xMidYMid meet"
-                  >
-                    <g
-                      transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                      fill="#ffffff"
-                      stroke="none"
-                    >
-                      <path
-                        d="M2330 5109 c-305 -29 -646 -126 -910 -259 -273 -138 -559 -356 -755
--576 -384 -432 -602 -931 -655 -1499 -41 -446 55 -949 260 -1355 138 -273 356
--559 576 -755 432 -384 931 -602 1499 -655 446 -41 949 55 1355 260 273 138
-559 356 755 576 384 432 602 931 655 1499 41 446 -55 949 -260 1355 -138 273
--356 559 -576 755 -432 384 -931 602 -1499 655 -125 11 -320 11 -445 -1z
-m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
-425 -425 425 -425 -213 -212 -212 -213 -425 425 -425 425 -425 -425 -425 -425
--212 213 -213 212 425 425 425 425 -425 425 -425 425 210 210 c115 115 212
-210 215 210 3 0 195 -190 427 -422z"
-                      />
-                    </g>
+                  <IoSearchOutline className={cx('search-icon')} />
+                </button>
+              </div>
+
+              <div className={cx('menu-button')}>
+                <div className={cx('divider-vertical')} />
+                <button
+                  type="button"
+                  className={cx('menu-icon')}
+                  onClick={toggleNav}
+                  aria-label="Toggle navigation"
+                  aria-controls={cx('full-menu-wrapper')}
+                  aria-expanded={!isNavShown}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none">
+                    <rect x="1" y="3" width="100" height="2" fill="black" />
+                    <rect x="1" y="11" width="100" height="2" fill="black" />
+                    <rect x="1" y="19" width="100" height="2" fill="black" />
                   </svg>
                 </button>
               </div>
-            )}
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={cx('close-button', { sticky: isScrolled })}>
-            {/* close button */}
-            <button
-              type="button"
-              className={cx('close-icon')}
-              onClick={() => {
-                setIsNavShown(!isNavShown)
-                setSearchQuery('')
-              }}
-              aria-label="Toggle navigation"
-              aria-controls={cx('primary-navigation')}
-              aria-expanded={!isNavShown}
-            >
-              <svg
-                version="1.0"
-                xmlns="http://www.w3.org/2000/svg"
-                width="512.000000pt"
-                height="512.000000pt"
-                viewBox="0 0 512.000000 512.000000"
-                preserveAspectRatio="xMidYMid meet"
+            </div>
+          ) : (
+            <div className={cx('menu-button')}>
+              <button
+                type="button"
+                className={cx('close-icon')}
+                onClick={toggleNav}
+                aria-label="Close navigation"
+                aria-controls={cx('full-menu-wrapper')}
+                aria-expanded={!isNavShown}
               >
-                <g
-                  transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                  fill="#ffffff"
-                  stroke="none"
-                >
-                  <path
-                    d="M2330 5109 c-305 -29 -646 -126 -910 -259 -273 -138 -559 -356 -755
--576 -384 -432 -602 -931 -655 -1499 -41 -446 55 -949 260 -1355 138 -273 356
--559 576 -755 432 -384 931 -602 1499 -655 446 -41 949 55 1355 260 273 138
-559 356 755 576 384 432 602 931 655 1499 41 446 -55 949 -260 1355 -138 273
--356 559 -576 755 -432 384 -931 602 -1499 655 -125 11 -320 11 -445 -1z
-m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
-425 -425 425 -425 -213 -212 -212 -213 -425 425 -425 425 -425 -425 -425 -425
--212 213 -213 212 425 425 425 425 -425 425 -425 425 210 210 c115 115 212
-210 215 210 3 0 195 -190 427 -422z"
-                  />
-                </g>
-              </svg>
-            </button>
-          </div>
-        </>
-      )}
-
-      {/* Search Bar */}
-      <div className={cx('search-bar-wrapper')}>
-        <div className={cx('search-result-wrapper')}>
-          {searchResultsError && (
-            <div className={cx('alert-error')}>
-              {'An error has occurred. Please refresh and try again.'}
+                ×
+              </button>
             </div>
           )}
+        </div>
+      ) : (
+        <div className={cx('close-button', { sticky: isScrolled })}>
+          <button
+            type="button"
+            className={cx('close-icon')}
+            onClick={toggleNav}
+            aria-label="Close navigation"
+            aria-controls={cx('primary-navigation')}
+            aria-expanded={!isNavShown}
+          >
+            ×
+          </button>
+        </div>
+      )}
 
+      <div className={cx('search-bar-wrapper')}>
+        <div className={cx('search-result-wrapper')}>
+          {error && <div className={cx('alert-error')}>An error has occurred. Please refresh and try again.</div>}
           {isSearchResultsVisible && (
-            <SearchResults
-              searchResults={contentNodesPosts}
-              isLoading={searchResultsLoading}
-            />
+            <SearchResults searchResults={contentNodesPosts} isLoading={loading} />
           )}
         </div>
       </div>
 
-      {/* Full menu */}
-      <div
-        className={cx(['full-menu-wrapper', isNavShown ? 'show' : undefined])}
-      >
+      <div className={cx(['full-menu-wrapper', isNavShown && 'show'])}>
         <FullMenu
           primaryMenuItems={primaryMenuItems}
           secondaryMenuItems={secondaryMenuItems}
@@ -320,14 +171,14 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           fifthMenuItems={fifthMenuItems}
           featureMenuItems={featureMenuItems}
           latestStories={latestStories}
-          clearSearch={clearSearch}
+          clearSearch={() => setSearchQuery('')}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           menusLoading={menusLoading}
           latestLoading={latestLoading}
           contentNodesPosts={contentNodesPosts}
-          searchResultsLoading={searchResultsLoading}
-          searchResultsError={searchResultsError}
+          searchResultsLoading={loading}
+          searchResultsError={error}
           isSearchResultsVisible={isSearchResultsVisible}
         />
       </div>
