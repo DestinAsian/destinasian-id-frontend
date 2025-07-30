@@ -4,7 +4,7 @@ import React from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './FrontPageVideos.module.scss'
-import { GetVideos } from '../../queries/GetVideos'
+import { GetVideoHomepage } from '../../queries/GetVideoHomepage'
 
 import ContentWrapperVideo from '../ContentWrapperVideo/ContentWrapperVideo'
 import HalfPageHome2 from '../../components/AdUnit/HalfPage2/HalfPageHome2'
@@ -12,14 +12,13 @@ import HalfPageHome2 from '../../components/AdUnit/HalfPage2/HalfPageHome2'
 const cx = classNames.bind(styles)
 
 export default function FrontPageVideos() {
-  const { data, loading, error } = useQuery(GetVideos, {
-    variables: { first: 1 },
+  const { data, loading, error } = useQuery(GetVideoHomepage, {
     fetchPolicy: 'cache-first',
   })
 
-  const videos = data?.videos?.edges || []
+  const video = data?.videos?.edges?.[0]?.node
 
-  if (loading || error || videos.length === 0) return null
+  if (loading || error || !video) return null
 
   return (
     <section className={cx('componentVideos')}>
@@ -29,10 +28,10 @@ export default function FrontPageVideos() {
         <div className={cx('twoColumns')}>
           <div className={cx('leftColumn')}>
             <div className={cx('videoWrapper')}>
-              <ContentWrapperVideo data={videos} />
+              <ContentWrapperVideo video={video} />
             </div>
           </div>
-          
+
           <div className={cx('rightColumn')}>
             <HalfPageHome2 />
           </div>

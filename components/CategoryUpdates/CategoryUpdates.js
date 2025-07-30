@@ -1,4 +1,3 @@
-// components/CategoryUpdates/CategoryUpdates.js
 'use client'
 
 import React from 'react'
@@ -15,44 +14,36 @@ const CategoryUpdates = React.memo(({ data = [] }) => {
   return (
     <div className={cx('categoryUpdatesWrapper')}>
       {data.map(({ node: category }) => {
-        const allPosts = category?.contentNodes?.edges || []
-        const posts = allPosts.slice(0, 8)
+        const posts = category?.contentNodes?.edges?.slice(0, 8) || []
 
         return (
           <div key={category.id} className={cx('childCategory')}>
-            {/* Judul kategori dengan link */}
             <Link href={category.uri}>
               <h2 className={cx('title')}>{category.name}</h2>
             </Link>
 
-            {/* Deskripsi (jika ada) */}
             {category.description && (
               <p className={cx('description')}>{category.description}</p>
             )}
 
-            {/* List post */}
             <div className={cx('postsWrapper')}>
               {posts.map(({ node: post }) => {
-                const featuredImage = post.featuredImage?.node
-                const postUrl = post.uri || `/${post.slug}`
-
+                const image = post.featuredImage?.node
                 return (
                   <div key={post.id} className={cx('card')}>
-                    <Link href={postUrl} className={cx('cardInner')}>
-                      <div>
-                        {featuredImage?.mediaItemUrl && (
-                          <div className={cx('imageWrapper')}>
-                            <Image
-                              src={featuredImage.mediaItemUrl}
-                              alt={featuredImage.title || post.title}
-                              fill
-                              loading="lazy"
-                              className={cx('thumbnail')}
-                            />
-                          </div>
-                        )}
-                        <p className={cx('uri')}>{post.title}</p>
-                      </div>
+                    <Link href={post.uri} className={cx('cardInner')}>
+                      {image?.mediaItemUrl && (
+                        <div className={cx('imageWrapper')}>
+                          <Image
+                            src={image.mediaItemUrl}
+                            alt={image.title || post.title}
+                            fill
+                            loading="lazy"
+                            className={cx('thumbnail')}
+                          />
+                        </div>
+                      )}
+                      <p className={cx('uri')}>{post.title}</p>
                     </Link>
                   </div>
                 )

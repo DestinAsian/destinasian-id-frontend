@@ -1,45 +1,32 @@
 'use client'
 
-import { useQuery } from '@apollo/client'
-import React, { useMemo } from 'react'
+import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './ContentWrapperVideo.module.scss'
-import { GetVideos } from '../../queries/GetVideos'
 import LiteYouTubeEmbed from 'react-lite-youtube-embed'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 import Link from 'next/link'
 
 const cx = classNames.bind(styles)
 
-export default function ContentWrapperVideo() {
-  const { data, loading, error } = useQuery(GetVideos, {
-    variables: { first: 1 },
-    fetchPolicy: 'network-only',
-  })
+const ContentWrapperVideo = React.memo(({ video }) => {
+  if (!video) return null
 
-  const videoNode = useMemo(() => data?.videos?.edges?.[0]?.node, [data])
+  const isYouTube = video.content.includes('youtube')
+  const youtubeId = video.content.match(/\/embed\/([^?"]+)/)?.[1] || ''
+  const localVideoSrc = video.content.match(/<source[^>]*src="([^"]+)"/)?.[1] || ''
 
-  if (loading) return <p className={cx('loadingMessage')}>Loading video...</p>
-  if (error) return <p>Error loading video: {error.message}</p>
-  if (!videoNode) return null
-
-  const isYouTube = videoNode.content.includes('youtube')
-  const youtubeId = videoNode.content.match(/\/embed\/([^?"]+)/)?.[1] || ''
-  const localVideoSrc =
-    videoNode.content.match(/<source[^>]*src="([^"]+)"/)?.[1] || ''
-
-  const { videoLink, customText, customLink } = videoNode.videosAcf || {}
-  const featuredImg = videoNode.featuredImage?.node?.sourceUrl || ''
+  const { videoLink, customText, customLink } = video.videosAcf || {}
+  const featuredImg = video.featuredImage?.node?.sourceUrl || ''
 
   return (
     <div className={cx('component')}>
       <div className={cx('first-video-wrapper')}>
         <div className={cx('first-iframe-wrapper')}>
-          {isYouTube ? (
+          {isYouTube && youtubeId ? (
             <LiteYouTubeEmbed
               id={youtubeId}
-              title={videoNode.title}
-              muted
+              title={video.title}
               poster="maxresdefault"
               webp
             />
@@ -51,6 +38,7 @@ export default function ContentWrapperVideo() {
               autoPlay
               muted
               poster={featuredImg}
+              playsInline
             />
           )}
         </div>
@@ -59,12 +47,13 @@ export default function ContentWrapperVideo() {
           <div className={cx('first-title-wrapper')}>
             {videoLink ? (
               <Link href={videoLink} className={cx('title')}>
-                {videoNode.title}
+                {video.title}
               </Link>
             ) : (
-              <h2 className={cx('title')}>{videoNode.title}</h2>
+              <h2 className={cx('title')}>{video.title}</h2>
             )}
           </div>
+
           {customText && (
             <div className={cx('first-custom-text-wrapper')}>
               {customLink ? (
@@ -80,4 +69,6 @@ export default function ContentWrapperVideo() {
       </div>
     </div>
   )
-}
+})
+
+export default ContentWrapperVideo

@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useMemo } from 'react'
 import { useQuery } from '@apollo/client'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -15,13 +16,9 @@ const CategoryNewsUpdates = React.memo(() => {
   const { data, loading, error } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
     fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
   })
 
-  const children = useMemo(
-    () => data?.category?.children?.edges || [],
-    [data]
-  )
+  const children = useMemo(() => data?.category?.children?.edges || [], [data])
 
   if (loading || !data) return null
   if (error) return <p className={styles.error}>Error: {error.message}</p>
@@ -29,7 +26,7 @@ const CategoryNewsUpdates = React.memo(() => {
   return (
     <div className={styles.categoryNewsUpdatesWrapper}>
       {children.map(({ node: category }) => {
-        const posts = category?.contentNodes?.edges?.slice(0, 20) || []
+        const posts = category?.contentNodes?.edges || []
 
         return (
           <div key={category.id} className={styles.childCategory}>
@@ -45,30 +42,25 @@ const CategoryNewsUpdates = React.memo(() => {
               className={styles.swiperContainer}
               preloadImages={false}
               lazy="true"
-              shouldSwiperUpdate={false} 
             >
               {posts.map(({ node: post }) => {
-                const featuredImage = post.featuredImage?.node
-                const postUrl = post.uri || `/${post.slug}`
-
+                const image = post.featuredImage?.node
                 return (
                   <SwiperSlide key={post.id}>
                     <div className={styles.slideWrapper}>
-                      {featuredImage?.mediaItemUrl && (
+                      {image?.mediaItemUrl && (
                         <div className={styles.imageWrapper}>
                           <Image
-                            src={featuredImage.mediaItemUrl}
-                            alt={post.title}
+                            src={image.mediaItemUrl}
+                            alt={image.title || post.title}
                             width={800}
                             height={600}
                             className={styles.thumbnail}
                             loading="lazy"
-                            placeholder="empty"
                           />
-
                           <div className={styles.overlay}>
                             <h3 className={styles.postTitle}>{post.title}</h3>
-                            <Link href={postUrl} className={styles.readMore}>
+                            <Link href={post.uri} className={styles.readMore}>
                               Read More →
                             </Link>
                           </div>
