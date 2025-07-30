@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+'use client'
+
+import React, { useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategoryStoriesGuide.module.scss'
 import { useQuery } from '@apollo/client'
@@ -10,12 +12,13 @@ const cx = classNames.bind(styles)
 
 export default function CategoryStoriesGuide({ categoryUri }) {
   const [isFetchingMore, setIsFetchingMore] = useState(false)
+
   const { categoryUri: uri, name, parent } = categoryUri || {}
   const categoryName = name?.toLowerCase() || ''
   const parentName = parent?.node?.name?.toLowerCase() || ''
 
-  const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
-  const isTravelGuide = travelGuideRoots.includes(categoryName) || travelGuideRoots.includes(parentName)
+  const isTravelGuide = ['bali', 'jakarta', 'bandung', 'surabaya'].includes(categoryName) ||
+                        ['bali', 'jakarta', 'bandung', 'surabaya'].includes(parentName)
 
   const { data, loading, error, fetchMore } = useQuery(GetCategoryStories, {
     variables: {
@@ -28,21 +31,12 @@ export default function CategoryStoriesGuide({ categoryUri }) {
     nextFetchPolicy: 'cache-and-network',
   })
 
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
-  if (loading) return null
+  const posts = useMemo(() => data?.category?.contentNodes?.edges || [], [data])
+  const pageInfo = data?.category?.contentNodes?.pageInfo
 
-  const posts = data?.category?.contentNodes?.edges || []
-
-  const filteredPosts = posts
-    .reduce((acc, { node }) => {
-      if (node.__typename === 'TravelGuide') acc.push(node)
-      return acc
-    }, [])
-    .slice(2)
-
-  const handleFetchMore = () => {
-    const pageInfo = data?.category?.contentNodes?.pageInfo
-    if (!isFetchingMore && pageInfo?.hasNextPage) {
+  // Load sisa data setelah render pertama
+  useEffect(() => {
+    if (pageInfo?.hasNextPage && !isFetchingMore) {
       setIsFetchingMore(true)
       fetchMore({
         variables: { after: pageInfo.endCursor },
@@ -65,7 +59,11 @@ export default function CategoryStoriesGuide({ categoryUri }) {
         },
       }).finally(() => setIsFetchingMore(false))
     }
-  }
+  }, [pageInfo, fetchMore, isFetchingMore])
+
+  if (loading || error || !posts.length) return null
+
+  const filteredPosts = posts.filter(({ node }) => node.__typename === 'TravelGuide')
 
   return (
     <div className={cx('component')}>

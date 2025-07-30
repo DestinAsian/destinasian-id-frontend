@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+'use client'
+
+import React, { useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategoryStories.module.scss'
 import { useQuery } from '@apollo/client'
@@ -6,43 +8,26 @@ import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
 import dynamic from 'next/dynamic'
 
-const Button = dynamic(() => import('../../components/Button/Button'))
-const PostTwoColumns = dynamic(() =>
-  import('../../components/PostTwoColumns/PostTwoColumns'),
-)
-const TextTwoColumns = dynamic(() =>
-  import('../../components/PostTwoColumns/TextTwoColumns'),
-)
+const Button = dynamic(() => import('../Button/Button'))
+const PostTwoColumns = dynamic(() => import('../PostTwoColumns/PostTwoColumns'))
+const TextTwoColumns = dynamic(() => import('../PostTwoColumns/TextTwoColumns'))
 
 const cx = classNames.bind(styles)
 
 export default function CategoryStories({ categoryUri, pinPosts, name, parent }) {
-  const postsPerPage = 4
-  const [visibleCount, setVisibleCount] = useState(postsPerPage)
-
   const uri = categoryUri
+  const postsPerPage = 4
 
-  // Helper untuk ambil root slug dari kategori (rekursif)
-  const getRootSlug = (parentNode) => {
-    let current = parentNode
-    let lastSlug = ''
-    while (current?.node) {
-      lastSlug = current.node.slug?.toLowerCase()
-      current = current.node.parent
-    }
-    return lastSlug
-  }
+  const [visibleCount, setVisibleCount] = useState(postsPerPage)
+  const [delayedLoaded, setDelayedLoaded] = useState(false)
 
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
-
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.toLowerCase() || ''
-  const rootCategorySlug = getRootSlug({ node: { slug: activeCategoryName, parent: { node: { name: parent } } } })
 
   const isTravelGuideCategory =
     travelGuideRoots.includes(activeCategoryName) ||
-    travelGuideRoots.includes(parentCategoryName) ||
-    travelGuideRoots.includes(rootCategorySlug)
+    travelGuideRoots.includes(parentCategoryName)
 
   const contentTypes = isTravelGuideCategory
     ? [CONTENT_TYPES.TRAVEL_GUIDES]
@@ -55,25 +40,23 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
       id: uri,
       contentTypes,
     },
-    // fetchPolicy: 'network-only',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
   const updateQuery = (prev, { fetchMoreResult }) => {
     if (!fetchMoreResult) return prev
-
-    const prevEdges = data?.category?.contentNodes?.edges || []
+    const prevEdges = prev?.category?.contentNodes?.edges || []
     const newEdges = fetchMoreResult?.category?.contentNodes?.edges || []
 
     return {
-      ...data,
+      ...prev,
       category: {
-        ...data?.category,
+        ...prev.category,
         contentNodes: {
-          ...data?.category?.contentNodes,
+          ...prev.category.contentNodes,
           edges: [...prevEdges, ...newEdges],
-          pageInfo: fetchMoreResult?.category?.contentNodes?.pageInfo,
+          pageInfo: fetchMoreResult.category.contentNodes.pageInfo,
         },
       },
     }
@@ -83,116 +66,99 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
     setVisibleCount((prev) => prev + postsPerPage)
     if (!loading && data?.category?.contentNodes?.pageInfo?.hasNextPage) {
       fetchMore({
-        variables: { after: data?.category?.contentNodes?.pageInfo?.endCursor },
+        variables: { after: data.category.contentNodes.pageInfo.endCursor },
         updateQuery,
       })
     }
   }
 
+  useEffect(() => {
+    const timeout = setTimeout(() => setDelayedLoaded(true), 500)
+    return () => clearTimeout(timeout)
+  }, [])
+
   if (error) return <pre>{JSON.stringify(error)}</pre>
-  if (loading) {
+
+  const allPosts = useMemo(() => {
+    const content = data?.category?.contentNodes?.edges || []
+    const contentPosts = content.map((post) => post.node)
+    const allPin = pinPosts?.pinPost ? [pinPosts.pinPost] : []
+    return [...allPin, ...contentPosts].filter(
+      (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
+    )
+  }, [data, pinPosts])
+
+  const initialPosts = allPosts.slice(0, 4)
+  const delayedPosts = delayedLoaded ? allPosts.slice(4, visibleCount) : []
+
+  const renderPost = (post) => {
+    const guideInfo = post?.guide_book_now
     return (
-      <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
-        <Button className="gap-x-4">Loading...</Button>
+      <div key={post?.id} className={cx('post-wrapper')}>
+        <PostTwoColumns
+          title={post?.title}
+          uri={post?.uri}
+          featuredImage={post?.featuredImage?.node}
+        />
+        {guideInfo && (
+          <div className={cx('guide-info')}>
+            {guideInfo?.guideName && (
+              <span className={cx('guide-name')}>
+                {guideInfo.guideName}
+              </span>
+            )}
+            {guideInfo?.guideLocation && guideInfo?.linkLocation && (
+              <>
+                <a
+                  href={guideInfo.linkLocation}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cx('guide-location')}
+                >
+                  {guideInfo.guideLocation}
+                </a>
+              </>
+            )}
+            {guideInfo?.guidePrice && (
+              <>
+                <span className={cx('separator')}>|</span>
+                <span className={cx('guide-price')}>
+                  {guideInfo.guidePrice}
+                </span>
+              </>
+            )}
+            {guideInfo?.linkBookNow && (
+              <>
+                <span className={cx('separator')}>|</span>
+                <a
+                  href={guideInfo.linkBookNow}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cx('book-now-button')}
+                >
+                  Book Now
+                </a>
+              </>
+            )}
+          </div>
+        )}
+        <TextTwoColumns
+          title={post?.title}
+          excerpt={post?.excerpt}
+          uri={post?.uri}
+          parentCategory={post?.categories?.edges[0]?.node?.parent?.node?.name}
+          category={post?.categories?.edges[0]?.node?.name}
+          categoryUri={post?.categories?.edges[0]?.node?.uri}
+        />
       </div>
     )
   }
 
-  const allPosts =
-    data?.category?.contentNodes?.edges?.map((post) => post.node) || []
-  const allPinPosts = pinPosts?.pinPost ? [pinPosts.pinPost] : []
-
-  const mergedPosts = [...allPinPosts, ...allPosts].reduce(
-    (uniquePosts, post) => {
-      if (!uniquePosts.some((p) => p?.id === post?.id)) uniquePosts.push(post)
-      return uniquePosts
-    },
-    [],
-  )
-
-  const startIndex = isTravelGuideCategory ? 2 : 0
-  const postsToDisplay = mergedPosts.slice(
-    startIndex,
-    startIndex + visibleCount,
-  )
-
   return (
     <div className={cx('component')}>
-      {postsToDisplay.length > 0 ? (
-        postsToDisplay.map((post) => {
-          const guideInfo = post?.guide_book_now
+      {[...initialPosts, ...delayedPosts].map(renderPost)}
 
-          return (
-            <div key={post?.id} className={cx('post-wrapper')}>
-              <PostTwoColumns
-                title={post?.title}
-                uri={post?.uri}
-                featuredImage={post?.featuredImage?.node}
-              />
-
-              {guideInfo && (
-                <div className={cx('guide-info')}>
-                  {guideInfo?.guideName && (
-                    <span className={cx('guide-name')}>
-                      {guideInfo.guideName}
-                    </span>
-                  )}
-                  {guideInfo?.guideLocation && guideInfo?.linkLocation && (
-                    <>
-                      <a
-                        href={guideInfo.linkLocation}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={cx('guide-location')}
-                      >
-                        {guideInfo.guideLocation}
-                      </a>
-                    </>
-                  )}
-                  {guideInfo?.guidePrice && (
-                    <>
-                      <span className={cx('separator')}>|</span>
-                      <span className={cx('guide-price')}>
-                        {guideInfo.guidePrice}
-                      </span>
-                    </>
-                  )}
-                  {guideInfo?.linkBookNow && (
-                    <>
-                      <span className={cx('separator')}>|</span>
-                      <a
-                        href={guideInfo.linkBookNow}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={cx('book-now-button')}
-                      >
-                        Book Now
-                      </a>
-                    </>
-                  )}
-                </div>
-              )}
-
-              <TextTwoColumns
-                title={post?.title}
-                excerpt={post?.excerpt}
-                uri={post?.uri}
-                parentCategory={
-                  post?.categories?.edges[0]?.node?.parent?.node?.name
-                }
-                category={post?.categories?.edges[0]?.node?.name}
-                categoryUri={post?.categories?.edges[0]?.node?.uri}
-              />
-            </div>
-          )
-        })
-      ) : (
-        <div className="mx-auto my-0 flex min-h-60 max-w-[100vw] items-center justify-center md:max-w-[700px]">
-          There is no results in this category...
-        </div>
-      )}
-
-      {mergedPosts.length - startIndex > visibleCount && (
+      {allPosts.length > visibleCount && (
         <div className="mx-auto my-0 flex w-[100vw] justify-center">
           <Button onClick={fetchMorePosts} className="gap-x-4">
             {loading ? 'Loading...' : 'LOAD MORE...'}

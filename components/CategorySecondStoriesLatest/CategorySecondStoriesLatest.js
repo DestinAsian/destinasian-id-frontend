@@ -6,18 +6,16 @@ import * as CONTENT_TYPES from '../../constants/contentTypes'
 import dynamic from 'next/dynamic'
 
 const GuideSecondLatestStories = dynamic(() =>
-  import('../../components/GuideSecondLatestStories/GuideSecondLatestStories'),
+  import('../../components/GuideSecondLatestStories/GuideSecondLatestStories')
 )
 const GuideTextBlock = dynamic(() =>
-  import('../../components/GuideSecondLatestStories/GuideTextBlock.js'),
+  import('../../components/GuideSecondLatestStories/GuideTextBlock.js')
 )
 
 const cx = classNames.bind(styles)
 
-// Komponen Banner dipisahkan dari fungsi utama
 const BannerFokusDA = ({ bannerDa }) => {
   if (!bannerDa) return null
-
   const { linkBannerFokusHubDa, bannerFokusHubDa } = bannerDa
 
   return (
@@ -46,7 +44,7 @@ export default function CategoryStoriesLatest({
   parent,
   bannerDa,
 }) {
-  const uri = categoryUri
+  const uri = categoryUri || ''
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
@@ -59,25 +57,26 @@ export default function CategoryStoriesLatest({
     ? [CONTENT_TYPES.TRAVEL_GUIDES]
     : [CONTENT_TYPES.POST]
 
+  const shouldSkip = !uri
+
   const { data, error, loading } = useQuery(GetCategoryStories, {
     variables: {
-      first: 5,
+      first: 3, // cukup ambil sedikit karena kita cuma butuh yang ke-2
       after: null,
       id: uri,
       contentTypes,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
+    skip: shouldSkip,
   })
 
-  if (error) return <pre>{JSON.stringify(error)}</pre>
-  if (loading) return <div className="text-center"></div>
+  if (shouldSkip || loading) return null
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
-  const travelGuides = allPosts?.filter(
-    (item) => item.__typename === 'TravelGuide',
-  )
-  const travelGuide = travelGuides?.[1] // ambil data ke-2
+  const travelGuides = allPosts?.filter((item) => item.__typename === 'TravelGuide')
+  const travelGuide = travelGuides?.[1] // ambil yang ke-2
 
   if (!travelGuide) return null
 
@@ -92,27 +91,21 @@ export default function CategoryStoriesLatest({
             date={travelGuide.date}
             author={travelGuide.author?.node?.name}
             uri={travelGuide.uri}
-            parentCategory={
-              travelGuide.categories?.edges[0]?.node?.parent?.node?.name
-            }
-            category={travelGuide.categories?.edges[0]?.node?.name}
-            categoryUri={travelGuide.categories?.edges[0]?.node?.uri}
+            parentCategory={travelGuide.categories?.edges?.[0]?.node?.parent?.node?.name}
+            category={travelGuide.categories?.edges?.[0]?.node?.name}
+            categoryUri={travelGuide.categories?.edges?.[0]?.node?.uri}
             featuredImage={travelGuide.featuredImage?.node}
             caption={travelGuide.featuredImage?.node?.caption}
           />
+
           {guideInfo && (
             <div className={cx('guide-info')}>
-              {guideInfo?.guideName && (
+              {guideInfo.guideName && (
                 <span className={cx('guide-name')}>{guideInfo.guideName}</span>
               )}
-
-              {guideInfo?.linkLocation && guideInfo?.guideLocation && (
+              {guideInfo.linkLocation && guideInfo.guideLocation && (
                 <>
-                  {
-                    guideInfo?.guideName && (
-                      <span className={cx('separator')}>|</span>
-                    ) /* ✅ updated logic */
-                  }
+                  {guideInfo.guideName && <span className={cx('separator')}>|</span>}
                   <a
                     href={guideInfo.linkLocation}
                     target="_blank"
@@ -123,24 +116,18 @@ export default function CategoryStoriesLatest({
                   </a>
                 </>
               )}
-
-              {guideInfo?.guidePrice && (
+              {guideInfo.guidePrice && (
                 <>
-                  {(guideInfo?.guideName || guideInfo?.guideLocation) && (
-                    <span className={cx('separator')}>|</span> // ✅ updated logic
+                  {(guideInfo.guideName || guideInfo.guideLocation) && (
+                    <span className={cx('separator')}>|</span>
                   )}
-                  <span className={cx('guide-price')}>
-                    {guideInfo.guidePrice}
-                  </span>
+                  <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
                 </>
               )}
-
-              {guideInfo?.linkBookNow && (
+              {guideInfo.linkBookNow && (
                 <>
-                  {(guideInfo?.guideName ||
-                    guideInfo?.guideLocation ||
-                    guideInfo?.guidePrice) && (
-                    <span className={cx('separator')}>|</span> // ✅ updated logic
+                  {(guideInfo.guideName || guideInfo.guideLocation || guideInfo.guidePrice) && (
+                    <span className={cx('separator')}>|</span>
                   )}
                   <a
                     href={guideInfo.linkBookNow}
@@ -165,11 +152,10 @@ export default function CategoryStoriesLatest({
           <BannerFokusDA bannerDa={bannerDa} />
         </div>
       </div>
-      {travelGuide && (
-        <div style={{ maxWidth: '1400px', margin: '1rem auto', }}>
-          <hr style={{ border: 'none', borderTop: '1px solid black' }} />
-        </div>
-      )}
+
+      <div style={{ maxWidth: '1400px', margin: '1rem auto' }}>
+        <hr style={{ border: 'none', borderTop: '1px solid black' }} />
+      </div>
     </div>
   )
 }
