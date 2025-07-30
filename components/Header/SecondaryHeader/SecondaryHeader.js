@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './SecondaryHeader.module.scss'
@@ -20,24 +20,16 @@ export default function SecondaryHeader({
 }) {
   const { data, error, loading } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
+    fetchPolicy: 'cache-first',
   })
 
-  if (error) return <div>Error loading categories!</div>
+  if (error || loading || !data?.categories?.edges?.length) return null
 
-  // Fallback cepat jika loading
-  const defaultCategories = [
-    { id: '20', name: 'News', uri: '/news' },
-    { id: '29', name: 'Features', uri: '/features' },
-    { id: '3', name: 'Insights', uri: '/insights' },
-  ]
-
-  const categories = loading
-    ? defaultCategories
-    : data?.categories?.edges.map((edge) => ({
-        id: edge.node.id,
-        name: edge.node.name,
-        uri: edge.node.uri,
-      }))
+  const categories = data.categories.edges.map(({ node }) => ({
+    id: node.id,
+    name: node.name,
+    uri: node.uri,
+  }))
 
   return (
     <>
@@ -58,24 +50,19 @@ export default function SecondaryHeader({
             <div className={cx('menu-title')}>Guides</div>
           </button>
 
-          {/* Kategori dari query atau fallback */}
+          {/* Link kategori */}
           {categories.map(({ id, name, uri }) => (
-            <Link key={id} href={uri} legacyBehavior>
-              <a className={cx('menu-button')}>
+            <Link key={id} href={uri}>
+              <div className={cx('menu-button')}>
                 <div className={cx('menu-title')}>{name}</div>
-              </a>
+              </div>
             </Link>
           ))}
         </div>
       </div>
 
       {/* Menu penuh untuk Travel Guides */}
-      <div
-        className={cx(
-          'full-menu-content',
-          isGuidesNavShown ? 'show' : undefined,
-        )}
-      >
+      <div className={cx('full-menu-content', isGuidesNavShown && 'show')}>
         <div className={cx('full-menu-wrapper')}>
           <TravelGuidesMenu />
         </div>

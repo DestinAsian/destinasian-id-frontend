@@ -1,77 +1,3 @@
-// import React from 'react'
-// import { useQuery } from '@apollo/client'
-// import classNames from 'classnames/bind'
-// import styles from './SecondaryDesktopHeader.module.scss'
-// import dynamic from 'next/dynamic'
-
-// const TravelGuidesMenu = dynamic(() =>
-//   import('../../../components/TravelGuidesMenu/TravelGuidesMenu'),
-// )
-// import Link from 'next/link'
-// import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
-
-// let cx = classNames.bind(styles)
-
-// export default function SecondaryDesktopHeader({
-//   setSearchQuery,
-//   isGuidesNavShown,
-//   setIsGuidesNavShown,
-//   isScrolled,
-// }) {
-//   const { data, error } = useQuery(GetSecondaryHeaders, {
-//     variables: { include: ['20', '29', '3'] },
-//   })
-
-//   if (error) return <div>Error loading categories!</div>
-
-//   const categories = data?.categories?.edges || []
-
-//   return (
-//     <>
-//       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
-//         <div className={cx('menu-wrapper')}>
-//           <button
-//             type="button"
-//             className={cx('menu-button', 'menu-button-guides', {
-//               active: isGuidesNavShown,
-//             })}
-//             onClick={() => {
-//               setIsGuidesNavShown(!isGuidesNavShown)
-//               setSearchQuery('')
-//             }}
-//             aria-label="Toggle navigation"
-//           >
-//             <div className={cx('menu-title')}>{`Guides`}</div>
-//           </button>
-
-//           {/* Render kategori dinamis (News, Insights, Features) */}
-//           {categories.map((category) => {
-//             const { id, name, slug } = category.node
-//             return (
-//               <Link key={id} href={`/${slug}`}>
-//                 <div className={cx('menu-button')}>
-//                   <div className={cx('menu-title')}>{name}</div>
-//                 </div>
-//               </Link>
-//             )
-//           })}
-//         </div>
-//       </div>
-
-//       <div
-//         className={cx(
-//           'full-menu-content',
-//           isGuidesNavShown ? 'show' : undefined,
-//         )}
-//       >
-//         <div className={cx('full-menu-wrapper')}>
-//           <TravelGuidesMenu />
-//         </div>
-//       </div>
-//     </>
-//   )
-// }
-
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
@@ -94,30 +20,22 @@ export default function SecondaryDesktopHeader({
 }) {
   const { data, error, loading } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
+    fetchPolicy: 'cache-first',
   })
 
-  if (error) return <div>Error loading categories!</div>
+  if (error || loading || !data?.categories?.edges?.length) return null
 
-  // Fallback cepat jika loading
-  const defaultCategories = [
-    { id: '20', name: 'News', uri: '/news' },
-    { id: '29', name: 'Features', uri: '/features' },
-    { id: '3', name: 'Insights', uri: '/insights' },
-  ]
-
-  const categories = loading
-    ? defaultCategories
-    : data?.categories?.edges.map((edge) => ({
-        id: edge.node.id,
-        name: edge.node.name,
-        uri: edge.node.uri,
-      }))
+  const categories = data.categories.edges.map((edge) => ({
+    id: edge.node.id,
+    name: edge.node.name,
+    uri: edge.node.uri,
+  }))
 
   return (
     <>
       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
         <div className={cx('menu-wrapper')}>
-          {/* Tombol untuk Guides */}
+          {/* Tombol Guides */}
           <button
             type="button"
             className={cx('menu-button', 'menu-button-guides', {
@@ -132,24 +50,19 @@ export default function SecondaryDesktopHeader({
             <div className={cx('menu-title')}>Guides</div>
           </button>
 
-          {/* Kategori dari query atau fallback */}
+          {/* Link kategori */}
           {categories.map(({ id, name, uri }) => (
-            <Link key={id} href={uri} legacyBehavior>
-              <a className={cx('menu-button')}>
+            <Link key={id} href={uri}>
+              <div className={cx('menu-button')}>
                 <div className={cx('menu-title')}>{name}</div>
-              </a>
+              </div>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Menu penuh untuk Travel Guides */}
-      <div
-        className={cx(
-          'full-menu-content',
-          isGuidesNavShown ? 'show' : undefined,
-        )}
-      >
+      {/* Menu Travel Guides */}
+      <div className={cx('full-menu-content', isGuidesNavShown && 'show')}>
         <div className={cx('full-menu-wrapper')}>
           <TravelGuidesMenu />
         </div>
