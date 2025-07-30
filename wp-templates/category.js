@@ -2,74 +2,92 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import dynamic from 'next/dynamic'
+import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
-
-const CategoryDesktopSecondaryHeader = dynamic(() =>
-  import(
-    '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
-  ),
-)
-
-const SecondaryDesktopHeader = dynamic(() =>
-  import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
-)
-
+// Static imports: komponen utama
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import Main from '../components/Main/Main'
-import CategoryStoriesLatest from '../components/CategoryStoriesLatest/CategoryStoriesLatest'
-import BannerPosterGuide from '../components/BannerPosterGuide/BannerPosterGuide'
-import GuideReelIg from '../components/GuideReelIg/GuideReelIg'
-import GuideFitur from '../components/GuideFitur/GuideFitur'
-
-import CategoryHeader  from '../components/CategoryHeader/CategoryHeader'
-import CategoryEntryHeader  from '../components/CategoryEntryHeader/CategoryEntryHeader'
-import CategoryStories from '../components/CategoryStories/CategoryStories'
-import CategoryDesktopHeader from '../components/CategoryDesktopHeader/CategoryDesktopHeader'
-import CategorySecondStoriesLatest from '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
-import CategorySecondaryHeader from '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
-import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
-// import CategoryDesktopSecondaryHeader from '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
-// import SecondaryDesktopHeader from '../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'
-
-
-import MastHeadTop from '../components/AdUnit/MastHeadTop/MastHeadTop'
-import MastHeadTopMobile from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'
-import MastHeadBottom from '../components/AdUnit/MastHeadBottom/MastHeadBottom'
-import MastHeadBottomMobile from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'
-import MastHeadTopGuides from '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
-import MastHeadTopMobileGuides from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'
-import MastHeadBottomGuides from '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
-import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
-
 import Footer from '../components/Footer/Footer'
+import dynamic from 'next/dynamic'
 
+const components = {
+  CategoryDesktopSecondaryHeader: dynamic(() =>
+    import(
+      '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
+    ),
+  ),
+  SecondaryDesktopHeader: dynamic(() =>
+    import(
+      '../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'
+    ),
+  ),
+  CategoryHeader: dynamic(() =>
+    import('../components/CategoryHeader/CategoryHeader'),
+  ),
+  CategorySecondaryHeader: dynamic(() =>
+    import(
+      '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
+    ),
+  ),
+  SecondaryHeader: dynamic(() =>
+    import('../components/Header/SecondaryHeader/SecondaryHeader'),
+  ),
+  CategoryDesktopHeader: dynamic(() =>
+    import('../components/CategoryDesktopHeader/CategoryDesktopHeader'),
+  ),
+  CategoryEntryHeader: dynamic(() =>
+    import('../components/CategoryEntryHeader/CategoryEntryHeader'),
+  ),
+  CategoryStoriesLatest: dynamic(() =>
+    import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
+  ),
+  GuideFitur: dynamic(() => import('../components/GuideFitur/GuideFitur')),
+  CategorySecondStoriesLatest: dynamic(() =>
+    import(
+      '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
+    ),
+  ),
+  GuideReelIg: dynamic(() => import('../components/GuideReelIg/GuideReelIg')),
+  CategoryStories: dynamic(() =>
+    import('../components/CategoryStories/CategoryStories'),
+  ),
+  BannerPosterGuide: dynamic(() =>
+    import('../components/BannerPosterGuide/BannerPosterGuide'),
+  ),
+  MastHeadTop: dynamic(() =>
+    import('../components/AdUnit/MastHeadTop/MastHeadTop'),
+  ),
+  MastHeadTopMobile: dynamic(() =>
+    import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
+  ),
+  MastHeadBottom: dynamic(() =>
+    import('../components/AdUnit/MastHeadBottom/MastHeadBottom'),
+  ),
+  MastHeadBottomMobile: dynamic(() =>
+    import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'),
+  ),
+  MastHeadTopGuides: dynamic(() =>
+    import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
+  ),
+  MastHeadTopMobileGuides: dynamic(() =>
+    import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'),
+  ),
+  MastHeadBottomGuides: dynamic(() =>
+    import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
+  ),
+  MastHeadBottomMobileGuides: dynamic(() =>
+    import(
+      '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+    ),
+  ),
+}
+// Queries
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
-import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 export default function Category({ loading, data: initialData }) {
-  if (loading) return <>Loading...</>
-
-  const {
-    generalSettings,
-    category: {
-      name,
-      description,
-      children,
-      parent,
-      pinPosts,
-      categoryImages,
-      destinationGuides,
-      databaseId,
-      guideStorie,
-      guideReelIg,
-      guidesfitur,
-    },
-  } = initialData || {}
-
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
@@ -78,50 +96,42 @@ export default function Category({ loading, data: initialData }) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    setIsMobile(window.innerWidth <= 768)
-    const handleResize = () => setIsMobile(window.innerWidth <= 768)
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  const handleResize = useCallback(
-    () => setIsDesktop(window.innerWidth >= 1024),
-    [],
-  )
-  const handleScroll = useCallback(() => setIsScrolled(window.scrollY > 0), [])
-
-  useEffect(() => {
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      window.removeEventListener('scroll', handleScroll)
+    const resizeHandler = () => {
+      const width = window.innerWidth
+      setIsDesktop(width >= 1024)
+      setIsMobile(width <= 768)
     }
-  }, [handleResize, handleScroll])
+    resizeHandler()
+    window.addEventListener('resize', resizeHandler)
+    window.addEventListener('scroll', () => setIsScrolled(window.scrollY > 0))
+    return () => {
+      window.removeEventListener('resize', resizeHandler)
+      window.removeEventListener('scroll', () =>
+        setIsScrolled(window.scrollY > 0),
+      )
+    }
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow =
       searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
-  // const renderMastheadTopAd = () => {
-  //   if (isGuidesCategory) {
-  //     return isMobile ? <MastHeadTopMobileGuides /> : <MastHeadTopGuides />
-  //   } else {
-  //     return isMobile ? <MastHeadTopMobile /> : <MastHeadTop />
-  //   }
-  // }
+  const { generalSettings, category } = initialData || {}
+  const {
+    name,
+    description,
+    children,
+    parent,
+    pinPosts,
+    categoryImages,
+    destinationGuides,
+    databaseId,
+    guideStorie,
+    guideReelIg,
+    guidesfitur,
+  } = category || {}
 
-  // const renderMastheadBottomAd = () => {
-  //   if (isGuidesCategory) {
-  //     return isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />
-  //   } else {
-  //     return isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />
-  //   }
-  // }
-
-  // Fetch queries
   const { data: menusData } = useQuery(GetMenus, {
     variables: {
       first: 20,
@@ -157,10 +167,12 @@ export default function Category({ loading, data: initialData }) {
     'yes'
 
   const latestPosts = useMemo(() => {
-    const posts = latestStories?.posts?.edges || []
-    const updates = latestStories?.updates?.edges || []
-    return [...posts, ...updates]
-      .map((edge) => edge.node)
+    const posts = [
+      ...(latestStories?.posts?.edges || []),
+      ...(latestStories?.updates?.edges || []),
+    ]
+    return posts
+      .map((e) => e.node)
       .sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [latestStories])
 
@@ -173,77 +185,63 @@ export default function Category({ loading, data: initialData }) {
     [categoryImages],
   )
 
-  const categoryComponentProps = {
-    parent: parent?.node?.name,
-    children: children?.edges,
-    title: name,
-    destinationGuides: destinationGuides?.destinationGuides,
-    changeToSlider: categoryImages?.changeToSlider,
-    guidesTitle: destinationGuides?.guidesTitle,
-    categorySlider,
-    image: categoryImages?.categoryImages?.mediaItemUrl,
-    imageCaption: categoryImages?.categoryImagesCaption,
-    description,
-  }
+  const sharedHeaderProps = useMemo(
+    () => ({
+      title: generalSettings?.title,
+      description: generalSettings?.description,
+      primaryMenuItems: menusData?.headerMenuItems?.nodes ?? [],
+      secondaryMenuItems: menusData?.secondHeaderMenuItems?.nodes ?? [],
+      thirdMenuItems: menusData?.thirdHeaderMenuItems?.nodes ?? [],
+      fourthMenuItems: menusData?.fourthHeaderMenuItems?.nodes ?? [],
+      fifthMenuItems: menusData?.fifthHeaderMenuItems?.nodes ?? [],
+      featureMenuItems: menusData?.featureHeaderMenuItems?.nodes ?? [],
+      latestStories: latestPosts,
+      searchQuery,
+      setSearchQuery,
+      isNavShown,
+      setIsNavShown,
+      isScrolled,
+      isGuidesCategory,
+    }),
+    [
+      menusData,
+      latestPosts,
+      searchQuery,
+      isNavShown,
+      isScrolled,
+      isGuidesCategory,
+    ],
+  )
 
-  const sharedHeaderProps = {
-    title: generalSettings?.title,
-    description: generalSettings?.description,
-    primaryMenuItems: menusData?.headerMenuItems?.nodes ?? [],
-    secondaryMenuItems: menusData?.secondHeaderMenuItems?.nodes ?? [],
-    thirdMenuItems: menusData?.thirdHeaderMenuItems?.nodes ?? [],
-    fourthMenuItems: menusData?.fourthHeaderMenuItems?.nodes ?? [],
-    fifthMenuItems: menusData?.fifthHeaderMenuItems?.nodes ?? [],
-    featureMenuItems: menusData?.featureHeaderMenuItems?.nodes ?? [],
-    latestStories: latestPosts,
-    searchQuery,
-    setSearchQuery,
-    isNavShown,
-    setIsNavShown,
-    isScrolled,
-    isGuidesCategory,
-  }
+  const renderAdComponent = useCallback(
+    (pos) => {
+      const prefix = isGuidesCategory ? 'Guides' : ''
+      const position = pos === 'top' ? 'Top' : 'Bottom'
+      const Component =
+        components[`MastHead${position}${isMobile ? 'Mobile' : ''}${prefix}`]
+      return Component ? <Component /> : null
+    },
+    [isMobile, isGuidesCategory],
+  )
 
-  const renderAdComponent = (position) => {
-    const isTop = position === 'top'
-    if (isGuidesCategory) {
-      if (isMobile)
-        return isTop ? (
-          <MastHeadTopMobileGuides />
-        ) : (
-          <MastHeadBottomMobileGuides />
-        )
-      return isTop ? (
-        <MastHeadTopGuides />
-      ) : (
-        <MastHeadBottomGuides />
-      )
-    } else {
-      if (isMobile)
-        return isTop ? (
-          <MastHeadTopMobile />
-        ) : (
-          <MastHeadBottomMobile />
-        )
-      return isTop ? <MastHeadTop /> : <MastHeadBottom />
-    }
-  }
+  if (loading) return <>Loading...</>
+
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       {isDesktop ? (
         <>
-          <CategoryDesktopHeader {...sharedHeaderProps} />
+          <components.CategoryDesktopHeader {...sharedHeaderProps} />
           {!isNavShown &&
             !loadingSecondaryHeader &&
             (isGuidesCategory ? (
-              <CategoryDesktopSecondaryHeader
+              <components.CategoryDesktopSecondaryHeader
                 data={dataSecondaryHeader}
                 databaseId={databaseId}
                 name={name}
                 parent={parent?.node?.name}
               />
             ) : (
-              <SecondaryDesktopHeader
+              <components.SecondaryDesktopHeader
                 {...sharedHeaderProps}
                 isGuidesNavShown={isGuidesNavShown}
                 setIsGuidesNavShown={setIsGuidesNavShown}
@@ -252,17 +250,17 @@ export default function Category({ loading, data: initialData }) {
         </>
       ) : (
         <>
-          <CategoryHeader {...sharedHeaderProps} />
+          <components.CategoryHeader {...sharedHeaderProps} />
           {!loadingSecondaryHeader &&
             (isGuidesCategory ? (
-              <CategorySecondaryHeader
+              <components.CategorySecondaryHeader
                 data={dataSecondaryHeader}
                 databaseId={databaseId}
                 name={name}
                 parent={parent?.node?.name}
               />
             ) : (
-              <SecondaryHeader
+              <components.SecondaryHeader
                 {...sharedHeaderProps}
                 isGuidesNavShown={isGuidesNavShown}
                 setIsGuidesNavShown={setIsGuidesNavShown}
@@ -271,80 +269,79 @@ export default function Category({ loading, data: initialData }) {
         </>
       )}
 
-      <CategoryEntryHeader {...categoryComponentProps} />
+      <components.CategoryEntryHeader
+        parent={parent?.node?.name}
+        children={children?.edges}
+        title={name}
+        destinationGuides={destinationGuides?.destinationGuides}
+        changeToSlider={categoryImages?.changeToSlider}
+        guidesTitle={destinationGuides?.guidesTitle}
+        categorySlider={categorySlider}
+        image={categoryImages?.categoryImages?.mediaItemUrl}
+        imageCaption={categoryImages?.categoryImagesCaption}
+        description={description}
+      />
 
       <Main>
         {isGuidesCategory && (
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-            <hr
-              style={{
-                border: 'none',
-                borderTop: '1px solid black',
-                margin: '2rem 0',
-              }}
-            />
-          </div>
+          <hr
+            style={{
+              border: 'none',
+              borderTop: '1px solid black',
+              margin: '2rem auto',
+              maxWidth: '1400px',
+            }}
+          />
         )}
         {renderAdComponent('top')}
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <hr
-            style={{
-              border: 'none',
-              borderTop: '1px solid black',
-              padding: '0 0 2rem',
-            }}
-          />
-        </div>
-        <CategoryStoriesLatest
-          categoryUri={databaseId}
-          pinPosts={pinPosts}
-          name={name}
-          children={children}
-          parent={parent?.node?.name}
-          guideStories={guideStorie}
+        <hr
+          style={{
+            border: 'none',
+            borderTop: '1px solid black',
+            padding: '0 0 2rem',
+            maxWidth: '1400px',
+            margin: '0 auto',
+          }}
         />
-        {isGuidesCategory && (
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-            <hr
-              style={{
-                border: 'none',
-                borderTop: '1px solid black',
-                margin: '0',
-              }}
-            />
-          </div>
-        )}
-        {isGuidesCategory && guidesfitur && (
-          <GuideFitur guidesfitur={guidesfitur} />
-        )}
-        <CategorySecondStoriesLatest
-          categoryUri={databaseId}
-          pinPosts={pinPosts}
-          name={name}
-          children={children}
-          parent={parent?.node?.name}
-          guideStories={guideStorie}
-          bannerDa={guideStorie}
-        />      
-        {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
-        <CategoryStories
-          categoryUri={databaseId}
-          pinPosts={pinPosts}
-          name={name}
-          children={children}
-          parent={parent?.node?.name}
-        />
-        <BannerPosterGuide guideStorie={guideStorie} />
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <hr
-            style={{
-              border: 'none',
-              borderTop: '1px solid black',
-              margin: '2rem 0',
-            }}
-          />
-        </div>
 
+        <components.CategoryStoriesLatest
+          categoryUri={databaseId}
+          pinPosts={pinPosts}
+          name={name}
+          children={children}
+          parent={parent?.node?.name}
+          guideStories={guideStorie}
+        />
+        {isGuidesCategory && guidesfitur && (
+          <components.GuideFitur guidesfitur={guidesfitur} />
+        )}
+        <components.CategorySecondStoriesLatest
+          categoryUri={databaseId}
+          pinPosts={pinPosts}
+          name={name}
+          children={children}
+          parent={parent?.node?.name}
+          bannerDa={guideStorie}
+          guideStories={guideStorie}
+        />
+        {guideReelIg && <components.GuideReelIg guideReelIg={guideReelIg} />}
+        <components.CategoryStories
+          categoryUri={databaseId}
+          pinPosts={pinPosts}
+          name={name}
+          children={children}
+          parent={parent?.node?.name}
+        />
+        <components.BannerPosterGuide guideStorie={guideStorie} />
+
+        <hr
+          style={{
+            border: 'none',
+            borderTop: '1px solid black',
+            margin: '2rem auto',
+            maxWidth: '1400px',
+          }}
+        />
         {renderAdComponent('bottom')}
       </Main>
 
