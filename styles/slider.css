@@ -466,7 +466,8 @@
 
 @media only screen and (min-width: 640px) {
   .post-swiper {
-    max-width: 975px;
+    max-width: 1200px;
+    /* padding-left: 1rem; */
   }
 
   .post-category-swiper {
