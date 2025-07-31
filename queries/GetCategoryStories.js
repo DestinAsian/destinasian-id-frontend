@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GetCategoryStories = gql`
-  query GetCategoryStories($first: Int, $after: String, $id: ID!) {
+  query GetCategoryStories($first: Int = 100, $after: String, $id: ID!) {
     category(id: $id, idType: DATABASE_ID) {
       name
       parent {

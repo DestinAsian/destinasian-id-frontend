@@ -78,7 +78,7 @@
 }
 
 .postTitle {
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-family: "Scheherazade New", serif;
   color: var(--wpe--color--white);
   padding: 0 6rem 0 0;
@@ -87,7 +87,7 @@
   width: 100%;        
   // letter-spacing: -0.5px;
   text-transform: uppercase;
-  line-height: 1rem;
+  line-height: 1.3rem;
 
   @media (min-width: $breakpoint-medium) {
     font-size: 1.5rem;
