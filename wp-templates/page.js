@@ -7,6 +7,9 @@ import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import dynamic from 'next/dynamic'
 
 const Header = dynamic(() => import('../components/Header/Header'))
+const CategoryHeader = dynamic(() =>
+  import('../components/CategoryHeader/CategoryHeader'),
+)
 const Footer = dynamic(() => import('../components/Footer/Footer'))
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
@@ -23,8 +26,8 @@ const PasswordProtected = dynamic(() =>
 const SecondaryHeader = dynamic(() =>
   import('../components/Header/SecondaryHeader/SecondaryHeader'),
 )
-const SecondaryDesktopHeader = dynamic(() =>
-  import('../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'),
+const SecondaryDesktopHeaderPage = dynamic(() =>
+  import('../components/Header/SecondaryDesktopHeaderPage/SecondaryDesktopHeaderPage'),
 )
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
@@ -102,8 +105,6 @@ export default function Component(props) {
       document.body.style.overflow = 'visible'
     }
   }, [isNavShown])
-
-
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -248,28 +249,49 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
+
       <>
         {isDesktop ? (
-          <SecondaryDesktopHeader
-            title={siteTitle}
-            description={siteDescription}
-            primaryMenuItems={primaryMenu}
-            secondaryMenuItems={secondaryMenu}
-            thirdMenuItems={thirdMenu}
-            fourthMenuItems={fourthMenu}
-            fifthMenuItems={fifthMenu}
-            featureMenuItems={featureMenu}
-            latestStories={allPosts}
-            menusLoading={menusLoading}
-            latestLoading={latestLoading}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-          />
+          <>
+            <Header
+              title={siteTitle}
+              description={siteDescription}
+              primaryMenuItems={primaryMenu}
+              secondaryMenuItems={secondaryMenu}
+              thirdMenuItems={thirdMenu}
+              fourthMenuItems={fourthMenu}
+              fifthMenuItems={fifthMenu}
+              featureMenuItems={featureMenu}
+              latestStories={allPosts}
+              menusLoading={menusLoading}
+              latestLoading={latestLoading}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              isNavShown={isNavShown}
+              setIsNavShown={setIsNavShown}
+              isScrolled={isScrolled}
+            />
+            <SecondaryDesktopHeaderPage
+              title={siteTitle}
+              description={siteDescription}
+              primaryMenuItems={primaryMenu}
+              secondaryMenuItems={secondaryMenu}
+              thirdMenuItems={thirdMenu}
+              fourthMenuItems={fourthMenu}
+              fifthMenuItems={fifthMenu}
+              featureMenuItems={featureMenu}
+              latestStories={allPosts}
+              menusLoading={menusLoading}
+              latestLoading={latestLoading}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              isNavShown={isNavShown}
+              setIsNavShown={setIsNavShown}
+              isScrolled={isScrolled}
+              isGuidesNavShown={isGuidesNavShown}
+              setIsGuidesNavShown={setIsGuidesNavShown}
+            />
+          </>
         ) : (
           <>
             <Header
