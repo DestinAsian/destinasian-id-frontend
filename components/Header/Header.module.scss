@@ -2,19 +2,25 @@
 
 .component {
   color: var(--wpe--header--color);
-  background-color: var(--wpe--main--background-color);
+  // background-color: var(--wpe--main--background-color);
+  background-color: var(--wpe--color--teal--light);
   position: relative;
   width: 100%;
   z-index: 50;
+
+  &.menu-open {
+    background-color: var(--wpe--color--teal--light);
+  }
 }
 
 .sticky {
-  background-color: var(--wpe--main--background-color);
+  // background-color: var(--wpe--main--background-color);
+  background-color: var(--wpe--color--teal--light);
   position: fixed;
   top: -60px;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  // z-index: 1000;
   transform: translateY(60px);
   // transition: transform 0.3s ease-in-out;
 }
@@ -32,10 +38,13 @@
   gap: 1rem;
   height: 2.75rem;
   background-color: var(--wpe--main--background-color);
-
+  
   @media (min-width: $breakpoint-extra-small) {
     padding: 0.5rem 0;
     height: 3.5rem;
+  }
+  &.menu-active {
+    background-color: var(--wpe--color--teal--light);
   }
 }
 
@@ -68,31 +77,58 @@
   text-decoration: none;
 }
 
-.menu-button-wrapper {
+.navbar-navigation-wrapper {
   display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-.search-button {
+.navbar-menu-name {
   display: flex;
-  margin-right: 1rem;
-  justify-content: flex-end;
-  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
 
   @media (min-width: $breakpoint-extra-small) {
-    margin-right: 1rem;
+    font-size: 2.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
   }
+}
 
-  button svg {
-    width: 1.2rem;
-    height: 1.3rem;
+.menu-button-wrapper {
+  display: flex;
+
+  .search-button {
+    display: flex;
+    margin-right: 1rem;
+    justify-content: flex-end;
+    align-items: center;
 
     @media (min-width: $breakpoint-extra-small) {
-      width: 1.8rem;
-      height: 2rem;
+      margin-right: 1rem;
+    }
+
+    button svg {
+      width: 1.2rem;
+      height: 1.3rem;
+
+      @media (min-width: $breakpoint-extra-small) {
+        width: 1.8rem;
+        height: 2rem;
+      }
+    }
+    &.active {
+      // Tambahkan class parent untuk mengubah warna header
+      ~ .component,
+      ~ .sticky,
+      ~ .navbar {
+        background-color: var(--wpe--color--teal--light);
+      }
     }
   }
 }
-
 .menu-button {
   display: flex;
   margin-right: 1rem;
@@ -153,12 +189,12 @@
 
 .close-button {
   display: flex;
-  margin-right: 1rem;
+  padding-right: 1rem;
   justify-content: flex-end;
   align-items: center;
 
   @media (min-width: $breakpoint-extra-small) {
-    margin-right: 2rem;
+    padding-right: 2rem;
   }
 
   button svg {
@@ -258,7 +294,6 @@
     }
   }
 }
-
 .full-menu-wrapper {
   display: block;
   width: 100vw;
@@ -266,14 +301,13 @@
   position: absolute;
   z-index: 51;
   top: -150vh;
-  background-color: var(--wpe--main--background-color);
+  background-color: var(--wpe--color--teal--light);
   color: var(--wpe--color--black);
 
   &.show {
     padding: 0;
     gap: 1rem;
     top: 2.5rem;
-    transition: top 0.4s ease-in-out;
 
     @media ((min-width: $breakpoint-extra-small) and (max-width: $breakpoint-small)) {
       top: 3.5rem;
@@ -284,5 +318,25 @@
       top: 4.5rem;
       height: calc(-4.5rem + 100vh);
     }
+
+    // Saat menu full aktif, header berubah warna
+    ~ .component,
+    ~ .sticky,
+    ~ .navbar {
+      background-color: var(--wpe--color--teal--light);
+    }
+  }
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 1rem;
+  background-color: #000;
+  margin: 0 1rem 0 0;
+  display: inline-block;
+
+  @media (min-width: $breakpoint-small) {
+    width: 2px;
+    height: 2rem;
   }
 }
