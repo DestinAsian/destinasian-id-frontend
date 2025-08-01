@@ -7,9 +7,6 @@ import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import dynamic from 'next/dynamic'
 
 const Header = dynamic(() => import('../components/Header/Header'))
-const CategoryHeader = dynamic(() =>
-  import('../components/CategoryHeader/CategoryHeader'),
-)
 const Footer = dynamic(() => import('../components/Footer/Footer'))
 const Main = dynamic(() => import('../components/Main/Main'))
 const Container = dynamic(() => import('../components/Container/Container'))
@@ -27,8 +24,24 @@ const SecondaryHeader = dynamic(() =>
   import('../components/Header/SecondaryHeader/SecondaryHeader'),
 )
 const SecondaryDesktopHeaderPage = dynamic(() =>
-  import('../components/Header/SecondaryDesktopHeaderPage/SecondaryDesktopHeaderPage'),
+  import(
+    '../components/Header/SecondaryDesktopHeaderPage/SecondaryDesktopHeaderPage'
+  ),
 )
+
+const MastHeadTop = dynamic(() =>
+  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
+)
+const MastHeadTopMobile = dynamic(() =>
+  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
+)
+const MastHeadBottom = dynamic(() =>
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottom'),
+)
+const MastHeadBottomMobile = dynamic(() =>
+  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'),
+)
+
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -74,6 +87,8 @@ export default function Component(props) {
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -83,6 +98,26 @@ export default function Component(props) {
       document.body.style.overflow = 'visible'
     }
   }, [searchQuery])
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 0)
+
+    const handleResize = () => {
+      const width = window.innerWidth
+      setIsMobile(width <= 768)
+      setIsDesktop(width > 768)
+    }
+
+    handleScroll()
+    handleResize()
+    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   // Add sticky header on scroll
   useEffect(() => {
@@ -208,18 +243,6 @@ export default function Component(props) {
     }
   }
 
-  const [isDesktop, setIsDesktop] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024) // breakpoint desktop (bisa kamu sesuaikan)
-    }
-
-    handleResize() // jalankan pertama kali
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
@@ -327,9 +350,11 @@ export default function Component(props) {
           {headerFooterVisibility?.headerVisibility == true ? null : (
             <EntryHeader title={title} />
           )}
+          <div>{isMobile ? <MastHeadTopMobile /> : <MastHeadTop />}</div>
           <Container>
             <ContentWrapperPage content={content} />
           </Container>
+          <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div>
         </>
       </Main>
       {headerFooterVisibility?.footerVisibility == true ? null : (

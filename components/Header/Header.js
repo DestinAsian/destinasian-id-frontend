@@ -117,7 +117,7 @@ export default function Header({
       <>
         <div
           className={cx('navbar', {
-            sticky: isScrolled && !isNavShown && !isMenuOpen,
+            sticky: isScrolled && !isNavShown,
             'menu-active': isNavShown,
           })}
         >
