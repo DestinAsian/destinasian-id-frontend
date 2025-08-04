@@ -4,83 +4,34 @@ import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
-// Static imports: komponen utama
+// Components
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import Main from '../components/Main/Main'
 import Footer from '../components/Footer/Footer'
-import dynamic from 'next/dynamic'
+import CategoryDesktopSecondaryHeader from '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
+import SecondaryDesktopHeader from '../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'
+import CategoryHeader from '../components/CategoryHeader/CategoryHeader'
+import CategorySecondaryHeader from '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import CategoryDesktopHeader from '../components/CategoryDesktopHeader/CategoryDesktopHeader'
+import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
+import CategoryStoriesLatest from '../components/CategoryStoriesLatest/CategoryStoriesLatest'
+import GuideFitur from '../components/GuideFitur/GuideFitur'
+import CategorySecondStoriesLatest from '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
+import GuideReelIg from '../components/GuideReelIg/GuideReelIg'
+import CategoryStories from '../components/CategoryStories/CategoryStories'
+import BannerPosterGuide from '../components/BannerPosterGuide/BannerPosterGuide'
 
-const components = {
-  CategoryDesktopSecondaryHeader: dynamic(() =>
-    import(
-      '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
-    ),
-  ),
-  SecondaryDesktopHeader: dynamic(() =>
-    import(
-      '../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'
-    ),
-  ),
-  CategoryHeader: dynamic(() =>
-    import('../components/CategoryHeader/CategoryHeader'),
-  ),
-  CategorySecondaryHeader: dynamic(() =>
-    import(
-      '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
-    ),
-  ),
-  SecondaryHeader: dynamic(() =>
-    import('../components/Header/SecondaryHeader/SecondaryHeader'),
-  ),
-  CategoryDesktopHeader: dynamic(() =>
-    import('../components/CategoryDesktopHeader/CategoryDesktopHeader'),
-  ),
-  CategoryEntryHeader: dynamic(() =>
-    import('../components/CategoryEntryHeader/CategoryEntryHeader'),
-  ),
-  CategoryStoriesLatest: dynamic(() =>
-    import('../components/CategoryStoriesLatest/CategoryStoriesLatest'),
-  ),
-  GuideFitur: dynamic(() => import('../components/GuideFitur/GuideFitur')),
-  CategorySecondStoriesLatest: dynamic(() =>
-    import(
-      '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
-    ),
-  ),
-  GuideReelIg: dynamic(() => import('../components/GuideReelIg/GuideReelIg')),
-  CategoryStories: dynamic(() =>
-    import('../components/CategoryStories/CategoryStories'),
-  ),
-  BannerPosterGuide: dynamic(() =>
-    import('../components/BannerPosterGuide/BannerPosterGuide'),
-  ),
-  MastHeadTop: dynamic(() =>
-    import('../components/AdUnit/MastHeadTop/MastHeadTop'),
-  ),
-  MastHeadTopMobile: dynamic(() =>
-    import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
-  ),
-  MastHeadBottom: dynamic(() =>
-    import('../components/AdUnit/MastHeadBottom/MastHeadBottom'),
-  ),
-  MastHeadBottomMobile: dynamic(() =>
-    import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'),
-  ),
-  MastHeadTopGuides: dynamic(() =>
-    import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
-  ),
-  MastHeadTopMobileGuides: dynamic(() =>
-    import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'),
-  ),
-  MastHeadBottomGuides: dynamic(() =>
-    import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
-  ),
-  MastHeadBottomMobileGuides: dynamic(() =>
-    import(
-      '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
-    ),
-  ),
-}
+// Ads
+import MastHeadTop from '../components/AdUnit/MastHeadTop/MastHeadTop'
+import MastHeadTopMobile from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'
+import MastHeadBottom from '../components/AdUnit/MastHeadBottom/MastHeadBottom'
+import MastHeadBottomMobile from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'
+import MastHeadTopGuides from '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
+import MastHeadTopMobileGuides from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'
+import MastHeadBottomGuides from '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
+import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+
 // Queries
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
@@ -134,7 +85,7 @@ export default function Category({ loading, data: initialData }) {
 
   const { data: menusData } = useQuery(GetMenus, {
     variables: {
-      first: 20,
+      first: 10,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
@@ -142,11 +93,6 @@ export default function Category({ loading, data: initialData }) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: 'cache-first',
-  })
-
-  const { data: footerMenusData } = useQuery(GetFooterMenus, {
-    variables: { first: 100, footerHeaderLocation: MENUS.FOOTER_LOCATION },
     fetchPolicy: 'cache-first',
   })
 
@@ -213,12 +159,28 @@ export default function Category({ loading, data: initialData }) {
     ],
   )
 
+  // if (loading) return <>Loading...</>
   const renderAdComponent = useCallback(
     (pos) => {
-      const prefix = isGuidesCategory ? 'Guides' : ''
       const position = pos === 'top' ? 'Top' : 'Bottom'
-      const Component =
-        components[`MastHead${position}${isMobile ? 'Mobile' : ''}${prefix}`]
+      const key = `${isGuidesCategory ? 'Guides' : ''}${
+        isMobile ? 'Mobile' : 'Desktop'
+      }`
+      const componentMap = {
+        Top: {
+          Desktop: MastHeadTop,
+          Mobile: MastHeadTopMobile,
+          GuidesDesktop: MastHeadTopGuides,
+          GuidesMobile: MastHeadTopMobileGuides,
+        },
+        Bottom: {
+          Desktop: MastHeadBottom,
+          Mobile: MastHeadBottomMobile,
+          GuidesDesktop: MastHeadBottomGuides,
+          GuidesMobile: MastHeadBottomMobileGuides,
+        },
+      }
+      const Component = componentMap[position][key]
       return Component ? <Component /> : null
     },
     [isMobile, isGuidesCategory],
@@ -230,18 +192,18 @@ export default function Category({ loading, data: initialData }) {
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       {isDesktop ? (
         <>
-          <components.CategoryDesktopHeader {...sharedHeaderProps} />
+          <CategoryDesktopHeader {...sharedHeaderProps} />
           {!isNavShown &&
             !loadingSecondaryHeader &&
             (isGuidesCategory ? (
-              <components.CategoryDesktopSecondaryHeader
+              <CategoryDesktopSecondaryHeader
                 data={dataSecondaryHeader}
                 databaseId={databaseId}
                 name={name}
                 parent={parent?.node?.name}
               />
             ) : (
-              <components.SecondaryDesktopHeader
+              <SecondaryDesktopHeader
                 {...sharedHeaderProps}
                 isGuidesNavShown={isGuidesNavShown}
                 setIsGuidesNavShown={setIsGuidesNavShown}
@@ -250,17 +212,17 @@ export default function Category({ loading, data: initialData }) {
         </>
       ) : (
         <>
-          <components.CategoryHeader {...sharedHeaderProps} />
+          <CategoryHeader {...sharedHeaderProps} />
           {!loadingSecondaryHeader &&
             (isGuidesCategory ? (
-              <components.CategorySecondaryHeader
+              <CategorySecondaryHeader
                 data={dataSecondaryHeader}
                 databaseId={databaseId}
                 name={name}
                 parent={parent?.node?.name}
               />
             ) : (
-              <components.SecondaryHeader
+              <SecondaryHeader
                 {...sharedHeaderProps}
                 isGuidesNavShown={isGuidesNavShown}
                 setIsGuidesNavShown={setIsGuidesNavShown}
@@ -269,7 +231,7 @@ export default function Category({ loading, data: initialData }) {
         </>
       )}
 
-      <components.CategoryEntryHeader
+      <CategoryEntryHeader
         parent={parent?.node?.name}
         children={children?.edges}
         title={name}
@@ -304,7 +266,7 @@ export default function Category({ loading, data: initialData }) {
           }}
         />
 
-        <components.CategoryStoriesLatest
+        <CategoryStoriesLatest
           categoryUri={databaseId}
           pinPosts={pinPosts}
           name={name}
@@ -313,9 +275,9 @@ export default function Category({ loading, data: initialData }) {
           guideStories={guideStorie}
         />
         {isGuidesCategory && guidesfitur && (
-          <components.GuideFitur guidesfitur={guidesfitur} />
+          <GuideFitur guidesfitur={guidesfitur} />
         )}
-        <components.CategorySecondStoriesLatest
+        <CategorySecondStoriesLatest
           categoryUri={databaseId}
           pinPosts={pinPosts}
           name={name}
@@ -324,15 +286,15 @@ export default function Category({ loading, data: initialData }) {
           bannerDa={guideStorie}
           guideStories={guideStorie}
         />
-        {guideReelIg && <components.GuideReelIg guideReelIg={guideReelIg} />}
-        <components.CategoryStories
+        {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
+        <CategoryStories
           categoryUri={databaseId}
           pinPosts={pinPosts}
           name={name}
           children={children}
           parent={parent?.node?.name}
         />
-        <components.BannerPosterGuide guideStorie={guideStorie} />
+        <BannerPosterGuide guideStorie={guideStorie} />
 
         <hr
           style={{
@@ -345,9 +307,7 @@ export default function Category({ loading, data: initialData }) {
         {renderAdComponent('bottom')}
       </Main>
 
-      <Footer
-        footerMenu={footerMenusData?.footerHeaderMenuItems?.nodes ?? []}
-      />
+      <Footer />
     </main>
   )
 }
@@ -450,8 +410,6 @@ Category.query = gql`
           ... on Post {
             id
             title
-            content
-            date
             uri
             excerpt
             ...FeaturedImageFragment
@@ -460,7 +418,7 @@ Category.query = gql`
                 name
               }
             }
-            categories(first: 1000, where: { childless: true }) {
+            categories(first: 100, where: { childless: true }) {
               edges {
                 node {
                   name
@@ -480,7 +438,7 @@ Category.query = gql`
         node {
           name
           uri
-          children(first: 1000, where: { childless: true }) {
+          children(first: 100, where: { childless: true }) {
             edges {
               node {
                 name

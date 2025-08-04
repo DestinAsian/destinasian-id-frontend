@@ -144,7 +144,7 @@ export default function Component(props) {
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
-      first: 20,
+      first: 10,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
@@ -164,21 +164,6 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
-  // Get Footer menus
-  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
-    GetFooterMenus,
-    {
-      variables: {
-        first: 50,
-        footerHeaderLocation: MENUS.FOOTER_LOCATION,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
-
-  // Footer Menu
-  const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
@@ -358,7 +343,7 @@ export default function Component(props) {
         </>
       </Main>
       {headerFooterVisibility?.footerVisibility == true ? null : (
-        <Footer footerMenu={footerMenu} />
+        <Footer />
       )}
     </main>
   )

@@ -1,17 +1,17 @@
+import React, { useEffect, useState, useMemo } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import React, { useEffect, useState, useMemo } from 'react'
-import dynamic from 'next/dynamic'
 import Cookies from 'js-cookie'
+import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
-import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 
+import dynamic from 'next/dynamic'
 const Container = dynamic(() => import('../components/Container/Container'))
 const ContentWrapperEditorial = dynamic(() =>
   import('../components/ContentWrapperEditorial/ContentWrapperEditorial'),
@@ -46,9 +46,6 @@ const SingleHeader = dynamic(() =>
   import('../components/SingleHeader/SingleHeader'),
 )
 
-const MastHeadTop = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
-)
 const MastHeadBottom = dynamic(() =>
   import('../components/AdUnit/MastHeadBottom/MastHeadBottom'),
 )

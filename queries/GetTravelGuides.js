@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export const GetTravelGuides = gql`
   query GetTravelGuides($search: String) {
-    tags(first: 1000, where: { search: $search, hideEmpty: true }) {
+    tags(first: 10, where: { search: $search, hideEmpty: true }) {
       edges {
         node {
           honorsCircles(where: { status: PUBLISH }, first: 10) {
