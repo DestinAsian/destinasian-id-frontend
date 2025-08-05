@@ -1,22 +1,17 @@
 import className from 'classnames/bind'
-import dynamic from 'next/dynamic'
-
-const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const Container = dynamic(() => import('../../components/Container/Container'))
-const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
+import Heading from '../../components/Heading/Heading'
+import Container from '../../components/Container/Container'
 import styles from './SingleEntryHeader.module.scss'
 import Link from 'next/link'
 
 let cx = className.bind(styles)
 
 export default function SingleEntryHeader({
-  parent,
   title,
   className,
   parentCategory,
   categoryUri,
   categoryName,
-  categoryLabel,
 
 }) {
   return (

@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
-import dynamic from 'next/dynamic'
 
-const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 import styles from './RelatedStories.module.scss'
 import Link from 'next/link'
 

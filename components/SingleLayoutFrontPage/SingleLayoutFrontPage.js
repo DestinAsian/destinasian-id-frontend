@@ -2,8 +2,8 @@ import React from "react";
 import dynamic from "next/dynamic";
 
 // Import layout dinamis
-const GuideLayoutPost = dynamic(() => import("../../components/GuideLayoutPost/GuideLayoutPost"));
-const EditorialLayoutPost = dynamic(() => import("../../components/EditorialLayoutPost/EditorialLayoutPost"));
+import GuideLayoutPost from "../../components/GuideLayoutPost/GuideLayoutPost"
+import EditorialLayoutPost from "../../components/EditorialLayoutPost/EditorialLayoutPost"
 
 const SingleLayoutFrontPage = ({
   data,

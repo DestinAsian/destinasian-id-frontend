@@ -1,6 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const FormatDate = dynamic(() => import('../../components/FormatDate/FormatDate'))
+import FormatDate from '../../components/FormatDate/FormatDate'
 
 export default function PostInfo({ date, author, className }) {
   if (!date && !author) {

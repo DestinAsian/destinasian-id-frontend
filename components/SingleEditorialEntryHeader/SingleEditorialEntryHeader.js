@@ -3,11 +3,16 @@ import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from './SingleEditorialEntryHeader.module.scss'
-
-const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const FormatDate = dynamic(() => import('../../components/FormatDate/FormatDate'))
-const MastHeadTop = dynamic(() => import('../../components/AdUnit/MastHeadTop/MastHeadTop'))
-const MastHeadTopMobile = dynamic(() => import('../../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'))
+import Heading from '../../components/Heading/Heading'
+import FormatDate from '../../components/FormatDate/FormatDate'
+const MastHeadTop = dynamic(
+  () => import('../../components/AdUnit/MastHeadTop/MastHeadTop'),
+  { ssr: false }
+)
+const MastHeadTopMobile = dynamic(
+  () => import('../../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
+  { ssr: false }
+)
 
 let cx = className.bind(styles)
 

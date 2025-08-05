@@ -7,11 +7,10 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
-const Container = dynamic(() => import('../../components/Container/Container'))
-const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
-// const LocationIcon = dynamic(() => import('../../components/LocationIcon/LocationIcon'))
-const PostInfo = dynamic(() => import('../../components/PostInfo/PostInfo'))
+import CategoryIcon from '../../components/CategoryIcon/CategoryIcon'
+import Container from '../../components/Container/Container'
+import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
+import PostInfo from '../../components/PostInfo/PostInfo'
 let cx = className.bind(styles)
 
 /**

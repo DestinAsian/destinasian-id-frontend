@@ -1,15 +1,9 @@
 import className from 'classnames/bind'
 import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
 
-const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const FormatDate = dynamic(() =>
-  import('../../components/FormatDate/FormatDate'),
-)
-const Container = dynamic(() => import('../../components/Container/Container'))
-const CategoryIcon = dynamic(() =>
-  import('../../components/CategoryIcon/CategoryIcon'),
-)
+import Heading from '../../components/Heading/Heading'
+import FormatDate from '../../components/FormatDate/FormatDate'
+import Container from '../../components/Container/Container'
 import styles from './SingleEntryHeaderTravelGuide.module.scss'
 import Link from 'next/link'
 
@@ -18,11 +12,9 @@ let cx = className.bind(styles)
 export default function SingleEntryHeaderTravelGuide({
   parent,
   title,
-  className,
   parentCategory,
   categoryUri,
   categoryName,
-  categoryLabel,
   author,
   date,
 }) {
