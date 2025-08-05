@@ -1,18 +1,12 @@
 import classNames from 'classnames/bind'
 import styles from './ChildrenNavigationTravelGuide.module.scss'
-import dynamic from 'next/dynamic'
 import { useQuery } from '@apollo/client'
 import { GetChildrenNavigation } from '../../../../queries/GetChildrenNavigation'
 import Link from 'next/link'
 
-const MainCategoryMenu = dynamic(() =>
-  import(
-    '../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'
-  ),
-)
-const TravelGuidesMenu = dynamic(() =>
-  import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'),
-)
+import MainCategoryMenu from '../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'
+import TravelGuidesMenu from '../../../../components/TravelGuidesMenu/TravelGuidesMenu'
+
 
 let cx = classNames.bind(styles)
 

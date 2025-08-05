@@ -3,14 +3,15 @@ import Link from 'next/link'
 import destinasianLogo from '../../assets/logo/destinasian-indo-logo.png'
 import dynamic from 'next/dynamic'
 
-const Container = dynamic(() => import('../../components/Container/Container'))
-const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
+
 const SearchInput = dynamic(() =>
   import('../../components/SearchInput/SearchInput'),
 )
 const SearchResults = dynamic(() =>
   import('../../components/SearchResults/SearchResults'),
 )
+import Container from '../../components/Container/Container'
+import FullMenu from '../../components/FullMenu/FullMenu'
 import { IoSearchOutline } from 'react-icons/io5'
 import styles from './CategoryHeaderTravelGuide.module.scss'
 import { useMediaQuery } from 'react-responsive'

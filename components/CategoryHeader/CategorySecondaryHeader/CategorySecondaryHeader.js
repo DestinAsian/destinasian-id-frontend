@@ -3,9 +3,13 @@ import classNames from 'classnames/bind'
 import styles from './CategorySecondaryHeader.module.scss'
 import dynamic from 'next/dynamic'
 
-const ChildrenNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'))
-const ParentNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'))
-const SingleNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'))
+// const ChildrenNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'))
+// const ParentNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'))
+// const SingleNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'))
+import ChildrenNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'
+import ParentNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'
+import SingleNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'
+
 
 
 let cx = classNames.bind(styles)

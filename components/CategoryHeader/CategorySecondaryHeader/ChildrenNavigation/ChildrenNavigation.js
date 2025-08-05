@@ -30,17 +30,12 @@ export default function ChildrenNavigation({
     first: catPerPage,
     id: databaseId,
   }
-  // // Fungsi pengecekan URI aktif
-  // const isActive = (uri) => {
-  //   const currentPath = router.asPath.replace(/\/$/, '')
-  //   const linkPath = uri.replace(/\/$/, '')
-  //   return currentPath === linkPath
-  // } 
 
   // Get Category
   const { data } = useQuery(GetChildrenNavigation, {
     variables: catVariable,
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 

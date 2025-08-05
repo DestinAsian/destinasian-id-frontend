@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategorySecondaryHeaderTravelGuide.module.scss'
-import dynamic from 'next/dynamic'
 
-const ChildrenNavigationTravelGuide = dynamic(() =>
-  import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide')
-)
-const ParentNavigationTravelGuide = dynamic(() =>
-  import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide')
-)
-const SingleNavigationTravelGuide = dynamic(() =>
-  import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide')
-)
+import ChildrenNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'
+import ParentNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'
+import SingleNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'
+
 
 const cx = classNames.bind(styles)
 

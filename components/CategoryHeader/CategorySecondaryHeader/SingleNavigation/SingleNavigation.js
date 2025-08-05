@@ -32,7 +32,7 @@ export default function SingleNavigation({
   // Get Category
   const { data } = useQuery(GetSingleNavigation, {
     variables: catVariable,
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
