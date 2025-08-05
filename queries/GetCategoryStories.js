@@ -27,8 +27,6 @@ export const GetCategoryStories = gql`
             ... on Post {
               id
               title
-              content
-              date
               uri
               excerpt
               featuredImage {
@@ -64,8 +62,6 @@ export const GetCategoryStories = gql`
             ... on TravelGuide {
               id
               title
-              content
-              date
               uri
               excerpt
               guide_book_now {
