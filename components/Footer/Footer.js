@@ -20,9 +20,11 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   // Link sosial media
-  const facebookUri = 'https://www.facebook.com/DestinAsian.Mag'
-  const instagramUri = 'https://www.instagram.com/destinasianmagazine'
+  const facebookUri = 'https://www.facebook.com/share/19RyY4XyMj/'
+  const instagramUri = 'https://www.instagram.com/destinasianindonesia'
   const linkedInUri = 'https://www.linkedin.com/company/destinasian-media/'
+  const xUri = 'https://x.com/DestinAsianID?t=7abAxXj_yoQgW3owe-RbQQ&s=09'
+  const threadsUri = 'https://www.threads.net/@destinasianindonesia'
 
   return (
     <footer className={cx('footer')}>
@@ -40,7 +42,7 @@ export default function Footer() {
                 <FaFacebookF />
               </a>
               <a
-                href={linkedInUri}
+                href={xUri}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -64,7 +66,7 @@ export default function Footer() {
                 <FaLinkedinIn />
               </a>
               <a
-                href={linkedInUri}
+                href={threadsUri}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
