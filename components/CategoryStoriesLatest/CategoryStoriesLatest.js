@@ -28,7 +28,7 @@ export default function CategoryStoriesLatest(categoryUri) {
 
   const { data, error, loading } = useQuery(GetCategoryStories, {
     variables: {
-      first: 3, // Ambil beberapa agar tetap bisa filter TravelGuide di front-end
+      first: 3,
       after: null,
       id: uri,
       contentTypes,

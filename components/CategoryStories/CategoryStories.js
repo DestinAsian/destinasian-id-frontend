@@ -6,11 +6,11 @@ import styles from './CategoryStories.module.scss'
 import { useQuery } from '@apollo/client'
 import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
-import dynamic from 'next/dynamic'
 
-const Button = dynamic(() => import('../Button/Button'))
-const PostTwoColumns = dynamic(() => import('../PostTwoColumns/PostTwoColumns'))
-const TextTwoColumns = dynamic(() => import('../PostTwoColumns/TextTwoColumns'))
+import Button from '../Button/Button'
+import PostTwoColumns from '../PostTwoColumns/PostTwoColumns'
+import TextTwoColumns from '../PostTwoColumns/TextTwoColumns'
+
 
 const cx = classNames.bind(styles)
 

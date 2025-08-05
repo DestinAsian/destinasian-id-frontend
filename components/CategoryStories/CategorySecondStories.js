@@ -6,9 +6,10 @@ import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
 import dynamic from 'next/dynamic'
 
-const Button = dynamic(() => import('../../components/Button/Button'))
-const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
-const TextTwoColumns = dynamic(() => import('../../components/PostTwoColumns/TextTwoColumns'))
+import Button from '../../components/Button/Button'
+import PostTwoColumns from '../../components/PostTwoColumns/PostTwoColumns'
+import TextTwoColumns from '../../components/PostTwoColumns/TextTwoColumns'
+
 
 const cx = classNames.bind(styles)
 
