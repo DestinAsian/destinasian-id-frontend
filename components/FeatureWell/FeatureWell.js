@@ -2,16 +2,13 @@ import React, { useRef, useEffect, useState } from 'react'
 import className from 'classnames/bind'
 import styles from './FeatureWell.module.scss'
 import { useMediaQuery } from 'react-responsive'
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Div100vh from 'react-div-100vh'
 
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import 'swiper/css/pagination'
 
-// import required modules
 import { EffectFade, Autoplay, Pagination } from 'swiper'
 import Image from 'next/image'
 import Link from 'next/link'

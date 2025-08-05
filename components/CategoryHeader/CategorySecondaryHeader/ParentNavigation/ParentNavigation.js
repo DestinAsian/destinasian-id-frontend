@@ -1,10 +1,8 @@
 import classNames from 'classnames/bind'
 import styles from './ParentNavigation.module.scss'
-import dynamic from 'next/dynamic'
 
-const DaGuideMenu = dynamic(() => import('../../../../components/DaGuideMenu/DaGuideMenu'))
-const MainCategoryMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'))
-const TravelGuidesMenu = dynamic(() => import('../../../../components/TravelGuidesMenu/TravelGuidesMenu'))
+import MainCategoryMenu from '../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'
+import TravelGuidesMenu from '../../../../components/TravelGuidesMenu/TravelGuidesMenu'
 
 import { useQuery } from '@apollo/client'
 import { GetParentNavigation } from '../../../../queries/GetParentNavigation'

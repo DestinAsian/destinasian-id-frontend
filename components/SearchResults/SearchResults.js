@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-import CategoryIcon from '../../components/CategoryIcon/CategoryIcon'
+// import CategoryIcon from '../../components/CategoryIcon/CategoryIcon'
 import Container from '../../components/Container/Container'
 import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 import PostInfo from '../../components/PostInfo/PostInfo'

@@ -4,9 +4,9 @@ import styles from './CategoryDesktopSecondaryHeaderTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
 
-const ChildrenNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'))
-const ParentNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'))
-const SingleNavigationTravelGuide = dynamic(() => import('../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'))
+import ChildrenNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'
+import ParentNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'
+import SingleNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'
 
 let cx = classNames.bind(styles)
 

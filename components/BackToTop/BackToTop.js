@@ -1,11 +1,10 @@
 import { useCallback } from 'react'
-import className from 'classnames/bind'
+import classNames from 'classnames/bind'
 import styles from './BackToTop.module.scss'
 
-let cx = className.bind(styles)
+const cx = classNames.bind(styles)
 
-export default function BackToTop({ onClickSection, onClickContent }) {
-  // scroll to section button
+export default function BackToTop() {
   const scrollToSection1 = useCallback(() => {
     const section = document.querySelector('[data-id="section1"]')
     if (section) {
@@ -15,14 +14,12 @@ export default function BackToTop({ onClickSection, onClickContent }) {
 
   return (
     <div className={cx('component')}>
-      {scrollToSection1 && (
-        <button
-          onClick={scrollToSection1}
-          aria-label="Scroll to the top"
-        >
-          <span className={cx('content')}>{'Back To Top'}</span>
-        </button>
-      )}
+      <button
+        onClick={scrollToSection1}
+        aria-label="Scroll to the top"
+      >
+        <span className={cx('content')}>Back To Top</span>
+      </button>
     </div>
   )
 }

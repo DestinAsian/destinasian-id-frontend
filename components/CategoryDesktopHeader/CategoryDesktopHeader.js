@@ -3,16 +3,11 @@ import Link from 'next/link'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
 import { IoSearchOutline } from "react-icons/io5";
-import dynamic from 'next/dynamic'
 
-const Container = dynamic(() => import('../../components/Container/Container'))
-const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
-const SearchInput = dynamic(() =>
-  import('../../components/SearchInput/SearchInput'),
-)
-const SearchResults = dynamic(() =>
-  import('../../components/SearchResults/SearchResults'),
-)
+import FullMenu from '../../components/FullMenu/FullMenu'
+import SearchInput from '../../components/SearchInput/SearchInput'
+import SearchResults from '../../components/SearchResults/SearchResults'
+
 
 import styles from './CategoryDesktopHeader.module.scss'
 import { useState, useEffect } from 'react'
@@ -20,7 +15,6 @@ import { useMediaQuery } from 'react-responsive'
 import Image from 'next/image'
 import { useQuery } from '@apollo/client'
 import { GetSearchResults } from '../../queries/GetSearchResults'
-import { FaSearch } from 'react-icons/fa'
 let cx = classNames.bind(styles)
 
 export default function CategoryDesktopHeader({

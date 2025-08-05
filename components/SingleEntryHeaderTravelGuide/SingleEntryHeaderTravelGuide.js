@@ -1,11 +1,11 @@
 import className from 'classnames/bind'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 import Heading from '../../components/Heading/Heading'
 import FormatDate from '../../components/FormatDate/FormatDate'
 import Container from '../../components/Container/Container'
 import styles from './SingleEntryHeaderTravelGuide.module.scss'
-import Link from 'next/link'
 
 let cx = className.bind(styles)
 

@@ -4,10 +4,8 @@ import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
-import dynamic from 'next/dynamic'
-const GallerySlider = dynamic(() =>
-  import('../../components/GallerySlider/GallerySlider'),
-)
+import GallerySlider from '../../components/GallerySlider/GallerySlider'
+
 
 let cx = className.bind(styles)
 

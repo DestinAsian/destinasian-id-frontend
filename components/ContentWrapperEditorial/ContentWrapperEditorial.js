@@ -2,7 +2,6 @@
 
 import className from 'classnames/bind'
 import styles from './ContentWrapperEditorial.module.scss'
-import dynamic from 'next/dynamic'
 
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'

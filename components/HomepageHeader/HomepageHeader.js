@@ -13,7 +13,6 @@ import { useMediaQuery } from 'react-responsive'
 import Image from 'next/image'
 import { useQuery } from '@apollo/client'
 import { GetSearchResults } from '../../queries/GetSearchResults'
-import { FaSearch } from 'react-icons/fa'
 
 let cx = classNames.bind(styles)
 

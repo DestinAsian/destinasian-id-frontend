@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategoryDesktopSecondaryHeader.module.scss'
-import dynamic from 'next/dynamic'
 
+// Category Header - Secondary Header Navigation
+import ChildrenNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'
+import ParentNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'
+import SingleNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'
 
-const ChildrenNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'))
-const ParentNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'))
-const SingleNavigation = dynamic(() => import('../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'))
 
 let cx = classNames.bind(styles)
 

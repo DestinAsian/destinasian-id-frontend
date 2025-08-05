@@ -4,7 +4,6 @@ import styles from './CategorySecondStories.module.scss'
 import { useQuery } from '@apollo/client'
 import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
-import dynamic from 'next/dynamic'
 
 import Button from '../../components/Button/Button'
 import PostTwoColumns from '../../components/PostTwoColumns/PostTwoColumns'

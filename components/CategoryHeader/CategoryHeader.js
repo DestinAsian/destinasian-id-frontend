@@ -1,24 +1,14 @@
-import classNames from 'classnames/bind'
-import Link from 'next/link'
-import destinasianLogo from '../../assets/logo/destinasian-indo-logo.png'
-import dynamic from 'next/dynamic'
-
-const Container = dynamic(() => import('../../components/Container/Container'))
-const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
-const SearchInput = dynamic(() =>
-  import('../../components/SearchInput/SearchInput'),
-)
-const SearchResults = dynamic(() =>
-  import('../../components/SearchResults/SearchResults'),
-)
-import { IoSearchOutline } from 'react-icons/io5'
-import styles from './CategoryHeader.module.scss'
-import { useState, useEffect } from 'react'
-import { useMediaQuery } from 'react-responsive'
-import Image from 'next/image'
 import { useQuery } from '@apollo/client'
+import { useMediaQuery } from 'react-responsive'
+import Link from 'next/link'
+import Image from 'next/image'
+import { IoSearchOutline } from 'react-icons/io5'
+import classNames from 'classnames/bind'
+import FullMenu from '../../components/FullMenu/FullMenu'
+import SearchResults from '../../components/SearchResults/SearchResults'
+import destinasianLogo from '../../assets/logo/destinasian-indo-logo.png'
+import styles from './CategoryHeader.module.scss'
 import { GetSearchResults } from '../../queries/GetSearchResults'
-import { FaSearch } from 'react-icons/fa'
 
 let cx = classNames.bind(styles)
 

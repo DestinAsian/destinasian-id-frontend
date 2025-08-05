@@ -12,7 +12,7 @@ import { GetSearchResults } from '../../queries/GetSearchResults'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
 
-const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
+import FullMenu from '../../components/FullMenu/FullMenu'
 const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
 
 const cx = classNames.bind(styles)
