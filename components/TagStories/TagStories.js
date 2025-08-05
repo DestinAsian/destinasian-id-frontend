@@ -7,11 +7,10 @@ import { GetTagStories } from '../../queries/GetTagStories'
 import { GetROSBannerAds } from '../../queries/GetROSBannerAds'
 import { GetSpecificBannerAds } from '../../queries/GetSpecificBannerAds'
 import { GetAdvertorialStories } from '../../queries/GetAdvertorialStories'
-import dynamic from 'next/dynamic'
+import PostTwoColumns from '../../components/PostTwoColumns/PostTwoColumns'
+import ModuleAd from '../../components/ModuleAd/ModuleAd'
+import Button from '../../components/Button/Button'
 
-const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
-const ModuleAd = dynamic(() => import('../../components/ModuleAd/ModuleAd'))
-const Button = dynamic(() => import('../../components/Button/Button'))
 // const AdvertorialPostTwoColumns = dynamic(() => import('../../components/AdvertorialPostTwoColumns/AdvertorialPostTwoColumns'))
 
 
