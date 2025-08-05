@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind'
-import dynamic from 'next/dynamic'
 import styles from './GuideTwoStories.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'

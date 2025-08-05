@@ -1,10 +1,5 @@
 import classNames from 'classnames/bind'
-import dynamic from 'next/dynamic'
-
-const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
-const CategoryIcon = dynamic(() => import('../../components/CategoryIcon/CategoryIcon'))
-const LocationIcon = dynamic(() => import('../../components/LocationIcon/LocationIcon'))
-const Container = dynamic(() => import('../../components/Container/Container'))
+import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 
 import styles from './GuidePost.module.scss'
 import Link from 'next/link'  

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import className from 'classnames/bind'
-import dynamic from 'next/dynamic'
 
-const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const Container = dynamic(() => import('../../components/Container/Container'))
+import Heading from '../../components/Heading/Heading'
+import Container from '../../components/Container/Container'
 import styles from './DaGuideMenu.module.scss'
-import Link from 'next/link'
 
 let cx = className.bind(styles)
 
@@ -14,13 +12,6 @@ export default function DaGuideMenu({
   title,
   categories,
   className,
-  parentUri,
-  titleUri,
-  categoryUri,
-  parentName,
-  titleName,
-  categoryName,
-  parentDestinationGuides,
 }) {
   const [isNavShown, setIsNavShown] = useState(false)
 

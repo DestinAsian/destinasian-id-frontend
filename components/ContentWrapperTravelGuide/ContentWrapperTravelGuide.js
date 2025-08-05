@@ -17,15 +17,6 @@ export default function ContentWrapperTravelGuide({ content, children }) {
   const stickyRef = useRef(null)
   const stopRef = useRef(null)
 
-  // useEffect(() => {
-  //   const checkIsMobile = () => {
-  //     setIsMobile(window.innerWidth < 768)
-  //   }
-
-  //   checkIsMobile()
-  //   window.addEventListener('resize', checkIsMobile)
-  //   return () => window.removeEventListener('resize', checkIsMobile)
-  // }, [])
 
   // NOTE: Perbaiki cara deteksi mobile
   useEffect(() => {
@@ -185,18 +176,6 @@ export default function ContentWrapperTravelGuide({ content, children }) {
   }, [content])
 
   return (
-    // <>
-    //   <article className={cx('component')}>
-    //     <div className={cx('content-wrapper')}>{transformedContent}</div>
-
-    //     {children}
-    //   </article>
-    //   <div>
-    //     <PreviewHalfPageGuides1 />
-    //     <PreviewHalfPageGuides2 />
-    //   </div>
-    // </>
-
     <article className={cx('component')}>
       <div className={cx('layout-wrapper')} ref={contentRef}>
         <div className={cx('content-wrapper')}>

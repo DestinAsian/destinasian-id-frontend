@@ -1,9 +1,8 @@
 import className from 'classnames/bind'
 import React, { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
 
-const Heading = dynamic(() => import('../../components/Heading/Heading'))
-const TravelGuidesMenu = dynamic(() => import('../../components/TravelGuidesMenu/TravelGuidesMenu'))
+import Heading from '../../components/Heading/Heading'
+import TravelGuidesMenu from '../../components/TravelGuidesMenu/TravelGuidesMenu'
 import styles from './TravelGuidesEntryHeader.module.scss'
 
 let cx = className.bind(styles)
