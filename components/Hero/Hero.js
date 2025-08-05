@@ -1,8 +1,6 @@
 import React from 'react';
 import className from 'classnames/bind';
-import dynamic from 'next/dynamic'
-
-const Heading = dynamic(() => import('../../components/Heading/Heading'))
+import Heading from '../../components/Heading/Heading'
 import styles from './Hero.module.scss';
 
 let cx = className.bind(styles);

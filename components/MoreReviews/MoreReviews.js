@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './MoreReviews.module.scss'
 import { GetMoreReviews } from '../../queries/GetMoreReviews'
-import dynamic from 'next/dynamic'
 
-const Button = dynamic(() => import('../../components/Button/Button'))
+import Button from '../../components/Button/Button'
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)

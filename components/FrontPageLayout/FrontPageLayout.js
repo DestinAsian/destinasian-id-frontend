@@ -14,16 +14,13 @@ import { GetChildrenTravelGuides } from '../../queries/GetChildrenTravelGuides'
 import TravelGuideCategories from '../TravelGuideCategories/TravelGuideCategories'
 import CategoryUpdates from '../CategoryUpdates/CategoryUpdates'
 import CategoryNewsUpdates from '../CategoryNewsUpdates/CategoryNewsUpdates'
+import CategoryFeatures from '../CategoryFeatures/CategoryFeatures'
 
 const MastHeadTopHome = dynamic(() => import('../AdUnit/MastHeadTop/MastHeadTopHome'))
 const MastHeadTopMobileHome = dynamic(() => import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'))
 const MastHeadBottomHome = dynamic(() => import('../AdUnit/MastHeadBottom/MastHeadBottomHome'))
 const MastHeadBottomMobileHome = dynamic(() => import('../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'))
 const HalfPageHome1 = dynamic(() => import('../AdUnit/HalfPage1/HalfPageHome1'))
-const CategoryFeatures = dynamic(() => import('../CategoryFeatures/CategoryFeatures'), {
-  ssr: false,
-  loading: () => <div>Loading features…</div>,
-})
 
 const cx = classNames.bind(styles)
 

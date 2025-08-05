@@ -3,13 +3,8 @@ import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import classNames from 'classnames/bind'
 import styles from './HomepageSecondaryHeader.module.scss'
-import dynamic from 'next/dynamic'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
-
-const TravelGuidesMenu = dynamic(() =>
-  import('../../../components/TravelGuidesMenu/TravelGuidesMenu'),
-)
-
+import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
 const cx = classNames.bind(styles)
 
 export default function SecondaryHeader({

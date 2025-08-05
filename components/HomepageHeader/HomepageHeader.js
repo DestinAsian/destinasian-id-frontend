@@ -5,8 +5,8 @@ import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
 import dynamic from 'next/dynamic'
 import { IoSearchOutline } from "react-icons/io5";
-const Container = dynamic(() => import('../../components/Container/Container'))
-const FullMenu = dynamic(() => import('../../components/FullMenu/FullMenu'))
+import Container from '../../components/Container/Container'
+import FullMenu from '../../components/FullMenu/FullMenu'
 const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
 import styles from './HomepageHeader.module.scss'
 import { useMediaQuery } from 'react-responsive'
