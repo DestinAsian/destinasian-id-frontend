@@ -8,7 +8,6 @@ import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
 import { GetMenus } from '../queries/GetMenus'
-import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeaderTravelGuide } from '../queries/GetSecondaryHeaderTravelGuide'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'

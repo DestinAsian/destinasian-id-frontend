@@ -14,7 +14,6 @@ export const GetTravelGuidesMenu = gql`
         path
         label
         parentId
-        cssClasses
         connectedNode {
           node {
             ... on Category {
@@ -58,11 +57,7 @@ export const GetTravelGuidesMenu = gql`
                     id
                     name
                     uri
-                    categoryImages {
-                      categoryImages {
-                        sourceUrl
-                      }
-                    }
+
                     parent {
                       node {
                         name

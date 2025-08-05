@@ -14,7 +14,7 @@ const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHead
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 const SEO = dynamic(() => import('../components/SEO/SEO'))
 import { GetMenus } from '../queries/GetMenus'
-import { GetFooterMenus } from '../queries/GetFooterMenus'
+// import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
@@ -201,7 +201,7 @@ export default function Component(props) {
         </>
       </Main>
       {headerFooterVisibility?.footerVisibility == true ? null : (
-        <Footer footerMenu={footerMenu} />
+        <Footer />
       )}
     </main>
   )

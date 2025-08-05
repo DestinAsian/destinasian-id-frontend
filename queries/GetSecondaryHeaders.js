@@ -8,9 +8,7 @@ export const GetSecondaryHeaders = gql`
         node {
           id
           name
-          slug
           uri
-          link
         }
       }
     }

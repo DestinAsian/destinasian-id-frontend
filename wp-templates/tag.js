@@ -13,7 +13,6 @@ const CategoryEntryHeader = dynamic(() => import('../components/CategoryEntryHea
 const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'))
 
 import { GetMenus } from '../queries/GetMenus'
-import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
@@ -203,7 +202,7 @@ export default function Component(props) {
           <TagStories tagUri={databaseId} name={name} />
         </>
       </Main>
-      <Footer footerMenu={footerMenu} />
+      <Footer />
     </main>
   )
 }

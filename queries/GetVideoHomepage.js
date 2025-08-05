@@ -11,11 +11,6 @@ export const GetVideoHomepage = gql`
           id
           title
           content
-          featuredImage {
-            node {
-              sourceUrl
-            }
-          }
           videosAcf {
             videoLink
             customLink

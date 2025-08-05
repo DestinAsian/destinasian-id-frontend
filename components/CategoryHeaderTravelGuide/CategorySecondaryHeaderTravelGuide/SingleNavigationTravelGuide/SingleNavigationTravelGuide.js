@@ -4,7 +4,6 @@ import { useQuery } from '@apollo/client'
 import { GetSingleNavigationTravelGuide } from '../../../../queries/GetSingleNavigationTravelGuide'
 import Link from 'next/link'
 
-import DaGuideMenu from '../../../../components/DaGuideMenu/DaGuideMenu'
 import MainCategoryMenu from '../../../../components/TravelGuidesMenu/MainCategoryMenu/MainCategoryMenu'
 import TravelGuidesMenu from '../../../../components/TravelGuidesMenu/TravelGuidesMenu'
 

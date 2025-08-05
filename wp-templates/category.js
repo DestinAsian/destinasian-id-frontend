@@ -34,7 +34,6 @@ import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobil
 
 // Queries
 import { GetMenus } from '../queries/GetMenus'
-import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 

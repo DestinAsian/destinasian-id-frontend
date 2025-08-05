@@ -61,7 +61,6 @@ NavigationMenu.fragments = {
       path
       label
       parentId
-      cssClasses
       menu {
         node {
           name

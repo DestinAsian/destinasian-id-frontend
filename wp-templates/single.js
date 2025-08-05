@@ -7,7 +7,6 @@ import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
-import { GetFooterMenus } from '../queries/GetFooterMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 
@@ -89,18 +88,25 @@ export default function Component(props) {
 
   // Lock scroll saat search/menu aktif
   useEffect(() => {
-    document.body.style.overflow = (searchQuery !== '' || isNavShown) ? 'hidden' : 'visible'
+    document.body.style.overflow =
+      searchQuery !== '' || isNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown])
 
-   // Password protection
+  // Password protection
   useEffect(() => {
     const storedPassword = Cookies.get('postPassword')
-    if (storedPassword && storedPassword === post?.passwordProtected?.password) {
+    if (
+      storedPassword &&
+      storedPassword === post?.passwordProtected?.password
+    ) {
       setIsAuthenticated(true)
     }
   }, [post?.passwordProtected?.password])
 
-  const catVariable = useMemo(() => ({ first: 1, id: post.databaseId }), [post.databaseId])
+  const catVariable = useMemo(
+    () => ({ first: 1, id: post.databaseId }),
+    [post.databaseId],
+  )
 
   const { data } = useQuery(GetSecondaryHeader, {
     variables: catVariable,
@@ -118,12 +124,6 @@ export default function Component(props) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  const { data: footerMenusData } = useQuery(GetFooterMenus, {
-    variables: { first: 100, footerHeaderLocation: MENUS.FOOTER_LOCATION },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
@@ -259,9 +259,7 @@ export default function Component(props) {
           date={post?.date}
         />
         <ContentWrapperEditorial content={post?.content} images={images} />
-        <div>
-          {isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}
-        </div>
+        <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div>
 
         <EntryRelatedStories />
         {props?.shuffledRelatedStories?.map((related) =>
@@ -280,9 +278,7 @@ export default function Component(props) {
         )}
       </Main>
 
-      <Footer
-        footerMenu={footerMenusData?.footerHeaderMenuItems?.nodes || []}
-      />
+      <Footer />
     </main>
   )
 }

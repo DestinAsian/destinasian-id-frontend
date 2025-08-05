@@ -15,9 +15,6 @@ export const GetSingleNavigation = gql`
                 countryCode {
                   countryCode
                 }
-                destinationGuides {
-                  destinationGuides
-                }
                 children {
                   edges {
                     node {
