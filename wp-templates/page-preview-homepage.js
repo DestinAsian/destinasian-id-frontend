@@ -4,8 +4,6 @@ import classNames from 'classnames/bind'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
-import { GetLatestStories } from '../queries/GetLatestStories'
-import { GetHomepagePinPosts } from '../queries/GetHomepagePinPosts'
 
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
@@ -19,10 +17,9 @@ import FrontPageLayout from '../components/FrontPageLayout/FrontPageLayout'
 import Container from '../components/Container/Container'
 import Footer from '../components/Footer/Footer'
 import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
+// import SEO from '../components/SEO/SEO'
 
-// const SEO = dynamic(() => import('../components/SEO/SEO'))
 
-// const cx = classNames.bind(styles)
 
 export default function Preview_homepage(props) {
   if (props.loading) return <>Loading...</>
@@ -83,7 +80,7 @@ export default function Preview_homepage(props) {
 
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
-      first: 20,
+      first: 10,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
@@ -94,24 +91,6 @@ export default function Preview_homepage(props) {
     fetchPolicy: 'cache-first',
   })
 
-  const { data: pinPostsData } = useQuery(GetHomepagePinPosts, {
-    variables: { id: databaseId, asPreview },
-    fetchPolicy: 'cache-first',
-  })
-
-  const { data: latestStories } = useQuery(GetLatestStories, {
-    variables: { first: 5 },
-    fetchPolicy: 'cache-first',
-  })
-
-  const mainPosts = latestStories?.posts?.edges?.map((p) => p.node) || []
-  const sortedPosts = useMemo(
-    () => mainPosts.sort((a, b) => new Date(b.date) - new Date(a.date)),
-    [mainPosts],
-  )
-
-  const homepagePinPosts = pinPostsData?.page?.homepagePinPosts ?? []
-
   const menuProps = {
     title: siteTitle,
     description: siteDescription,
@@ -121,10 +100,10 @@ export default function Preview_homepage(props) {
     fourthMenuItems: menusData?.fourthHeaderMenuItems?.nodes ?? [],
     fifthMenuItems: menusData?.fifthHeaderMenuItems?.nodes ?? [],
     featureMenuItems: menusData?.footerMenuItems?.nodes ?? [],
-    latestStories: sortedPosts,
+    // latestStories: sortedPosts,
     home: uri,
     menusLoading,
-    latestLoading: !latestStories,
+    // latestLoading: !latestStories,
     searchQuery,
     setSearchQuery,
     isNavShown,
