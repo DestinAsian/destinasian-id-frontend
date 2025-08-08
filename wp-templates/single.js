@@ -9,42 +9,21 @@ import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
+import Container from '../components/Container/Container'
+import ContentWrapperEditorial from '../components/ContentWrapperEditorial/ContentWrapperEditorial'
+import EntryRelatedStories from '../components/EntryRelatedStories/EntryRelatedStories'
+import Footer from '../components/Footer/Footer'
+import Main from '../components/Main/Main'
+import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
+import RelatedStories from '../components/RelatedStories/RelatedStories'
+import SEO from '../components/SEO/SEO'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
+import SingleEntryHeader from '../components/Single/SingleEntryHeader'
+import SingleFeaturedImage from '../components/Single/SingleFeaturedImage'
+import SingleHeader from '../components/SingleHeader/SingleHeader'
 
 import dynamic from 'next/dynamic'
-const Container = dynamic(() => import('../components/Container/Container'))
-const ContentWrapperEditorial = dynamic(() =>
-  import('../components/ContentWrapperEditorial/ContentWrapperEditorial'),
-)
-const EntryRelatedStories = dynamic(() =>
-  import('../components/EntryRelatedStories/EntryRelatedStories'),
-)
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const Main = dynamic(() => import('../components/Main/Main'))
-const PasswordProtected = dynamic(() =>
-  import('../components/PasswordProtected/PasswordProtected'),
-)
-const RelatedStories = dynamic(() =>
-  import('../components/RelatedStories/RelatedStories'),
-)
-const SEO = dynamic(() => import('../components/SEO/SEO'))
-const SecondaryHeader = dynamic(() =>
-  import('../components/Header/SecondaryHeader/SecondaryHeader'),
-)
-const SingleDesktopHeader = dynamic(() =>
-  import('../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'),
-)
-const SingleEditorialEntryHeader = dynamic(() =>
-  import('../components/SingleEditorialEntryHeader/SingleEditorialEntryHeader'),
-)
-const SingleEditorialFeaturedImage = dynamic(() =>
-  import(
-    '../components/SingleEditorialFeaturedImage/SingleEditorialFeaturedImage'
-  ),
-)
-const SingleHeader = dynamic(() =>
-  import('../components/SingleHeader/SingleHeader'),
-)
-
 const MastHeadBottom = dynamic(() =>
   import('../components/AdUnit/MastHeadBottom/MastHeadBottom'),
 )
@@ -248,8 +227,8 @@ export default function Component(props) {
       )}
 
       <Main className="relative top-[-0.75rem] sm:top-[-1rem]">
-        <SingleEditorialFeaturedImage image={post?.featuredImage?.node} />
-        <SingleEditorialEntryHeader
+        <SingleFeaturedImage image={post?.featuredImage?.node} />
+        <SingleEntryHeader
           image={post?.featuredImage?.node}
           title={post?.title}
           categoryUri={categories?.[0]?.node?.uri}

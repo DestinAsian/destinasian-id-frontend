@@ -2,7 +2,7 @@ import className from 'classnames/bind'
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import styles from './SingleEditorialEntryHeader.module.scss'
+import styles from './SingleEntryHeader.module.scss'
 import Heading from '../../components/Heading/Heading'
 import FormatDate from '../../components/FormatDate/FormatDate'
 const MastHeadTop = dynamic(
@@ -16,7 +16,7 @@ const MastHeadTopMobile = dynamic(
 
 let cx = className.bind(styles)
 
-export default function SingleEditorialEntryHeader({
+export default function SingleEntryHeader({
   parent,
   title,
   parentCategory,

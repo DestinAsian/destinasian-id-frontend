@@ -12,7 +12,6 @@ import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 // Static Imports (non-ads)
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
-import { GetLatestStories } from '../queries/GetLatestStories'
 
 // Dynamic Imports (non-ads)
 import dynamic from 'next/dynamic'
@@ -143,11 +142,6 @@ export default function SingleContest(props) {
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
-
-
-
-
-
 
   const images = [
     [

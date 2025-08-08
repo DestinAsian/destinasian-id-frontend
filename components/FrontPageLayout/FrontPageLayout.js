@@ -11,10 +11,10 @@ import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import { GetChildrenTravelGuides } from '../../queries/GetChildrenTravelGuides'
 
-import TravelGuideCategories from '../TravelGuideCategories/TravelGuideCategories'
-import CategoryUpdates from '../CategoryUpdates/CategoryUpdates'
-import CategoryNewsUpdates from '../CategoryNewsUpdates/CategoryNewsUpdates'
-import CategoryFeatures from '../CategoryFeatures/CategoryFeatures'
+import TravelGuideCategories from '../CategoryHomePage/TravelGuideCategories'
+import CategoryUpdates from '../CategoryHomePage/CategoryUpdates'
+import CategoryNewsUpdates from '../CategoryHomePage/CategoryNewsUpdates'
+import CategoryFeatures from '../CategoryHomePage/CategoryFeatures'
 
 const MastHeadTopHome = dynamic(() => import('../AdUnit/MastHeadTop/MastHeadTopHome'))
 const MastHeadTopMobileHome = dynamic(() => import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'))
