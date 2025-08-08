@@ -2,26 +2,29 @@ import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import dynamic from 'next/dynamic'
-
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const Main = dynamic(() => import('../components/Main/Main'))
-const SingleLTContainer = dynamic(() => import('../components/SingleLTContainer/SingleLTContainer'))
-const SingleAdvertorialEntryHeader = dynamic(() => import('../components/SingleAdvertorialEntryHeader/SingleAdvertorialEntryHeader'))
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-const SEO = dynamic(() => import('../components/SEO/SEO'))
-const ContentWrapperAdvertorial = dynamic(() => import('../components/ContentWrapperAdvertorial/ContentWrapperAdvertorial'))
-const LuxuryTravelStories = dynamic(() => import('../components/LuxuryTravelStories/LuxuryTravelStories'))
-const LuxuryTravelDirectory = dynamic(() => import('../components/LuxuryTravelDirectory/LuxuryTravelDirectory'))
-const TabsEditor = dynamic(() => import('../components/TabsEditor/TabsEditor'))
-const SingleAdvertorialSlider = dynamic(() => import('../components/SingleAdvertorialSlider/SingleAdvertorialSlider'))
-const BackToTop = dynamic(() => import('../components/BackToTop/BackToTop'))
-const PasswordProtected = dynamic(() => import('../components/PasswordProtected/PasswordProtected'))
 import { GetMenus } from '../queries/GetMenus'
-import { GetFooterMenus } from '../queries/GetFooterMenus'
-import { GetLatestStories } from '../queries/GetLatestStories'
+import SingleLTEntryHeader from '../components/SingleLuxuryTravel/SingleLTEntryHeader'
+import ContentWrapperLuxuryTravel from '../components/ContentWrapperLuxuryTravel/ContentWrapperLuxuryTravel'
+import SingleHeader from '../components/SingleHeader/SingleHeader'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
+import SEO from '../components/SEO/SEO'
+import Footer from '../components/Footer/Footer'
+import Main from '../components/Main/Main'
+import SingleSlider from '../components/SingleSlider/SingleSlider'
+import SingleLTContainer from '../components/SingleLuxuryTravel/SingleLTContainer'
+import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
+
+// Dynamic Imports (iklan/ad components)
+import dynamic from 'next/dynamic'
+const MastHeadTopGuides = dynamic(() => import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'))
+const MastHeadTopMobileSingleGuides = dynamic(() => import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'))
+const MastHeadBottomGuides = dynamic(() => import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'))
+const MastHeadBottomMobileGuides = dynamic(() => import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'))
+
 
 export default function SingleLuxuryTravel(props) {
   // Loading state for previews
@@ -52,24 +55,17 @@ export default function SingleLuxuryTravel(props) {
     parent,
     featuredImage,
     acfPostSlider,
-    acfAdvertorialLabel,
     seo,
     uri,
-    luxuryTravelPinPosts,
-    luxuryTravelDirectory,
-    tabsEditor,
     passwordProtected,
   } = props?.data?.luxuryTravel
 
-  // Search function content
   const [searchQuery, setSearchQuery] = useState('')
-  // Scrolled Function
   const [isScrolled, setIsScrolled] = useState(false)
-  // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  // Stop scrolling pages when searchQuery
   useEffect(() => {
     if (searchQuery !== '') {
       document.body.style.overflow = 'hidden'
@@ -78,82 +74,23 @@ export default function SingleLuxuryTravel(props) {
     }
   }, [searchQuery])
 
-  // Add sticky header on scroll
+  // desktop
   useEffect(() => {
-    function handleScroll() {
-      setIsScrolled(window.scrollY > 0)
+    const handleResize = () => {
+      const width = window.innerWidth
+      setIsDesktop(width >= 1024)
+      setIsMobile(width <= 768)
     }
 
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
+    handleResize() // cek saat mount
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  // Stop scrolling pages when isNavShown
-  useEffect(() => {
-    if (isNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isNavShown])
-
-
-
-  const [visibleComponent, setVisibleComponent] = useState(null)
-  // const sliderLL = useRef(null)
-  // const [isSliderMounted, setIsSliderMounted] = useState(false) // Track slider mount status
-
-  // // scroll to section button
-  // const scrollToSection2 = useCallback(() => {
-  //   const section = document.querySelector('[data-id="section2"]')
-  //   if (section) {
-  //     section.scrollIntoView({ behavior: 'smooth' })
-  //   }
-  // }, [])
-
-  // // scroll to section button
-  // const scrollToSection3 = useCallback(() => {
-  //   const section = document.querySelector('[data-id="section3"]')
-  //   if (section) {
-  //     section.scrollIntoView({ behavior: 'smooth' })
-  //   }
-  // }, [])
-
-  const [directoryTitle, setDirectoryTitle] = useState('')
-  // Function to extract directory title from HTML string
-  useEffect(() => {
-    const extractDirectoryTitle = () => {
-      // Create a DOMParser
-      const parser = new DOMParser()
-      // Parse the HTML content
-      const doc = parser.parseFromString(
-        luxuryTravelDirectory?.directory,
-        'text/html',
-      )
-
-      // Use querySelector to find the element with the class "directory-title"
-      const directoryTitleElement = doc.querySelector('.directory-title')
-
-      // Extract the content inside the element
-      const directoryTitle = directoryTitleElement
-        ? directoryTitleElement?.textContent?.trim()
-        : null
-
-      // // Set the transformed HTML content
-      setDirectoryTitle(directoryTitle)
-    }
-
-    // Call the function to extract image data and replace <img>
-    extractDirectoryTitle()
-  }, [luxuryTravelDirectory?.directory])
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
-      first: 20,
+      first: 10,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
@@ -164,82 +101,6 @@ export default function SingleLuxuryTravel(props) {
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
-
-  // Header Menu
-  const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
-  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
-  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
-  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
-  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
-  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
-
-  // Get Footer menus
-  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
-    GetFooterMenus,
-    {
-      variables: {
-        first: 50,
-        footerHeaderLocation: MENUS.FOOTER_LOCATION,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
-
-  // Footer Menu
-  const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
-
-  // Get latest travel stories
-  const { data: latestStories, loading: latestLoading } = useQuery(
-    GetLatestStories,
-    {
-      variables: {
-        first: 5,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
-
-  const posts = latestStories?.posts ?? []
-  const editorials = latestStories?.editorials ?? []
-  const updates = latestStories?.updates ?? []
-
-  const mainPosts = []
-  const mainEditorialPosts = []
-  const mainUpdatesPosts = []
-
-  // loop through all the main categories posts
-  posts?.edges?.forEach((post) => {
-    mainPosts.push(post.node)
-  })
-
-  // loop through all the main categories and their posts
-  editorials?.edges?.forEach((post) => {
-    mainEditorialPosts.push(post.node)
-  })
-
-  // loop through all the main categories and their posts
-  updates?.edges?.forEach((post) => {
-    mainUpdatesPosts.push(post.node)
-  })
-
-  // sort posts by date
-  const sortPostsByDate = (a, b) => {
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-    return dateB - dateA // Sort in descending order
-  }
-
-  // define mainCatPostCards
-  const mainCatPosts = [
-    ...(mainPosts != null ? mainPosts : []),
-    ...(mainEditorialPosts != null ? mainEditorialPosts : []),
-    ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
-  ]
-
-  // sortByDate mainCat & childCat Posts
-  const allPosts = mainCatPosts.sort(sortPostsByDate)
 
   const images = [
     [
@@ -306,119 +167,79 @@ export default function SingleLuxuryTravel(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-      <LTHeader
-        title={siteTitle}
-        description={siteDescription}
-        primaryMenuItems={primaryMenu}
-        secondaryMenuItems={secondaryMenu}
-        thirdMenuItems={thirdMenu}
-        fourthMenuItems={fourthMenu}
-        fifthMenuItems={fifthMenu}
-        featureMenuItems={featureMenu}
-        latestStories={allPosts}
-        menusLoading={menusLoading}
-        latestLoading={latestLoading}
-        // visibleComponent={visibleComponent}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isNavShown={isNavShown}
-        setIsNavShown={setIsNavShown}
-        isScrolled={isScrolled}
-      />
-      <LTSecondaryHeader
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isGuidesNavShown={isGuidesNavShown}
-        setIsGuidesNavShown={setIsGuidesNavShown}
-        isScrolled={isScrolled}
-      />
+      {isDesktop ? (
+        <>
+          <SingleHeader
+            title={props?.data?.generalSettings?.title}
+            description={props?.data?.generalSettings?.description}
+            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+            menusLoading={menusLoading}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+          />
+          <SingleDesktopHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isScrolled={isScrolled}
+          />
+        </>
+      ) : (
+        <>
+          <SingleHeader
+            title={props?.data?.generalSettings?.title}
+            description={props?.data?.generalSettings?.description}
+            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+            menusLoading={menusLoading}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+          />
+          <SecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isScrolled={isScrolled}
+          />
+        </>
+      )}
       <Main>
         <>
+          <div>
+            {isMobile ? (
+              <MastHeadTopMobileSingleGuides />
+            ) : (
+              <MastHeadTopGuides />
+            )}
+          </div>
           <SingleLTContainer>
-            <div className=" bg-[#dbf2f1] sm:top-[4.5rem]">
-              <section
-                className="relative pt-[3.5rem] sm:pt-[4.5rem]"
-                data-id="section1"
-              >
-                <div className=" bg-[#dbf2f1]">
-                  <SingleAdvertorialSlider
-                    images={images?.map((image) => image[0])}
-                  />
-                  <SingleAdvertorialEntryHeader
-                    title={title}
-                    label={acfAdvertorialLabel?.advertorialLabel}
-                    // luxuryTravelClass={'luxuryTravelClass'}
-                  />
-                </div>
-              </section>
-              {content && (
-                <section
-                  className="relative pt-4 sm:pt-6"
-                  data-id="section2"
-                  id="section2"
-                >
-                  <div className="">
-                    <div className="sm:h-fit">
-                      <ContentWrapperAdvertorial
-                        content={content}
-                        luxuryTravelClass={'luxuryTravelClass'}
-                      />
-                    </div>
-                  </div>
-                </section>
+            <SingleSlider images={images} />
+            <SingleLTEntryHeader title={title} />
+            <ContentWrapperLuxuryTravel content={content} />
+            <div>
+              {isMobile ? (
+                <MastHeadBottomMobileGuides />
+              ) : (
+                <MastHeadBottomGuides />
               )}
-              {(tabsEditor?.tabTitle1 && tabsEditor?.tab1) !== null && (
-                <section className="relative pt-4 sm:pt-6" data-id="section3">
-                  <div className=" bg-[#dbf2f1] pt-[3.5rem] sm:pt-0">
-                    <div className="sm:h-fit">
-                      <TabsEditor
-                        tabsEditor={tabsEditor}
-                        // luxuryTravelClass={'luxuryTravelClass'}
-                      />
-                    </div>
-                  </div>
-                </section>
-              )}
-              {(luxuryTravelPinPosts?.pinPosts?.length &&
-                luxuryTravelPinPosts?.moreStories?.length) !== 0 && (
-                <section className="relative pt-4 sm:pt-6" data-id="section4">
-                  <div className=" bg-[#dbf2f1]">
-                    <LuxuryTravelStories
-                      luxuryTravelId={databaseId}
-                      name={title}
-                      parent={parent?.node?.title}
-                      luxuryTravelPinPosts={luxuryTravelPinPosts}
-                      pinPostsTitle={luxuryTravelPinPosts?.pinPostsTitle}
-                    />
-                  </div>
-                </section>
-              )}
-              {luxuryTravelDirectory?.directory && (
-                <section className="relative pt-4 sm:pt-6" data-id="section5">
-                  <div className=" bg-[#dbf2f1]">
-                    <LuxuryTravelDirectory
-                      content={luxuryTravelDirectory?.directory}
-                      parent={parent?.node?.title}
-                      isAdvertorial={false}
-                    />
-                  </div>
-                </section>
-              )}
-              <section
-                className="pb-e relative pt-4 sm:pt-6"
-                data-id="section6"
-              >
-                <div className=" bg-[#ffffff]">
-                  <BackToTop />
-                </div>
-              </section>
-              <section className="relative pb-0" data-id="section7">
-                <Footer footerMenu={footerMenu} />
-              </section>
             </div>
           </SingleLTContainer>
         </>
       </Main>
+      <Footer />
     </main>
   )
 }
@@ -435,12 +256,6 @@ SingleLuxuryTravel.query = gql`
       passwordProtected {
         onOff
         password
-      }
-      tabsEditor {
-        tab1
-        tab2
-        tabTitle1
-        tabTitle2
       }
       parent {
         node {
@@ -461,9 +276,7 @@ SingleLuxuryTravel.query = gql`
         focuskw
       }
       uri
-      acfAdvertorialLabel {
-        advertorialLabel
-      }
+
       acfPostSlider {
         slide1 {
           mediaItemUrl
@@ -485,301 +298,6 @@ SingleLuxuryTravel.query = gql`
         slideCaption3
         slideCaption4
         slideCaption5
-      }
-      luxuryTravelDirectory {
-        directory
-      }
-      luxuryTravelPinPosts {
-        pinPostsTitle
-        pinPosts {
-          ... on Post {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            featuredImage {
-              node {
-                id
-                sourceUrl
-                altText
-                mediaDetails {
-                  width
-                  height
-                }
-              }
-            }
-            categories(where: { childless: true }) {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-            acfCategoryIcon {
-              categoryLabel
-              chooseYourCategory
-              chooseIcon {
-                mediaItemUrl
-              }
-            }
-            acfLocationIcon {
-              fieldGroupName
-              locationLabel
-              locationUrl
-            }
-          }
-          ... on Editorial {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            featuredImage {
-              node {
-                id
-                sourceUrl
-                altText
-                mediaDetails {
-                  width
-                  height
-                }
-              }
-            }
-            categories {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-          ... on Update {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            featuredImage {
-              node {
-                id
-                sourceUrl
-                altText
-                mediaDetails {
-                  width
-                  height
-                }
-              }
-            }
-            categories {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-          ... on Advertorial {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            featuredImage {
-              node {
-                id
-                sourceUrl
-                altText
-                mediaDetails {
-                  width
-                  height
-                }
-              }
-            }
-          }
-          ... on HonorsCircle {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            contentType {
-              node {
-                label
-              }
-            }
-            featuredImage {
-              node {
-                id
-                sourceUrl
-                altText
-                mediaDetails {
-                  width
-                  height
-                }
-              }
-            }
-          }
-          ... on Video {
-            id
-            contentTypeName
-            title
-            content
-            featuredImage {
-              node {
-                id
-                sourceUrl
-                altText
-                mediaDetails {
-                  width
-                  height
-                }
-              }
-            }
-            videosAcf {
-              videoLink
-              guidesCategoryLink
-              guidesCategoryText
-              customLink
-              customText
-            }
-          }
-        }
-        moreStories {
-          ... on Post {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            categories(where: { childless: true }) {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-            acfCategoryIcon {
-              categoryLabel
-              chooseYourCategory
-              chooseIcon {
-                mediaItemUrl
-              }
-            }
-            acfLocationIcon {
-              fieldGroupName
-              locationLabel
-              locationUrl
-            }
-          }
-          ... on Editorial {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            categories {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-          ... on Update {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            categories {
-              edges {
-                node {
-                  name
-                  uri
-                  parent {
-                    node {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-          ... on Advertorial {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-          }
-          ... on HonorsCircle {
-            id
-            uri
-            contentTypeName
-            title
-            excerpt
-            contentType {
-              node {
-                label
-              }
-            }
-          }
-          ... on Video {
-            id
-            contentTypeName
-            title
-            content
-            featuredImage {
-              node {
-                id
-                sourceUrl
-                altText
-                mediaDetails {
-                  width
-                  height
-                }
-              }
-            }
-            videosAcf {
-              videoLink
-              guidesCategoryLink
-              guidesCategoryText
-              customLink
-              customText
-            }
-          }
-        }
       }
     }
     generalSettings {

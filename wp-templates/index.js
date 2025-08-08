@@ -9,7 +9,7 @@ import pageContests from './page-contests'
 
 import single from './single'
 import singleContest from './single-contest'
-
+import singleLuxuryTravel from './single-luxury-travel'
 import singleTravelGuide from './single-travel-guide'
 
 export default {
@@ -24,4 +24,6 @@ export default {
   single,
   'single-travel-guide': singleTravelGuide,  
   'single-contest': singleContest,
+  'single-luxury-travel': singleLuxuryTravel,
+
 }
