@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import classNames from "classnames/bind";
 import styles from "./MastHeadTopHome.module.scss";
 import { Ad } from "react-ad-manager";
@@ -5,6 +6,8 @@ import { Ad } from "react-ad-manager";
 let cx = classNames.bind(styles);
 
 export default function MastHeadTopHome() {
+  useEffect(() => {
+  }, [])
   return (
     <div className={cx("desktop-banner")}>
       {/* MastHead Top Desktop */}
