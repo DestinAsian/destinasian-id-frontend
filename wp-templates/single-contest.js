@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import Cookies from 'js-cookie'
-
-// Constants & Fragments
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 
-// Fonts
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 
-// Static Imports (non-ads)
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
-
-// Dynamic Imports (non-ads)
 import dynamic from 'next/dynamic'
 
 import SEO from '../components/SEO/SEO'

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Suspense, useMemo } from 'react'
 import { gql, useQuery } from '@apollo/client'
-import classNames from 'classnames/bind'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
@@ -17,7 +16,7 @@ import FrontPageLayout from '../components/FrontPageLayout/FrontPageLayout'
 import Container from '../components/Container/Container'
 import Footer from '../components/Footer/Footer'
 import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
-// import SEO from '../components/SEO/SEO'
+import SEO from '../components/SEO/SEO'
 
 
 
@@ -113,13 +112,13 @@ export default function Component(props) {
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      {/* <SEO
+      <SEO
         title={seo?.title}
         description={seo?.metaDesc}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={uri}
         focuskw={seo?.focuskw}
-      /> */}
+      />
 
       {isDesktop ? (
         <HomepageDestopHeader

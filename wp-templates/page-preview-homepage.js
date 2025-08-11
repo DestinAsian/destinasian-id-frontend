@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Suspense, useMemo } from 'react'
 import { gql, useQuery } from '@apollo/client'
-import classNames from 'classnames/bind'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
@@ -17,11 +16,11 @@ import FrontPageLayout from '../components/FrontPageLayout/FrontPageLayout'
 import Container from '../components/Container/Container'
 import Footer from '../components/Footer/Footer'
 import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
-// import SEO from '../components/SEO/SEO'
+import SEO from '../components/SEO/SEO'
 
 
 
-export default function Preview_homepage(props) {
+export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
   const { title: siteTitle, description: siteDescription } =
@@ -113,13 +112,13 @@ export default function Preview_homepage(props) {
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      {/* <SEO
+      <SEO
         title={seo?.title}
         description={seo?.metaDesc}
         imageUrl={featuredImage?.node?.sourceUrl}
         url={uri}
         focuskw={seo?.focuskw}
-      /> */}
+      />
 
       {isDesktop ? (
         <HomepageDestopHeader
@@ -171,7 +170,7 @@ export default function Preview_homepage(props) {
   )
 }
 
-Preview_homepage.query = gql`
+Component.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}
   query GetPageData($databaseId: ID!, $asPreview: Boolean = false) {
@@ -238,7 +237,7 @@ Preview_homepage.query = gql`
   }
 `
 
-Preview_homepage.variables = ({ databaseId }, ctx) => ({
+Component.variables = ({ databaseId }, ctx) => ({
   databaseId,
   asPreview: ctx?.asPreview,
 })
