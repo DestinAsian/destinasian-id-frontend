@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import className from 'classnames/bind'
 import styles from './GallerySliderSingle.module.scss'
+
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react'
 import Image from 'next/image'
-import { CgChevronLeft, CgChevronRight } from 'react-icons/cg'
+
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/effect-fade'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+
+// import required modules
+import { EffectFade, Autoplay, Pagination, Navigation } from 'swiper'
 
 let cx = className.bind(styles)
 
 export default function GallerySliderSingle({ gallerySlider }) {
   const [images, setImages] = useState([])
-  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     if (!gallerySlider) return
@@ -16,10 +26,13 @@ export default function GallerySliderSingle({ gallerySlider }) {
     const processGalleryImages = (galleryNode) => {
       let imagesArray = []
 
+      // Recursively extract all images and their captions
       const extractImagesRecursively = (node) => {
         if (node.nodeType === 1 && node.tagName === 'IMG') {
+          // Find the closest figure.gallery-item parent
           const figureParent = node.closest('figure.gallery-item')
           let caption = ''
+
           if (figureParent) {
             const figcaption = figureParent.querySelector('figcaption')
             caption = figcaption ? figcaption.innerText.trim() : ''
@@ -30,9 +43,10 @@ export default function GallerySliderSingle({ gallerySlider }) {
             alt: node.getAttribute('alt') || 'Image',
             width: node.getAttribute('width') || 800,
             height: node.getAttribute('height') || 600,
-            caption,
+            caption, // Store the figcaption text
           })
         } else {
+          // Traverse child nodes
           Array.from(node.childNodes).forEach(extractImagesRecursively)
         }
       }
@@ -44,83 +58,89 @@ export default function GallerySliderSingle({ gallerySlider }) {
     setImages(processGalleryImages(gallerySlider))
   }, [gallerySlider])
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
-  }
-
-  // return (
-  //   <div className={cx('component', 'gallery-slider-wrapper')}>
-  //     <div className={cx('slide-wrapper')}>
-  //       <div className={cx('image-wrapper')}>
-  //         {images[currentIndex] && (
-  //           <Image
-  //             src={images[currentIndex].src}
-  //             alt={images[currentIndex].alt}
-  //             fill
-  //             priority
-  //           />
-  //         )}
-
-  //         {images[currentIndex]?.caption && (
-  //           <div className={cx('caption-wrapper')}>
-  //             <div
-  //               className={cx('caption')}
-  //               dangerouslySetInnerHTML={{ __html: images[currentIndex].caption }}
-  //             />
-  //           </div>
-  //         )}
-
-  //         {/* Tombol Navigasi */}
-  //         <button className={cx('custom-button', 'prev')} onClick={handlePrev}>
-  //           <CgChevronLeft />
-  //         </button>
-  //         <button className={cx('custom-button', 'next')} onClick={handleNext}>
-  //           <CgChevronRight />
-  //         </button>
-  //       </div>
-  //     </div>
-  //   </div>
-  // )
   return (
-    <div className={cx('swiperContainer')}>
-      <div className={cx('gallery-slider-wrapper')}>
-        <div className={cx('slideWrapper')}>
-          <div className={cx('imageWrapper')}>
-            {images[currentIndex] && (
-              <Image
-                src={images[currentIndex].src}
-                alt={images[currentIndex].alt}
-                fill
-                priority
-                className={cx('thumbnail')}
-              />
-            )}
-  
-            {images[currentIndex]?.caption && (
-              <div className={cx('overlay')}>
-                <div
-                  className={cx('postTitle')}
-                  dangerouslySetInnerHTML={{
-                    __html: images[currentIndex].caption,
-                  }}
-                />
+    // <div className={cx('component')}>
+    <div className={cx('component', 'gallery-slider-wrapper')}>
+      <div className={cx('swiper-slider', 'swiper-wrapper')}>
+        <Swiper
+          effect={'fade'}
+          autoplay={{ delay: 5000, disableOnInteraction: true }}
+          // autoplay={'false'}
+          loop={true}
+          // autoHeight={true}
+          pagination={{
+            el: '.swiper-custom-pagination',
+            clickable: true,
+            type: 'bullets',
+          }}
+          navigation={{
+            prevEl: '.swiper-custom-button-prev',
+            nextEl: '.swiper-custom-button-next',
+          }}
+          modules={[EffectFade, Autoplay, Pagination, Navigation]}
+          className="gallery-swiper-wrapper"
+        >
+          {images.map((image, index) => (
+            <SwiperSlide key={index}>
+              <div className={cx('slide-wrapper')}>
+                <div className={cx('image-wrapper')}>
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    // sizes="100%"
+                    priority
+                  />
+                </div>
+
+                <div className={cx('caption-wrapper')}>
+                  {image?.caption && (
+                    <div className={cx('caption')}>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: image.caption,
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-  
-            <button className={cx('customButton', 'prev')} onClick={handlePrev}>
-              <CgChevronLeft />
-            </button>
-            <button className={cx('customButton', 'next')} onClick={handleNext}>
-              <CgChevronRight />
-            </button>
+            </SwiperSlide>
+          ))}
+          <div className="swiper-custom-pagination"></div>
+          <div className="swiper-custom-button-prev">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="65"
+              height="65"
+              viewBox="0 0 65 65"
+              fill="none"
+            >
+              <rect width="65" height="65" fill="black" />
+              <path d="M45 12L21 31L45 49" stroke="white" strokeWidth="3" />
+            </svg>
           </div>
-        </div>
+          <div className="swiper-custom-button-next">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="65"
+              height="65"
+              viewBox="0 0 65 65"
+              fill="none"
+            >
+              <rect
+                x="65"
+                y="65"
+                width="65"
+                height="65"
+                transform="rotate(-180 65 65)"
+                fill="black"
+              />
+              <path d="M20 53L44 34L20 16" stroke="white" strokeWidth="3" />
+            </svg>
+          </div>
+        </Swiper>
       </div>
     </div>
   )
-  
 }
