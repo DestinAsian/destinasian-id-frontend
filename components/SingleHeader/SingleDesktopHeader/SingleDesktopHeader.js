@@ -44,9 +44,9 @@ export default function SingleDesktopHeader({
 
           {/* Render kategori dinamis (News, Insights, Features) */}
           {categories.map((category) => {
-            const { id, name, slug } = category.node
+            const { id, name, uri } = category.node
             return (
-              <Link key={id} href={`/${slug}`}>
+              <Link key={id} href={uri}>
                 <div className={cx('menu-button')}>
                   <div className={cx('menu-title')}>{name}</div>
                 </div>
