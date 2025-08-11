@@ -38,37 +38,52 @@ export default function ContentWrapperTravelGuide({ content, children }) {
   }, [])
 
   useEffect(() => {
+    let ticking = false
+  
     const handleScroll = () => {
       if (!stickyRef.current || !contentRef.current || !stopRef.current) return
-
-      const sticky = stickyRef.current
-      const content = contentRef.current
-      const stop = stopRef.current
-
-      const contentRect = content.getBoundingClientRect()
-      const stopRect = stop.getBoundingClientRect()
-
-      const maxTranslateY = stopRect.top - sticky.offsetHeight - 32 // 32 = top offset (2rem)
-      const stickyTop = 32 // sticky top
-
-      if (contentRect.top < stickyTop && maxTranslateY > stickyTop) {
-        sticky.style.position = 'fixed'
-        sticky.style.top = `${stickyTop}px`
-      } else {
-        sticky.style.position = 'static'
-      }
-
-      if (stopRect.top <= sticky.offsetHeight + stickyTop) {
-        sticky.style.position = 'absolute'
-        sticky.style.top = 'unset'
-        sticky.style.bottom = '0'
+  
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const sticky = stickyRef.current
+          const content = contentRef.current
+          const stop = stopRef.current
+  
+          const contentRect = content.getBoundingClientRect()
+          const stopRect = stop.getBoundingClientRect()
+  
+          const stickyTop = 32
+          const maxTranslateY = stopRect.top - sticky.offsetHeight - stickyTop
+  
+          if (contentRect.top < stickyTop && maxTranslateY > stickyTop) {
+            sticky.style.position = 'fixed'
+            sticky.style.top = `${stickyTop}px`
+            sticky.style.transform = 'translateY(0)'
+          }
+  
+          if (stopRect.top <= sticky.offsetHeight + stickyTop) {
+            sticky.style.position = 'absolute'
+            sticky.style.top = 'unset'
+            sticky.style.bottom = '0'
+          }
+  
+          if (contentRect.top >= stickyTop) {
+            sticky.style.position = 'static'
+            sticky.style.top = 'unset'
+            sticky.style.transform = 'none'
+          }
+  
+          ticking = false
+        })
+  
+        ticking = true
       }
     }
-
-    window.addEventListener('scroll', handleScroll)
+  
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
+  
   useEffect(() => {
     const extractHTMLData = () => {
       const parser = new DOMParser()
