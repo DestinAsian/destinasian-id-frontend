@@ -259,7 +259,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap; // jaga-jaga jika viewport sempit
-  margin-bottom: 1rem;
+  margin-top: 1rem;
   gap: 1rem; // jarak antar parent dan children
 
   @media (min-width: $breakpoint-extra-small) {
