@@ -2,58 +2,27 @@ import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import dynamic from 'next/dynamic'
 import Cookies from 'js-cookie'
-
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeaderTravelGuide } from '../queries/GetSecondaryHeaderTravelGuide'
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
-
-// Dynamic Imports (Lazy load)
-const SEO = dynamic(() => import('../components/SEO/SEO'))
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const Main = dynamic(() => import('../components/Main/Main'))
-const Container = dynamic(() => import('../components/Container/Container'))
-const SingleHeader = dynamic(() =>
-  import('../components/SingleHeader/SingleHeader'),
-)
-const EntryMoreReviews = dynamic(() =>
-  import('../components/EntryMoreReviews/EntryMoreReviews'),
-)
-const MoreReviews = dynamic(() =>
-  import('../components/MoreReviews/MoreReviews'),
-)
-const PartnerContent = dynamic(() =>
-  import('../components/PartnerContent/PartnerContent'),
-)
-const PasswordProtected = dynamic(() =>
-  import('../components/PasswordProtected/PasswordProtected'),
-)
-const SingleEntryHeaderTravelGuide = dynamic(() =>
-  import(
-    '../components/SingleEntryHeaderTravelGuide/SingleEntryHeaderTravelGuide'
-  ),
-)
-const ContentWrapperTravelGuide = dynamic(() =>
-  import('../components/ContentWrapperTravelGuide/ContentWrapperTravelGuide'),
-)
-const SingleSliderTravelGuide = dynamic(() =>
-  import('../components/SingleSliderTravelGuide/SingleSliderTravelGuide'),
-)
-const CategorySecondaryHeaderTravelGuide = dynamic(() =>
-  import(
-    '../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'
-  ),
-)
-const CategoryDesktopSecondaryHeaderTravelGuide = dynamic(() =>
-  import(
-    '../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'
-  ),
-)
-
+import SEO from '../components/SEO/SEO'
+import Footer from '../components/Footer/Footer'
+import Main from '../components/Main/Main'
+import Container from '../components/Container/Container'
+import SingleHeader from '../components/SingleHeader/SingleHeader'
+import EntryMoreReviews from '../components/EntryMoreReviews/EntryMoreReviews'
+import MoreReviews from '../components/MoreReviews/MoreReviews'
+import PartnerContent from '../components/PartnerContent/PartnerContent'
+import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
+import SingleEntryHeaderTravelGuide from '../components/SingleEntryHeaderTravelGuide/SingleEntryHeaderTravelGuide'
+import ContentWrapperTravelGuide from '../components/ContentWrapperTravelGuide/ContentWrapperTravelGuide'
+import SingleSliderTravelGuide from '../components/SingleSliderTravelGuide/SingleSliderTravelGuide'
+import CategorySecondaryHeaderTravelGuide from '../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'
+import CategoryDesktopSecondaryHeaderTravelGuide from '../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'
 const MastHeadTopGuides = dynamic(() =>
   import(
     '../components/AdUnit/MastHeadTop/MastHeadTopGuides'

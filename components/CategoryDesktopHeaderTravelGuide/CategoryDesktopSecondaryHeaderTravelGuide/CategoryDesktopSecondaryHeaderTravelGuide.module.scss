@@ -6,13 +6,28 @@
 }
 
 .container-wrapper {
+  position: fixed;
   width: 70%;
   padding: 1rem 0;
+  top: 0;
+  left: 15%;
+  z-index: 9999;
+}
+
+.sticky {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;
+  left: 15%;
+  width: 70%;
+  transform: translateY(2.75rem);
+  box-shadow: 0 2px 1px 0px rgba(245, 245, 245, 0.75);
+
+  @media (min-width: $breakpoint-extra-small) {
+    top: 0;
+    transform: translateY(0);
+    max-height: 3.5rem;
+
+  }
 }
 
 

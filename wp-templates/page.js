@@ -1,54 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
+import dynamic from 'next/dynamic'
+import Cookies from 'js-cookie'
+
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { HeaderFooterVisibilityFragment } from '../fragments/HeaderFooterVisibility'
+
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-import dynamic from 'next/dynamic'
-
-const Header = dynamic(() => import('../components/Header/Header'))
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const Main = dynamic(() => import('../components/Main/Main'))
-const Container = dynamic(() => import('../components/Container/Container'))
-const ContentWrapperPage = dynamic(() =>
-  import('../components/ContentWrapperPage/ContentWrapperPage'),
-)
-const EntryHeader = dynamic(() =>
-  import('../components/EntryHeader/EntryHeader'),
-)
-const SEO = dynamic(() => import('../components/SEO/SEO'))
-const PasswordProtected = dynamic(() =>
-  import('../components/PasswordProtected/PasswordProtected'),
-)
-const SecondaryHeader = dynamic(() =>
-  import('../components/Header/SecondaryHeader/SecondaryHeader'),
-)
-const SecondaryDesktopHeaderPage = dynamic(() =>
-  import(
-    '../components/Header/SecondaryDesktopHeaderPage/SecondaryDesktopHeaderPage'
-  ),
-)
-
-const MastHeadTop = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
-)
-const MastHeadTopMobile = dynamic(() =>
-  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
-)
-const MastHeadBottom = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottom/MastHeadBottom'),
-)
-const MastHeadBottomMobile = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'),
-)
+import Header from '../components/Header/Header'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import SecondaryDesktopHeaderPage from '../components/Header/SecondaryDesktopHeaderPage/SecondaryDesktopHeaderPage'
+import Footer from '../components/Footer/Footer'
+import Main from '../components/Main/Main'
+import Container from '../components/Container/Container'
+import ContentWrapperPage from '../components/ContentWrapperPage/ContentWrapperPage'
+import EntryHeader from '../components/EntryHeader/EntryHeader'
+import SEO from '../components/SEO/SEO'
+import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
 
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
+
 import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
-import Cookies from 'js-cookie'
+
+const MastHeadTop = dynamic(() =>
+  import('../components/AdUnit/MastHeadTop/MastHeadTop')
+)
+const MastHeadTopMobile = dynamic(() =>
+  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile')
+)
+const MastHeadBottom = dynamic(() =>
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottom')
+)
+const MastHeadBottomMobile = dynamic(() =>
+  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile')
+)
 
 export default function Component(props) {
-  // Loading state for previews
   if (props.loading) {
     return <>Loading...</>
   }
@@ -56,7 +45,6 @@ export default function Component(props) {
   const [enteredPassword, setEnteredPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  // Check for stored password in cookies on mount
   useEffect(() => {
     const storedPassword = Cookies.get('pagePassword')
     if (
@@ -79,17 +67,13 @@ export default function Component(props) {
     passwordProtected,
   } = props?.data?.page
 
-  // Search function content
   const [searchQuery, setSearchQuery] = useState('')
-  // Scrolled Function
   const [isScrolled, setIsScrolled] = useState(false)
-  // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  // Stop scrolling pages when searchQuery
   useEffect(() => {
     if (searchQuery !== '') {
       document.body.style.overflow = 'hidden'
@@ -100,38 +84,31 @@ export default function Component(props) {
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0)
-
     const handleResize = () => {
       const width = window.innerWidth
       setIsMobile(width <= 768)
       setIsDesktop(width > 768)
     }
-
     handleScroll()
     handleResize()
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('resize', handleResize)
-
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
     }
   }, [])
 
-  // Add sticky header on scroll
   useEffect(() => {
     function handleScroll() {
       setIsScrolled(window.scrollY > 0)
     }
-
     window.addEventListener('scroll', handleScroll)
-
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
-  // Stop scrolling pages when isNavShown
   useEffect(() => {
     if (isNavShown) {
       document.body.style.overflow = 'hidden'
@@ -140,7 +117,6 @@ export default function Component(props) {
     }
   }, [isNavShown])
 
-  // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
       first: 10,
@@ -155,7 +131,6 @@ export default function Component(props) {
     nextFetchPolicy: 'cache-and-network',
   })
 
-  // Header Menu
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
   const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
@@ -163,65 +138,35 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
-
-  // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
     GetLatestStories,
     {
-      variables: {
-        first: 5,
-      },
+      variables: { first: 5 },
       fetchPolicy: 'network-only',
       nextFetchPolicy: 'cache-and-network',
-    },
+    }
   )
 
   const posts = latestStories?.posts ?? []
-  const editorials = latestStories?.editorials ?? []
-  const updates = latestStories?.updates ?? []
-
   const mainPosts = []
-  const mainEditorialPosts = []
-  const mainUpdatesPosts = []
-
-  // loop through all the main categories posts
   posts?.edges?.forEach((post) => {
     mainPosts.push(post.node)
   })
 
-  // loop through all the main categories and their posts
-  editorials?.edges?.forEach((post) => {
-    mainEditorialPosts.push(post.node)
-  })
-
-  // loop through all the main categories and their posts
-  updates?.edges?.forEach((post) => {
-    mainUpdatesPosts.push(post.node)
-  })
-
-  // sort posts by date
   const sortPostsByDate = (a, b) => {
     const dateA = new Date(a.date)
     const dateB = new Date(b.date)
-    return dateB - dateA // Sort in descending order
+    return dateB - dateA
   }
 
-  // define mainCatPostCards
-  const mainCatPosts = [
-    ...(mainPosts != null ? mainPosts : []),
-    ...(mainEditorialPosts != null ? mainEditorialPosts : []),
-    ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
-  ]
-
-  // sortByDate mainCat & childCat Posts
+  const mainCatPosts = [...(mainPosts != null ? mainPosts : [])]
   const allPosts = mainCatPosts.sort(sortPostsByDate)
 
-  // Handle password submission
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
-      Cookies.set('pagePassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
+      Cookies.set('pagePassword', enteredPassword, { expires: 1 })
     } else {
       alert('Incorrect password. Please try again.')
     }
@@ -256,7 +201,6 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-
       <>
         {isDesktop ? (
           <>
@@ -341,9 +285,7 @@ export default function Component(props) {
           <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div>
         </>
       </Main>
-      {headerFooterVisibility?.footerVisibility == true ? null : (
-        <Footer />
-      )}
+      {headerFooterVisibility?.footerVisibility == true ? null : <Footer />}
     </main>
   )
 }

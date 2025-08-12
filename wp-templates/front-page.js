@@ -3,7 +3,6 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
-
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
@@ -18,13 +17,10 @@ import Footer from '../components/Footer/Footer'
 import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
 import SEO from '../components/SEO/SEO'
 
-
-
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
-  const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings || {}
+  const { title: siteTitle, description: siteDescription } = props?.data?.generalSettings || {}
   const { featuredImage, uri, seo } = props?.data?.page || {}
   const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
@@ -38,7 +34,6 @@ export default function Component(props) {
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 0)
     const onResize = () => setIsDesktop(window.innerWidth >= 1024)
-
     onResize()
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', onResize)
@@ -49,13 +44,12 @@ export default function Component(props) {
   }, [])
 
   useEffect(() => {
-    document.body.style.overflow =
-      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
+    document.body.style.overflow = searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
   const featureWell = useMemo(() => {
     return [1, 2, 3]
-      .map((num) => ({
+      .map(num => ({
         type: acfHomepageSlider?.[`typeSlide${num}`],
         videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
         desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
@@ -64,9 +58,9 @@ export default function Component(props) {
         category: acfHomepageSlider?.[`slideCategory${num}`],
         categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
         caption: acfHomepageSlider?.[`slideCaption${num}`],
-        standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
+        standFirst: acfHomepageSlider?.[`slideStandFirst${num}`]
       }))
-      .filter((slide) => slide.type)
+      .filter(slide => slide.type)
   }, [acfHomepageSlider])
 
   const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
@@ -85,9 +79,9 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      featureHeaderLocation: MENUS.FEATURE_LOCATION
     },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-first'
   })
 
   const menuProps = {
@@ -99,15 +93,13 @@ export default function Component(props) {
     fourthMenuItems: menusData?.fourthHeaderMenuItems?.nodes ?? [],
     fifthMenuItems: menusData?.fifthHeaderMenuItems?.nodes ?? [],
     featureMenuItems: menusData?.footerMenuItems?.nodes ?? [],
-    // latestStories: sortedPosts,
     home: uri,
     menusLoading,
-    // latestLoading: !latestStories,
     searchQuery,
     setSearchQuery,
     isNavShown,
     setIsNavShown,
-    isScrolled,
+    isScrolled
   }
 
   return (
@@ -153,11 +145,7 @@ export default function Component(props) {
               <FrontPageLayout />
             </Suspense>
           </div>
-
-          <div
-            className="component-videos w-full"
-            style={{ backgroundColor: '#008080' }}
-          >
+          <div className="component-videos w-full" style={{ backgroundColor: '#008080' }}>
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
               <FrontPageVideos />
             </div>
@@ -184,33 +172,15 @@ Component.query = gql`
       }
       ...FeaturedImageFragment
       acfHomepageSlider {
-        desktopSlide1 {
-          mediaItemUrl
-        }
-        desktopSlide2 {
-          mediaItemUrl
-        }
-        desktopSlide3 {
-          mediaItemUrl
-        }
-        mobileSlide1 {
-          mediaItemUrl
-        }
-        mobileSlide2 {
-          mediaItemUrl
-        }
-        mobileSlide3 {
-          mediaItemUrl
-        }
-        video1 {
-          mediaItemUrl
-        }
-        video2 {
-          mediaItemUrl
-        }
-        video3 {
-          mediaItemUrl
-        }
+        desktopSlide1 { mediaItemUrl }
+        desktopSlide2 { mediaItemUrl }
+        desktopSlide3 { mediaItemUrl }
+        mobileSlide1 { mediaItemUrl }
+        mobileSlide2 { mediaItemUrl }
+        mobileSlide3 { mediaItemUrl }
+        video1 { mediaItemUrl }
+        video2 { mediaItemUrl }
+        video3 { mediaItemUrl }
         slideCaption1
         slideCaption2
         slideCaption3
@@ -239,5 +209,5 @@ Component.query = gql`
 
 Component.variables = ({ databaseId }, ctx) => ({
   databaseId,
-  asPreview: ctx?.asPreview,
+  asPreview: ctx?.asPreview
 })

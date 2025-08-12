@@ -60,6 +60,7 @@
   .sticky-ads {
     position: sticky;
     top: 2rem;
+    will-change: transform; 
   }
   
   
@@ -156,7 +157,7 @@
     }
 
     * {
-      padding: 0 1rem 0.5rem;
+      padding: 0 0 0.5rem;
 
       @media (min-width: $breakpoint-small) {
         padding: 0 0 0.5rem;
@@ -177,8 +178,7 @@
       padding: 0;
 
       figcaption {
-        // display: flex;
-        padding: 0 1rem;
+        padding: 0;
         font-size: 0.8rem;
         line-height: 1.2;
         text-align: start;

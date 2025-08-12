@@ -2,16 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import dynamic from 'next/dynamic'
-
-const Header = dynamic(() => import('../components/Header/Header'))
-const Footer = dynamic(() => import('../components/Footer/Footer'))
-const Main = dynamic(() => import('../components/Main/Main'))
-const SEO = dynamic(() => import('../components/SEO/SEO'))
-const TagStories = dynamic(() => import('../components/TagStories/TagStories'))
-const CategoryEntryHeader = dynamic(() => import('../components/CategoryEntryHeader/CategoryEntryHeader'))
-const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'))
-
+import Header from '../components/Header/Header'
+import Footer from '../components/Footer/Footer'
+import Main from '../components/Main/Main'
+import SEO from '../components/SEO/SEO'
+import TagStories from '../components/TagStories/TagStories'
+import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
@@ -74,7 +71,7 @@ export default function Component(props) {
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
-      first: 20,
+      first: 10,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
@@ -82,7 +79,7 @@ export default function Component(props) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
@@ -93,22 +90,6 @@ export default function Component(props) {
   const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
-
-  // Get Footer menus
-  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
-    GetFooterMenus,
-    {
-      variables: {
-        first: 50,
-        footerHeaderLocation: MENUS.FOOTER_LOCATION,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
-
-  // Footer Menu
-  const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(

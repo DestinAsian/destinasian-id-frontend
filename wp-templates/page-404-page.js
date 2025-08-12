@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import dynamic from 'next/dynamic'
-
-const Header = dynamic(() => import('../components/Header/Header'))
-const Main = dynamic(() => import('../components/Main/Main'))
-const Container = dynamic(() => import('../components/Container/Container'))
-import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-const SEO = dynamic(() => import('../components/SEO/SEO'))
-const ErrorPage = dynamic(() => import('../components/ErrorPage/ErrorPage'))
+import Header from '../components/Header/Header'
+import Main from '../components/Main/Main'
+import Container from '../components/Container/Container'
+import SEO from '../components/SEO/SEO'
+import ErrorPage from '../components/ErrorPage/ErrorPage'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import { GetMenus } from '../queries/GetMenus'
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
-const SecondaryHeader = dynamic(() => import('../components/Header/SecondaryHeader/SecondaryHeader'));
 
 export default function Component(props) {
   // Loading state for previews

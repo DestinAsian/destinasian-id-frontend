@@ -1,8 +1,6 @@
 import classNames from 'classnames/bind'
 
 import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
-import CategoryIcon from '../../components/CategoryIcon/CategoryIcon'
-import LocationIcon from '../../components/LocationIcon/LocationIcon'
 
 import styles from './Post.module.scss'
 import Link from 'next/link'
@@ -19,12 +17,6 @@ export default function Post({
   categoryUri,
   uri,
   featuredImage,
-  categoryLabel,
-  chooseYourCategory,
-  chooseIcon,
-  locationLabel,
-  locationUrl,
-  locationValidation,
 }) {
   let trimmedExcerpt = excerpt?.substring(0, MAX_EXCERPT_LENGTH)
   const lastSpaceIndex = trimmedExcerpt?.lastIndexOf(' ')
@@ -78,26 +70,6 @@ export default function Post({
           )}
         </div>
       )}
-      <div className={cx('content-wrapper')}>
-        {(chooseYourCategory || locationValidation) && (
-          <div className={cx('icon-wrapper')}>
-            {chooseYourCategory && (
-              <CategoryIcon
-                chooseYourCategory={chooseYourCategory}
-                chooseIcon={chooseIcon}
-                categoryLabel={categoryLabel}
-              />
-            )}
-            {locationValidation && (
-              <LocationIcon
-                locationValidation={locationValidation}
-                locationLabel={locationLabel}
-                locationUrl={locationUrl}
-              />
-            )}
-          </div>
-        )}
-      </div>
       <div className={cx('border-bottom')}></div>
     </article>
   )
