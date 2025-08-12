@@ -169,7 +169,7 @@
   backdrop-filter: blur(10px);
 
   &.show {
-    top: 4.7rem;
+    top: 5.7rem;
     height: calc(100vh - 4.7rem);
     transition: backdrop-filter 0.8s ease-in-out, visibility 0.8s ease-in-out;
 
