@@ -49,11 +49,6 @@ $font-title: 'Scheherazade New', serif;
   position: relative;
   overflow: hidden;
   text-decoration: none;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.02);
-  }
 }
 
 .imageWrapper {
@@ -70,27 +65,49 @@ $font-title: 'Scheherazade New', serif;
   display: block;
 }
 
-.nameOverlay {
+
+.textWrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nameOverlay {
   color: white;
   font-family: $font-main;
   font-weight: 400;
   font-size: 1rem;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
   text-align: center;
   padding: 0 1rem;
   text-transform: uppercase;
-  letter-spacing: 0.20em; 
-
+  letter-spacing: 0.20em;
 
   @media (min-width: $breakpoint-small) {
     font-size: 1.75rem;
   }
-
   @media (min-width: $breakpoint-large) {
     font-size: 1.57rem;
+  }
+}
+
+.comingsoon {
+  color: white;
+  font-family: $font-main;
+  font-weight: 400;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 0 1rem;
+  text-transform: uppercase;
+
+  @media (min-width: $breakpoint-small) {
+    font-size: 1.2rem;
+  }
+  @media (min-width: $breakpoint-large) {
+    font-size: 1rem;
   }
 }
