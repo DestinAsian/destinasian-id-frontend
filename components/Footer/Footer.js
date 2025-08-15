@@ -5,6 +5,7 @@ import styles from './Footer.module.scss'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
 import daman_footer_logo from '../../assets/logo/daman_footer_logo.png'
 import Prestige_logo from '../../assets/logo/Prestige_logo.png'
+import NewsletterEmbed from '../../components/NewsletterEmbed/NewsletterEmbed'
 
 import {
   FaFacebookF,
@@ -29,6 +30,9 @@ export default function Footer() {
   return (
     <footer className={cx('footer')}>
       <div className={cx('container')}>
+      <div>
+          <NewsletterEmbed />
+        </div>
         <div className={cx('footer-wrapper')}>
           {/* KIRI */}
           <div className={cx('footer-left')}>
