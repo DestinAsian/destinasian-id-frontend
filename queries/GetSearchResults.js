@@ -72,13 +72,9 @@ export const GetSearchResults = gql`
               contentTypes: [
                 POST
                 PAGE
-                EDITORIAL
-                ADVERTORIAL
+                TRAVER_GUIDE
                 HONORS_CIRCLE
-                UPDATE
                 CONTEST
-                LUXE_LIST
-                READERS_CHOICE_AWARD
                 LUXURY_TRAVEL
               ]
             }
@@ -120,18 +116,6 @@ export const GetSearchResults = gql`
                         }
                       }
                     }
-                  }
-                  acfCategoryIcon {
-                    categoryLabel
-                    chooseYourCategory
-                    chooseIcon {
-                      mediaItemUrl
-                    }
-                  }
-                  acfLocationIcon {
-                    fieldGroupName
-                    locationLabel
-                    locationUrl
                   }
                 }
                 ... on Page {
