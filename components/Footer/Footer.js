@@ -77,7 +77,7 @@ export default function Footer() {
 
             <div className={cx('footer-text')}>
               <div className={cx('footer-buttons')}>
-                <Link href="/about" className={cx('footer-btn')}>
+                <Link href="/about-us" className={cx('footer-btn')}>
                   About
                 </Link>
                 <Link href="/contact-us" className={cx('footer-btn')}>
@@ -116,7 +116,7 @@ export default function Footer() {
                 />
               </a>
               <a
-                href="https://www.prestigeonline.com/id/40-under-40/"
+                href="https://www.prestigeonline.com/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
