@@ -103,24 +103,42 @@ export default function Footer() {
             </a>
 
             <div className={cx('footer-logos')}>
-              <Image
-                src={destinasianLogoWht.src}
-                alt="DestinAsian"
-                width={120}
-                height={30}
-              />
-              <Image
-                src={Prestige_logo.src}
-                alt="Prestige"
-                width={120}
-                height={30}
-              />
-              <Image
-                src={daman_footer_logo.src}
-                alt="Daman"
-                width={120}
-                height={30}
-              />
+              <a
+                href="https://destinasian.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={destinasianLogoWht.src}
+                  alt="DestinAsian"
+                  width={120}
+                  height={30}
+                />
+              </a>
+              <a
+                href="https://www.prestigeonline.com/id/40-under-40/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={Prestige_logo.src}
+                  alt="Prestige"
+                  width={120}
+                  height={30}
+                />
+              </a>
+              <a
+                href="https://daman.co.id/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={daman_footer_logo.src}
+                  alt="Daman"
+                  width={120}
+                  height={30}
+                />
+              </a>
             </div>
           </div>
         </div>
