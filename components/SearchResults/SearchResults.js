@@ -1,16 +1,15 @@
 import { FaSearch } from 'react-icons/fa'
 import className from 'classnames/bind'
-
 import styles from './SearchResults.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
+// Import Components
 
-// import CategoryIcon from '../../components/CategoryIcon/CategoryIcon'
-import Container from '../../components/Container/Container'
 import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 import PostInfo from '../../components/PostInfo/PostInfo'
+
+
 let cx = className.bind(styles)
 
 /**
@@ -95,7 +94,7 @@ export default function SearchResults({ searchResults, isLoading }) {
     <>
       <div className={cx('component')}>
         {filteredResults?.map((node) => (
-          <Container>
+          <>
             {node?.__typename === 'Category' ? (
               // Search Result for Categories
               <div className={cx('content-wrapper')}>
@@ -246,16 +245,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                     {node?.contentType?.node?.graphqlPluralName ==
                     'pages' ? null : (
                       <div className={cx('category-wrapper')}>
-                        {/* Destinations */}
-                        {node?.contentType?.node?.graphqlPluralName ==
-                          'Editorials' &&
-                          node?.categories?.edges[0]?.node?.uri && (
-                            <Link href={node?.categories?.edges[0]?.node?.uri}>
-                              <h2 className={cx('meta')}>
-                                {node?.categories?.edges[0]?.node?.name}
-                              </h2>
-                            </Link>
-                          )}
+                        
 
                         {/* Destination Guides */}
                         {node?.contentType?.node?.graphqlPluralName ==
@@ -272,9 +262,9 @@ export default function SearchResults({ searchResults, isLoading }) {
                             </Link>
                           )}
 
-                        {/* Update */}
+                        {/* TravelGuides */}
                         {node?.contentType?.node?.graphqlPluralName ==
-                          'Updates' &&
+                          'TravelGuides' &&
                           node?.categories?.edges[0]?.node?.uri && (
                             <Link href={node?.categories?.edges[0]?.node?.uri}>
                               <h2 className={cx('meta')}>
@@ -297,14 +287,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-                    
-
-                        {/* LuxeList */}
-                        {node?.contentType?.node?.graphqlPluralName ==
-                          'LuxeLists' && (
-                          <h2 className={cx('meta')}>{'Luxe List'}</h2>
-                        )}
-
+             
                         {/* Contest */}
                         {node?.contentType?.node?.graphqlPluralName ==
                           'Contests' && (
@@ -312,6 +295,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                             <h2 className={cx('meta')}>{'Contest'}</h2>
                           </Link>
                         )}
+
 
                         {/* Luxury Travel */}
                         {node?.contentType?.node?.graphqlPluralName ==
@@ -350,9 +334,9 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-                      {/* Update */}
+                      {/* TravelGuides */}
                       {node?.contentType?.node?.graphqlPluralName ==
-                        'Updates' &&
+                        'TravelGuides' &&
                         node?.uri && (
                           <Link href={node?.uri}>
                             <h2 className={cx('title')}>{node?.title}</h2>
@@ -370,7 +354,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-
+            
 
                       {/* LuxeList */}
                       {node?.contentType?.node?.graphqlPluralName ==
@@ -394,7 +378,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-
+                   
 
                       {/* Luxury Travel */}
                       {node?.contentType?.node?.graphqlPluralName ==
@@ -412,26 +396,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                       <div className={cx('date-wrapper')}>
                         <PostInfo date={node?.date} className={cx('meta')} />
                       </div>
-                      {node?.acfCategoryIcon && node?.acfLocationIcon && (
-                        <div className={cx('icon-wrapper')}>
-                          <CategoryIcon
-                            chooseYourCategory={
-                              node?.acfCategoryIcon?.chooseYourCategory
-                            }
-                            chooseIcon={
-                              node?.acfCategoryIcon?.chooseIcon?.mediaItemUrl
-                            }
-                            categoryLabel={node?.acfCategoryIcon?.categoryLabel}
-                          />
-                          <LocationIcon
-                            locationValidation={
-                              node?.acfLocationIcon?.fieldGroupName
-                            }
-                            locationLabel={node?.acfLocationIcon?.locationLabel}
-                            locationUrl={node?.acfLocationIcon?.locationUrl}
-                          />
-                        </div>
-                      )}
+                      
                     </div>
 
                     {node?.excerpt && node?.uri && (
@@ -451,7 +416,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                 </div>
               </div>
             )}
-          </Container>
+          </>
         ))}
       </div>
     </>
