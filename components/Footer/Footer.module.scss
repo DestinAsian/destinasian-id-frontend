@@ -78,6 +78,27 @@
     font-family: 'Open Sans', sans-serif;
     max-width: 60%;
 
+    .footer-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+  
+      .footer-btn {
+        border: 1px solid white;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+        font-weight: 300;
+        text-transform: uppercase;
+        color: var(--wpe--color--white);
+        background-color: transparent;
+        transition: all 0.3s ease;
+  
+        &:hover {
+          font-weight: 600;
+        }
+      }
+    }
+
     p {
       margin-bottom: 0.5rem;
       font-size: 1rem;

@@ -76,6 +76,14 @@ export default function Footer() {
             </div>
 
             <div className={cx('footer-text')}>
+              <div className={cx('footer-buttons')}>
+                <Link href="/about" className={cx('footer-btn')}>
+                  About
+                </Link>
+                <Link href="/contact-us" className={cx('footer-btn')}>
+                  Contact
+                </Link>
+              </div>
               <p>
                 © {year} DestinAsian Media Group All Rights Reserved. Use of
                 this site constitutes acceptance of our User Agreement
@@ -101,8 +109,18 @@ export default function Footer() {
                 width={120}
                 height={30}
               />
-              <Image src={Prestige_logo.src} alt="Prestige" width={120} height={30} />
-              <Image src={daman_footer_logo.src} alt="Daman" width={120} height={30} />
+              <Image
+                src={Prestige_logo.src}
+                alt="Prestige"
+                width={120}
+                height={30}
+              />
+              <Image
+                src={daman_footer_logo.src}
+                alt="Daman"
+                width={120}
+                height={30}
+              />
             </div>
           </div>
         </div>
