@@ -1,3 +1,4 @@
+
 @import 'styles/breakpoints';
 
 .component {
@@ -43,6 +44,9 @@
     height: 3rem;
   }
 
+  // &.show {
+  //   height: 3rem;
+  // }
 }
 
 .text-menu-wrapper,
@@ -50,8 +54,8 @@
   width: fit-content;
 
   button {
-    font-family: "Scheherazade New";
-    font-weight: 500;
+    // font-family: 'Unit Slab Pro Black';
+    font-weight: 700;
     text-align: right;
     text-transform: uppercase;
     font-size: 0.8rem;
@@ -60,10 +64,6 @@
     @media (min-width: $breakpoint-extra-small) {
       font-size: 1rem;
     }
-  }
-
-  &.show {
-    visibility: collapse;
   }
 }
 
@@ -90,16 +90,13 @@
   justify-content: center;
   width: 100%;
 
-  &.show {
-    visibility: collapse;
-  }
 }
 
 .navigation {
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: 3vw;
+  column-gap: 3rem;
   flex: 1;
 
   @media (min-width: $breakpoint-extra-small) {
@@ -110,29 +107,23 @@
 .nav-link {
   display: flex;
 
+  a {
+    display: inline-block;
+    // padding-bottom: 0.25rem;
+  }
+
   .not-active {
-
-    @media (min-width: $breakpoint-extra-small) {
-    }
-
     &:hover,
     &:focus {
       color: var(--wpe--color--teal--light);
-
-      @media (min-width: $breakpoint-extra-small) {
-        color: var(--wpe--color--teal--light);
-      }
     }
   }
 
   .active {
     color: var(--wpe--color--teal--light);
-
-    @media (min-width: $breakpoint-extra-small) {
-      color: var(--wpe--color--teal--light);
-    }
   }
 }
+
 
 .nav-name {
   font-size: 0.65rem;
@@ -302,7 +293,6 @@
 }
 
 
-
 .menu-button-single {
   display: flex;
   justify-content: flex-start;
@@ -318,7 +308,6 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    
 
     .menu-icon {
       display: flex;
@@ -355,9 +344,7 @@
         font-size: 0.65rem;
         font-weight: 500;
         text-transform: uppercase;
-        color:var(--wpe--color--white);
-        font-family: 'Open Sans', sans-serif;
-
+        color: var(--wpe--color--white);
 
         @media (min-width: $breakpoint-extra-small) {
           font-size: 0.875rem;
@@ -369,4 +356,19 @@
       }
     }
   }
+
+  .menu-button-children.active {
+    background-color: var(--wpe--color--teal--light); // tetap pakai teal--light
+    border-left: 4px solid var(--wpe--color--black); // tambahan indikator aktif (opsional)
+  
+    .nav-name {
+      color: var(--wpe--color--white); // teks putih agar kontras dengan teal--light
+      font-weight: 700; // tampil lebih tegas
+    }
+  
+    .menu-icon svg {
+      fill: var(--wpe--color--white); // jika ikon SVG menggunakan fill
+    }
+  }
+  
 }

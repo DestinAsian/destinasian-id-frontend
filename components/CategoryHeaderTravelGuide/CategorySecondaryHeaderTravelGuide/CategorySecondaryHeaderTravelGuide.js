@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategorySecondaryHeaderTravelGuide.module.scss'
 
-import ChildrenNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'
-import ParentNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'
+// import ChildrenNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'
+// import ParentNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'
+import ChildrenNavigationTravelGuide from '../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'
+import ParentNavigationTravelGuide from '../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'
 import SingleNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'
 
 
@@ -20,6 +22,8 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
   const [currentUrl, setCurrentUrl] = useState('')
   const [isMainNavShown, setIsMainNavShown] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false) 
+
 
   // Ambil current URL dan atur body overflow
   useEffect(() => {
@@ -50,6 +54,8 @@ export default function CategoryDesktopSecondaryHeaderTravelGuide({
               isActive={isActive}
               isMainNavShown={isMainNavShown}
               setIsMainNavShown={setIsMainNavShown}
+              isGuidesNavShown={isGuidesNavShown}       
+              setIsGuidesNavShown={setIsGuidesNavShown}
               isNavShown={isNavShown}
               setIsNavShown={setIsNavShown}
               categoryName={name}
