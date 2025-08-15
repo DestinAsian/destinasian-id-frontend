@@ -64,10 +64,6 @@
       font-size: 1rem;
     }
   }
-
-  &.show {
-    visibility: collapse;
-  }
 }
 
 .da-guide-wrapper {
@@ -93,16 +89,13 @@
   justify-content: center;
   width: 100%;
 
-  &.show {
-    visibility: collapse;
-  }
 }
 
 .navigation {
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: 3vw;
+  column-gap: 3rem;
   flex: 1;
 
   @media (min-width: $breakpoint-extra-small) {
