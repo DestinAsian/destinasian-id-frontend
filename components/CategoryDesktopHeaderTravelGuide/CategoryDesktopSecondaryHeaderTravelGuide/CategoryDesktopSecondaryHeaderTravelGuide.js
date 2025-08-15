@@ -4,9 +4,12 @@ import styles from './CategoryDesktopSecondaryHeaderTravelGuide.module.scss'
 import dynamic from 'next/dynamic'
 
 
-import ChildrenNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'
-import ParentNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'
-import SingleNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'
+// import ChildrenNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ChildrenNavigationTravelGuide/ChildrenNavigationTravelGuide'
+// import ParentNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/ParentNavigationTravelGuide/ParentNavigationTravelGuide'
+// import SingleNavigationTravelGuide from '../../../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/SingleNavigationTravelGuide/SingleNavigationTravelGuide'
+import ChildrenNavigationTravelGuide from '../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'
+import ParentNavigationTravelGuide from '../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'
+import SingleNavigationTravelGuide from '../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'
 
 let cx = classNames.bind(styles)
 
