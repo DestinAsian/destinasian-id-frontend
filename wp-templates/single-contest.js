@@ -20,8 +20,6 @@ import ContentWrapperContest from '../components/ContentWrapperContest/ContentWr
 import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
-
-
 // Dynamic Imports (ads only)
 const MastHeadTopGuides = dynamic(() =>
   import('../components/AdUnit/MastHeadTop/MastHeadTopGuides')

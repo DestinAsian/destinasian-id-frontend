@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Suspense, useMemo } from 'react'
 import { gql, useQuery } from '@apollo/client'
+
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
-
 import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
+// Components
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import HomepageHeader from '../components/HomepageHeader/HomepageHeader'
 import HomepageSecondaryHeader from '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
@@ -18,23 +19,24 @@ import Footer from '../components/Footer/Footer'
 import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
 import SEO from '../components/SEO/SEO'
 
-
-
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
+  // Data dari props
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings || {}
-  const { featuredImage, uri, seo } = props?.data?.page || {}
+  const { featuredImage, uri, seo, acfHomepageSlider } = props?.data?.page || {}
   const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
-  const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
 
+  // State UI
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
 
+  // Scroll & resize listener
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 0)
     const onResize = () => setIsDesktop(window.innerWidth >= 1024)
@@ -42,17 +44,20 @@ export default function Component(props) {
     onResize()
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', onResize)
+
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
     }
   }, [])
 
+  // Lock body scroll saat menu/search aktif
   useEffect(() => {
     document.body.style.overflow =
       searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
+  // Generate featureWell slides
   const featureWell = useMemo(() => {
     return [1, 2, 3]
       .map((num) => ({
@@ -69,7 +74,7 @@ export default function Component(props) {
       .filter((slide) => slide.type)
   }, [acfHomepageSlider])
 
-  const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
+  // Pilih random slide awal
   useEffect(() => {
     if (featureWell.length) {
       const randomIndex = Math.floor(Math.random() * featureWell.length)
@@ -77,6 +82,7 @@ export default function Component(props) {
     }
   }, [featureWell])
 
+  // Ambil data menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
       first: 10,
@@ -99,10 +105,8 @@ export default function Component(props) {
     fourthMenuItems: menusData?.fourthHeaderMenuItems?.nodes ?? [],
     fifthMenuItems: menusData?.fifthHeaderMenuItems?.nodes ?? [],
     featureMenuItems: menusData?.footerMenuItems?.nodes ?? [],
-    // latestStories: sortedPosts,
     home: uri,
     menusLoading,
-    // latestLoading: !latestStories,
     searchQuery,
     setSearchQuery,
     isNavShown,
@@ -148,16 +152,14 @@ export default function Component(props) {
               </Container>
             )}
           </div>
+
           <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
             <Suspense fallback={<div>Loading section...</div>}>
               <FrontPageLayout />
             </Suspense>
           </div>
 
-          <div
-            className="component-videos w-full"
-            style={{ backgroundColor: '#008080' }}
-          >
+          <div className="component-videos w-full" style={{ backgroundColor: '#008080' }}>
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
               <FrontPageVideos />
             </div>
@@ -184,33 +186,15 @@ Component.query = gql`
       }
       ...FeaturedImageFragment
       acfHomepageSlider {
-        desktopSlide1 {
-          mediaItemUrl
-        }
-        desktopSlide2 {
-          mediaItemUrl
-        }
-        desktopSlide3 {
-          mediaItemUrl
-        }
-        mobileSlide1 {
-          mediaItemUrl
-        }
-        mobileSlide2 {
-          mediaItemUrl
-        }
-        mobileSlide3 {
-          mediaItemUrl
-        }
-        video1 {
-          mediaItemUrl
-        }
-        video2 {
-          mediaItemUrl
-        }
-        video3 {
-          mediaItemUrl
-        }
+        desktopSlide1 { mediaItemUrl }
+        desktopSlide2 { mediaItemUrl }
+        desktopSlide3 { mediaItemUrl }
+        mobileSlide1 { mediaItemUrl }
+        mobileSlide2 { mediaItemUrl }
+        mobileSlide3 { mediaItemUrl }
+        video1 { mediaItemUrl }
+        video2 { mediaItemUrl }
+        video3 { mediaItemUrl }
         slideCaption1
         slideCaption2
         slideCaption3

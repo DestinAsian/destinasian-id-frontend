@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
-import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
-import Main from '../components/Main/Main'
-import SEO from '../components/SEO/SEO'
-import TagStories from '../components/TagStories/TagStories'
-import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
-import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
-import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
+import { eb_garamond, poppins, rubik_mono_one } from '../styles/fonts/fonts'
+// Import Components
+import Header from '../components/Header/Header'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
+import TagStories from '../components/TagStories/TagStories'
+import Main from '../components/Main/Main'
+import Footer from '../components/Footer/Footer'
+
 
 export default function Component(props) {
-  const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings
-  const { name, databaseId, seo, uri } = props?.data?.tag ?? []
+  const { name, databaseId } = props?.data?.tag ?? []
 
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
   // Scrolled Function
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
+  const [isSearchBarShown, setIsSearchBarShown] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isRCANavShown, setIsRCANavShown] = useState(false)
+  const [isMagNavShown, setIsMagNavShown] = useState(false)
+  const [isBurgerNavShown, setIsBurgerNavShown] = useState(false)
 
   // Stop scrolling pages when searchQuery
   useEffect(() => {
@@ -57,6 +59,32 @@ export default function Component(props) {
     }
   }, [isNavShown])
 
+  // Stop scrolling pages when isSearchBarShown
+  useEffect(() => {
+    if (isSearchBarShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isSearchBarShown])
+
+  // Stop scrolling pages when isMagNavShown
+  useEffect(() => {
+    if (isMagNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isMagNavShown])
+
+  // Stop scrolling pages when isRCANavShown
+  useEffect(() => {
+    if (isRCANavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isRCANavShown])
 
   // Stop scrolling pages when isGuidesNavShown
   useEffect(() => {
@@ -67,11 +95,42 @@ export default function Component(props) {
     }
   }, [isGuidesNavShown])
 
+  // Stop scrolling pages when isBurgerNavShown
+  useEffect(() => {
+    if (isBurgerNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isBurgerNavShown])
+
+  const { data: rcaData } = useQuery(GetLatestRCA, {
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
+
+  const [latestRCA, setLatestRCA] = useState(null)
+
+  useEffect(() => {
+    if (rcaData?.readersChoiceAwards?.edges) {
+      // Find the first RCA where parent is null
+      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
+        (edge) => !edge.node.parent,
+      )?.node
+      setLatestRCA(filteredRCA || null)
+    }
+  }, [rcaData]) // Runs whenever rcaData changes
+
+  const {
+    // title: rcaTitle,
+    databaseId: rcaDatabaseId,
+    uri: rcaUri,
+  } = latestRCA ?? []
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
-      first: 10,
+      first: 30,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
@@ -79,7 +138,7 @@ export default function Component(props) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
 
@@ -90,6 +149,22 @@ export default function Component(props) {
   const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
+
+  // Get Footer menus
+  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
+    GetFooterMenus,
+    {
+      variables: {
+        first: 100,
+        footerHeaderLocation: MENUS.FOOTER_LOCATION,
+      },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    },
+  )
+
+  // Footer Menu
+  const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
 
   // Get latest travel stories
   const { data: latestStories, loading: latestLoading } = useQuery(
@@ -145,16 +220,11 @@ export default function Component(props) {
   const latestAllPosts = latestMainCatPosts.sort(sortPostsByDate)
 
   return (
-    <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
-      <SEO
-        title={seo?.title}
-        description={seo?.metaDesc}
-        url={uri}
-        focuskw={seo?.focuskw}
-      />
-      <Header
-        title={siteTitle}
-        description={siteDescription}
+    <main
+      className={`${eb_garamond.variable} ${poppins.variable} ${rubik_mono_one.variable}`}
+    >
+      <Header isScrolled={isScrolled} />
+      <SecondaryHeader
         primaryMenuItems={primaryMenu}
         secondaryMenuItems={secondaryMenu}
         thirdMenuItems={thirdMenu}
@@ -164,17 +234,20 @@ export default function Component(props) {
         latestStories={latestAllPosts}
         menusLoading={menusLoading}
         latestLoading={latestLoading}
+        rcaDatabaseId={rcaDatabaseId}
+        rcaUri={rcaUri}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        isNavShown={isNavShown}
-        setIsNavShown={setIsNavShown}
-        isScrolled={isScrolled}
-      />
-      <SecondaryHeader
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        isSearchBarShown={isSearchBarShown}
+        setIsSearchBarShown={setIsSearchBarShown}
+        isMagNavShown={isMagNavShown}
+        setIsMagNavShown={setIsMagNavShown}
         isGuidesNavShown={isGuidesNavShown}
         setIsGuidesNavShown={setIsGuidesNavShown}
+        isRCANavShown={isRCANavShown}
+        setIsRCANavShown={setIsRCANavShown}
+        isBurgerNavShown={isBurgerNavShown}
+        setIsBurgerNavShown={setIsBurgerNavShown}
         isScrolled={isScrolled}
       />
       <CategoryEntryHeader parent={'Tag: '} children={0} title={name} />
@@ -189,7 +262,6 @@ export default function Component(props) {
 }
 
 Component.query = gql`
-  ${BlogInfoFragment}
   query GetTagPage($databaseId: ID!) {
     tag(id: $databaseId, idType: DATABASE_ID) {
       name
@@ -200,9 +272,44 @@ Component.query = gql`
         metaDesc
         focuskw
       }
-    }
-    generalSettings {
-      ...BlogInfoFragment
+      featuredImage {
+        node {
+          id
+          sourceUrl
+          altText
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+      categoryImages {
+        changeToSlider
+        categorySlide1 {
+          mediaItemUrl
+        }
+        categorySlide2 {
+          mediaItemUrl
+        }
+        categorySlide3 {
+          mediaItemUrl
+        }
+        categorySlide4 {
+          mediaItemUrl
+        }
+        categorySlide5 {
+          mediaItemUrl
+        }
+        categoryImages {
+          mediaItemUrl
+        }
+        categorySlideCaption1
+        categorySlideCaption2
+        categorySlideCaption3
+        categorySlideCaption4
+        categorySlideCaption5
+        categoryImagesCaption
+      }
     }
   }
 `

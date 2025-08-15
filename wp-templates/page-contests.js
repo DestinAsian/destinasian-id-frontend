@@ -1,67 +1,45 @@
-import React, { useState, useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client'
-import * as MENUS from '../constants/menus'
-import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import Main from '../components/Main/Main'
-import Container from '../components/Container/Container'
-import SEO from '../components/SEO/SEO'
-import EntryHeader from '../components/EntryHeader/EntryHeader'
-import ContentWrapperContestFrontPage from '../components/ContentWrapperContest/ContentWrapperContestFrontPage'
-import Header from '../components/Header/Header'
-import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
-import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-import { GetMenus } from '../queries/GetMenus'
-import { GetLatestStories } from '../queries/GetLatestStories'
-import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
+import React, { useState, useEffect } from 'react';
+import { gql, useQuery } from '@apollo/client';
+import * as MENUS from '../constants/menus';
+import { BlogInfoFragment } from '../fragments/GeneralSettings';
+import Main from '../components/Main/Main';
+import Container from '../components/Container/Container';
+import SEO from '../components/SEO/SEO';
+import EntryHeader from '../components/EntryHeader/EntryHeader';
+import ContentWrapperContestFrontPage from '../components/ContentWrapperContest/ContentWrapperContestFrontPage';
+import Header from '../components/Header/Header';
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader';
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage';
+import { GetMenus } from '../queries/GetMenus';
+import { GetLatestStories } from '../queries/GetLatestStories';
+import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts';
 
 export default function Component(props) {
-  // Loading state for previews
   if (props.loading) {
-    return <>Loading...</>
+    return <>Loading...</>;
   }
 
-  const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings
-  const { title, featuredImage, seo, uri } = props?.data?.page ?? []
+  const { title: siteTitle, description: siteDescription } = props?.data?.generalSettings;
+  const { title, featuredImage, seo, uri } = props?.data?.page ?? {};
 
-  // Search function content
-  const [searchQuery, setSearchQuery] = useState('')
-  // Scrolled Function
-  const [isScrolled, setIsScrolled] = useState(false)
-  // NavShown Function
-  const [isNavShown, setIsNavShown] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isNavShown, setIsNavShown] = useState(false);
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false);
 
-  // Stop scrolling pages when searchQuery
   useEffect(() => {
-    if (searchQuery !== '') {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [searchQuery])
+    document.body.style.overflow = searchQuery ? 'hidden' : 'visible';
+  }, [searchQuery]);
 
-  // Add sticky header on scroll
   useEffect(() => {
-    function handleScroll() {
-      setIsScrolled(window.scrollY > 0)
-    }
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
-  // Stop scrolling pages when isNavShown
   useEffect(() => {
-    if (isNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isNavShown])
+    document.body.style.overflow = isNavShown ? 'hidden' : 'visible';
+  }, [isNavShown]);
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -76,66 +54,29 @@ export default function Component(props) {
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
-  })
+  });
 
-  const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
-  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
-  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
-  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
-  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
-  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
+  const primaryMenu = menusData?.headerMenuItems?.nodes ?? [];
+  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? [];
+  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? [];
+  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? [];
+  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? [];
+  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? [];
 
-  // Get latest travel stories
-  const { data: latestStories, loading: latestLoading } = useQuery(
-    GetLatestStories,
-    {
-      variables: {
-        first: 5,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
+  // Get latest stories
+  const { data: latestStories, loading: latestLoading } = useQuery(GetLatestStories, {
+    variables: { first: 5 },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  });
 
-  const posts = latestStories?.posts ?? []
-  const editorials = latestStories?.editorials ?? []
-  const updates = latestStories?.updates ?? []
+  const posts = latestStories?.posts?.edges?.map(edge => edge.node) ?? [];
+  const editorials = latestStories?.editorials?.edges?.map(edge => edge.node) ?? [];
+  const updates = latestStories?.updates?.edges?.map(edge => edge.node) ?? [];
 
-  const mainPosts = []
-  const mainEditorialPosts = []
-  const mainUpdatesPosts = []
-
-  // loop through all the main categories posts
-  posts?.edges?.forEach((post) => {
-    mainPosts.push(post.node)
-  })
-
-  // loop through all the main categories and their posts
-  editorials?.edges?.forEach((post) => {
-    mainEditorialPosts.push(post.node)
-  })
-
-  // loop through all the main categories and their posts
-  updates?.edges?.forEach((post) => {
-    mainUpdatesPosts.push(post.node)
-  })
-
-  // sort posts by date
-  const sortPostsByDate = (a, b) => {
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-    return dateB - dateA // Sort in descending order
-  }
-
-  // define mainCatPostCards
-  const mainCatPosts = [
-    ...(mainPosts != null ? mainPosts : []),
-    ...(mainEditorialPosts != null ? mainEditorialPosts : []),
-    ...(mainUpdatesPosts != null ? mainUpdatesPosts : []),
-  ]
-
-  // sortByDate mainCat & childCat Posts
-  const allPosts = mainCatPosts.sort(sortPostsByDate)
+  const allPosts = [...posts, ...editorials, ...updates].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
 
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
@@ -146,6 +87,7 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
+
       <Header
         title={siteTitle}
         description={siteDescription}
@@ -164,6 +106,7 @@ export default function Component(props) {
         setIsNavShown={setIsNavShown}
         isScrolled={isScrolled}
       />
+
       <SecondaryHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -171,16 +114,15 @@ export default function Component(props) {
         setIsGuidesNavShown={setIsGuidesNavShown}
         isScrolled={isScrolled}
       />
+
       <Main>
-        <>
-          <Container>
-            <EntryHeader contestTitle={title} />
-            <ContentWrapperContestFrontPage />
-          </Container>
-        </>
+        <Container>
+          <EntryHeader contestTitle={title} />
+          <ContentWrapperContestFrontPage />
+        </Container>
       </Main>
     </main>
-  )
+  );
 }
 
 Component.query = gql`
@@ -201,11 +143,9 @@ Component.query = gql`
       ...BlogInfoFragment
     }
   }
-`
+`;
 
-Component.variables = ({ databaseId }, ctx) => {
-  return {
-    databaseId,
-    asPreview: ctx?.asPreview,
-  }
-}
+Component.variables = ({ databaseId }, ctx) => ({
+  databaseId,
+  asPreview: ctx?.asPreview,
+});

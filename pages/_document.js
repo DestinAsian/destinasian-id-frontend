@@ -1,5 +1,5 @@
 // pages/_document.js
-import { Html, Head, Main, NextScript } from "next/document";
+import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
   return (
@@ -10,11 +10,16 @@ export default function Document() {
           async
           src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"
         ></script>
+
+        <link
+          rel="stylesheet"
+          href="https://cloud.typography.com/7429004/6477832/css/fonts.css"
+        />
       </Head>
       <body>
         <Main />
         <NextScript />
       </body>
     </Html>
-  );
+  )
 }
