@@ -48,4 +48,4 @@ jobs:
           ssh-add pm2_key
 
           # Restart PM2 process on the server
-          ssh -o StrictHostKeyChecking=no -i pm2_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} "pm2 restart @destinasian-id-testing"
+          ssh -o StrictHostKeyChecking=no -i pm2_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} "pm2 restart @destinasian-id-frontend"
