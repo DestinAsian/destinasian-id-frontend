@@ -17,8 +17,8 @@ export default function ContentWrapper({ content, children }) {
       const parser = new DOMParser()
 
       const cleanedContent = content.replaceAll(
-        'https://test.destinasian.co.id',
-        'https://testing.destinasian.co.id',
+        'https://destinasian.co.id',
+        // 'https://testing.destinasian.co.id',
       )
       // const doc = parser.parseFromString(content, 'text/html')
       const doc = parser.parseFromString(cleanedContent, 'text/html')
