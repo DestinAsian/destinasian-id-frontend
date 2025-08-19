@@ -52,7 +52,7 @@ const TravelGuideCategories = ({ data }) => {
           )
 
           return isComingSoon ? (
-            <div key={id}>{CardContent}</div> // tidak pakai Link
+            <div key={id}>{CardContent}</div>
           ) : (
             <Link key={id} href={uri}>
               {CardContent}
