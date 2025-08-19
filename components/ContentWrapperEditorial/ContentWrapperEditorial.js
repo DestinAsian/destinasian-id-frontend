@@ -21,7 +21,7 @@ export default function ContentWrapperEditorial({ content, children }) {
       // Bersihkan domain
       const cleanedContent = content.replaceAll(
         'https://destinasian.co.id',
-        'https://backend.destinasian.co.id'
+        // 'https://backend.destinasian.co.id'
       )
 
       const doc = parser.parseFromString(cleanedContent, 'text/html')
@@ -47,7 +47,7 @@ export default function ContentWrapperEditorial({ content, children }) {
           const width = node.getAttribute('width') || 800
           const height = node.getAttribute('height') || 600
 
-          const testDomain = 'https://destinasian.co.id'
+          const testDomain = 'https://backend.destinasian.co.id'
           const newDomain = 'https://backend.destinasian.co.id'
           src = src.replace(testDomain, newDomain)
           srcset = srcset.replaceAll(testDomain, newDomain)
@@ -69,6 +69,7 @@ export default function ContentWrapperEditorial({ content, children }) {
             const figcaption = figure.querySelector('figcaption')
             if (figcaption) {
               captionText = figcaption.innerHTML
+              figcaption.remove()
             }
           }
 

@@ -14,6 +14,9 @@ import CategoryHeader from '../components/CategoryHeader/CategoryHeader'
 import CategorySecondaryHeader from '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import CategoryDesktopHeader from '../components/CategoryDesktopHeader/CategoryDesktopHeader'
+import HomepageHeader from '../components/HomepageHeader/HomepageHeader'
+import HomepageSecondaryHeader from '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
+import HomepageDestopHeader from '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
 import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
 import CategoryStoriesLatest from '../components/CategoryStoriesLatest/CategoryStoriesLatest'
 import GuideFitur from '../components/GuideFitur/GuideFitur'
@@ -130,7 +133,7 @@ export default function Category({ loading, data: initialData }) {
     [categoryImages],
   )
 
-  const sharedHeaderProps = useMemo(
+  const menuProps = useMemo(
     () => ({
       title: generalSettings?.title,
       description: generalSettings?.description,
@@ -157,6 +160,7 @@ export default function Category({ loading, data: initialData }) {
       isGuidesCategory,
     ],
   )
+
 
   // if (loading) return <>Loading...</>
   const renderAdComponent = useCallback(
@@ -190,43 +194,21 @@ export default function Category({ loading, data: initialData }) {
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       {isDesktop ? (
-        <>
-          <CategoryDesktopHeader {...sharedHeaderProps} />
-          {!isNavShown &&
-            !loadingSecondaryHeader &&
-            (isGuidesCategory ? (
-              <CategoryDesktopSecondaryHeader
-                data={dataSecondaryHeader}
-                databaseId={databaseId}
-                name={name}
-                parent={parent?.node?.name}
-              />
-            ) : (
-              <SecondaryDesktopHeader
-                {...sharedHeaderProps}
-                isGuidesNavShown={isGuidesNavShown}
-                setIsGuidesNavShown={setIsGuidesNavShown}
-              />
-            ))}
-        </>
+        <HomepageDestopHeader
+          {...menuProps}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+        />
       ) : (
         <>
-          <CategoryHeader {...sharedHeaderProps} />
-          {!loadingSecondaryHeader &&
-            (isGuidesCategory ? (
-              <CategorySecondaryHeader
-                data={dataSecondaryHeader}
-                databaseId={databaseId}
-                name={name}
-                parent={parent?.node?.name}
-              />
-            ) : (
-              <SecondaryHeader
-                {...sharedHeaderProps}
-                isGuidesNavShown={isGuidesNavShown}
-                setIsGuidesNavShown={setIsGuidesNavShown}
-              />
-            ))}
+          <HomepageHeader {...menuProps} />
+          <HomepageSecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
         </>
       )}
 

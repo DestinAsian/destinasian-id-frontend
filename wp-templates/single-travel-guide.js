@@ -23,10 +23,12 @@ import ContentWrapperTravelGuide from '../components/ContentWrapperTravelGuide/C
 import SingleSliderTravelGuide from '../components/SingleSliderTravelGuide/SingleSliderTravelGuide'
 import CategorySecondaryHeaderTravelGuide from '../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'
 import CategoryDesktopSecondaryHeaderTravelGuide from '../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'
+import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+
+
 const MastHeadTopGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
-  ),
+  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
 )
 const MastHeadTopMobileSingleGuides = dynamic(() =>
   import(
@@ -34,9 +36,7 @@ const MastHeadTopMobileSingleGuides = dynamic(() =>
   ),
 )
 const MastHeadBottomGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
-  ),
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
 )
 const MastHeadBottomMobileGuides = dynamic(() =>
   import(
@@ -85,7 +85,7 @@ export default function SingleTravelGuide(props) {
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
-
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -241,6 +241,10 @@ export default function SingleTravelGuide(props) {
     )
   }
 
+  const firstSlider = images[0]?.map((image) => {
+    return image
+  })
+
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       <SEO
@@ -250,49 +254,69 @@ export default function SingleTravelGuide(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-      <SingleHeader
-        title={siteTitle}
-        description={siteDescription}
-        primaryMenuItems={primaryMenu}
-        secondaryMenuItems={secondaryMenu}
-        thirdMenuItems={thirdMenu}
-        fourthMenuItems={fourthMenu}
-        fifthMenuItems={fifthMenu}
-        featureMenuItems={featureMenu}
-        latestStories={allPosts}
-        menusLoading={menusLoading}
-        latestLoading={latestLoading}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isNavShown={isNavShown}
-        setIsNavShown={setIsNavShown}
-        isScrolled={isScrolled}
-      />
       {/* Header */}
       {isDesktop ? (
-        <CategoryDesktopSecondaryHeaderTravelGuide
-          data={data}
-          databaseId={databaseId}
-          categoryUri={categories[0]?.node?.uri}
-          parentCategory={categories[0]?.node?.parent?.node?.name}
-        />
+        <>
+          <SingleHeader
+            title={props?.data?.generalSettings?.title}
+            description={props?.data?.generalSettings?.description}
+            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+            latestStories={allPosts}
+            menusLoading={menusLoading}
+            latestLoading={!latestStories}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+          />
+          <SingleDesktopHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
+        </>
       ) : (
-        <CategorySecondaryHeaderTravelGuide
-          data={data}
-          databaseId={databaseId}
-          categoryUri={categories[0]?.node?.uri}
-          parentCategory={categories[0]?.node?.parent?.node?.name}
-        />
+        <>
+          <SingleHeader
+            title={props?.data?.generalSettings?.title}
+            description={props?.data?.generalSettings?.description}
+            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+            latestStories={allPosts}
+            menusLoading={menusLoading}
+            latestLoading={!latestStories}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+          />
+          <SecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
+        </>
       )}
       <Main>
         <div>
-          {isMobile ? (
-            <MastHeadTopMobileSingleGuides />
-          ) : (
-            <MastHeadTopGuides />
-          )}
+          {isMobile ? <MastHeadTopMobileSingleGuides /> : <MastHeadTopGuides />}
         </div>
-        <SingleSliderTravelGuide images={images} />
+        {firstSlider[0] !== null && <SingleSliderTravelGuide images={images} />}
         <SingleEntryHeaderTravelGuide
           title={title}
           categoryUri={categories?.[0]?.node?.uri}
@@ -305,11 +329,7 @@ export default function SingleTravelGuide(props) {
           <ContentWrapperTravelGuide content={content} />
         </Container>
         <div>
-          {isMobile ? (
-            <MastHeadBottomMobileGuides />
-          ) : (
-            <MastHeadBottomGuides />
-          )}
+          {isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />}
         </div>
 
         <EntryMoreReviews
@@ -323,7 +343,7 @@ export default function SingleTravelGuide(props) {
         />
       </Main>
 
-      <Footer/>
+      <Footer />
     </main>
   )
 }

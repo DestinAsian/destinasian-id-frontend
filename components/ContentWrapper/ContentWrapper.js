@@ -18,7 +18,7 @@ export default function ContentWrapper({ content, children }) {
 
       const cleanedContent = content.replaceAll(
         'https://destinasian.co.id',
-        // 'https://testing.destinasian.co.id',
+        'https://backend.destinasian.co.id',
       )
       // const doc = parser.parseFromString(content, 'text/html')
       const doc = parser.parseFromString(cleanedContent, 'text/html')
@@ -49,8 +49,8 @@ export default function ContentWrapper({ content, children }) {
           const width = node.getAttribute('width') || 800
           const height = node.getAttribute('height') || 600
 
-          const testDomain = 'https://test.destinasian.co.id'
-          const newDomain = 'https://testing.destinasian.co.id'
+          const testDomain = 'https://destinasian.co.id'
+          const newDomain = 'https://backend.destinasian.co.id'
           src = src.replace(testDomain, newDomain)
           srcset = srcset.replaceAll(testDomain, newDomain)
 

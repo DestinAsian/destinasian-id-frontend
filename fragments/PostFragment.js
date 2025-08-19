@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { FeaturedImage } from '../components/FeaturedImage/FeaturedImage' // pastikan path sesuai
 
 export const PostFragment = gql`
   fragment PostFragment on Post {
@@ -10,4 +11,5 @@ export const PostFragment = gql`
     excerpt
     ...FeaturedImageFragment
   }
+  ${FeaturedImage.fragments.entry}
 `
