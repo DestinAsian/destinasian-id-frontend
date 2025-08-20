@@ -1,7 +1,10 @@
 import Head from 'next/head'
+import Script from 'next/script'
+import { GoogleTagManager } from '@next/third-parties/google'
+import { AdScript, AdConfig } from 'react-ad-manager'
 import { GetFavicon } from '../../queries/GetFavicon'
 import { useQuery } from '@apollo/client'
-import Script from 'next/script'
+import { useEffect, useState } from 'react'
 
 /**
  * Provide SEO related meta tags to a page.
@@ -14,48 +17,127 @@ import Script from 'next/script'
  *
  * @returns {React.ReactElement} The SEO component
  */
-export default function SEO() {
+export default function SEO({ title, description, imageUrl, url, focuskw }) {
+  const [locationPathname, setLocationPathname] = useState('')
+
+  useEffect(() => {
+    // Check if the window object is defined (for SSR compatibility)
+    if (typeof window !== 'undefined') {
+      const currentPathname = window?.location?.pathname
+      setLocationPathname(currentPathname)
+    }
+  }, []) // Run this effect only once on component mount
+
   const { data } = useQuery(GetFavicon, {
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
 
-  const favicon = data?.favicon?.mediaDetails?.sizes
+  // Get Favicon
+  const favicon = data?.favicon
 
   return (
     <>
       <Head>
-        {/* Favicon */}
-        {favicon?.length > 0 &&
-          favicon.map(({ width, sourceUrl }) => {
-            if (width === '180') {
-              return (
-                <link
-                  key={`fav-${width}x${width}`}
-                  rel="apple-touch-icon"
-                  href={sourceUrl}
-                  sizes={`${width}x${width}`}
-                />
-              )
-            }
-            return (
-              <link
-                key={`fav-${width}x${width}`}
-                rel="icon"
-                type="image/png"
-                sizes={`${width}x${width}`}
-                href={sourceUrl}
-              />
-            )
-          })}
+        <meta property="og:type" content="website" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
 
-        {/* Testing Typography Cloud */}
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cloud.typography.com/7429004/6477832/css/fonts.css"
+        {/* Favicon */}
+        {favicon && (
+          <link
+            key={`fav-${favicon?.mediaDetails?.width}x${favicon?.mediaDetails?.height}`}
+            rel="icon"
+            type="image/png"
+            sizes={`${favicon?.mediaDetails?.width}x${favicon?.mediaDetails?.height}`}
+            href={favicon?.sourceUrl}
+          />
+        )}
+
+        {title && (
+          <>
+            <title>{title}</title>
+            <meta name="title" content={title} />
+            <meta itemProp="name" content={title} />
+            <meta property="og:title" content={title} />
+            <meta property="twitter:title" content={title} />
+          </>
+        )}
+
+        {description && (
+          <>
+            <meta name="description" content={description} />
+            <meta itemProp="description" content={description} />
+            <meta property="og:description" content={description} />
+            <meta property="twitter:description" content={description} />
+          </>
+        )}
+
+        {imageUrl && (
+          <>
+            <meta itemProp="image" content={imageUrl} />
+            <meta property="og:image" content={imageUrl} />
+            <meta property="twitter:image" content={imageUrl} />
+          </>
+        )}
+
+        {url && (
+          <>
+            <meta
+              property="og:url"
+              content={
+                url.startsWith('http') ? url : 'https://destinasian.co.id' + url
+              }
+            />
+            <meta
+              property="twitter:url"
+              content={
+                url.startsWith('http') ? url : 'https://destinasian.co.id' + url
+              }
+            />
+          </>
+        )}
+
+        {focuskw && <meta name="keywords" content={focuskw} />}
+
+        {/* SEM Keywords */}
+        <meta
+          name="keywords"
+          content="luxury travel, travel, jalan-jalan, travel guide indonesia, indonesia luxury travel guide, indonesia travel magazine, travel online magazine, premium travel magazine, travel online website, destinasian indonesia"
+        />
+
+        {/* Google Ad Manager */}
+        <AdScript />
+        <AdConfig
+          networkCode={6808792}
+          target={[['URL_Exact', locationPathname]]}
+          collapseEmptyDivs={true}
         />
       </Head>
+
+      {/* Google Tag Manager */}
+      <GoogleTagManager gtmId="GTM-K9B9SVH6" />
+
+      {/* Frmwrk Tracking Code */}
+      <Script
+        beforeInteractive
+        id="frmwrk-script"
+        dangerouslySetInnerHTML={{
+          __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K9B9SVH6');`,
+        }}
+      />
+      {/* End Frmwrk Tracking Code */}
+
+      {/* Google Tag Manager (noscript) */}
+      <noscript>
+        <iframe
+          src="https://www.googletagmanager.com/ns.html?id=GTM-K9B9SVH6"
+          height="0"
+          width="0"
+          className="invisible hidden"
+        ></iframe>
+      </noscript>
+      {/* End Google Tag Manager (noscript) */}
     </>
   )
 }

@@ -4,6 +4,8 @@ import * as MENUS from '../constants/menus'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { eb_garamond, poppins, rubik_mono_one } from '../styles/fonts/fonts'
+import SEO from '../components/SEO/SEO'
+
 // Import Components
 import Header from '../components/Header/Header'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
@@ -14,7 +16,7 @@ import Footer from '../components/Footer/Footer'
 
 
 export default function Component(props) {
-  const { name, databaseId } = props?.data?.tag ?? []
+  const {seo, name, databaseId } = props?.data?.tag ?? []
 
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
@@ -223,6 +225,13 @@ export default function Component(props) {
     <main
       className={`${eb_garamond.variable} ${poppins.variable} ${rubik_mono_one.variable}`}
     >
+      <SEO
+      title={seo?.title}
+      description={seo?.metaDesc}
+      imageUrl={featuredImage?.node?.sourceUrl}
+      url={uri}
+      focuskw={seo?.focuskw}
+    />
       <Header isScrolled={isScrolled} />
       <SecondaryHeader
         primaryMenuItems={primaryMenu}

@@ -111,7 +111,6 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-
       {isDesktop ? (
         <HomepageDestopHeader
           {...menuProps}

@@ -166,7 +166,6 @@ export default function Component(props) {
         url={post?.uri}
         focuskw={post?.seo?.focuskw}
       />
-
       {/* Header */}
       {isDesktop ? (
         <>
