@@ -8,15 +8,10 @@ import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import Main from '../components/Main/Main'
 import Footer from '../components/Footer/Footer'
-import CategoryDesktopSecondaryHeader from '../components/CategoryDesktopHeader/CategoryDesktopSecondaryHeader/CategoryDesktopSecondaryHeader'
 import SecondaryDesktopHeader from '../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'
 import CategoryHeader from '../components/CategoryHeader/CategoryHeader'
-import CategorySecondaryHeader from '../components/CategoryHeader/CategorySecondaryHeader/CategorySecondaryHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import CategoryDesktopHeader from '../components/CategoryDesktopHeader/CategoryDesktopHeader'
-import HomepageHeader from '../components/HomepageHeader/HomepageHeader'
-import HomepageSecondaryHeader from '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
-import HomepageDestopHeader from '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
 import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
 import CategoryStoriesLatest from '../components/CategoryStoriesLatest/CategoryStoriesLatest'
 import GuideFitur from '../components/GuideFitur/GuideFitur'
@@ -133,7 +128,7 @@ export default function Category({ loading, data: initialData }) {
     [categoryImages],
   )
 
-  const menuProps = useMemo(
+  const sharedHeaderProps = useMemo(
     () => ({
       title: generalSettings?.title,
       description: generalSettings?.description,
@@ -160,7 +155,6 @@ export default function Category({ loading, data: initialData }) {
       isGuidesCategory,
     ],
   )
-
 
   // if (loading) return <>Loading...</>
   const renderAdComponent = useCallback(
@@ -194,20 +188,21 @@ export default function Category({ loading, data: initialData }) {
   return (
     <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
       {isDesktop ? (
-        <HomepageDestopHeader
-          {...menuProps}
-          isGuidesNavShown={isGuidesNavShown}
-          setIsGuidesNavShown={setIsGuidesNavShown}
-        />
-      ) : (
         <>
-          <HomepageHeader {...menuProps} />
-          <HomepageSecondaryHeader
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+          <CategoryDesktopHeader {...sharedHeaderProps} />
+          <SecondaryDesktopHeader
+            {...sharedHeaderProps}
             isGuidesNavShown={isGuidesNavShown}
             setIsGuidesNavShown={setIsGuidesNavShown}
-            isScrolled={isScrolled}
+          />
+        </>
+      ) : (
+        <>
+          <CategoryHeader {...sharedHeaderProps} />
+          <SecondaryHeader
+            {...sharedHeaderProps}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
           />
         </>
       )}
