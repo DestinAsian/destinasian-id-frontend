@@ -17,6 +17,7 @@ import CategoryStoriesLatest from '../components/CategoryStoriesLatest/CategoryS
 import GuideFitur from '../components/GuideFitur/GuideFitur'
 import CategorySecondStoriesLatest from '../components/CategorySecondStoriesLatest/CategorySecondStoriesLatest'
 import GuideReelIg from '../components/GuideReelIg/GuideReelIg'
+import Tagline from '../components/Tagline/Tagline'
 import CategoryStories from '../components/CategoryStories/CategoryStories'
 import BannerPosterGuide from '../components/BannerPosterGuide/BannerPosterGuide'
 
@@ -78,6 +79,7 @@ export default function Category({ loading, data: initialData }) {
     guideStorie,
     guideReelIg,
     guidesfitur,
+    tagline,
   } = category || {}
 
   const { data: menusData } = useQuery(GetMenus, {
@@ -219,8 +221,8 @@ export default function Category({ loading, data: initialData }) {
         imageCaption={categoryImages?.categoryImagesCaption}
         description={description}
       />
-
       <Main>
+      {tagline && <Tagline tagline={tagline} />}
         {isGuidesCategory && (
           <hr
             style={{
@@ -365,6 +367,9 @@ Category.query = gql`
           mediaItemUrl
         }
         linkUrlBannerReelIg2
+      }
+      tagline {
+        tagline
       }
       guideStorie {
         bannerFokusHubDa {
