@@ -1,7 +1,7 @@
 import className from 'classnames/bind'
 import Heading from '../../components/Heading/Heading'
 import Container from '../../components/Container/Container'
-
+import { useQuery } from '@apollo/client'
 import styles from './CategoryEntryHeader.module.scss'
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -336,11 +336,11 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                       {children?.length !== 0 &&
                         (guidesTitle
                           ? guidesTitle
-                          : 'The DA Guide to ' + title)}
+                          : 'DestinAsian Indonesia Travel Guide - ' + title)}
                       {children?.length === 0 &&
                         (guidesTitle
                           ? guidesTitle
-                          : (parent ? parent : '') + ' ' + title)}
+                          : 'DestinAsian Indonesia Travel Guide - ' + title)}
                     </Heading>
                   )}
                   {description && (
@@ -385,13 +385,15 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                       {children?.length !== 0 &&
                         (guidesTitle
                           ? guidesTitle
-                          : 'The DA Guide to ' + title)}
+                          : 'DestinAsian Indonesia Travel Guide - ' + title)}
                       {children?.length === 0 &&
                         (guidesTitle
                           ? guidesTitle
-                          : (parent ? parent : '') + ' ' + title)}
+                          : ' DestinAsian Indonesia Travel Guide - ' + title)}
+                          {/* : (parent ? parent : '') + ' DestinAsian Indonesia Travel Guide - ' + title)} */}
                     </Heading>
                   )}
+
                   {description && (
                     <p
                       className={cx('description')}
