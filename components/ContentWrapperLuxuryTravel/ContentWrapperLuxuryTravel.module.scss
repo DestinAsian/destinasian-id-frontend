@@ -149,7 +149,7 @@
       padding-right: 0.5rem;
       text-transform: uppercase;
       color: var(--wpe--color--black);
-
+      line-height: 1;
       @media (min-width: $breakpoint-small) {
         padding-right: 0.5rem;
       }
@@ -157,6 +157,7 @@
 
     * {
       padding: 0 1rem 0.5rem;
+      line-height: 1.5rem;
 
       @media (min-width: $breakpoint-small) {
         padding: 0 0 0.5rem;
