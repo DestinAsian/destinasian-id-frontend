@@ -22,16 +22,20 @@ import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeade
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
 // Dynamic Imports (ads only)
 const MastHeadTopGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides')
+  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
 )
 const MastHeadTopMobileSingleGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides')
+  import(
+    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
+  ),
 )
 const MastHeadBottomGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides')
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
 )
 const MastHeadBottomMobileGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides')
+  import(
+    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+  ),
 )
 
 export default function SingleContest(props) {
@@ -56,6 +60,7 @@ export default function SingleContest(props) {
 
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings
+
   const {
     title,
     content,
@@ -64,15 +69,17 @@ export default function SingleContest(props) {
     seo,
     uri,
     passwordProtected,
+    author,
+    date,
   } = props?.data?.contest
-
+  const categories = props?.data?.contest.categories?.edges ?? []
   // Search function content
   const [searchQuery, setSearchQuery] = useState('')
   // Scrolled Function
   const [isScrolled, setIsScrolled] = useState(false)
   // NavShown Function
   const [isNavShown, setIsNavShown] = useState(false)
-
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -239,6 +246,8 @@ export default function SingleContest(props) {
           <SingleDesktopHeader
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
             isScrolled={isScrolled}
           />
         </>
@@ -263,21 +272,30 @@ export default function SingleContest(props) {
           <SecondaryHeader
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
             isScrolled={isScrolled}
           />
         </>
       )}
       <Main>
         <>
-        <div>
-          {isMobile ? (
-            <MastHeadTopMobileSingleGuides />
-          ) : (
-            <MastHeadTopGuides />
-          )}
-        </div>
+          <div>
+            {isMobile ? (
+              <MastHeadTopMobileSingleGuides />
+            ) : (
+              <MastHeadTopGuides />
+            )}
+          </div>
           <SingleSlider images={images} />
-          <SingleContestEntryHeader title={title} />
+          <SingleContestEntryHeader
+            title={title}
+            categoryUri={categories?.[0]?.node?.uri}
+            parentCategory={categories?.[0]?.node?.parent?.node?.name}
+            categoryName={categories?.[0]?.node?.name}
+            author={author?.node?.name}
+            date={date}
+          />
           <ContentWrapperContest content={content} />
           <div>
             {isMobile ? (
@@ -304,6 +322,11 @@ SingleContest.query = gql`
       passwordProtected {
         onOff
         password
+      }
+      author {
+        node {
+          name
+        }
       }
       seo {
         title
