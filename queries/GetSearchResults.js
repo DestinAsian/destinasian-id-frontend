@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GetSearchResults = gql`
-  query GetSearchResults($first: Int!, $after: String, $search: String) {
+  query GetSearchResults($first: Int!, $after: String, $search: String!) {
     categories(
       first: $first
       after: $after
@@ -42,10 +42,14 @@ export const GetSearchResults = gql`
           destinationGuides {
             guidesTitle
           }
-          contentNodes(first: 10, where: { contentTypes: POST }) {
+          contentNodes(first: 10, where: { contentTypes: [ POST, TRAVEL_GUIDE ] }) {
             edges {
               node {
                 ... on Post {
+                  title
+                  uri
+                }
+                ... on TravelGuide {
                   title
                   uri
                 }
@@ -71,8 +75,7 @@ export const GetSearchResults = gql`
               status: PUBLISH
               contentTypes: [
                 POST
-                PAGE
-                TRAVER_GUIDE
+                TRAVEL_GUIDE
                 HONORS_CIRCLE
                 CONTEST
                 LUXURY_TRAVEL
@@ -91,6 +94,34 @@ export const GetSearchResults = gql`
                   }
                 }
                 ... on Post {
+                  title
+                  excerpt
+                  date
+                  featuredImage {
+                    node {
+                      sourceUrl
+                      altText
+                      mediaDetails {
+                        width
+                        height
+                      }
+                    }
+                  }
+                  categories(where: { childless: true }) {
+                    edges {
+                      node {
+                        name
+                        uri
+                        parent {
+                          node {
+                            name
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                ... on TravelGuide {
                   title
                   excerpt
                   date
@@ -147,82 +178,7 @@ export const GetSearchResults = gql`
                     }
                   }
                 }
-                ... on Editorial {
-                  title
-                  excerpt
-                  date
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
-                      mediaDetails {
-                        width
-                        height
-                      }
-                    }
-                  }
-                  categories {
-                    edges {
-                      node {
-                        name
-                        uri
-                      }
-                    }
-                  }
-                }
-                ... on Update {
-                  title
-                  excerpt
-                  date
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
-                      mediaDetails {
-                        width
-                        height
-                      }
-                    }
-                  }
-                  categories {
-                    edges {
-                      node {
-                        name
-                        uri
-                      }
-                    }
-                  }
-                }
-                ... on Advertorial {
-                  title
-                  excerpt
-                  date
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
-                      mediaDetails {
-                        width
-                        height
-                      }
-                    }
-                  }
-                }
-                ... on LuxeList {
-                  title
-                  excerpt
-                  date
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
-                      mediaDetails {
-                        width
-                        height
-                      }
-                    }
-                  }
-                }
+
                 ... on Contest {
                   title
                   excerpt
@@ -238,21 +194,7 @@ export const GetSearchResults = gql`
                     }
                   }
                 }
-                ... on ReadersChoiceAward {
-                  title
-                  excerpt
-                  date
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
-                      mediaDetails {
-                        width
-                        height
-                      }
-                    }
-                  }
-                }
+
                 ... on LuxuryTravel {
                   title
                   excerpt
