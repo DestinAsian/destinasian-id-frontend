@@ -4,11 +4,12 @@ import styles from './SearchResults.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 // Import Components
 
 import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
-import PostInfo from '../../components/PostInfo/PostInfo'
 
+const PostInfo = dynamic(() => import('../../components/PostInfo/PostInfo'))
 
 let cx = className.bind(styles)
 
@@ -218,6 +219,25 @@ export default function SearchResults({ searchResults, isLoading }) {
                             </div>
                           ),
                         )}
+                        {node?.contentNodes?.edges?.map(
+                          (travelGuide, index, array) => (
+                            <div
+                              key={index}
+                              className={cx('sub-category-post-wrapper')}
+                            >
+                              <Link href={travelGuide?.node?.uri}>
+                                <div className={cx('category-post-wrapper')}>
+                                  <p className={cx('category-post')}>
+                                    {travelGuide?.node?.title}
+                                  </p>
+                                </div>
+                              </Link>
+                              {index !== array.length - 1 && (
+                                <div className={cx('border-gap')}></div>
+                              )}
+                            </div>
+                          ),
+                        )}
                       </div>
                     )}
                   </div>
@@ -245,8 +265,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                     {node?.contentType?.node?.graphqlPluralName ==
                     'pages' ? null : (
                       <div className={cx('category-wrapper')}>
-                        
-
                         {/* Destination Guides */}
                         {node?.contentType?.node?.graphqlPluralName ==
                           'posts' &&
@@ -261,10 +279,9 @@ export default function SearchResults({ searchResults, isLoading }) {
                               </h2>
                             </Link>
                           )}
-
-                        {/* TravelGuides */}
+                        {/* travel Guide Guides */}
                         {node?.contentType?.node?.graphqlPluralName ==
-                          'TravelGuides' &&
+                          'travelGuide' &&
                           node?.categories?.edges[0]?.node?.uri && (
                             <Link href={node?.categories?.edges[0]?.node?.uri}>
                               <h2 className={cx('meta')}>
@@ -287,7 +304,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-             
                         {/* Contest */}
                         {node?.contentType?.node?.graphqlPluralName ==
                           'Contests' && (
@@ -295,7 +311,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                             <h2 className={cx('meta')}>{'Contest'}</h2>
                           </Link>
                         )}
-
 
                         {/* Luxury Travel */}
                         {node?.contentType?.node?.graphqlPluralName ==
@@ -309,17 +324,16 @@ export default function SearchResults({ searchResults, isLoading }) {
                     )}
 
                     <div className={cx('title-wrapper')}>
-                      {/* Destinations */}
-                      {node?.contentType?.node?.graphqlPluralName ==
-                        'Editorials' &&
+                      {/* Destination Guides */}
+                      {node?.contentType?.node?.graphqlPluralName == 'posts' &&
                         node?.uri && (
                           <Link href={node?.uri}>
                             <h2 className={cx('title')}>{node?.title}</h2>
                           </Link>
                         )}
-
-                      {/* Destination Guides */}
-                      {node?.contentType?.node?.graphqlPluralName == 'posts' &&
+                      {/* Travel Guides */}
+                      {node?.contentType?.node?.graphqlPluralName ==
+                        'travelGuide' &&
                         node?.uri && (
                           <Link href={node?.uri}>
                             <h2 className={cx('title')}>{node?.title}</h2>
@@ -328,15 +342,6 @@ export default function SearchResults({ searchResults, isLoading }) {
 
                       {/* Pages */}
                       {node?.contentType?.node?.graphqlPluralName == 'pages' &&
-                        node?.uri && (
-                          <Link href={node?.uri}>
-                            <h2 className={cx('title')}>{node?.title}</h2>
-                          </Link>
-                        )}
-
-                      {/* TravelGuides */}
-                      {node?.contentType?.node?.graphqlPluralName ==
-                        'TravelGuides' &&
                         node?.uri && (
                           <Link href={node?.uri}>
                             <h2 className={cx('title')}>{node?.title}</h2>
@@ -354,19 +359,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                           </Link>
                         )}
 
-            
-
-                      {/* LuxeList */}
-                      {node?.contentType?.node?.graphqlPluralName ==
-                        'LuxeLists' &&
-                        node?.uri && (
-                          <Link href={node?.uri}>
-                            <h2 className={cx('title', 'title-ll')}>
-                              {node?.title}
-                            </h2>
-                          </Link>
-                        )}
-
                       {/* Contest */}
                       {node?.contentType?.node?.graphqlPluralName ==
                         'Contests' &&
@@ -377,8 +369,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                             </h2>
                           </Link>
                         )}
-
-                   
 
                       {/* Luxury Travel */}
                       {node?.contentType?.node?.graphqlPluralName ==
@@ -396,7 +386,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                       <div className={cx('date-wrapper')}>
                         <PostInfo date={node?.date} className={cx('meta')} />
                       </div>
-                      
                     </div>
 
                     {node?.excerpt && node?.uri && (

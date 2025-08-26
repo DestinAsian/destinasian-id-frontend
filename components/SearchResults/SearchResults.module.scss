@@ -5,23 +5,29 @@
 $color-grey: #777;
 
 .component {
-  background-color: var(--wpe--main--background-color);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0 1rem 7rem;
-  height: calc(-5.75rem + 100vh);
+  padding: 0 1rem 10rem;
+  height: calc(-10.75rem + 100vh);
   overflow: auto;
   margin: 0 auto;
 
+  // Tambahan agar tampil paling depan
+  position: relative; // atau fixed jika ingin selalu terlihat
+  z-index: 9999; 
+
   @media (min-width: $breakpoint-extra-small) {
-    padding: 0 1rem 5rem;
+    padding: 0 2rem 8rem;
     align-items: center;
-    height: calc(-7.85rem + 100vh);
+    height: calc(-12.85rem + 100vh);
     max-width: 700px;
   }
 }
+
+// Tidak perlu ubah style lain kecuali jika ingin overlay
+
 
 .content-wrapper {
   width: 100%;
@@ -34,7 +40,7 @@ $color-grey: #777;
   min-width: calc(100vw - 2rem);
 
   @media (min-width: $breakpoint-extra-small) {
-    min-width: calc(700px - 2rem);
+    min-width: calc(700px - 4rem);
   }
 }
 
@@ -155,7 +161,7 @@ $color-grey: #777;
 }
 
 .meta-hc {
-  font-family: 'Gotham A', 'Gotham B';
+  font-family: var(--font--poppins);
 }
 
 .title-wrapper {
@@ -173,7 +179,7 @@ $color-grey: #777;
 }
 
 .title-hc {
-  font-family: 'Hoefler Text A', 'Hoefler Text B';
+  font-family: var(--font--eb--garamond);
   font-weight: 700;
 }
 
@@ -187,12 +193,8 @@ $color-grey: #777;
 }
 
 .title-contest {
-  font-family: 'Gotham A', 'Gotham B';
+  font-family: var(--font--poppins);
   font-weight: 700;
-}
-
-.title-rca {
-  font-family: 'ChunkFive-Regular';
 }
 
 .main-category-post,
@@ -275,7 +277,7 @@ $color-grey: #777;
 .no-results {
   text-align: center;
   color: $color-grey;
-  background-color: var(--wpe--color--teal--light);
+  // background-color: var(--wpe--main--background-color);
   display: flex;
   width: 100%;
   height: 100%;

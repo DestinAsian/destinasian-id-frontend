@@ -45,7 +45,7 @@
     color: var(--wpe--color--white);
     &:hover,
     &:focus {
-      color: var(--wpe--color--black);
+      color: var(--wpe--color--white);
     }
   }
 
@@ -89,6 +89,7 @@
       text-align: left;
       padding: 0;
       justify-content: center;
+      z-index: 9999;
 
       @media (min-width: $breakpoint-extra-small) {
         padding: 0 1rem;
@@ -218,7 +219,7 @@
 
           &:hover,
           &:focus {
-            color: var(--wpe--color--black);
+            color: var(--wpe--color--white);
 
             // @media (min-width: $breakpoint-small) {
             //   color: var(--wpe--color--orange);
