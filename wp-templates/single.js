@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import Cookies from 'js-cookie'
-import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
+import {rubik, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
@@ -101,7 +101,7 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
@@ -140,7 +140,7 @@ export default function Component(props) {
   if (post?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
-        className={`${eb_garamond.variable} ${rubik_mono_one.variable} ${rubik.variable}`}
+        className={`${rubik_mono_one.variable} ${rubik.variable}`}
       >
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
@@ -158,7 +158,7 @@ export default function Component(props) {
   }
 
   return (
-    <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
+    <main>
       <SEO
         title={post?.seo?.title}
         description={post?.seo?.metaDesc}

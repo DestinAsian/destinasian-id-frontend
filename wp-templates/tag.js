@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
-import { eb_garamond, poppins, rubik_mono_one } from '../styles/fonts/fonts'
+import { rubik_mono_one } from '../styles/fonts/fonts'
 import SEO from '../components/SEO/SEO'
 
 // Import Components
@@ -138,7 +138,7 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
@@ -223,7 +223,7 @@ export default function Component(props) {
 
   return (
     <main
-      className={`${eb_garamond.variable} ${poppins.variable} ${rubik_mono_one.variable}`}
+      className={`${rubik_mono_one.variable}`}
     >
       <SEO
       title={seo?.title}

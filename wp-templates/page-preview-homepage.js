@@ -4,7 +4,6 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
-import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 // Components
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
@@ -91,7 +90,7 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'cache-first',
   })
@@ -115,7 +114,7 @@ export default function Component(props) {
   }
 
   return (
-    <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
+    <main>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}

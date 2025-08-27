@@ -15,7 +15,7 @@ import Main from '../components/Main/Main'
 import SingleSlider from '../components/SingleSlider/SingleSlider'
 import SingleLTContainer from '../components/SingleLuxuryTravel/SingleLTContainer'
 import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
-import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
+import { rubik, rubik_mono_one } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
 
 // Dynamic Imports (iklan/ad components)
@@ -96,7 +96,7 @@ export default function SingleLuxuryTravel(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
@@ -139,7 +139,7 @@ export default function SingleLuxuryTravel(props) {
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
-        className={`${eb_garamond.variable} ${rubik_mono_one.variable} ${rubik.variable}`}
+        className={`${rubik_mono_one.variable} ${rubik.variable}`}
       >
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
@@ -158,7 +158,7 @@ export default function SingleLuxuryTravel(props) {
 
   return (
     <main
-      className={`${eb_garamond.variable} ${rubik_mono_one.variable} ${rubik.variable}`}
+      className={` ${rubik_mono_one.variable} ${rubik.variable}`}
     >
       <SEO
         title={seo?.title}

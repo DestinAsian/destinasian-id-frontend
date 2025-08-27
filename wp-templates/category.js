@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import { eb_garamond, rubik_mono_one } from '../styles/fonts/fonts'
 
 // Components
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
@@ -90,7 +89,7 @@ export default function Category({ loading, data: initialData }) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'cache-first',
   })
@@ -188,7 +187,7 @@ export default function Category({ loading, data: initialData }) {
   if (loading) return <>Loading...</>
 
   return (
-    <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
+    <main>
       {isDesktop ? (
         <>
           <CategoryDesktopHeader {...sharedHeaderProps} />

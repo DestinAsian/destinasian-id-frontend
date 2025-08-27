@@ -21,8 +21,6 @@ import PasswordProtected from '../components/PasswordProtected/PasswordProtected
 import SingleEntryHeaderTravelGuide from '../components/SingleEntryHeaderTravelGuide/SingleEntryHeaderTravelGuide'
 import ContentWrapperTravelGuide from '../components/ContentWrapperTravelGuide/ContentWrapperTravelGuide'
 import SingleSliderTravelGuide from '../components/SingleSliderTravelGuide/SingleSliderTravelGuide'
-import CategorySecondaryHeaderTravelGuide from '../components/CategoryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide/CategorySecondaryHeaderTravelGuide'
-import CategoryDesktopSecondaryHeaderTravelGuide from '../components/CategoryDesktopHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide/CategoryDesktopSecondaryHeaderTravelGuide'
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 
@@ -154,7 +152,7 @@ export default function SingleTravelGuide(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
@@ -224,7 +222,7 @@ export default function SingleTravelGuide(props) {
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
-        className={`${eb_garamond.variable} ${rubik_mono_one.variable} ${rubik.variable}`}
+        className={`${rubik_mono_one.variable} ${rubik.variable}`}
       >
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
@@ -246,7 +244,7 @@ export default function SingleTravelGuide(props) {
   })
 
   return (
-    <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
+    <main className={`${rubik_mono_one.variable}`}>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}

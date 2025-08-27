@@ -20,9 +20,6 @@ import FeaturedImage from "../components/FeaturedImage/FeaturedImage";
 import { GetMenus } from "../queries/GetMenus";
 import { GetLatestStories } from "../queries/GetLatestStories";
 
-// Fonts
-import { eb_garamond, rubik_mono_one } from "../styles/fonts/fonts";
-
 export default function Component(props) {
   /** =====================
    *  Early Loading State
@@ -77,7 +74,7 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      featureHeaderLocation: MENUS.FEATURE_LOCATION,
+      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
@@ -117,7 +114,7 @@ export default function Component(props) {
    *  Render
    *  ===================== */
   return (
-    <main className={`${eb_garamond.variable} ${rubik_mono_one.variable}`}>
+    <main>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}
