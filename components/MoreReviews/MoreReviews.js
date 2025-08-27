@@ -53,7 +53,7 @@ export default function MoreReviews({ databaseId }) {
   if (loading) {
     return (
       <>
-        <div className="mx-auto my-0 flex max-w-[100vw] justify-center	bg-white ">
+        <div className="mx-auto my-0 flex max-w-[100vw] justify-center ">
           <Button className="gap-x-4 ">{'Loading...'}</Button>
         </div>
       </>
