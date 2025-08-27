@@ -19,7 +19,7 @@ import GuideReelIg from '../components/GuideReelIg/GuideReelIg'
 import Tagline from '../components/Tagline/Tagline'
 import CategoryStories from '../components/CategoryStories/CategoryStories'
 import BannerPosterGuide from '../components/BannerPosterGuide/BannerPosterGuide'
-
+import { open_sans } from '../styles/fonts/fonts'
 // Ads
 import MastHeadTop from '../components/AdUnit/MastHeadTop/MastHeadTop'
 import MastHeadTopMobile from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'
@@ -187,7 +187,7 @@ export default function Category({ loading, data: initialData }) {
   if (loading) return <>Loading...</>
 
   return (
-    <main>
+    <main className={`${open_sans.variable}`}>
       {isDesktop ? (
         <>
           <CategoryDesktopHeader {...sharedHeaderProps} />
@@ -221,7 +221,7 @@ export default function Category({ loading, data: initialData }) {
         description={description}
       />
       <Main>
-      {tagline && <Tagline tagline={tagline} />}
+        {tagline && <Tagline tagline={tagline} />}
         {isGuidesCategory && (
           <hr
             style={{

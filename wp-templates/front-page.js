@@ -15,11 +15,12 @@ import Container from '../components/Container/Container'
 import Footer from '../components/Footer/Footer'
 import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
 import SEO from '../components/SEO/SEO'
-
+import { open_sans } from '../styles/fonts/fonts'
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
-  const { title: siteTitle, description: siteDescription } = props?.data?.generalSettings || {}
+  const { title: siteTitle, description: siteDescription } =
+    props?.data?.generalSettings || {}
   const { featuredImage, uri, seo } = props?.data?.page || {}
   const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
   const acfHomepageSlider = props?.data?.page?.acfHomepageSlider
@@ -43,12 +44,13 @@ export default function Component(props) {
   }, [])
 
   useEffect(() => {
-    document.body.style.overflow = searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
+    document.body.style.overflow =
+      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
   const featureWell = useMemo(() => {
     return [1, 2, 3]
-      .map(num => ({
+      .map((num) => ({
         type: acfHomepageSlider?.[`typeSlide${num}`],
         videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
         desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
@@ -57,9 +59,9 @@ export default function Component(props) {
         category: acfHomepageSlider?.[`slideCategory${num}`],
         categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
         caption: acfHomepageSlider?.[`slideCaption${num}`],
-        standFirst: acfHomepageSlider?.[`slideStandFirst${num}`]
+        standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
       }))
-      .filter(slide => slide.type)
+      .filter((slide) => slide.type)
   }, [acfHomepageSlider])
 
   const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
@@ -80,7 +82,7 @@ export default function Component(props) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
       // featureHeaderLocation: MENUS.FEATURE_LOCATION
     },
-    fetchPolicy: 'cache-first'
+    fetchPolicy: 'cache-first',
   })
 
   const menuProps = {
@@ -98,11 +100,11 @@ export default function Component(props) {
     setSearchQuery,
     isNavShown,
     setIsNavShown,
-    isScrolled
+    isScrolled,
   }
 
   return (
-    <main>
+    <main className={`${open_sans.variable}`}>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}
@@ -143,7 +145,10 @@ export default function Component(props) {
               <FrontPageLayout />
             </Suspense>
           </div>
-          <div className="component-videos w-full" style={{ backgroundColor: '#008080' }}>
+          <div
+            className="component-videos w-full"
+            style={{ backgroundColor: '#008080' }}
+          >
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
               <FrontPageVideos />
             </div>
@@ -170,15 +175,33 @@ Component.query = gql`
       }
       ...FeaturedImageFragment
       acfHomepageSlider {
-        desktopSlide1 { mediaItemUrl }
-        desktopSlide2 { mediaItemUrl }
-        desktopSlide3 { mediaItemUrl }
-        mobileSlide1 { mediaItemUrl }
-        mobileSlide2 { mediaItemUrl }
-        mobileSlide3 { mediaItemUrl }
-        video1 { mediaItemUrl }
-        video2 { mediaItemUrl }
-        video3 { mediaItemUrl }
+        desktopSlide1 {
+          mediaItemUrl
+        }
+        desktopSlide2 {
+          mediaItemUrl
+        }
+        desktopSlide3 {
+          mediaItemUrl
+        }
+        mobileSlide1 {
+          mediaItemUrl
+        }
+        mobileSlide2 {
+          mediaItemUrl
+        }
+        mobileSlide3 {
+          mediaItemUrl
+        }
+        video1 {
+          mediaItemUrl
+        }
+        video2 {
+          mediaItemUrl
+        }
+        video3 {
+          mediaItemUrl
+        }
         slideCaption1
         slideCaption2
         slideCaption3
@@ -207,5 +230,5 @@ Component.query = gql`
 
 Component.variables = ({ databaseId }, ctx) => ({
   databaseId,
-  asPreview: ctx?.asPreview
+  asPreview: ctx?.asPreview,
 })

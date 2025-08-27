@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import Cookies from 'js-cookie'
-import {rubik, rubik_mono_one } from '../styles/fonts/fonts'
+import {open_sans } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
@@ -140,7 +140,7 @@ export default function Component(props) {
   if (post?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
-        className={`${rubik_mono_one.variable} ${rubik.variable}`}
+        className={`${open_sans.variable}`}
       >
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected

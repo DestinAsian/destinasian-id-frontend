@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
-import { rubik_mono_one } from '../styles/fonts/fonts'
+import { open_sans } from '../styles/fonts/fonts'
 import SEO from '../components/SEO/SEO'
 
 // Import Components
@@ -223,7 +223,7 @@ export default function Component(props) {
 
   return (
     <main
-      className={`${rubik_mono_one.variable}`}
+      className={`${open_sans.variable}`}
     >
       <SEO
       title={seo?.title}

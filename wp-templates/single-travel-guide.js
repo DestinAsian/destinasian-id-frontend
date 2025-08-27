@@ -8,7 +8,7 @@ import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeaderTravelGuide } from '../queries/GetSecondaryHeaderTravelGuide'
-import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
+import { open_sans } from '../styles/fonts/fonts'
 import SEO from '../components/SEO/SEO'
 import Footer from '../components/Footer/Footer'
 import Main from '../components/Main/Main'
@@ -23,7 +23,6 @@ import ContentWrapperTravelGuide from '../components/ContentWrapperTravelGuide/C
 import SingleSliderTravelGuide from '../components/SingleSliderTravelGuide/SingleSliderTravelGuide'
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
-
 
 const MastHeadTopGuides = dynamic(() =>
   import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
@@ -221,9 +220,7 @@ export default function SingleTravelGuide(props) {
 
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
-      <main
-        className={`${rubik_mono_one.variable} ${rubik.variable}`}
-      >
+      <main className={`${open_sans.variable}`}>
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
             enteredPassword={enteredPassword}
@@ -244,7 +241,7 @@ export default function SingleTravelGuide(props) {
   })
 
   return (
-    <main className={`${rubik_mono_one.variable}`}>
+    <main className={`${open_sans.variable}`}>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}

@@ -24,8 +24,6 @@ import PasswordProtected from '../components/PasswordProtected/PasswordProtected
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 
-// Fonts
-import { rubik, rubik_mono_one } from '../styles/fonts/fonts'
 
 // Ads (lazy)
 const MastHeadTop = dynamic(() =>
@@ -149,7 +147,6 @@ export default function Component(props) {
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
-        className={`${rubik_mono_one.variable} ${rubik.variable}`}
       >
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
@@ -167,7 +164,7 @@ export default function Component(props) {
   }
 
   return (
-    <main className={`${rubik_mono_one.variable}`}>
+    <main>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}

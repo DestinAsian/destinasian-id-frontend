@@ -15,7 +15,7 @@ import Main from '../components/Main/Main'
 import SingleSlider from '../components/SingleSlider/SingleSlider'
 import SingleLTContainer from '../components/SingleLuxuryTravel/SingleLTContainer'
 import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
-import { rubik, rubik_mono_one } from '../styles/fonts/fonts'
+import { open_sans } from '../styles/fonts/fonts'
 import Cookies from 'js-cookie'
 
 // Dynamic Imports (iklan/ad components)
@@ -139,7 +139,7 @@ export default function SingleLuxuryTravel(props) {
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
-        className={`${rubik_mono_one.variable} ${rubik.variable}`}
+        className={`${open_sans.variable}`}
       >
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
@@ -158,7 +158,7 @@ export default function SingleLuxuryTravel(props) {
 
   return (
     <main
-      className={` ${rubik_mono_one.variable} ${rubik.variable}`}
+      className={` ${open_sans.variable}`}
     >
       <SEO
         title={seo?.title}

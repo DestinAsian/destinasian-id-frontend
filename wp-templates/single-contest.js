@@ -199,7 +199,6 @@ export default function SingleContest(props) {
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main
-        className={`${rubik_mono_one.variable} ${rubik.variable}`}
       >
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
@@ -217,7 +216,7 @@ export default function SingleContest(props) {
   }
 
   return (
-    <main className={`${rubik_mono_one.variable}`}>
+    <main>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}
