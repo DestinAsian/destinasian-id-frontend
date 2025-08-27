@@ -53,10 +53,9 @@
 }
 
 
-/* === CAPTION WRAPPER === */
 .caption-wrapper {
   position: absolute;
-  bottom: -2rem;
+  bottom: -1.3rem;
   left: 0;
   right: 0;
   display: flex;
@@ -69,15 +68,17 @@
   width: 100%;
 
   @media (min-width: $breakpoint-extra-small) {
+    bottom: -1.2rem;
     padding: 1rem 0 1.8rem;
   }
 }
+
 
 /* === CAPTION STYLE === */
 .caption {
   background-color: var(--wpe--color--white--smoke) !important;
   color: var(--wpe--color--grey);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem 1rem;
   width: 100%;
   text-align: left;
   pointer-events: auto;
@@ -87,7 +88,7 @@
   font-style: italic;
 
   @media (min-width: $breakpoint-extra-small) {
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 1rem;
     font-size: 0.8rem;
   }
 

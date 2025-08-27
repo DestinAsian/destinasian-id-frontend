@@ -26,7 +26,38 @@ $color-grey: #777;
   }
 }
 
-// Tidak perlu ubah style lain kecuali jika ingin overlay
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3; // 🔥 konsisten landscape, ubah sesuai desain
+  overflow: hidden;
+
+  img,
+  span {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+}
+
+.left-wrapper {
+  flex-shrink: 0;
+  width: 30%; // konsisten lebar kiri
+
+  @media (min-width: $breakpoint-extra-small) {
+    width: 25%;
+  }
+}
+
+.right-wrapper {
+  width: 70%;
+
+  @media (min-width: $breakpoint-extra-small) {
+    width: 75%;
+  }
+}
+
 
 
 .content-wrapper {
@@ -101,8 +132,8 @@ $color-grey: #777;
   }
 
   * {
-    font-family: 'Ringside Regular A', 'Ringside Regular B';
-    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     font-size: 0.6rem;
 
     @media (min-width: $breakpoint-extra-small) {
@@ -116,7 +147,7 @@ $color-grey: #777;
   align-items: flex-end;
   flex-wrap: wrap;
   column-gap: 0.5rem;
-  font-family: 'Ringside Regular A', 'Ringside Regular B';
+  font-family: 'Open Sans', sans-serif;
   font-weight: 500;
   row-gap: 0.3rem;
 
@@ -157,11 +188,19 @@ $color-grey: #777;
 }
 
 .meta {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 0.6rem;
   text-transform: none;
+
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 0.8rem;
+  }
 }
 
+
 .meta-hc {
-  font-family: var(--font--poppins);
+  font-family: 'Open Sans', sans-serif;
 }
 
 .title-wrapper {
@@ -174,26 +213,19 @@ $color-grey: #777;
 }
 
 .title {
-  font-family: 'Unit Slab Pro Black';
-  font-weight: 400;
+  // font-family: 'Open Sans', sans-serif;
+  font-family: "Scheherazade New";
+  font-weight: 500;
 }
 
 .title-hc {
-  font-family: var(--font--eb--garamond);
+  font-family: "Scheherazade New";
   font-weight: 700;
 }
 
-.title-advertorial {
-  font-family: var(--font--eb--garamond);
-  font-weight: 700;
-}
-
-.title-ll {
-  font-family: var(--font--rubik--mono--one);
-}
 
 .title-contest {
-  font-family: var(--font--poppins);
+  font-family: "Scheherazade New";
   font-weight: 700;
 }
 
@@ -254,8 +286,8 @@ $color-grey: #777;
   }
 
   p {
-    font-family: 'Chronicle Display A', 'Chronicle Display B';
-    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     font-size: 0.65rem;
 
     @media (min-width: $breakpoint-extra-small) {
@@ -264,7 +296,7 @@ $color-grey: #777;
   }
 
   .more-link {
-    font-family: 'Chronicle Display A', 'Chronicle Display B';
+    font-family: 'Open Sans', sans-serif;
     font-weight: 700;
     font-size: 0.65rem;
 
