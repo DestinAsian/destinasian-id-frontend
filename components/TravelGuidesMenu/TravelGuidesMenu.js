@@ -15,7 +15,7 @@ export default function TravelGuidesMenu(className) {
   const [results, setResults] = useState([])
   const client = useApolloClient()
 
-  /** 🔹 Primary menu (header) */
+  /** Primary menu (header) */
   const { data: menusData } = useQuery(GetPrimaryMenu, {
     variables: { first: 20, headerLocation: PRIMARY_LOCATION },
     fetchPolicy: 'cache-first',
@@ -32,7 +32,7 @@ export default function TravelGuidesMenu(className) {
     [primaryMenu]
   )
 
-  /** 🔹 Fetch Travel Guides by category */
+  /** Fetch Travel Guides by category */
   useEffect(() => {
     let isMounted = true
 
