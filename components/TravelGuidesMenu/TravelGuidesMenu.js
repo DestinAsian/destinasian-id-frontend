@@ -15,7 +15,7 @@ export default function TravelGuidesMenu(className) {
   const [results, setResults] = useState([])
   const client = useApolloClient()
 
-  // Primary menu (header)
+  /** 🔹 Primary menu (header) */
   const { data: menusData } = useQuery(GetPrimaryMenu, {
     variables: { first: 20, headerLocation: PRIMARY_LOCATION },
     fetchPolicy: 'cache-first',
@@ -23,14 +23,16 @@ export default function TravelGuidesMenu(className) {
 
   const primaryMenu = menusData?.headerMenuItems?.edges ?? []
 
-  const mainCategoryLabels = useMemo(() => {
-    return primaryMenu
-      .map((post) => post?.node?.connectedNode?.node?.name)
-      .filter(Boolean)
-      .slice(0, 6) // Ambil hanya 6 kategori
-  }, [primaryMenu])
+  const mainCategoryLabels = useMemo(
+    () =>
+      primaryMenu
+        .map((post) => post?.node?.connectedNode?.node?.name)
+        .filter(Boolean)
+        .slice(0, 6),
+    [primaryMenu]
+  )
 
-  // Fetch Travel Guides by category name
+  /** 🔹 Fetch Travel Guides by category */
   useEffect(() => {
     let isMounted = true
 
@@ -53,25 +55,24 @@ export default function TravelGuidesMenu(className) {
 
         if (isMounted) setResults(formatted)
       } catch (err) {
+        // ❌ hanya log error (biar gampang debugging, tanpa spam console)
         console.error('Failed to fetch travel guides:', err)
       }
     }
 
-    if (mainCategoryLabels.length > 0) {
-      fetchGuides()
-    }
+    if (mainCategoryLabels.length > 0) fetchGuides()
 
     return () => {
       isMounted = false
     }
   }, [mainCategoryLabels, client])
 
-  // Footer menu
+  /** 🔹 Footer menu */
   const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
     GetTravelGuidesMenu,
     {
       variables: {
-        first: 30, // ⚠️ lebih ringan, ganti sesuai kebutuhan
+        first: 30,
         footerHeaderLocation: FOOTER_LOCATION,
       },
       fetchPolicy: 'cache-first',
@@ -84,65 +85,61 @@ export default function TravelGuidesMenu(className) {
     [footerMenu]
   )
 
-  function renderMenu(items) {
-    return (
-      <>
-        {items?.map((item) => {
-          const menuId = item?.id
-          const parentName = item?.label
-          const parentUri = item?.url || item?.path || '#'
-          const childrenMenus = item?.connectedNode?.node?.children?.edges || []
+  /** 🔹 Render menu */
+  const renderMenu = (items) =>
+    items?.map((item) => {
+      const menuId = item?.id
+      const parentName = item?.label
+      const parentUri = item?.url || item?.path || '#'
+      const childrenMenus = item?.connectedNode?.node?.children?.edges || []
 
-          return (
-            <div key={menuId} className={cx('menu-row')}>
-              <div className={cx('parent-menu')}>
-                <Link href={parentUri}>
-                  <span
-                    className={cx(
-                      'title',
-                      className?.className === 'dark-color' ? 'title-dark' : ''
-                    )}
-                  >
-                    {parentName}
-                  </span>
-                  <span className={cx('separator', 'parent-separator')}>|</span>
-                </Link>
-              </div>
+      return (
+        <div key={menuId} className={cx('menu-row')}>
+          <div className={cx('parent-menu')}>
+            <Link href={parentUri}>
+              <span
+                className={cx(
+                  'title',
+                  className?.className === 'dark-color' ? 'title-dark' : ''
+                )}
+              >
+                {parentName}
+              </span>
+              <span className={cx('separator', 'parent-separator')}>|</span>
+            </Link>
+          </div>
 
-              {childrenMenus.length > 0 && (
-                <ul className={cx('children-menu')}>
-                  {childrenMenus.map((edge, index) => {
-                    const childName = edge?.node?.name
-                    const childUri = edge?.node?.uri
+          {childrenMenus.length > 0 && (
+            <ul className={cx('children-menu')}>
+              {childrenMenus.map((edge, index) => {
+                const childName = edge?.node?.name
+                const childUri = edge?.node?.uri
 
-                    return (
-                      <li key={childUri} className={cx('nav-link')}>
-                        {index > 0 && <span className={cx('separator')}>|</span>}
-                        <Link href={childUri}>
-                          <h2
-                            className={cx(
-                              'nav-name',
-                              className?.className === 'dark-color'
-                                ? 'nav-name-dark'
-                                : ''
-                            )}
-                          >
-                            {childName}
-                          </h2>
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-            </div>
-          )
-        })}
-      </>
-    )
-  }
+                return (
+                  <li key={childUri} className={cx('nav-link')}>
+                    {index > 0 && <span className={cx('separator')}>|</span>}
+                    <Link href={childUri}>
+                      <h2
+                        className={cx(
+                          'nav-name',
+                          className?.className === 'dark-color'
+                            ? 'nav-name-dark'
+                            : ''
+                        )}
+                      >
+                        {childName}
+                      </h2>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+      )
+    })
 
-  // Hanya render ketika data siap
+  /** 🔹 Render utama */
   if (footerMenusLoading) return null
 
   return (

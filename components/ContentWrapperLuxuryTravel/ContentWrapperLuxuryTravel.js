@@ -87,8 +87,6 @@ export default function ContentWrapperLuxuryTravel({ content, children }) {
           typeof node.getAttribute === 'function' &&
           node.getAttribute('src')?.includes(BACKEND_URL)
         ) {
-          console.log('CONTENT RAW:', content)
-
           // Skip images inside .gallery-slider
           const insideGallerySlider = node.closest('.gallery')
           if (insideGallerySlider) return

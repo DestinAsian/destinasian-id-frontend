@@ -51,17 +51,7 @@ export default function ContentWrapperEditorial({ content, children }) {
           const newDomain = 'https://backend.destinasian.co.id'
           src = src.replace(testDomain, newDomain)
           srcset = srcset.replaceAll(testDomain, newDomain)
-
-
-          console.log('[IMG FOUND]', {
-            src,
-            srcset,
-            alt,
-            width,
-            height
-          })
-      
-
+          
           // Cek kalau parent figure punya caption
           let captionText = ''
           const figure = node.closest('figure')
