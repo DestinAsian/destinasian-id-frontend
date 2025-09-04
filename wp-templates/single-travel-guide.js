@@ -23,6 +23,7 @@ import ContentWrapperTravelGuide from '../components/ContentWrapperTravelGuide/C
 import SingleSliderTravelGuide from '../components/SingleSliderTravelGuide/SingleSliderTravelGuide'
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import FloatingButtons from '../components/FloatingButtons/FloatingButtons'
 
 const MastHeadTopGuides = dynamic(() =>
   import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
@@ -241,6 +242,8 @@ export default function SingleTravelGuide(props) {
   })
 
   return (
+    <>
+
     <main className={`${open_sans.variable}`}>
       <SEO
         title={seo?.title}
@@ -340,6 +343,11 @@ export default function SingleTravelGuide(props) {
 
       <Footer />
     </main>
+    {props?.data?.travelGuide?.buttontopup && (
+  <FloatingButtons buttonTopUp={props.data.travelGuide.buttontopup} />
+)}
+
+    </>
   )
 }
 
@@ -373,6 +381,13 @@ SingleTravelGuide.query = gql`
         linkBookNow
         linkLocation
         guideLocation
+      }
+      buttontopup {
+        buttonPopUp1
+        buttonPopUp2
+        linkButtonPopUp1
+        linkButtonPopUp2
+        logoButtonPopUp
       }
       categories(where: { childless: true }) {
         edges {
