@@ -4,7 +4,9 @@ import React from 'react'
 import Link from 'next/link'
 import styles from './TravelGuidesCategories.module.scss'
 import classNames from 'classnames/bind'
+import Image from 'next/image'
 
+import logohilton from '../../assets/logo/logo_hilton.png'
 const cx = classNames.bind(styles)
 
 const normalize = (str = '') => str.toLowerCase().trim()
@@ -23,7 +25,17 @@ const TravelGuideCategories = ({ data }) => {
 
   return (
     <div className={cx('wrapper')}>
-      <h2 className={cx('title')}>Guides</h2>
+      <div className={cx('titleWrapper')}>
+        <h2 className={cx('title')}>Guides</h2>
+        <Image
+          src={logohilton.src}
+          alt="Hilton Logo"
+          width={100}
+          height={100}
+          className={cx('logo')}
+        />
+        
+      </div>
       <div className={cx('grid')}>
         {orderedCategories.map(({ id, name, uri, categoryImages }) => {
           const imageUrl = categoryImages?.categorySlide1?.mediaItemUrl
