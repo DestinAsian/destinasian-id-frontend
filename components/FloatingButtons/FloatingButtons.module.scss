@@ -1,0 +1,142 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.floatingButtonsWrap {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  @media (max-width: $breakpoint-small) {
+    bottom: 0.75rem;
+    gap: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+
+.buttonItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--wpe--color--teal--deep);
+  border-radius: 0.5rem;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 4px 8px rgba(0, 0, 0, 0.25),
+      0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .buttonLink {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+
+    @media (max-width: $breakpoint-small) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    // background: rgba(0,0,0,0.3);
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    color: #eee;
+    // transition: color 0.2s ease, background 0.2s ease;
+
+    &:hover {
+      color: var(--wpe--color--teal--deep);
+      background:#fff;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      width: 16px;
+      height: 16px;
+      font-size: 10px;
+      top: 2px;
+      right: 2px;
+    }
+  }
+}
+
+
+  .logoWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 2rem;
+    flex-shrink: 0;
+
+    img, svg {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      width: 3rem;
+      height: 1.5rem;
+    }
+  }
+
+//   .closeBtn {
+//     position: absolute;   // absolute dalam buttonItem
+//     top: 4px;
+//     right: 4px;
+//     background: rgba(0,0,0,0.3);
+//     border: none;
+//     border-radius: 50%;
+//     width: 20px;
+//     height: 20px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     cursor: pointer;
+//     font-size: 12px;
+//     color: #eee;
+//     transition: color 0.2s ease, background 0.2s ease;
+
+//     &:hover {
+//       color: #fff;
+//       background: rgba(0,0,0,0.5);
+//     }
+
+//     @media (max-width: $breakpoint-small) {
+//       width: 16px;
+//       height: 16px;
+//       font-size: 10px;
+//       top: 2px;
+//       right: 2px;
+//     }
+//   }
+// }

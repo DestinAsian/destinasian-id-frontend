@@ -29,6 +29,7 @@ import MastHeadTopGuides from '../components/AdUnit/MastHeadTop/MastHeadTopGuide
 import MastHeadTopMobileGuides from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'
 import MastHeadBottomGuides from '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
 import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+import FloatingButtons from '../components/FloatingButtons/FloatingButtons'
 
 // Queries
 import { GetMenus } from '../queries/GetMenus'
@@ -187,42 +188,93 @@ export default function Category({ loading, data: initialData }) {
   if (loading) return <>Loading...</>
 
   return (
-    <main className={`${open_sans.variable}`}>
-      {isDesktop ? (
-        <>
-          <CategoryDesktopHeader {...sharedHeaderProps} />
-          <SecondaryDesktopHeader
-            {...sharedHeaderProps}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-          />
-        </>
-      ) : (
-        <>
-          <CategoryHeader {...sharedHeaderProps} />
-          <SecondaryHeader
-            {...sharedHeaderProps}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-          />
-        </>
-      )}
+    <>
+      <main className={`${open_sans.variable}`}>
+        {isDesktop ? (
+          <>
+            <CategoryDesktopHeader {...sharedHeaderProps} />
+            <SecondaryDesktopHeader
+              {...sharedHeaderProps}
+              isGuidesNavShown={isGuidesNavShown}
+              setIsGuidesNavShown={setIsGuidesNavShown}
+            />
+          </>
+        ) : (
+          <>
+            <CategoryHeader {...sharedHeaderProps} />
+            <SecondaryHeader
+              {...sharedHeaderProps}
+              isGuidesNavShown={isGuidesNavShown}
+              setIsGuidesNavShown={setIsGuidesNavShown}
+            />
+          </>
+        )}
 
-      <CategoryEntryHeader
-        parent={parent?.node?.name}
-        children={children?.edges}
-        title={name}
-        destinationGuides={destinationGuides?.destinationGuides}
-        changeToSlider={categoryImages?.changeToSlider}
-        guidesTitle={destinationGuides?.guidesTitle}
-        categorySlider={categorySlider}
-        image={categoryImages?.categoryImages?.mediaItemUrl}
-        imageCaption={categoryImages?.categoryImagesCaption}
-        description={description}
-      />
-      <Main>
-        {tagline && <Tagline tagline={tagline} />}
-        {isGuidesCategory && (
+        <CategoryEntryHeader
+          parent={parent?.node?.name}
+          children={children?.edges}
+          title={name}
+          destinationGuides={destinationGuides?.destinationGuides}
+          changeToSlider={categoryImages?.changeToSlider}
+          guidesTitle={destinationGuides?.guidesTitle}
+          categorySlider={categorySlider}
+          image={categoryImages?.categoryImages?.mediaItemUrl}
+          imageCaption={categoryImages?.categoryImagesCaption}
+          description={description}
+        />
+        <Main style={{ position: 'relative', zIndex: 1 }}>
+          {tagline && <Tagline tagline={tagline} />}
+          {isGuidesCategory && (
+            <hr
+              style={{
+                border: 'none',
+                borderTop: '1px solid black',
+                margin: '2rem auto',
+                maxWidth: '1400px',
+              }}
+            />
+          )}
+          {renderAdComponent('top')}
+          <hr
+            style={{
+              border: 'none',
+              borderTop: '1px solid black',
+              padding: '0 0 2rem',
+              maxWidth: '1400px',
+              margin: '0 auto',
+            }}
+          />
+
+          <CategoryStoriesLatest
+            categoryUri={databaseId}
+            pinPosts={pinPosts}
+            name={name}
+            children={children}
+            parent={parent?.node?.name}
+            guideStories={guideStorie}
+          />
+          {isGuidesCategory && guidesfitur && (
+            <GuideFitur guidesfitur={guidesfitur} />
+          )}
+          <CategorySecondStoriesLatest
+            categoryUri={databaseId}
+            pinPosts={pinPosts}
+            name={name}
+            children={children}
+            parent={parent?.node?.name}
+            bannerDa={guideStorie}
+            guideStories={guideStorie}
+          />
+          {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
+          <CategoryStories
+            categoryUri={databaseId}
+            pinPosts={pinPosts}
+            name={name}
+            children={children}
+            parent={parent?.node?.name}
+          />
+          <BannerPosterGuide guideStorie={guideStorie} />
+
           <hr
             style={{
               border: 'none',
@@ -231,61 +283,14 @@ export default function Category({ loading, data: initialData }) {
               maxWidth: '1400px',
             }}
           />
-        )}
-        {renderAdComponent('top')}
-        <hr
-          style={{
-            border: 'none',
-            borderTop: '1px solid black',
-            padding: '0 0 2rem',
-            maxWidth: '1400px',
-            margin: '0 auto',
-          }}
-        />
-
-        <CategoryStoriesLatest
-          categoryUri={databaseId}
-          pinPosts={pinPosts}
-          name={name}
-          children={children}
-          parent={parent?.node?.name}
-          guideStories={guideStorie}
-        />
-        {isGuidesCategory && guidesfitur && (
-          <GuideFitur guidesfitur={guidesfitur} />
-        )}
-        <CategorySecondStoriesLatest
-          categoryUri={databaseId}
-          pinPosts={pinPosts}
-          name={name}
-          children={children}
-          parent={parent?.node?.name}
-          bannerDa={guideStorie}
-          guideStories={guideStorie}
-        />
-        {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
-        <CategoryStories
-          categoryUri={databaseId}
-          pinPosts={pinPosts}
-          name={name}
-          children={children}
-          parent={parent?.node?.name}
-        />
-        <BannerPosterGuide guideStorie={guideStorie} />
-
-        <hr
-          style={{
-            border: 'none',
-            borderTop: '1px solid black',
-            margin: '2rem auto',
-            maxWidth: '1400px',
-          }}
-        />
-        {renderAdComponent('bottom')}
-      </Main>
-
-      <Footer />
-    </main>
+          {renderAdComponent('bottom')}
+        </Main>
+        <Footer />
+      </main>
+      {category?.buttontopup && (
+        <FloatingButtons buttonTopUp={category.buttontopup} />
+      )}
+    </>
   )
 }
 
@@ -366,6 +371,13 @@ Category.query = gql`
           mediaItemUrl
         }
         linkUrlBannerReelIg2
+      }
+      buttontopup {
+        buttonPopUp1
+        buttonPopUp2
+        linkButtonPopUp1
+        linkButtonPopUp2
+        logoButtonPopUp
       }
       tagline {
         tagline
