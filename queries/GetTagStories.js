@@ -5,7 +5,6 @@ export const GetTagStories = gql`
     $first: Int
     $after: String
     $id: ID!
-    $contentTypes: [ContentTypesOfTagEnum]
   ) {
     tag(id: $id, idType: DATABASE_ID) {
       name
@@ -14,7 +13,7 @@ export const GetTagStories = gql`
         after: $after
         where: {
           status: PUBLISH
-          contentTypes: $contentTypes
+          contentTypes: [POST, TRAVEL_GUIDE]
           orderby: [{ field: DATE, order: DESC }]
         }
       ) {
@@ -60,26 +59,20 @@ export const GetTagStories = gql`
                   }
                 }
               }
-              acfCategoryIcon {
-                categoryLabel
-                chooseYourCategory
-                chooseIcon {
-                  mediaItemUrl
-                }
-              }
-              acfLocationIcon {
-                fieldGroupName
-                locationLabel
-                locationUrl
-              }
             }
-            ... on Editorial {
+              ... on TravelGuide {
               id
               title
-              content
-              date
               uri
               excerpt
+              guide_book_now {
+                fieldGroupName
+                guideName
+                linkBookNow
+                guidePrice
+                linkLocation
+                guideLocation
+              }
               featuredImage {
                 node {
                   id
@@ -96,39 +89,7 @@ export const GetTagStories = gql`
                   name
                 }
               }
-              categories {
-                edges {
-                  node {
-                    name
-                    uri
-                    parent {
-                      node {
-                        name
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            ... on Update {
-              id
-              title
-              content
-              date
-              uri
-              excerpt
-              featuredImage {
-                node {
-                  id
-                  sourceUrl
-                  altText
-                  mediaDetails {
-                    width
-                    height
-                  }
-                }
-              }
-              categories {
+              categories(where: { childless: true }) {
                 edges {
                   node {
                     name

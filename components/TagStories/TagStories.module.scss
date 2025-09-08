@@ -6,8 +6,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 0;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto;
   width: 100vw;
   position: relative;
 
@@ -30,5 +29,50 @@
 
   .banner-ad-wrapper {
     width: 100vw;
+  }
+}
+
+.guide-info {
+  margin: 1.5rem 1rem 0 1rem;
+  font-size: 0.95rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Inter', sans-serif;
+
+  .separator {
+    color: #888;
+    font-weight: bold;
+  }
+
+  .guide-name {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .guide-location {
+    color: #000;
+    font-size: 0.95rem;
+
+    &:hover {
+      color: var(--wpe--color--teal--deep);
+    }
+  }
+
+  .guide-price {
+    color: #000;
+    font-size: 0.95rem;
+  }
+
+  .book-now-button {
+    color: #000;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s;
+
+    &:hover {
+      color: var(--wpe--color--teal--deep);
+    }
   }
 }

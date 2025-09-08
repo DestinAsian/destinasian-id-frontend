@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { GetMenus } from '../queries/GetMenus'
@@ -6,128 +6,78 @@ import { GetLatestStories } from '../queries/GetLatestStories'
 import { open_sans } from '../styles/fonts/fonts'
 import SEO from '../components/SEO/SEO'
 
-// Import Components
-import Header from '../components/Header/Header'
+// Components
+import SingleHeader from '../components/SingleHeader/SingleHeader'
+import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
 import TagStories from '../components/TagStories/TagStories'
 import Main from '../components/Main/Main'
 import Footer from '../components/Footer/Footer'
 
-
+// Ads
+import MastHeadTop from '../components/AdUnit/MastHeadTop/MastHeadTop'
+import MastHeadTopMobile from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'
+import MastHeadBottom from '../components/AdUnit/MastHeadBottom/MastHeadBottom'
+import MastHeadBottomMobile from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'
+import MastHeadTopGuides from '../components/AdUnit/MastHeadTop/MastHeadTopGuides'
+import MastHeadTopMobileGuides from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'
+import MastHeadBottomGuides from '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
+import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
 export default function Component(props) {
-  const {seo, name, databaseId } = props?.data?.tag ?? []
+  // Pastikan data selalu object, bukan array
+  const { seo, name, databaseId, uri } = props?.data?.tag ?? {}
 
-  // Search function content
+  // UI States
   const [searchQuery, setSearchQuery] = useState('')
-  // Scrolled Function
   const [isScrolled, setIsScrolled] = useState(false)
-  // NavShown Function
   const [isSearchBarShown, setIsSearchBarShown] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isRCANavShown, setIsRCANavShown] = useState(false)
   const [isMagNavShown, setIsMagNavShown] = useState(false)
   const [isBurgerNavShown, setIsBurgerNavShown] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  // Stop scrolling pages when searchQuery
+  // Handle scroll & responsive screen (desktop vs mobile)
   useEffect(() => {
-    if (searchQuery !== '') {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [searchQuery])
-
-  // Add sticky header on scroll
-  useEffect(() => {
-    function handleScroll() {
-      setIsScrolled(window.scrollY > 0)
+    const handleScroll = () => setIsScrolled(window.scrollY > 0)
+    const handleResize = () => {
+      const width = window.innerWidth
+      setIsMobile(width <= 768)
+      setIsDesktop(width > 768)
     }
 
+    handleScroll()
+    handleResize()
     window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleResize)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
     }
   }, [])
 
-  // Stop scrolling pages when isNavShown
+  // Lock body scroll ketika overlay/nav aktif
   useEffect(() => {
-    if (isNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isNavShown])
+    const shouldLock =
+      searchQuery ||
+      isNavShown ||
+      isSearchBarShown ||
+      isMagNavShown ||
+      isGuidesNavShown ||
+      isBurgerNavShown
 
-  // Stop scrolling pages when isSearchBarShown
-  useEffect(() => {
-    if (isSearchBarShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isSearchBarShown])
-
-  // Stop scrolling pages when isMagNavShown
-  useEffect(() => {
-    if (isMagNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isMagNavShown])
-
-  // Stop scrolling pages when isRCANavShown
-  useEffect(() => {
-    if (isRCANavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isRCANavShown])
-
-  // Stop scrolling pages when isGuidesNavShown
-  useEffect(() => {
-    if (isGuidesNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isGuidesNavShown])
-
-  // Stop scrolling pages when isBurgerNavShown
-  useEffect(() => {
-    if (isBurgerNavShown) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [isBurgerNavShown])
-
-  const { data: rcaData } = useQuery(GetLatestRCA, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  const [latestRCA, setLatestRCA] = useState(null)
-
-  useEffect(() => {
-    if (rcaData?.readersChoiceAwards?.edges) {
-      // Find the first RCA where parent is null
-      const filteredRCA = rcaData.readersChoiceAwards.edges.find(
-        (edge) => !edge.node.parent,
-      )?.node
-      setLatestRCA(filteredRCA || null)
-    }
-  }, [rcaData]) // Runs whenever rcaData changes
-
-  const {
-    // title: rcaTitle,
-    databaseId: rcaDatabaseId,
-    uri: rcaUri,
-  } = latestRCA ?? []
+    document.body.style.overflow = shouldLock ? 'hidden' : 'visible'
+  }, [
+    searchQuery,
+    isNavShown,
+    isSearchBarShown,
+    isMagNavShown,
+    isGuidesNavShown,
+    isBurgerNavShown,
+  ])
 
   // Get menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -138,138 +88,135 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
 
-  // Header Menu
-  const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
-  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
-  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
-  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
-  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
-  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
-
-  // Get Footer menus
-  const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
-    GetFooterMenus,
-    {
-      variables: {
-        first: 100,
-        footerHeaderLocation: MENUS.FOOTER_LOCATION,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
-  )
-
-  // Footer Menu
-  const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
-
   // Get latest travel stories
-  const { data: latestStories, loading: latestLoading } = useQuery(
-    GetLatestStories,
-    {
-      variables: {
-        first: 5,
-      },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    },
+  const { data: latestStories } = useQuery(GetLatestStories, {
+    variables: { first: 5 },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
+
+  const latestPosts =
+    latestStories?.posts?.edges?.map((post) => post.node) ?? []
+  const latestAllPosts = latestPosts.sort(
+    (a, b) => new Date(b.date) - new Date(a.date),
   )
-
-  // Latest Travel Stories
-  const latestPosts = latestStories?.posts ?? []
-  const latestEditorials = latestStories?.editorials ?? []
-  const latestUpdates = latestStories?.updates ?? []
-
-  const latestMainPosts = []
-  const latestMainEditorialPosts = []
-  const latestMainUpdatesPosts = []
-
-  // loop through all the latest categories posts
-  latestPosts?.edges?.forEach((post) => {
-    latestMainPosts.push(post.node)
-  })
-
-  // loop through all the latest categories and their posts
-  latestEditorials?.edges?.forEach((post) => {
-    latestMainEditorialPosts.push(post.node)
-  })
-
-  // loop through all the latest categories and their posts
-  latestUpdates?.edges?.forEach((post) => {
-    latestMainUpdatesPosts.push(post.node)
-  })
-
-  // define latestCatPostCards
-  const latestMainCatPosts = [
-    ...(latestMainPosts != null ? latestMainPosts : []),
-    ...(latestMainEditorialPosts != null ? latestMainEditorialPosts : []),
-    ...(latestMainUpdatesPosts != null ? latestMainUpdatesPosts : []),
-  ]
-
-  // sort posts by date
-  const sortPostsByDate = (a, b) => {
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-    return dateB - dateA // Sort in descending order
-  }
-
-  // sortByDate latestCat & childCat Posts
-  const latestAllPosts = latestMainCatPosts.sort(sortPostsByDate)
+  // Render Ads
+  const renderAdComponent = useCallback(
+    (pos) => {
+      const position = pos === 'top' ? 'Top' : 'Bottom'
+      const key = `${isMobile ? 'Mobile' : 'Desktop'}`
+      const componentMap = {
+        Top: {
+          Desktop: MastHeadTop,
+          Mobile: MastHeadTopMobile,
+          DesktopGuides: MastHeadTopGuides,
+          MobileGuides: MastHeadTopMobileGuides,
+        },
+        Bottom: {
+          Desktop: MastHeadBottom,
+          Mobile: MastHeadBottomMobile,
+          DesktopGuides: MastHeadBottomGuides,
+          MobileGuides: MastHeadBottomMobileGuides,
+        },
+      }
+      // Karena ini tag page, kita asumsikan non-guides
+      const Component = componentMap[position][key]
+      return Component ? <Component /> : null
+    },
+    [isMobile],
+  )
 
   return (
-    <main
-      className={`${open_sans.variable}`}
-    >
+    <main className={`${open_sans.variable}`}>
+      {/* SEO */}
       <SEO
-      title={seo?.title}
-      description={seo?.metaDesc}
-      imageUrl={featuredImage?.node?.sourceUrl}
-      url={uri}
-      focuskw={seo?.focuskw}
-    />
-      <Header isScrolled={isScrolled} />
-      <SecondaryHeader
-        primaryMenuItems={primaryMenu}
-        secondaryMenuItems={secondaryMenu}
-        thirdMenuItems={thirdMenu}
-        fourthMenuItems={fourthMenu}
-        fifthMenuItems={fifthMenu}
-        featureMenuItems={featureMenu}
-        latestStories={latestAllPosts}
-        menusLoading={menusLoading}
-        latestLoading={latestLoading}
-        rcaDatabaseId={rcaDatabaseId}
-        rcaUri={rcaUri}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isSearchBarShown={isSearchBarShown}
-        setIsSearchBarShown={setIsSearchBarShown}
-        isMagNavShown={isMagNavShown}
-        setIsMagNavShown={setIsMagNavShown}
-        isGuidesNavShown={isGuidesNavShown}
-        setIsGuidesNavShown={setIsGuidesNavShown}
-        isRCANavShown={isRCANavShown}
-        setIsRCANavShown={setIsRCANavShown}
-        isBurgerNavShown={isBurgerNavShown}
-        setIsBurgerNavShown={setIsBurgerNavShown}
-        isScrolled={isScrolled}
+        title={seo?.title}
+        description={seo?.metaDesc}
+        url={uri}
+        focuskw={seo?.focuskw}
       />
-      <CategoryEntryHeader parent={'Tag: '} children={0} title={name} />
-      <Main>
+
+      {/* Header */}
+      {isDesktop ? (
         <>
-          <TagStories tagUri={databaseId} name={name} />
+          <SingleHeader
+            title={props?.data?.generalSettings?.title}
+            description={props?.data?.generalSettings?.description}
+            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+            latestStories={latestAllPosts}
+            menusLoading={menusLoading}
+            latestLoading={!latestStories}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+          />
+          <SingleDesktopHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
         </>
+      ) : (
+        <>
+          <SingleHeader
+            title={props?.data?.generalSettings?.title}
+            description={props?.data?.generalSettings?.description}
+            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+            latestStories={latestAllPosts}
+            menusLoading={menusLoading}
+            latestLoading={!latestStories}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isNavShown={isNavShown}
+            setIsNavShown={setIsNavShown}
+            isScrolled={isScrolled}
+          />
+          <SecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
+        </>
+      )}
+
+      {/* Category / Tag Header */}
+      <CategoryEntryHeader parent="Tag: " children={0} title={name} />
+
+      {/* Main Content */}
+      <Main>
+        {renderAdComponent('top')}
+        <TagStories tagUri={databaseId} name={name} />
+        {renderAdComponent('bottom')}
       </Main>
+
+      {/* Footer */}
       <Footer />
     </main>
   )
 }
 
+// GraphQL Query
 Component.query = gql`
   query GetTagPage($databaseId: ID!) {
     tag(id: $databaseId, idType: DATABASE_ID) {
@@ -280,17 +227,6 @@ Component.query = gql`
         title
         metaDesc
         focuskw
-      }
-      featuredImage {
-        node {
-          id
-          sourceUrl
-          altText
-          mediaDetails {
-            width
-            height
-          }
-        }
       }
       categoryImages {
         changeToSlider
@@ -323,8 +259,4 @@ Component.query = gql`
   }
 `
 
-Component.variables = ({ databaseId }) => {
-  return {
-    databaseId,
-  }
-}
+Component.variables = ({ databaseId }) => ({ databaseId })

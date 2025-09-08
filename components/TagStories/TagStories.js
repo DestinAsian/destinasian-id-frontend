@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+'use client'
+
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import classNames from 'classnames/bind'
 import styles from './TagStories.module.scss'
 import { useQuery } from '@apollo/client'
@@ -6,56 +8,58 @@ import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetTagStories } from '../../queries/GetTagStories'
 import dynamic from 'next/dynamic'
 
-const PostTwoColumns = dynamic(() => import('../../components/PostTwoColumns/PostTwoColumns'))
+const PostTwoColumns = dynamic(() =>
+  import('../../components/PostTwoColumns/PostTwoColumns'),
+)
+const TextTwoColumns = dynamic(() =>
+  import('../../components/PostTwoColumns/TextTwoColumns'),
+)
 const Button = dynamic(() => import('../../components/Button/Button'))
 
 let cx = classNames.bind(styles)
 
-export default function TagStories(tagUri) {
+export default function TagStories({ tagUri }) {
+  const postsPerPage = 4
+  const [visibleCount, setVisibleCount] = useState(postsPerPage)
+  const [delayedLoaded, setDelayedLoaded] = useState(false)
   const [isFetchingMore, setIsFetchingMore] = useState(false)
 
-  const postsPerPage = 4
-  const uri = tagUri?.tagUri
+  const uri = tagUri
 
-  let storiesVariable = {
+  const storiesVariable = {
     first: postsPerPage,
     after: null,
     id: uri,
-    contentTypes: [
-      CONTENT_TYPES.EDITORIAL,
-      CONTENT_TYPES.POST,
-      CONTENT_TYPES.UPDATE,
-    ],
+    contentTypes: [CONTENT_TYPES.POST, CONTENT_TYPES.TRAVEL_GUIDES],
   }
 
-  // Query untuk ambil post berdasarkan tag
   const { data, error, loading, fetchMore } = useQuery(GetTagStories, {
     variables: storiesVariable,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
 
-  const updateQuery = (prev, { fetchMoreResult }) => {
+  // UpdateQuery untuk gabung data lama + baru
+  const updateQuery = useCallback((prev, { fetchMoreResult }) => {
     if (!fetchMoreResult) return prev
-
-    const prevEdges = data?.tag?.contentNodes?.edges || []
+    const prevEdges = prev?.tag?.contentNodes?.edges || []
     const newEdges = fetchMoreResult?.tag?.contentNodes?.edges || []
 
     return {
-      ...data,
+      ...prev,
       tag: {
-        ...data?.tag,
+        ...prev?.tag,
         contentNodes: {
-          ...data?.tag?.contentNodes,
+          ...prev?.tag?.contentNodes,
           edges: [...prevEdges, ...newEdges],
           pageInfo: fetchMoreResult?.tag?.contentNodes?.pageInfo,
         },
       },
     }
-  }
+  }, [])
 
-  // Fetch more ketika scroll sampai bawah
-  const fetchMorePosts = () => {
+  // ✅ Fetch More
+  const fetchMorePosts = useCallback(() => {
     if (!isFetchingMore && data?.tag?.contentNodes?.pageInfo?.hasNextPage) {
       setIsFetchingMore(true)
       fetchMore({
@@ -63,17 +67,19 @@ export default function TagStories(tagUri) {
           after: data?.tag?.contentNodes?.pageInfo?.endCursor,
         },
         updateQuery,
-      }).then(() => {
+      }).finally(() => {
         setIsFetchingMore(false)
+        setVisibleCount((prev) => prev + postsPerPage)
       })
     }
-  }
+  }, [isFetchingMore, data, fetchMore, updateQuery])
 
+  // Auto load ketika scroll
   useEffect(() => {
     const handleScroll = () => {
       const scrolledToBottom =
         window.scrollY + window.innerHeight >=
-        document.documentElement.scrollHeight
+        document.documentElement.scrollHeight - 50
 
       if (scrolledToBottom) {
         fetchMorePosts()
@@ -84,11 +90,38 @@ export default function TagStories(tagUri) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchMorePosts])
 
+  // Delay render biar smooth
+  useEffect(() => {
+    const timeout = setTimeout(() => setDelayedLoaded(true), 500)
+    return () => clearTimeout(timeout)
+  }, [])
+
+  // Ambil semua post
+  const allPosts = useMemo(() => {
+    const content = data?.tag?.contentNodes?.edges || []
+    return content.map((post) => post.node)
+  }, [data])
+
+  // Hilangkan duplikat
+  const mergedPosts = useMemo(() => {
+    return allPosts.filter(
+      (post, index, self) =>
+        index === self.findIndex((p) => p?.id === post?.id),
+    )
+  }, [allPosts])
+
+  // Slice untuk delay
+  const initialPosts = mergedPosts.slice(0, postsPerPage)
+  const delayedPosts = delayedLoaded
+    ? mergedPosts.slice(postsPerPage, visibleCount)
+    : []
+
   if (error) {
-    return <pre>{JSON.stringify(error)}</pre>
+    return <pre>{JSON.stringify(error, null, 2)}</pre>
   }
 
-  if (loading) {
+  // Loading awal
+  if (loading && !data) {
     return (
       <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
         <Button className="gap-x-4">{'Loading...'}</Button>
@@ -96,70 +129,87 @@ export default function TagStories(tagUri) {
     )
   }
 
-  const allPosts = data?.tag?.contentNodes?.edges?.map((post) => post.node)
-
-  // Hilangkan duplikat post
-  const mergedPosts = [...allPosts].reduce((uniquePosts, post) => {
-    if (!uniquePosts.some((uniquePost) => uniquePost?.id === post?.id)) {
-      uniquePosts.push(post)
-    }
-    return uniquePosts
-  }, [])
+  // Render tiap post
+  const renderPost = (post) => {
+    const guideInfo = post?.guide_book_now
+    return (
+      <div key={post?.id} className={cx('post-wrapper')}>
+        <PostTwoColumns
+          title={post?.title}
+          uri={post?.uri}
+          featuredImage={post?.featuredImage?.node}
+        />
+        {guideInfo && (
+          <div className={cx('guide-info')}>
+            {guideInfo?.guideName && (
+              <span className={cx('guide-name')}>{guideInfo.guideName}</span>
+            )}
+            {guideInfo?.guideLocation && guideInfo?.linkLocation && (
+              <a
+                href={guideInfo.linkLocation}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cx('guide-location')}
+              >
+                {guideInfo.guideLocation}
+              </a>
+            )}
+            {guideInfo?.guidePrice && (
+              <>
+                <span className={cx('separator')}>|</span>
+                <span className={cx('guide-price')}>
+                  {guideInfo.guidePrice}
+                </span>
+              </>
+            )}
+            {guideInfo?.linkBookNow && (
+              <>
+                <span className={cx('separator')}>|</span>
+                <a
+                  href={guideInfo.linkBookNow}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cx('book-now-button')}
+                >
+                  Book Now
+                </a>
+              </>
+            )}
+          </div>
+        )}
+        <TextTwoColumns
+          title={post?.title}
+          excerpt={post?.excerpt}
+          uri={post?.uri}
+          parentCategory={post?.categories?.edges[0]?.node?.parent?.node?.name}
+          category={post?.categories?.edges[0]?.node?.name}
+          categoryUri={post?.categories?.edges[0]?.node?.uri}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className={cx('component')}>
-      {mergedPosts?.length !== 0 &&
-        mergedPosts?.map((post) => (
-          <div className={cx('post-wrapper')} key={post?.id}>
-            <PostTwoColumns
-              title={post?.title}
-              excerpt={post?.excerpt}
-              content={post?.content}
-              date={post?.date}
-              author={post?.author?.node?.name}
-              uri={post?.uri}
-              parentCategory={
-                post?.categories?.edges[0]?.node?.parent?.node?.name
-              }
-              category={post?.categories?.edges[0]?.node?.name}
-              categoryUri={post?.categories?.edges[0]?.node?.uri}
-              featuredImage={post?.featuredImage?.node}
-              chooseYourCategory={post?.acfCategoryIcon?.chooseYourCategory}
-              chooseIcon={post?.acfCategoryIcon?.chooseIcon?.mediaItemUrl}
-              categoryLabel={post?.acfCategoryIcon?.categoryLabel}
-              locationValidation={post?.acfLocationIcon?.fieldGroupName}
-              locationLabel={post?.acfLocationIcon?.locationLabel}
-              locationUrl={post?.acfLocationIcon?.locationUrl}
-            />
+      {[...initialPosts, ...delayedPosts].map(renderPost)}
+
+      {/* Loading saat scroll sama dengan loading awal */}
+      {isFetchingMore && (
+        <div className="mx-auto my-4 flex max-w-[100vw] justify-center md:max-w-[700px]">
+          <Button className="gap-x-4">{'Loading...'}</Button>
+        </div>
+      )}
+
+      {/* Tombol Load More manual */}
+      {data?.tag?.contentNodes?.pageInfo?.hasNextPage &&
+        mergedPosts.length > visibleCount &&
+        !isFetchingMore && (
+          <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
+            <Button onClick={fetchMorePosts} className="gap-x-4">
+              {'Load More'}
+            </Button>
           </div>
-        ))}
-
-      {mergedPosts?.length === 0 && (
-        <div className="mx-auto my-0 flex min-h-60 max-w-[100vw] items-center justify-center md:max-w-[700px]">
-          {'There is no results in this tag...'}
-        </div>
-      )}
-
-      {mergedPosts?.length !== 0 && mergedPosts?.length && (
-        <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
-          {data?.tag?.contentNodes?.pageInfo?.hasNextPage &&
-            data?.tag?.contentNodes?.pageInfo?.endCursor && (
-              <Button
-                onClick={() => {
-                  if (
-                    !isFetchingMore &&
-                    data?.tag?.contentNodes?.pageInfo?.hasNextPage
-                  ) {
-                    fetchMorePosts()
-                  }
-                }}
-                className="gap-x-4"
-              >
-                {isFetchingMore ? 'Loading...' : 'Load More'}
-              </Button>
-            )}
-        </div>
-      )}
+        )}
     </div>
   )
 }
