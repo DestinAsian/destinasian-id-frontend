@@ -10,13 +10,14 @@
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
+  margin-bottom: 1rem;
 
   @media (max-width: $breakpoint-small) {
     bottom: 0.75rem;
     gap: 0.5rem;
     justify-content: center;
     padding: 0 0.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
   }
 }
 
@@ -31,7 +32,7 @@
     0 2px 6px rgba(0, 0, 0, 0.2),
     0 6px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  white-space: nowrap; // biar background selalu pas dengan konten
+  white-space: nowrap;
 
   &:hover {
     transform: translateY(-2px);
