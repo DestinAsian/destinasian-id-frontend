@@ -20,6 +20,7 @@ import Tagline from '../components/Tagline/Tagline'
 import CategoryStories from '../components/CategoryStories/CategoryStories'
 import BannerPosterGuide from '../components/BannerPosterGuide/BannerPosterGuide'
 import { open_sans } from '../styles/fonts/fonts'
+import SEO from '../components/SEO/SEO'
 // Ads
 import MastHeadTop from '../components/AdUnit/MastHeadTop/MastHeadTop'
 import MastHeadTopMobile from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'
@@ -189,6 +190,13 @@ export default function Category({ loading, data: initialData }) {
 
   return (
     <>
+    <SEO
+        title={category?.seo?.title || category?.name}
+        description={category?.seo?.metaDesc || category?.description}
+        imageUrl={category?.categoryImages?.categoryImages?.mediaItemUrl}
+        url={category?.uri}
+        focuskw={category?.seo?.focuskw}
+      />
       <main className={`${open_sans.variable}`}>
         {isDesktop ? (
           <>
