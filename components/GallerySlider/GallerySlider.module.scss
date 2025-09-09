@@ -17,8 +17,7 @@
     width: 30px;
     height: 30px;
     font-size: 14px;
-    top: 11rem;
-
+    top: 9rem;
 
     transform: scale(0.5);
 
@@ -90,6 +89,8 @@
   @media (min-width: $breakpoint-extra-small) {
     padding: 0.5rem 0 1rem;
     font-size: 0.8rem;
+    line-height: 1;
+    padding: 0.5rem 1rem;
   }
 
   * {
