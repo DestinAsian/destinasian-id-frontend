@@ -12,11 +12,18 @@ const stripDropcapTags = (content = '') =>
     .replace(/\[\/?dropcap\]/gi, '')
     .replace(/<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi, '$1')
 
-export default function GuideLatestStories({ title, excerpt, uri, featuredImage, caption }) {
+export default function GuideLatestStories({
+  title,
+  excerpt,
+  uri,
+  featuredImage,
+  caption,
+}) {
   const text = stripDropcapTags(excerpt)
   const trimmed = text.slice(0, MAX_EXCERPT_LENGTH)
   const lastSpace = trimmed.lastIndexOf(' ')
-  const finalExcerpt = lastSpace !== -1 ? trimmed.slice(0, lastSpace) + '...' : trimmed
+  const finalExcerpt =
+    lastSpace !== -1 ? trimmed.slice(0, lastSpace) + '...' : trimmed
 
   return (
     <article className={cx('component')}>
@@ -41,14 +48,15 @@ export default function GuideLatestStories({ title, excerpt, uri, featuredImage,
         {featuredImage && (
           <div className={cx('imageColumn')}>
             <Link href={uri} passHref>
-              <Image
-                src={featuredImage.sourceUrl}
-                alt={`${title} Featured Image`}
-                width={600}
-                height={400}
-                className={cx('mainImage')}
-                loading="lazy"
-              />
+              <div className={cx('imageWrapper')}>
+                <Image
+                  src={featuredImage.sourceUrl}
+                  alt={`${title} Featured Image`}
+                  fill
+                  className={cx('mainImage')}
+                  loading="lazy"
+                />
+              </div>
             </Link>
             {caption && <div className={cx('caption')}>{caption}</div>}
           </div>
