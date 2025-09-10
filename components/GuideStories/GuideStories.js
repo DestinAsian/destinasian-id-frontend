@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import styles from './GuideStories.module.scss'
 import classNames from 'classnames/bind'
@@ -12,7 +14,6 @@ const GuideStories = ({ guideStories }) => {
     contentGuideStories,
     bannerGuideStories,
     imageGuideStories,
-    iconGuideStories,
     captionImagesGuideStories,
     linkBookHereGuideStories,
   } = guideStories
@@ -20,15 +21,20 @@ const GuideStories = ({ guideStories }) => {
   return (
     <div className={cx('guideStoriesWrap')}>
       <div className={cx('contentGrid')}>
-        {/* Left Column (70%) */}
+        {/* Left Section (main image + text) */}
         <div className={cx('leftContent')}>
           {imageGuideStories?.mediaItemUrl && (
             <div className={cx('imageWrapper')}>
-              <a href={linkBookHereGuideStories || '#'}>
+              <a
+                href={linkBookHereGuideStories || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <img
                   src={imageGuideStories.mediaItemUrl}
                   alt="Guide Main"
                   className={cx('mainImage')}
+                  loading="lazy"
                 />
               </a>
             </div>
@@ -46,7 +52,13 @@ const GuideStories = ({ guideStories }) => {
               )}
               {linkBookHereGuideStories && (
                 <span className={cx('bookHere')}>
-                  <a href={linkBookHereGuideStories}>Book Here</a>
+                  <a
+                    href={linkBookHereGuideStories}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Book Here
+                  </a>
                 </span>
               )}
             </div>
@@ -67,13 +79,14 @@ const GuideStories = ({ guideStories }) => {
           </div>
         </div>
 
-        {/* Right Banner (30%) */}
+        {/* Right Banner */}
         {bannerGuideStories?.mediaItemUrl && (
           <div className={cx('rightBanner')}>
             <img
               src={bannerGuideStories.mediaItemUrl}
               alt="Banner Guide"
               className={cx('bannerImage')}
+              loading="lazy"
             />
           </div>
         )}

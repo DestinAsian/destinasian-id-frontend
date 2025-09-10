@@ -9,14 +9,14 @@ import { GetTagStories } from '../../queries/GetTagStories'
 import dynamic from 'next/dynamic'
 
 const PostTwoColumns = dynamic(() =>
-  import('../../components/PostTwoColumns/PostTwoColumns'),
+  import('../../components/PostTwoColumns/PostTwoColumns')
 )
 const TextTwoColumns = dynamic(() =>
-  import('../../components/PostTwoColumns/TextTwoColumns'),
+  import('../../components/PostTwoColumns/TextTwoColumns')
 )
 const Button = dynamic(() => import('../../components/Button/Button'))
 
-let cx = classNames.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function TagStories({ tagUri }) {
   const postsPerPage = 4
@@ -24,22 +24,18 @@ export default function TagStories({ tagUri }) {
   const [delayedLoaded, setDelayedLoaded] = useState(false)
   const [isFetchingMore, setIsFetchingMore] = useState(false)
 
-  const uri = tagUri
-
-  const storiesVariable = {
-    first: postsPerPage,
-    after: null,
-    id: uri,
-    contentTypes: [CONTENT_TYPES.POST, CONTENT_TYPES.TRAVEL_GUIDES],
-  }
-
   const { data, error, loading, fetchMore } = useQuery(GetTagStories, {
-    variables: storiesVariable,
+    variables: {
+      first: postsPerPage,
+      after: null,
+      id: tagUri,
+      contentTypes: [CONTENT_TYPES.POST, CONTENT_TYPES.TRAVEL_GUIDES],
+    },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
 
-  // UpdateQuery untuk gabung data lama + baru
+  // Merge old + new data
   const updateQuery = useCallback((prev, { fetchMoreResult }) => {
     if (!fetchMoreResult) return prev
     const prevEdges = prev?.tag?.contentNodes?.edges || []
@@ -58,14 +54,12 @@ export default function TagStories({ tagUri }) {
     }
   }, [])
 
-  // ✅ Fetch More
+  // Load more posts
   const fetchMorePosts = useCallback(() => {
     if (!isFetchingMore && data?.tag?.contentNodes?.pageInfo?.hasNextPage) {
       setIsFetchingMore(true)
       fetchMore({
-        variables: {
-          after: data?.tag?.contentNodes?.pageInfo?.endCursor,
-        },
+        variables: { after: data?.tag?.contentNodes?.pageInfo?.endCursor },
         updateQuery,
       }).finally(() => {
         setIsFetchingMore(false)
@@ -74,43 +68,40 @@ export default function TagStories({ tagUri }) {
     }
   }, [isFetchingMore, data, fetchMore, updateQuery])
 
-  // Auto load ketika scroll
+  // Auto-load on scroll
   useEffect(() => {
     const handleScroll = () => {
       const scrolledToBottom =
         window.scrollY + window.innerHeight >=
         document.documentElement.scrollHeight - 50
 
-      if (scrolledToBottom) {
-        fetchMorePosts()
-      }
+      if (scrolledToBottom) fetchMorePosts()
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchMorePosts])
 
-  // Delay render biar smooth
+  // Delay for smoother rendering
   useEffect(() => {
     const timeout = setTimeout(() => setDelayedLoaded(true), 500)
     return () => clearTimeout(timeout)
   }, [])
 
-  // Ambil semua post
+  // Collect all posts
   const allPosts = useMemo(() => {
-    const content = data?.tag?.contentNodes?.edges || []
-    return content.map((post) => post.node)
+    const edges = data?.tag?.contentNodes?.edges || []
+    return edges.map((post) => post.node)
   }, [data])
 
-  // Hilangkan duplikat
+  // Remove duplicates
   const mergedPosts = useMemo(() => {
     return allPosts.filter(
       (post, index, self) =>
-        index === self.findIndex((p) => p?.id === post?.id),
+        index === self.findIndex((p) => p?.id === post?.id)
     )
   }, [allPosts])
 
-  // Slice untuk delay
   const initialPosts = mergedPosts.slice(0, postsPerPage)
   const delayedPosts = delayedLoaded
     ? mergedPosts.slice(postsPerPage, visibleCount)
@@ -120,18 +111,18 @@ export default function TagStories({ tagUri }) {
     return <pre>{JSON.stringify(error, null, 2)}</pre>
   }
 
-  // Loading awal
   if (loading && !data) {
     return (
       <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
-        <Button className="gap-x-4">{'Loading...'}</Button>
+        <Button className="gap-x-4">Loading...</Button>
       </div>
     )
   }
 
-  // Render tiap post
+  // Render individual post
   const renderPost = (post) => {
     const guideInfo = post?.guide_book_now
+
     return (
       <div key={post?.id} className={cx('post-wrapper')}>
         <PostTwoColumns
@@ -139,6 +130,7 @@ export default function TagStories({ tagUri }) {
           uri={post?.uri}
           featuredImage={post?.featuredImage?.node}
         />
+
         {guideInfo && (
           <div className={cx('guide-info')}>
             {guideInfo?.guideName && (
@@ -157,9 +149,7 @@ export default function TagStories({ tagUri }) {
             {guideInfo?.guidePrice && (
               <>
                 <span className={cx('separator')}>|</span>
-                <span className={cx('guide-price')}>
-                  {guideInfo.guidePrice}
-                </span>
+                <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
               </>
             )}
             {guideInfo?.linkBookNow && (
@@ -177,6 +167,7 @@ export default function TagStories({ tagUri }) {
             )}
           </div>
         )}
+
         <TextTwoColumns
           title={post?.title}
           excerpt={post?.excerpt}
@@ -193,20 +184,18 @@ export default function TagStories({ tagUri }) {
     <div className={cx('component')}>
       {[...initialPosts, ...delayedPosts].map(renderPost)}
 
-      {/* Loading saat scroll sama dengan loading awal */}
       {isFetchingMore && (
         <div className="mx-auto my-4 flex max-w-[100vw] justify-center md:max-w-[700px]">
-          <Button className="gap-x-4">{'Loading...'}</Button>
+          <Button className="gap-x-4">Loading...</Button>
         </div>
       )}
 
-      {/* Tombol Load More manual */}
       {data?.tag?.contentNodes?.pageInfo?.hasNextPage &&
         mergedPosts.length > visibleCount &&
         !isFetchingMore && (
           <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
             <Button onClick={fetchMorePosts} className="gap-x-4">
-              {'Load More'}
+              Load More
             </Button>
           </div>
         )}

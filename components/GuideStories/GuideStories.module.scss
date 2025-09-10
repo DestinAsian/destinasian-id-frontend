@@ -3,17 +3,20 @@
 .guideStoriesWrap {
   max-width: 1400px;
   margin: 2rem auto;
+  padding: 0 1rem;
 
+  @media (max-width: $breakpoint-medium) {
+    padding: 0 1rem;
+  }
 }
 
 .contentGrid {
   display: flex;
   gap: 2rem;
-  
 
   @media (max-width: $breakpoint-medium) {
     flex-direction: column-reverse;
-    padding: 0 1rem;
+    gap: 1.5rem;
   }
 }
 
@@ -25,9 +28,10 @@
 
     img {
       width: 100%;
-      height: auto;
+      aspect-ratio: 4 / 3;
       object-fit: cover;
       display: block;
+      border-radius: 0.25rem;
     }
   }
 
@@ -41,27 +45,28 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    gap: 0.5rem;
 
     .captionText {
       font-weight: bold;
       font-size: 0.95rem;
-      margin-right: 1rem;
     }
+
     .separator {
-        color: #888;
-        padding: 0 0.5rem;
-      }
-    
+      color: #888;
+      padding: 0 0.5rem;
+    }
+
     .bookHere {
       font-size: 0.9rem;
 
       a {
-        color: #000000;
+        color: #000;
         transition: color 0.3s ease;
 
-    &:hover {
-      color: var(--wpe--color--teal--light);
-    }
+        &:hover {
+          color: var(--wpe--color--teal--light);
+        }
       }
     }
   }
@@ -69,10 +74,13 @@
   .titleWrapper {
     font-size: 1.8rem;
     font-family: 'Unit Slab Pro Black';
-
     font-weight: bold;
     color: #111;
     line-height: 1.4;
+
+    @media (max-width: $breakpoint-small) {
+      font-size: 1.5rem;
+    }
   }
 
   .contentWrapper {
@@ -88,9 +96,10 @@
 
   img {
     width: 100%;
-    height: auto;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     display: block;
+    border-radius: 0.25rem;
   }
 
   @media (max-width: $breakpoint-medium) {

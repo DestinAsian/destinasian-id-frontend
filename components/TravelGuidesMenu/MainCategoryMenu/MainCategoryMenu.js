@@ -203,7 +203,7 @@ export default function MainCategoryMenu(categoryName) {
 
   if (loading || menusLoading || travelGuidesloading || footerMenusLoading) {
     return (
-      <div className="mx-auto my-0 flex max-w-[100vw] justify-center md:max-w-[700px]">
+      <div className="mx-auto my-0 flex max-w-[100%] justify-center md:max-w-[700px]">
         <div role="status">
           <svg
             aria-hidden="true"

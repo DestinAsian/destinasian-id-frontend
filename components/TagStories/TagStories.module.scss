@@ -7,7 +7,8 @@
   justify-content: space-between;
   padding: 0;
   margin: 0 auto;
-  width: 100vw;
+  width: 100%; // ✅ changed from 100vw to avoid horizontal scroll
+  box-sizing: border-box;
   position: relative;
 
   @media (min-width: $breakpoint-small) {
@@ -19,16 +20,16 @@
 
   .post-wrapper,
   .advertorial-wrapper {
-    width: 100vw;
+    width: 100%;
     max-width: 700px;
 
     @media (min-width: $breakpoint-small) {
-      width: calc(50vw - 1rem);
+      width: calc(50% - 1rem);
     }
   }
 
   .banner-ad-wrapper {
-    width: 100vw;
+    width: 100%;
   }
 }
 
@@ -69,7 +70,7 @@
     color: #000;
     font-size: 0.95rem;
     text-decoration: none;
-    transition: background 0.2s;
+    transition: color 0.2s;
 
     &:hover {
       color: var(--wpe--color--teal--deep);

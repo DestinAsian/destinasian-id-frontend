@@ -1,4 +1,4 @@
-import className from 'classnames/bind'
+import classNames from 'classnames/bind'
 import styles from './ContentWrapper.module.scss'
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -6,10 +6,10 @@ import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
 
-const cx = className.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function ContentWrapper({ content, children }) {
-  const [transformedContent, setTransformedContent] = useState('')
+  const [transformedContent, setTransformedContent] = useState([])
 
   useEffect(() => {
     const extractHTMLData = () => {
@@ -20,6 +20,7 @@ export default function ContentWrapper({ content, children }) {
       )
       const doc = parser.parseFromString(cleanedContent, 'text/html')
 
+      // Recursive function to replace images with Next.js Image components
       const extractImagesRecursively = (node) => {
         if (
           node?.nodeType === 1 &&
@@ -27,10 +28,10 @@ export default function ContentWrapper({ content, children }) {
           typeof node.getAttribute === 'function' &&
           node.getAttribute('src')?.includes(BACKEND_URL)
         ) {
-          // Skip images inside .gallery
+          // Skip images inside gallery
           if (node.closest('.gallery')) return
 
-          // Skip if img has inline styles
+          // Skip images with inline styles
           if (node.hasAttribute('style')) return
 
           let src = node.getAttribute('src') || ''
@@ -39,6 +40,7 @@ export default function ContentWrapper({ content, children }) {
           const width = node.getAttribute('width') || 800
           const height = node.getAttribute('height') || 600
 
+          // Replace domain for backend
           const testDomain = 'https://destinasian.co.id'
           const newDomain = 'https://backend.destinasian.co.id'
           src = src.replace(testDomain, newDomain)
@@ -64,7 +66,7 @@ export default function ContentWrapper({ content, children }) {
       Array.from(doc.body.childNodes).forEach(extractImagesRecursively)
 
       const elements = Array.from(doc.body.childNodes).map((node, index) => {
-        if (node?.nodeType === 1 && node?.matches('div.gallery')) {
+        if (node?.nodeType === 1 && node.matches('div.gallery')) {
           return <GallerySlider key={index} gallerySlider={node} />
         }
 

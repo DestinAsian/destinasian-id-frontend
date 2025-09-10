@@ -4,9 +4,7 @@ import classNames from 'classnames/bind'
 import styles from './SecondaryDesktopHeader.module.scss'
 import Link from 'next/link'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
-
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
-
 
 const cx = classNames.bind(styles)
 
@@ -31,9 +29,10 @@ export default function SecondaryDesktopHeader({
 
   return (
     <>
+      {/* Navigation bar */}
       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
         <div className={cx('menu-wrapper')}>
-          {/* Tombol Guides */}
+          {/* Guides button */}
           <button
             type="button"
             className={cx('menu-button', 'menu-button-guides', {
@@ -43,23 +42,21 @@ export default function SecondaryDesktopHeader({
               setIsGuidesNavShown(!isGuidesNavShown)
               setSearchQuery('')
             }}
-            aria-label="Toggle navigation"
+            aria-label="Toggle Guides menu"
           >
             <div className={cx('menu-title')}>Guides</div>
           </button>
 
-          {/* Link kategori */}
+          {/* Category links */}
           {categories.map(({ id, name, uri }) => (
-            <Link key={id} href={uri}>
-              <div className={cx('menu-button')}>
-                <div className={cx('menu-title')}>{name}</div>
-              </div>
+            <Link key={id} href={uri} className={cx('menu-button')}>
+              <div className={cx('menu-title')}>{name}</div>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Menu Travel Guides */}
+      {/* Travel Guides menu */}
       <div className={cx('full-menu-content', isGuidesNavShown && 'show')}>
         <div className={cx('full-menu-wrapper')}>
           <TravelGuidesMenu />

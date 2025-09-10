@@ -17,8 +17,9 @@ export default function CategoryStoriesGuide({ categoryUri }) {
   const categoryName = name?.toLowerCase() || ''
   const parentName = parent?.node?.name?.toLowerCase() || ''
 
-  const isTravelGuide = ['bali', 'jakarta', 'bandung', 'surabaya'].includes(categoryName) ||
-                        ['bali', 'jakarta', 'bandung', 'surabaya'].includes(parentName)
+  const isTravelGuide =
+    ['bali', 'jakarta', 'bandung', 'surabaya'].includes(categoryName) ||
+    ['bali', 'jakarta', 'bandung', 'surabaya'].includes(parentName)
 
   const { data, loading, error, fetchMore } = useQuery(GetCategoryStories, {
     variables: {
@@ -34,7 +35,7 @@ export default function CategoryStoriesGuide({ categoryUri }) {
   const posts = useMemo(() => data?.category?.contentNodes?.edges || [], [data])
   const pageInfo = data?.category?.contentNodes?.pageInfo
 
-  // Load sisa data setelah render pertama
+  // Auto-load remaining posts after first render
   useEffect(() => {
     if (pageInfo?.hasNextPage && !isFetchingMore) {
       setIsFetchingMore(true)
@@ -61,6 +62,7 @@ export default function CategoryStoriesGuide({ categoryUri }) {
     }
   }, [pageInfo, fetchMore, isFetchingMore])
 
+  // Prevent UI flicker/wobble by skipping render until data is ready
   if (loading || error || !posts.length) return null
 
   const filteredPosts = posts.filter(({ node }) => node.__typename === 'TravelGuide')

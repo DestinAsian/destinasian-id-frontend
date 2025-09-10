@@ -1,20 +1,18 @@
 import React from 'react'
-import styles from './Tagline.module.scss'
 import classNames from 'classnames/bind'
+import styles from './Tagline.module.scss'
 
 const cx = classNames.bind(styles)
 
 const Tagline = ({ tagline }) => {
-  // Exit early kalau tidak ada tagline
-  if (!tagline || !tagline.tagline) {
-    return null
-  }
+  // Return null if no tagline is provided
+  if (!tagline?.tagline) return null
 
   return (
-    <div className={styles.taglineWrap}>
+    <div className={cx('taglineWrap')}>
       <div
         className={cx('contentWrapper')}
-        dangerouslySetInnerHTML={{ __html: tagline.tagline }}
+        dangerouslySetInnerHTML={{ __html: tagline.tagline }} // render HTML content safely
       />
     </div>
   )

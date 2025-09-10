@@ -1,54 +1,33 @@
-import Link from 'next/link';
-
-import styles from './Button.module.scss';
+import Link from 'next/link'
+import styles from './Button.module.scss'
 
 /**
- * Render the Button component.
+ * Button component, can render as <button> or <Link> if href is provided.
  *
- * @param {Props} props The props object.
- * @param {string} props.href The href attribute. If provided the button will be an <a> element.
- * @param {primary|secondary} props.styleType The type of the button
- * @param {string} props.className An optional className to be added to the button
- * @return {React.ReactElement} The Button component.
+ * @param {Object} props
+ * @param {string} props.href Optional href, renders a Link if present
+ * @param {'primary'|'secondary'} props.styleType Button style type
+ * @param {string} props.className Optional additional className
+ * @param {React.ReactNode} props.children Button content
  */
-export default function Button({
-  href,
-  styleType,
-  className,
-  children,
-  ...props
-}) {
-  let buttonStyle;
-  switch (styleType) {
-    case 'secondary': {
-      buttonStyle = 'secondary';
-      break;
-    }
-    default: {
-      buttonStyle = 'primary';
-      break;
-    }
-  }
-
-  let buttonClassName = [
+export default function Button({ href, styleType = 'primary', className, children, ...props }) {
+  const buttonClassName = [
     styles.button,
-    styles[`button-${buttonStyle}`],
-    className ?? undefined,
-  ].join(' ');
+    styles[`button-${styleType}`],
+    className,
+  ].filter(Boolean).join(' ')
 
   if (href) {
     return (
-      (<Link href={href} role="button" className={buttonClassName} {...props}>
-
+      <Link href={href} role="button" className={buttonClassName} {...props}>
         {children}
-
-      </Link>)
-    );
+      </Link>
+    )
   }
 
   return (
     <button className={buttonClassName} {...props}>
       {children}
     </button>
-  );
+  )
 }

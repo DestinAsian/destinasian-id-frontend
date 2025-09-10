@@ -12,6 +12,7 @@ const cx = classNames.bind(styles)
 const ContentWrapperVideo = React.memo(({ video }) => {
   if (!video) return null
 
+  // Detect YouTube video
   const isYouTube = video.content.includes('youtube')
   const youtubeId = video.content.match(/\/embed\/([^?"]+)/)?.[1] || ''
   const localVideoSrc = video.content.match(/<source[^>]*src="([^"]+)"/)?.[1] || ''

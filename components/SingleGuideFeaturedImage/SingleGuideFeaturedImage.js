@@ -1,15 +1,14 @@
-import className from 'classnames/bind'
+import classNames from 'classnames/bind'
 import { FeaturedImage } from '..'
 import styles from './SingleGuideFeaturedImage.module.scss'
 
-let cx = className.bind(styles)
+const cx = classNames.bind(styles)
 
-export default function SingleGuideFeaturedImage({
-  image,
-}) {
+export default function SingleGuideFeaturedImage({ image, className }) {
   return (
-    <div className={cx(['component', className])}>
+    <div className={cx('component', className)}>
       <div className={cx('image-wrapper')}>
+        {/* Render the image only if provided */}
         {image && (
           <FeaturedImage
             image={image}

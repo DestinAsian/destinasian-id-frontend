@@ -1,11 +1,11 @@
-import className from 'classnames/bind'
+import classNames from 'classnames/bind'
+import Link from 'next/link'
 
 import Heading from '../../components/Heading/Heading'
 import Container from '../../components/Container/Container'
 import styles from './SingleGuideEntryHeader.module.scss'
-import Link from 'next/link'
 
-let cx = className.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function SingleGuideEntryHeader({
   parent,
@@ -14,12 +14,12 @@ export default function SingleGuideEntryHeader({
   parentCategory,
   categoryUri,
   categoryName,
-
 }) {
   return (
-    <div className={cx(['component', className])}>
+    <div className={cx('component', className)}>
       <Container>
         <div className={cx('header-wrapper')}>
+          {/* Render category link if not "Rest of World" */}
           {parentCategory !== 'Rest of World' &&
             categoryName !== 'Rest of World' &&
             categoryUri && (
@@ -30,7 +30,6 @@ export default function SingleGuideEntryHeader({
               </Link>
             )}
           <Heading className={cx('title')}>
-            {/* {parent || null} */}
             {title}
           </Heading>
         </div>

@@ -18,7 +18,12 @@ export default function FrontPageVideos() {
 
   const video = data?.videos?.edges?.[0]?.node
 
-  if (loading || error || !video) return null
+  if (loading) return null
+  if (error) {
+    console.error('Error fetching homepage videos:', error)
+    return null
+  }
+  if (!video) return null
 
   return (
     <section className={cx('componentVideos')}>

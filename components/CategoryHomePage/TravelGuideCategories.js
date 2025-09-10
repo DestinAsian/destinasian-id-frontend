@@ -2,11 +2,12 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import styles from './TravelGuidesCategories.module.scss'
 import classNames from 'classnames/bind'
-import Image from 'next/image'
 
 import logohilton from '../../assets/logo/logo_hilton.png'
+
 const cx = classNames.bind(styles)
 
 const normalize = (str = '') => str.toLowerCase().trim()
@@ -27,30 +28,38 @@ const TravelGuideCategories = ({ data }) => {
     <div className={cx('wrapper')}>
       <div className={cx('titleWrapper')}>
         <h2 className={cx('title')}>Guides</h2>
+        {/* Hilton logo */}
         <Image
-          src={logohilton.src}
+          src={logohilton}
           alt="Hilton Logo"
           width={100}
           height={100}
           className={cx('logo')}
+          priority
+          draggable={false}
         />
-        
       </div>
+
       <div className={cx('grid')}>
         {orderedCategories.map(({ id, name, uri, categoryImages }) => {
           const imageUrl = categoryImages?.categorySlide1?.mediaItemUrl
           const isComingSoon = ['bandung', 'surabaya'].includes(normalize(name))
 
           const CardContent = (
-            <div className={cx('card', { comingSoon: isComingSoon })} draggable="false">
+            <div
+              className={cx('card', { comingSoon: isComingSoon })}
+              draggable={false}
+            >
               <div className={cx('imageWrapper')}>
                 {imageUrl && (
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={name}
+                    width={800}   // set fixed width for aspect ratio
+                    height={600}  // 4:3 ratio → prevents layout shift
                     className={cx('image')}
                     loading="lazy"
-                    draggable="false"
+                    draggable={false}
                   />
                 )}
                 <div className={cx('textWrapper')}>
@@ -66,7 +75,7 @@ const TravelGuideCategories = ({ data }) => {
           return isComingSoon ? (
             <div key={id}>{CardContent}</div>
           ) : (
-            <Link key={id} href={uri}>
+            <Link key={id} href={uri} draggable={false}>
               {CardContent}
             </Link>
           )
@@ -77,6 +86,7 @@ const TravelGuideCategories = ({ data }) => {
 }
 
 export default TravelGuideCategories
+
 
 
 // 'use client'

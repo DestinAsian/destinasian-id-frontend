@@ -21,6 +21,8 @@ import CategoryStories from '../components/CategoryStories/CategoryStories'
 import BannerPosterGuide from '../components/BannerPosterGuide/BannerPosterGuide'
 import { open_sans } from '../styles/fonts/fonts'
 import SEO from '../components/SEO/SEO'
+import FloatingButtons from '../components/FloatingButtons/FloatingButtons'
+
 // Ads
 import MastHeadTop from '../components/AdUnit/MastHeadTop/MastHeadTop'
 import MastHeadTopMobile from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'
@@ -30,7 +32,6 @@ import MastHeadTopGuides from '../components/AdUnit/MastHeadTop/MastHeadTopGuide
 import MastHeadTopMobileGuides from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'
 import MastHeadBottomGuides from '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
 import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
-import FloatingButtons from '../components/FloatingButtons/FloatingButtons'
 
 // Queries
 import { GetMenus } from '../queries/GetMenus'
@@ -46,22 +47,27 @@ export default function Category({ loading, data: initialData }) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const resizeHandler = () => {
+    const handleResize = () => {
       const width = window.innerWidth
       setIsDesktop(width >= 1024)
       setIsMobile(width <= 768)
     }
-    resizeHandler()
-    window.addEventListener('resize', resizeHandler)
-    window.addEventListener('scroll', () => setIsScrolled(window.scrollY > 0))
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+
+    handleResize() // run on mount
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('scroll', handleScroll)
+
     return () => {
-      window.removeEventListener('resize', resizeHandler)
-      window.removeEventListener('scroll', () =>
-        setIsScrolled(window.scrollY > 0),
-      )
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
+  // Lock body scroll when search or nav is open
   useEffect(() => {
     document.body.style.overflow =
       searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
@@ -83,6 +89,7 @@ export default function Category({ loading, data: initialData }) {
     tagline,
   } = category || {}
 
+  // Menus query
   const { data: menusData } = useQuery(GetMenus, {
     variables: {
       first: 10,
@@ -91,27 +98,28 @@ export default function Category({ loading, data: initialData }) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'cache-first',
   })
 
+  // Latest stories query
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
     fetchPolicy: 'cache-first',
   })
 
-  const { data: dataSecondaryHeader, loading: loadingSecondaryHeader } =
-    useQuery(GetSecondaryHeader, {
-      variables: { id: databaseId },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    })
+  // Secondary header query
+  const { data: dataSecondaryHeader } = useQuery(GetSecondaryHeader, {
+    variables: { id: databaseId },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
 
   const isGuidesCategory =
     dataSecondaryHeader?.category?.destinationGuides?.destinationGuides ===
     'yes'
 
+  // Merge latest stories + updates, sorted by date
   const latestPosts = useMemo(() => {
     const posts = [
       ...(latestStories?.posts?.edges || []),
@@ -122,6 +130,7 @@ export default function Category({ loading, data: initialData }) {
       .sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [latestStories])
 
+  // Prepare category slider images and captions
   const categorySlider = useMemo(
     () =>
       [1, 2, 3, 4, 5].map((i) => [
@@ -131,6 +140,7 @@ export default function Category({ loading, data: initialData }) {
     [categoryImages],
   )
 
+  // Shared header props for multiple components
   const sharedHeaderProps = useMemo(
     () => ({
       title: generalSettings?.title,
@@ -159,13 +169,14 @@ export default function Category({ loading, data: initialData }) {
     ],
   )
 
-  // if (loading) return <>Loading...</>
+  // Helper to render ad component depending on category and device type
   const renderAdComponent = useCallback(
     (pos) => {
       const position = pos === 'top' ? 'Top' : 'Bottom'
       const key = `${isGuidesCategory ? 'Guides' : ''}${
         isMobile ? 'Mobile' : 'Desktop'
       }`
+
       const componentMap = {
         Top: {
           Desktop: MastHeadTop,
@@ -180,6 +191,7 @@ export default function Category({ loading, data: initialData }) {
           GuidesMobile: MastHeadBottomMobileGuides,
         },
       }
+
       const Component = componentMap[position][key]
       return Component ? <Component /> : null
     },
@@ -190,13 +202,14 @@ export default function Category({ loading, data: initialData }) {
 
   return (
     <>
-    <SEO
+      <SEO
         title={category?.seo?.title || category?.name}
         description={category?.seo?.metaDesc || category?.description}
         imageUrl={category?.categoryImages?.categoryImages?.mediaItemUrl}
         url={category?.uri}
         focuskw={category?.seo?.focuskw}
       />
+
       <main className={`${open_sans.variable}`}>
         {isDesktop ? (
           <>
@@ -230,8 +243,10 @@ export default function Category({ loading, data: initialData }) {
           imageCaption={categoryImages?.categoryImagesCaption}
           description={description}
         />
+
         <Main style={{ position: 'relative', zIndex: 1 }}>
           {tagline && <Tagline tagline={tagline} />}
+
           {isGuidesCategory && (
             <hr
               style={{
@@ -242,7 +257,9 @@ export default function Category({ loading, data: initialData }) {
               }}
             />
           )}
+
           {renderAdComponent('top')}
+
           <hr
             style={{
               border: 'none',
@@ -261,9 +278,11 @@ export default function Category({ loading, data: initialData }) {
             parent={parent?.node?.name}
             guideStories={guideStorie}
           />
+
           {isGuidesCategory && guidesfitur && (
             <GuideFitur guidesfitur={guidesfitur} />
           )}
+
           <CategorySecondStoriesLatest
             categoryUri={databaseId}
             pinPosts={pinPosts}
@@ -273,7 +292,9 @@ export default function Category({ loading, data: initialData }) {
             bannerDa={guideStorie}
             guideStories={guideStorie}
           />
+
           {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
+
           <CategoryStories
             categoryUri={databaseId}
             pinPosts={pinPosts}
@@ -281,6 +302,7 @@ export default function Category({ loading, data: initialData }) {
             children={children}
             parent={parent?.node?.name}
           />
+
           <BannerPosterGuide guideStorie={guideStorie} />
 
           <hr
@@ -291,10 +313,13 @@ export default function Category({ loading, data: initialData }) {
               maxWidth: '1400px',
             }}
           />
+
           {renderAdComponent('bottom')}
         </Main>
+
         <Footer />
       </main>
+
       {category?.buttontopup && (
         <FloatingButtons buttonTopUp={category.buttontopup} />
       )}
@@ -469,8 +494,4 @@ Category.query = gql`
   }
 `
 
-Category.variables = ({ databaseId }) => {
-  return {
-    databaseId,
-  }
-}
+Category.variables = ({ databaseId }) => ({ databaseId })

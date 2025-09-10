@@ -4,25 +4,23 @@
 .guideFiturSection {
   max-width: 1400px;
   margin: 2rem 0 3rem;
-  // padding: 0 1rem;
 
   @media (min-width: $breakpoint-small) {
-    padding: 0;
     margin: 4rem auto;
   }
+
   .sectionTitle {
     font-size: 2rem;
     font-weight: 500;
     line-height: 1.1;
     text-align: center;
     font-family: "Scheherazade New";
-    padding: 0 0 1rem 0;
+    padding-bottom: 1rem;
 
     @media (min-width: $breakpoint-small) {
       font-size: 2.5rem;
-      padding: 0 0 3rem 0;
+      padding-bottom: 3rem;
     }
-
   }
 }
 
@@ -34,24 +32,22 @@
   padding: 0 1rem;
 
   @media (max-width: $breakpoint-small) {
-    padding: 0 auto;
+    margin: 0 auto; // fixed from padding: 0 auto;
   }
-
 }
 
 .guideFiturItem {
-  flex: 1 1 calc(25% - 1.125rem); // 4 kolom di desktop
+  flex: 1 1 calc(25% - 1.125rem); // 4 columns on desktop
   text-decoration: none;
   color: inherit;
   position: relative;
 
   @media (max-width: $breakpoint-medium) {
-    flex: 1 1 calc(50% - 0.75rem); // default mobile 2 kolom
+    flex: 1 1 calc(50% - 0.75rem); // 2 columns on mobile
   }
 
-
   .threeMobile & {
-    flex: 1 1 calc(33.333% - 1rem);
+    flex: 1 1 calc(33.333% - 1rem); // 3 columns on small screens if 3 items
   }
 }
 

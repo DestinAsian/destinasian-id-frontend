@@ -5,9 +5,10 @@
   align-items: center;
   position: fixed;
   top: 2.75rem;
-  width: 100vw;
+  width: 100%;
   z-index: 51;
   padding: 0;
+  will-change: transform, top;
 
   @media (min-width: $breakpoint-extra-small) {
     top: 3.5rem;
@@ -50,6 +51,7 @@
     width: fit-content;
     height: 100%;
     color: var(--wpe--color--white--smoke);
+    cursor: pointer;
 
     @media (min-width: $breakpoint-extra-small) {
       min-width: 20%;
@@ -96,7 +98,6 @@
       }
     }
 
-    // ===  BUTTON GUIDES ===
     &.menu-button-guides {
       background-color: var(--wpe--color--teal--light);
       color: var(--wpe--color--white);
@@ -122,6 +123,7 @@
   left: 0;
   width: 100%;
   transform: translateY(7rem);
+  will-change: transform, top;
 
   @media (min-width: $breakpoint-extra-small) {
     top: -3.5rem;
@@ -131,7 +133,7 @@
     color: var(--wpe--color--black);
   }
 
-  // Cegah warna putih pada button guides tertimpa
+  /* Keep guides button style intact when sticky */
   .menu-button-guides {
     color: var(--wpe--color--white) !important;
 
@@ -157,21 +159,21 @@
   }
 }
 
-
 .full-menu-content {
   display: block;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   position: fixed;
   top: -150vh;
   z-index: 48;
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
+  transition: all 0.4s ease-in-out;
+  will-change: top, height, backdrop-filter;
 
   &.show {
     top: 5.7rem;
     height: calc(100vh - 4.7rem);
-    transition: backdrop-filter 0.8s ease-in-out, visibility 0.8s ease-in-out;
 
     @media (min-width: $breakpoint-extra-small) {
       top: 5.8rem;
@@ -198,4 +200,3 @@
     color: var(--wpe--color--black);
   }
 }
-

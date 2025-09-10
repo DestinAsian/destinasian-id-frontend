@@ -1,4 +1,3 @@
-// wp-template/page.js
 import React, { useEffect, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import dynamic from 'next/dynamic'
@@ -6,9 +5,9 @@ import Cookies from 'js-cookie'
 
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import { PageFragment } from '../fragments/PageFragment' // ✅ pakai PageFragment tunggal
+import { PageFragment } from '../fragments/PageFragment'
 
-// Komponen
+// Components
 import Header from '../components/Header/Header'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import SecondaryDesktopHeaderPage from '../components/Header/SecondaryDesktopHeaderPage/SecondaryDesktopHeaderPage'
@@ -20,10 +19,9 @@ import EntryHeader from '../components/EntryHeader/EntryHeader'
 import SEO from '../components/SEO/SEO'
 import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
 
-// Queries tambahan
+// Queries
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
-
 
 // Ads (lazy)
 const MastHeadTop = dynamic(() =>
@@ -64,7 +62,7 @@ export default function Component(props) {
     passwordProtected,
   } = page || {}
 
-  // Password check
+  // Check password from cookies
   useEffect(() => {
     const storedPassword = Cookies.get('pagePassword')
     if (storedPassword && storedPassword === passwordProtected?.password) {
@@ -72,12 +70,13 @@ export default function Component(props) {
     }
   }, [passwordProtected?.password])
 
-  // Lock scroll saat search aktif
+  // Prevent body scroll when search or nav is active
   useEffect(() => {
-    document.body.style.overflow = searchQuery ? 'hidden' : 'visible'
-  }, [searchQuery])
+    const shouldLock = searchQuery || isNavShown
+    document.body.style.overflow = shouldLock ? 'hidden' : 'visible'
+  }, [searchQuery, isNavShown])
 
-  // Scroll + responsive
+  // Scroll state + responsive detection
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0)
     const handleResize = () => {
@@ -85,6 +84,7 @@ export default function Component(props) {
       setIsMobile(w <= 768)
       setIsDesktop(w > 768)
     }
+
     handleScroll()
     handleResize()
     window.addEventListener('scroll', handleScroll)
@@ -95,12 +95,7 @@ export default function Component(props) {
     }
   }, [])
 
-  // Lock scroll saat nav aktif
-  useEffect(() => {
-    document.body.style.overflow = isNavShown ? 'hidden' : 'visible'
-  }, [isNavShown])
-
-  // Menus
+  // Menus query
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
       first: 10,
@@ -109,7 +104,6 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'cache-and-network',
   })
@@ -121,11 +115,14 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
-  // Latest posts
-  const { data: latestStories, loading: latestLoading } = useQuery(GetLatestStories, {
-    variables: { first: 5 },
-    fetchPolicy: 'cache-and-network',
-  })
+  // Latest posts query
+  const { data: latestStories, loading: latestLoading } = useQuery(
+    GetLatestStories,
+    {
+      variables: { first: 5 },
+      fetchPolicy: 'cache-and-network',
+    }
+  )
 
   const allPosts =
     latestStories?.posts?.edges
@@ -143,11 +140,10 @@ export default function Component(props) {
     }
   }
 
-  // Password Protected View
+  // Password-protected page
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
-      <main
-      >
+      <main>
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
             enteredPassword={enteredPassword}
@@ -261,8 +257,7 @@ export default function Component(props) {
   )
 }
 
-// ✅ Query bersih: hanya BlogInfoFragment & PageFragment.
-//    PageFragment sudah berisi semua field yang dibutuhkan untuk `page`.
+// GraphQL query: BlogInfo + PageFragment
 Component.query = gql`
   ${BlogInfoFragment}
   ${PageFragment}

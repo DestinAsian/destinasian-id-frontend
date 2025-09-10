@@ -11,16 +11,14 @@ import Button from '../Button/Button'
 import PostTwoColumns from '../PostTwoColumns/PostTwoColumns'
 import TextTwoColumns from '../PostTwoColumns/TextTwoColumns'
 
-
 const cx = classNames.bind(styles)
 
 export default function CategoryStories({ categoryUri, pinPosts, name, parent }) {
-  const uri = categoryUri
   const postsPerPage = 4
-
   const [visibleCount, setVisibleCount] = useState(postsPerPage)
   const [delayedLoaded, setDelayedLoaded] = useState(false)
 
+  // Detect if the category is a travel guide
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.toLowerCase() || ''
@@ -37,13 +35,14 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
     variables: {
       first: 20,
       after: null,
-      id: uri,
+      id: categoryUri,
       contentTypes,
     },
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
 
+  // Merge new posts when fetching more
   const updateQuery = (prev, { fetchMoreResult }) => {
     if (!fetchMoreResult) return prev
     const prevEdges = prev?.category?.contentNodes?.edges || []
@@ -72,6 +71,7 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
     }
   }
 
+  // Delay rendering of posts for smooth loading
   useEffect(() => {
     const timeout = setTimeout(() => setDelayedLoaded(true), 500)
     return () => clearTimeout(timeout)
@@ -79,6 +79,7 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
 
   if (error) return <pre>{JSON.stringify(error)}</pre>
 
+  // Prepare all posts (pinned + fetched)
   const allPosts = useMemo(() => {
     const content = data?.category?.contentNodes?.edges || []
     const contentPosts = content.map((post) => post.node)
@@ -100,31 +101,26 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
           uri={post?.uri}
           featuredImage={post?.featuredImage?.node}
         />
+
         {guideInfo && (
           <div className={cx('guide-info')}>
             {guideInfo?.guideName && (
-              <span className={cx('guide-name')}>
-                {guideInfo.guideName}
-              </span>
+              <span className={cx('guide-name')}>{guideInfo.guideName}</span>
             )}
             {guideInfo?.guideLocation && guideInfo?.linkLocation && (
-              <>
-                <a
-                  href={guideInfo.linkLocation}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cx('guide-location')}
-                >
-                  {guideInfo.guideLocation}
-                </a>
-              </>
+              <a
+                href={guideInfo.linkLocation}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cx('guide-location')}
+              >
+                {guideInfo.guideLocation}
+              </a>
             )}
             {guideInfo?.guidePrice && (
               <>
                 <span className={cx('separator')}>|</span>
-                <span className={cx('guide-price')}>
-                  {guideInfo.guidePrice}
-                </span>
+                <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
               </>
             )}
             {guideInfo?.linkBookNow && (
@@ -142,6 +138,7 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
             )}
           </div>
         )}
+
         <TextTwoColumns
           title={post?.title}
           excerpt={post?.excerpt}
@@ -159,7 +156,7 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
       {[...initialPosts, ...delayedPosts].map(renderPost)}
 
       {allPosts.length > visibleCount && (
-        <div className="mx-auto my-0 flex w-[100vw] justify-center">
+        <div className="mx-auto my-0 flex w-full justify-center">
           <Button onClick={fetchMorePosts} className="gap-x-4">
             {loading ? 'Loading...' : 'LOAD MORE...'}
           </Button>

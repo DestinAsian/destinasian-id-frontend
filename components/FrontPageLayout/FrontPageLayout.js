@@ -16,6 +16,7 @@ import CategoryUpdates from '../CategoryHomePage/CategoryUpdates'
 import CategoryNewsUpdates from '../CategoryHomePage/CategoryNewsUpdates'
 import CategoryFeatures from '../CategoryHomePage/CategoryFeatures'
 
+// Dynamic imports with fallback containers to avoid layout shift
 const MastHeadTopHome = dynamic(() => import('../AdUnit/MastHeadTop/MastHeadTopHome'))
 const MastHeadTopMobileHome = dynamic(() => import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'))
 const MastHeadBottomHome = dynamic(() => import('../AdUnit/MastHeadBottom/MastHeadBottomHome'))
@@ -30,7 +31,7 @@ function useIsMobile(breakpoint = 768) {
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= breakpoint)
     handleResize()
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize, { passive: true })
     return () => window.removeEventListener('resize', handleResize)
   }, [breakpoint])
 
@@ -59,7 +60,10 @@ export default function FrontPageLayout() {
 
   return (
     <>
-      <div>{isMobile ? <MastHeadTopMobileHome /> : <MastHeadTopHome />}</div>
+      {/* Masthead Ad - wrapped with min-height to prevent layout shift */}
+      <div style={{ minHeight: '250px' }}>
+        {isMobile ? <MastHeadTopMobileHome /> : <MastHeadTopHome />}
+      </div>
 
       {/* TRAVEL GUIDE CHILDREN */}
       {!travelGuideLoading && travelGuideData?.category?.children?.edges?.length > 0 && (
@@ -83,7 +87,10 @@ export default function FrontPageLayout() {
 
       <hr className={cx('divider')} />
 
-      <div>{isMobile ? <MastHeadBottomMobileHome /> : <MastHeadBottomHome />}</div>
+      {/* Bottom Masthead Ad */}
+      <div style={{ minHeight: '250px' }}>
+        {isMobile ? <MastHeadBottomMobileHome /> : <MastHeadBottomHome />}
+      </div>
 
       <hr className={cx('divider')} />
 
@@ -113,7 +120,8 @@ export default function FrontPageLayout() {
             )}
           </div>
           <div className={cx('right-column')}>
-            <aside className={cx('outnow-wrapper')}>
+            {/* Half Page Ad with fixed space */}
+            <aside className={cx('outnow-wrapper')} style={{ minHeight: '600px' }}>
               <div className={cx('outnow-component')}>
                 <HalfPageHome1 />
               </div>

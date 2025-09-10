@@ -1,70 +1,51 @@
 // wp-template/page-404-page.js
 
-import React, { useState, useEffect } from "react";
-import { gql, useQuery } from "@apollo/client";
+import React, { useState, useEffect } from 'react'
+import { gql, useQuery } from '@apollo/client'
 
 // Constants & Fragments
-import * as MENUS from "../constants/menus";
-import { BlogInfoFragment } from "../fragments/GeneralSettings";
+import * as MENUS from '../constants/menus'
+import { BlogInfoFragment } from '../fragments/GeneralSettings'
 
 // Components
-import Header from "../components/Header/Header";
-import SecondaryHeader from "../components/Header/SecondaryHeader/SecondaryHeader";
-import Main from "../components/Main/Main";
-import Container from "../components/Container/Container";
-import SEO from "../components/SEO/SEO";
-import ErrorPage from "../components/ErrorPage/ErrorPage";
-import FeaturedImage from "../components/FeaturedImage/FeaturedImage";
+import Header from '../components/Header/Header'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import Main from '../components/Main/Main'
+import Container from '../components/Container/Container'
+import SEO from '../components/SEO/SEO'
+import ErrorPage from '../components/ErrorPage/ErrorPage'
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
 // Queries
-import { GetMenus } from "../queries/GetMenus";
-import { GetLatestStories } from "../queries/GetLatestStories";
+import { GetMenus } from '../queries/GetMenus'
+import { GetLatestStories } from '../queries/GetLatestStories'
 
 export default function Component(props) {
-  /** =====================
-   *  Early Loading State
-   *  ===================== */
-  if (props.loading) return <>Loading...</>;
+  if (props.loading) return <>Loading...</>
 
-  /** =====================
-   *  Destructure Data
-   *  ===================== */
+  // Site & page data
   const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings;
-  const { title, content, featuredImage, hcCaption, seo, uri } =
-    props?.data?.page ?? {};
+    props?.data?.generalSettings
+  const { title, content, featuredImage, seo, uri } = props?.data?.page ?? {}
 
-  /** =====================
-   *  UI State Management
-   *  ===================== */
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isNavShown, setIsNavShown] = useState(false);
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false);
+  // UI states
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
 
-  /** =====================
-   *  Effects
-   *  ===================== */
-  // Lock scroll when search is open
+  // Lock body scroll when search or nav is active
   useEffect(() => {
-    document.body.style.overflow = searchQuery ? "hidden" : "visible";
-  }, [searchQuery]);
+    document.body.style.overflow = searchQuery || isNavShown ? 'hidden' : 'visible'
+  }, [searchQuery, isNavShown])
 
   // Add sticky header on scroll
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleScroll = () => setIsScrolled(window.scrollY > 0)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
-  // Lock scroll when nav is open
-  useEffect(() => {
-    document.body.style.overflow = isNavShown ? "hidden" : "visible";
-  }, [isNavShown]);
-
-  /** =====================
-   *  Queries
-   *  ===================== */
   // Menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
@@ -74,45 +55,39 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-and-network",
-  });
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
 
-  const primaryMenu = menusData?.headerMenuItems?.nodes ?? [];
-  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? [];
-  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? [];
-  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? [];
-  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? [];
-  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? [];
+  const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
+  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
+  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
+  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
+  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
+  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
   // Latest stories
   const { data: latestStories, loading: latestLoading } = useQuery(
     GetLatestStories,
     {
       variables: { first: 5 },
-      fetchPolicy: "network-only",
-      nextFetchPolicy: "cache-and-network",
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
     }
-  );
+  )
 
-  /** =====================
-   *  Data Processing
-   *  ===================== */
+  // Merge all posts
   const mainCatPosts = [
     ...(latestStories?.posts?.edges ?? []).map((p) => p.node),
     ...(latestStories?.editorials?.edges ?? []).map((p) => p.node),
     ...(latestStories?.updates?.edges ?? []).map((p) => p.node),
-  ];
+  ]
 
   const allPosts = mainCatPosts.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
-  );
+  )
 
-  /** =====================
-   *  Render
-   *  ===================== */
   return (
     <main>
       <SEO
@@ -160,12 +135,10 @@ export default function Component(props) {
         </Container>
       </Main>
     </main>
-  );
+  )
 }
 
-/** =====================
- *  GraphQL Query
- *  ===================== */
+// GraphQL query
 Component.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}
@@ -174,9 +147,6 @@ Component.query = gql`
       title
       content
       ...FeaturedImageFragment
-      hcCaption {
-        hcCaption
-      }
       seo {
         title
         metaDesc
@@ -188,12 +158,10 @@ Component.query = gql`
       ...BlogInfoFragment
     }
   }
-`;
+`
 
-/** =====================
- *  Query Variables
- *  ===================== */
+// Query variables
 Component.variables = ({ databaseId }, ctx) => ({
   databaseId,
   asPreview: ctx?.asPreview,
-});
+})

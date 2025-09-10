@@ -2,16 +2,11 @@ import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategoryDesktopSecondaryHeader.module.scss'
 
-// Category Header - Secondary Header Navigation
-// import ChildrenNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'
-// import ParentNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'
-// import SingleNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'
 import ChildrenNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ChildrenNavigation/ChildrenNavigation'
 import ParentNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/ParentNavigation/ParentNavigation'
 import SingleNavigation from '../../../components/CategoryHeader/CategorySecondaryHeader/SingleNavigation/SingleNavigation'
 
-
-let cx = classNames.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function CategoryDesktopSecondaryHeader({
   data,
@@ -32,25 +27,23 @@ export default function CategoryDesktopSecondaryHeader({
 
   useEffect(() => {
     setCategoryUrl(categoryUri)
-  }, [])
+  }, [categoryUri])
 
   useEffect(() => {
-    document.body.style.overflow = isMainNavShown || isNavShown ? 'hidden' : 'visible'
+    // Prevent body scroll when navigation menus are open
+    document.body.style.overflow = isMainNavShown || isNavShown ? 'hidden' : 'auto'
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
   }, [isMainNavShown, isNavShown])
 
-  function isActive(uri) {
-    return currentUrl + '/' === uri
-  }
-
-  function isActiveCategory(uri) {
-    return categoryUrl === uri
-  }
+  const isActive = (uri) => currentUrl + '/' === uri
+  const isActiveCategory = (uri) => categoryUrl === uri
 
   return (
     <nav className={cx('component')}>
       <div className={cx('container-wrapper', 'sticky')}>
         <div className={cx('navbar')}>
-          {/* Parent category navigation */}
           {data?.category?.children?.edges?.length > 0 && (
             <ParentNavigation
               databaseId={databaseId}
@@ -62,7 +55,7 @@ export default function CategoryDesktopSecondaryHeader({
               categoryName={name}
             />
           )}
-          {/* Children category navigation */}
+
           {!data?.category?.children?.edges?.length &&
             data?.category?.parent?.node?.children?.edges?.length > 0 && (
               <ChildrenNavigation
@@ -75,7 +68,7 @@ export default function CategoryDesktopSecondaryHeader({
                 categoryName={parent}
               />
             )}
-          {/* Single travelGuide navigation */}
+
           {data?.travelGuide?.categories?.edges[0]?.node?.parent && (
             <SingleNavigation
               databaseId={databaseId}

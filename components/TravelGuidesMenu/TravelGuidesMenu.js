@@ -1,26 +1,26 @@
+import React, { useState, useEffect, useMemo } from 'react'
 import { useQuery, useApolloClient } from '@apollo/client'
-import { FOOTER_LOCATION, PRIMARY_LOCATION } from '../../constants/menus'
-import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import classNames from 'classnames/bind'
+
 import styles from './TravelGuidesMenu.module.scss'
 import flatListToHierarchical from '../../utilities/flatListToHierarchical'
 import { GetPrimaryMenu } from '../../queries/GetPrimaryMenu'
 import { GetTravelGuides } from '../../queries/GetTravelGuides'
 import { GetTravelGuidesMenu } from '../../queries/GetTravelGuidesMenu'
+import { FOOTER_LOCATION, PRIMARY_LOCATION } from '../../constants/menus'
 
 const cx = classNames.bind(styles)
 
-export default function TravelGuidesMenu(className) {
+export default function TravelGuidesMenu({ className }) {
   const [results, setResults] = useState([])
   const client = useApolloClient()
 
-  /** Primary menu (header) */
+  // Primary menu (header)
   const { data: menusData } = useQuery(GetPrimaryMenu, {
     variables: { first: 20, headerLocation: PRIMARY_LOCATION },
     fetchPolicy: 'cache-first',
   })
-
   const primaryMenu = menusData?.headerMenuItems?.edges ?? []
 
   const mainCategoryLabels = useMemo(
@@ -32,7 +32,7 @@ export default function TravelGuidesMenu(className) {
     [primaryMenu]
   )
 
-  /** Fetch Travel Guides by category */
+  // Fetch Travel Guides by category
   useEffect(() => {
     let isMounted = true
 
@@ -55,7 +55,7 @@ export default function TravelGuidesMenu(className) {
 
         if (isMounted) setResults(formatted)
       } catch (err) {
-        // ❌ hanya log error (biar gampang debugging, tanpa spam console)
+        // Log only critical errors
         console.error('Failed to fetch travel guides:', err)
       }
     }
@@ -67,14 +67,11 @@ export default function TravelGuidesMenu(className) {
     }
   }, [mainCategoryLabels, client])
 
-  /** 🔹 Footer menu */
+  // Footer menu
   const { data: footerMenusData, loading: footerMenusLoading } = useQuery(
     GetTravelGuidesMenu,
     {
-      variables: {
-        first: 30,
-        footerHeaderLocation: FOOTER_LOCATION,
-      },
+      variables: { first: 30, footerHeaderLocation: FOOTER_LOCATION },
       fetchPolicy: 'cache-first',
     }
   )
@@ -85,7 +82,7 @@ export default function TravelGuidesMenu(className) {
     [footerMenu]
   )
 
-  /** 🔹 Render menu */
+  // Render menu recursively
   const renderMenu = (items) =>
     items?.map((item) => {
       const menuId = item?.id
@@ -100,7 +97,7 @@ export default function TravelGuidesMenu(className) {
               <span
                 className={cx(
                   'title',
-                  className?.className === 'dark-color' ? 'title-dark' : ''
+                  className === 'dark-color' ? 'title-dark' : ''
                 )}
               >
                 {parentName}
@@ -114,7 +111,6 @@ export default function TravelGuidesMenu(className) {
               {childrenMenus.map((edge, index) => {
                 const childName = edge?.node?.name
                 const childUri = edge?.node?.uri
-
                 return (
                   <li key={childUri} className={cx('nav-link')}>
                     {index > 0 && <span className={cx('separator')}>|</span>}
@@ -122,9 +118,7 @@ export default function TravelGuidesMenu(className) {
                       <h2
                         className={cx(
                           'nav-name',
-                          className?.className === 'dark-color'
-                            ? 'nav-name-dark'
-                            : ''
+                          className === 'dark-color' ? 'nav-name-dark' : ''
                         )}
                       >
                         {childName}
@@ -139,7 +133,6 @@ export default function TravelGuidesMenu(className) {
       )
     })
 
-  /** 🔹 Render utama */
   if (footerMenusLoading) return null
 
   return (

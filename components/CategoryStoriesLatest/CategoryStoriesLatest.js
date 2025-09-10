@@ -38,11 +38,12 @@ export default function CategoryStoriesLatest(categoryUri) {
     skip: shouldSkip,
   })
 
+  // Avoid UI flicker when query is not ready
   if (shouldSkip || loading) return null
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
+  if (error) return null
 
-  const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
-  const travelGuide = allPosts?.find((item) => item.__typename === 'TravelGuide')
+  const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node) || []
+  const travelGuide = allPosts.find((item) => item.__typename === 'TravelGuide')
 
   if (!travelGuide) return null
 
@@ -56,9 +57,9 @@ export default function CategoryStoriesLatest(categoryUri) {
           date={travelGuide.date}
           author={travelGuide.author?.node?.name}
           uri={travelGuide.uri}
-          parentCategory={travelGuide.categories?.edges[0]?.node?.parent?.node?.name}
-          category={travelGuide.categories?.edges[0]?.node?.name}
-          categoryUri={travelGuide.categories?.edges[0]?.node?.uri}
+          parentCategory={travelGuide.categories?.edges?.[0]?.node?.parent?.node?.name}
+          category={travelGuide.categories?.edges?.[0]?.node?.name}
+          categoryUri={travelGuide.categories?.edges?.[0]?.node?.uri}
           featuredImage={travelGuide.featuredImage?.node}
           caption={travelGuide.featuredImage?.node?.caption}
         />

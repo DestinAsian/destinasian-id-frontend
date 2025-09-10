@@ -5,6 +5,7 @@ import classNames from 'classnames'
 const GuideFitur = ({ guidesfitur }) => {
   if (!guidesfitur) return null
 
+  // Collect valid guide items
   const guideItems = [
     {
       title: guidesfitur.titleGuideFitur1,
@@ -26,7 +27,7 @@ const GuideFitur = ({ guidesfitur }) => {
       image: guidesfitur.featureImageGuideFitur4?.mediaItemUrl,
       url: guidesfitur.linkUrlGuideFitur4,
     },
-  ].filter((item) => item.title && item.image && item.url) // Hanya item valid
+  ].filter((item) => item.title && item.image && item.url)
 
   const itemCount = guideItems.length
 

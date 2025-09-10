@@ -5,17 +5,15 @@ import Image from 'next/image'
 
 const cx = classNames.bind(styles)
 
-// NOTE: Removed unused dynamic imports (FeaturedImage, Container) for performance
+const MAX_EXCERPT_LENGTH = 150
 
-// Clean up dropcap tags
+// Utility: remove dropcap tags from excerpt
 const stripDropcapTags = (content) =>
   content
     ? content
         .replace(/\[\/?dropcap\]/gi, '')
         .replace(/<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi, '$1')
     : ''
-
-const MAX_EXCERPT_LENGTH = 150
 
 export default function GuideTwoStories({
   title,
@@ -43,14 +41,14 @@ export default function GuideTwoStories({
                 src={featuredImage?.sourceUrl}
                 alt={`${title} Featured Image`}
                 fill
-                sizes="100%"
+                sizes="100vw"
                 priority
               />
             </Link>
           </div>
         )}
 
-        {/* Category label */}
+        {/* Category Label */}
         {parentCategory !== 'Rest of World' &&
           category !== 'Rest of World' &&
           categoryUri && (
@@ -85,7 +83,6 @@ export default function GuideTwoStories({
         )}
       </div>
 
-      {/* Decorative bottom border */}
       <div className={cx('border-bottom')} />
     </article>
   )

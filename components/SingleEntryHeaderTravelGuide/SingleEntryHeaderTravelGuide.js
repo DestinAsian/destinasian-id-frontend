@@ -1,4 +1,4 @@
-import className from 'classnames/bind'
+import classNames from 'classnames/bind'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
@@ -7,7 +7,7 @@ import FormatDate from '../../components/FormatDate/FormatDate'
 import Container from '../../components/Container/Container'
 import styles from './SingleEntryHeaderTravelGuide.module.scss'
 
-let cx = className.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function SingleEntryHeaderTravelGuide({
   parent,
@@ -20,14 +20,12 @@ export default function SingleEntryHeaderTravelGuide({
 }) {
   const [isMaximized, setIsMaximized] = useState(false)
 
-  // Maximized EntryHeader when page load
+  // Automatically maximize header after page load
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsMaximized(true)
-    }, 2000) // Change the timeframe (in milliseconds) as per your requirement
-
+    const timeout = setTimeout(() => setIsMaximized(true), 2000)
     return () => clearTimeout(timeout)
   }, [])
+
   return (
     <div className={cx('component', { maximized: isMaximized })}>
       <Container>
@@ -42,14 +40,12 @@ export default function SingleEntryHeaderTravelGuide({
               </Link>
             )}
           <Heading className={cx('title')}>
-          {parent || null} {title}
-            {/* {title} */}
+            {parent ? `${parent} ` : ''}{title}
           </Heading>
           <time className={cx('meta-wrapper')} dateTime={date}>
             <span className={cx('meta-author')}>
-              {'By '}
-              {author}{' '}
-            </span>{' '}
+              By {author}
+            </span>
             &nbsp; | &nbsp;
             <FormatDate date={date} />
           </time>

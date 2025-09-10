@@ -8,7 +8,7 @@
   padding: 0;
   margin-right: auto;
   margin-left: auto;
-  width: 100vw;
+  width: 100%;
   position: relative;
 
   @media (min-width: $breakpoint-small) {
@@ -20,16 +20,16 @@
 
   .post-wrapper,
   .advertorial-wrapper {
-    width: 100vw;
+    width: 100%;
     max-width: 700px;
 
     @media (min-width: $breakpoint-small) {
-      width: calc(50vw - 1rem);
+      width: calc(50% - 1rem);
     }
   }
 
   .banner-ad-wrapper {
-    width: 100vw;
+    width: 100%;
   }
 }
 .fokusLayoutGrid {

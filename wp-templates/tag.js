@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { GetMenus } from '../queries/GetMenus'
@@ -24,8 +24,8 @@ import MastHeadTopGuides from '../components/AdUnit/MastHeadTop/MastHeadTopGuide
 import MastHeadTopMobileGuides from '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileGuides'
 import MastHeadBottomGuides from '../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'
 import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+
 export default function Component(props) {
-  // Pastikan data selalu object, bukan array
   const { seo, name, databaseId, uri } = props?.data?.tag ?? {}
 
   // UI States
@@ -39,7 +39,7 @@ export default function Component(props) {
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  // Handle scroll & responsive screen (desktop vs mobile)
+  // Handle scroll and responsive screen (desktop vs mobile)
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0)
     const handleResize = () => {
@@ -59,7 +59,7 @@ export default function Component(props) {
     }
   }, [])
 
-  // Lock body scroll ketika overlay/nav aktif
+  // Lock/unlock body scroll when overlays or navigation menus are active
   useEffect(() => {
     const shouldLock =
       searchQuery ||
@@ -69,7 +69,7 @@ export default function Component(props) {
       isGuidesNavShown ||
       isBurgerNavShown
 
-    document.body.style.overflow = shouldLock ? 'hidden' : 'visible'
+    document.body.style.overflow = shouldLock ? 'hidden' : 'unset'
   }, [
     searchQuery,
     isNavShown,
@@ -100,12 +100,12 @@ export default function Component(props) {
     nextFetchPolicy: 'cache-and-network',
   })
 
-  const latestPosts =
-    latestStories?.posts?.edges?.map((post) => post.node) ?? []
+  const latestPosts = latestStories?.posts?.edges?.map((post) => post.node) ?? []
   const latestAllPosts = latestPosts.sort(
     (a, b) => new Date(b.date) - new Date(a.date),
   )
-  // Render Ads
+
+  // Render ads (different for desktop/mobile)
   const renderAdComponent = useCallback(
     (pos) => {
       const position = pos === 'top' ? 'Top' : 'Bottom'
@@ -124,16 +124,15 @@ export default function Component(props) {
           MobileGuides: MastHeadBottomMobileGuides,
         },
       }
-      // Karena ini tag page, kita asumsikan non-guides
-      const Component = componentMap[position][key]
-      return Component ? <Component /> : null
+      // This is tag page (not guides)
+      const AdComponent = componentMap[position][key]
+      return AdComponent ? <AdComponent /> : null
     },
     [isMobile],
   )
 
   return (
     <main className={`${open_sans.variable}`}>
-      {/* SEO */}
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}
@@ -200,17 +199,14 @@ export default function Component(props) {
         </>
       )}
 
-      {/* Category / Tag Header */}
       <CategoryEntryHeader parent="Tag: " children={0} title={name} />
 
-      {/* Main Content */}
       <Main>
         {renderAdComponent('top')}
         <TagStories tagUri={databaseId} name={name} />
         {renderAdComponent('bottom')}
       </Main>
 
-      {/* Footer */}
       <Footer />
     </main>
   )

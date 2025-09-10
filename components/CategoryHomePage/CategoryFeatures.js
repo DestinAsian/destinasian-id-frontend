@@ -49,11 +49,12 @@ const CategoryFeatures = () => {
                   <div className={styles.imageWrapper}>
                     <Image
                       src={image}
-                      alt={post.slug}
-                      width={600}
-                      height={400}
+                      alt={post.title}
+                      width={800}
+                      height={600} // 4:3 ratio → konsisten, no wobble
                       className={styles.thumbnail}
                       loading="lazy"
+                      draggable={false}
                     />
                   </div>
                 )}

@@ -16,6 +16,7 @@ $font-title: 'Scheherazade New', serif;
     padding: 0 0 4rem 0;
   }
 }
+
 .titleWrapper {
   display: flex;
   align-items: center;
@@ -25,26 +26,28 @@ $font-title: 'Scheherazade New', serif;
 }
 
 .logo {
-  width: 150px;
-  height: 150px;
+  display: block;
   object-fit: contain;
+  /* Use fixed ratio for stability */
+  width: 100px;
+  height: auto;
 
   @media (min-width: $breakpoint-small) {
-    width: 200px;
-    height: 100px;
+    width: 150px;
+    height: auto;
   }
 
   @media (min-width: $breakpoint-large) {
-    width: 300px;
-    height: 200px;
+    width: 200px;
+    height: auto;
   }
 }
+
 .title {
   font-family: $font-title;
   font-size: 2rem;
   text-align: center;
   font-weight: 530;
-  // margin-bottom: 2rem;
   color: var(--wpe--color--black);
 
   @media (min-width: $breakpoint-small) {
@@ -75,7 +78,7 @@ $font-title: 'Scheherazade New', serif;
 
 .imageWrapper {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 3; /* ensures 4:3 ratio */
   position: relative;
   overflow: hidden;
 }
@@ -86,7 +89,6 @@ $font-title: 'Scheherazade New', serif;
   object-fit: cover;
   display: block;
 }
-
 
 .textWrapper {
   position: absolute;
@@ -107,13 +109,14 @@ $font-title: 'Scheherazade New', serif;
   text-align: center;
   padding: 0 1rem;
   text-transform: uppercase;
-  letter-spacing: 0.20em;
+  letter-spacing: 0.2em;
 
   @media (min-width: $breakpoint-small) {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
+
   @media (min-width: $breakpoint-large) {
-    font-size: 1.57rem;
+    font-size: 1.75rem;
   }
 }
 
@@ -127,9 +130,10 @@ $font-title: 'Scheherazade New', serif;
   text-transform: uppercase;
 
   @media (min-width: $breakpoint-small) {
-    font-size: 1.2rem;
-  }
-  @media (min-width: $breakpoint-large) {
     font-size: 1rem;
+  }
+
+  @media (min-width: $breakpoint-large) {
+    font-size: 1.2rem;
   }
 }

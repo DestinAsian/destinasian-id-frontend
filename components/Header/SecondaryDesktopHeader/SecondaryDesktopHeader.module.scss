@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 60vw;
+  width: 60%;
   padding: 0.75rem 0;
   z-index: 51;
   margin: 0 auto;
@@ -22,13 +22,11 @@
     height: 70%;
     width: 70%;
     max-width: 700px;
-    padding: 0 1rem 0;
-    // background-color: var(--wpe--color--teal--light);
+    padding: 0 1rem;
     background-color: transparent;
 
     @media (min-width: $breakpoint-extra-small) {
       padding: 0 2rem;
-      margin: 0 auto;
     }
 
     @media (min-width: $breakpoint-small) {
@@ -37,12 +35,11 @@
 
     @media (min-width: $breakpoint-large) {
       margin: 0 auto;
-      padding: 0;
-      position: relative;
       max-width: 700px;
       z-index: 48;
     }
   }
+
   .menu-button {
     display: flex;
     align-items: center;
@@ -52,12 +49,6 @@
     min-width: 4rem;
     width: fit-content;
     height: 100%;
-    color: var(--wpe--color--white--smoke);
-
-    @media (min-width: $breakpoint-extra-small) {
-      min-width: 20%;
-      max-width: 100%;
-    }
 
     .menu-title {
       text-transform: uppercase;
@@ -76,8 +67,6 @@
     }
 
     svg {
-      margin: 0;
-      padding: 0;
       height: 2rem;
     }
 
@@ -91,15 +80,6 @@
       }
     }
 
-    &.active-not-scrolled {
-      background-color: transparent;
-
-      * {
-        font-weight: 700;
-      }
-    }
-
-    // ===  BUTTON GUIDES ===
     &.menu-button-guides {
       background-color: var(--wpe--color--teal--light);
       color: var(--wpe--color--white);
@@ -112,11 +92,6 @@
       &:hover,
       &.active {
         background-color: var(--wpe--color--teal--dark);
-        color: var(--wpe--color--white);
-
-        .menu-title {
-          font-weight: bold;
-        }
       }
     }
   }
@@ -128,6 +103,7 @@
   left: 25%;
   width: 50%;
   transform: translateY(4rem);
+  transition: transform 0.3s ease, top 0.3s ease;
 
   * {
     color: var(--wpe--color--black);
@@ -140,28 +116,25 @@
 
 .full-menu-content {
   display: block;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   position: fixed;
   z-index: 48;
   top: -150vh;
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
+  transition: top 0.4s ease, backdrop-filter 0.4s ease;
 
   &.show {
-    padding: 0;
-    gap: 1rem;
     top: 4.7rem;
-    height: calc(4.7rem + 100vh);
-    transition: backdrop-filter 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    height: calc(100vh - 4.7rem);
 
     @media (min-width: $breakpoint-extra-small) {
-      height: calc(5.8rem + 100vh);
-      width: 100vw;
+      height: calc(100vh - 5.8rem);
     }
 
     @media (min-width: $breakpoint-large) {
-      height: calc(6.35rem + 100vh);
+      height: calc(100vh - 6.35rem);
     }
   }
 }
@@ -170,10 +143,7 @@
   background-color: var(--wpe--main--background-color);
   position: relative;
   max-width: 700px;
-
-  @media (min-width: $breakpoint-extra-small) {
-    margin: 0 auto;
-  }
+  margin: 0 auto;
 
   * {
     color: var(--wpe--color--black);

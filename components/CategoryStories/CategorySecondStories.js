@@ -9,11 +9,10 @@ import Button from '../../components/Button/Button'
 import PostTwoColumns from '../../components/PostTwoColumns/PostTwoColumns'
 import TextTwoColumns from '../../components/PostTwoColumns/TextTwoColumns'
 
-
 const cx = classNames.bind(styles)
 
 export default function CategorySecondStories(categoryUri) {
-  const postsPerPage = 6 // Menampilkan 3 per baris
+  const postsPerPage = 6
   const [visibleCount, setVisibleCount] = useState(postsPerPage)
 
   const uri = categoryUri?.categoryUri
@@ -40,7 +39,6 @@ export default function CategorySecondStories(categoryUri) {
       id: uri,
       contentTypes,
     },
-    // fetchPolicy: 'network-only',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
@@ -77,7 +75,7 @@ export default function CategorySecondStories(categoryUri) {
   if (error) return <pre>{JSON.stringify(error)}</pre>
   if (loading) {
     return (
-      <div className="mx-auto flex max-w-[100vw] justify-center md:max-w-[700px]">
+      <div className="mx-auto flex max-w-full justify-center md:max-w-[700px]">
         <Button className="gap-x-4">Loading...</Button>
       </div>
     )
@@ -140,7 +138,9 @@ export default function CategorySecondStories(categoryUri) {
 
                     {guideInfo?.linkBookNow && (
                       <>
-                        {(guideInfo?.guideName || guideInfo?.guideLocation || guideInfo?.guidePrice) && (
+                        {(guideInfo?.guideName ||
+                          guideInfo?.guideLocation ||
+                          guideInfo?.guidePrice) && (
                           <span className={cx('separator')}>|</span>
                         )}
                         <a
@@ -171,13 +171,13 @@ export default function CategorySecondStories(categoryUri) {
           })}
         </div>
       ) : (
-        <div className="mx-auto flex min-h-60 max-w-[100vw] items-center justify-center md:max-w-[700px]">
-          There is no results in this category...
+        <div className="mx-auto flex min-h-60 max-w-full items-center justify-center md:max-w-[700px]">
+          There are no results in this category...
         </div>
       )}
 
       {mergedPosts.length - startIndex > visibleCount && (
-        <div className="mx-auto flex w-[100vw] justify-center">
+        <div className="mx-auto flex w-full justify-center">
           <Button onClick={fetchMorePosts} className="gap-x-4">
             {loading ? 'Loading...' : 'LOAD MORE...'}
           </Button>

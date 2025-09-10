@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './SecondaryHeader.module.scss'
@@ -19,6 +19,14 @@ export default function SecondaryHeader({
     fetchPolicy: 'cache-first',
   })
 
+  // Lock/unlock body scroll when guides menu is toggled
+  useEffect(() => {
+    document.body.style.overflow = isGuidesNavShown ? 'hidden' : 'auto'
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isGuidesNavShown])
+
   if (error || loading || !data?.categories?.edges?.length) return null
 
   const categories = data.categories.edges.map(({ node }) => ({
@@ -31,7 +39,7 @@ export default function SecondaryHeader({
     <>
       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
         <div className={cx('menu-wrapper')}>
-          {/* Tombol untuk Guides */}
+          {/* Guides button */}
           <button
             type="button"
             className={cx('menu-button', 'menu-button-guides', {
@@ -41,12 +49,12 @@ export default function SecondaryHeader({
               setIsGuidesNavShown(!isGuidesNavShown)
               setSearchQuery('')
             }}
-            aria-label="Toggle navigation"
+            aria-label="Toggle Guides navigation"
           >
             <div className={cx('menu-title')}>Guides</div>
           </button>
 
-          {/* Link kategori */}
+          {/* Category links */}
           {categories.map(({ id, name, uri }) => (
             <Link key={id} href={uri}>
               <div className={cx('menu-button')}>
@@ -57,7 +65,7 @@ export default function SecondaryHeader({
         </div>
       </div>
 
-      {/* Menu penuh untuk Travel Guides */}
+      {/* Full screen Travel Guides menu */}
       <div className={cx('full-menu-content', isGuidesNavShown && 'show')}>
         <div className={cx('full-menu-wrapper')}>
           <TravelGuidesMenu />

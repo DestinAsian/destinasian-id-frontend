@@ -21,13 +21,12 @@ import SEO from '../components/SEO/SEO'
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
-  // Data dari props
+  // Global data
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings || {}
   const { featuredImage, uri, seo, acfHomepageSlider } = props?.data?.page || {}
-  const { databaseId, asPreview } = props?.__TEMPLATE_VARIABLES__ ?? {}
 
-  // State UI
+  // UI States
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
@@ -41,7 +40,7 @@ export default function Component(props) {
     const onResize = () => setIsDesktop(window.innerWidth >= 1024)
 
     onResize()
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
 
     return () => {
@@ -50,13 +49,16 @@ export default function Component(props) {
     }
   }, [])
 
-  // Lock body scroll saat menu/search aktif
+  // Prevent body scroll when menus or search are active
   useEffect(() => {
-    document.body.style.overflow =
-      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
+    if (searchQuery || isNavShown || isGuidesNavShown) {
+      document.body.classList.add('no-scroll')
+    } else {
+      document.body.classList.remove('no-scroll')
+    }
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
-  // Generate featureWell slides
+  // FeatureWell slides
   const featureWell = useMemo(() => {
     return [1, 2, 3]
       .map((num) => ({
@@ -73,7 +75,7 @@ export default function Component(props) {
       .filter((slide) => slide.type)
   }, [acfHomepageSlider])
 
-  // Pilih random slide awal
+  // Pick a random starting slide
   useEffect(() => {
     if (featureWell.length) {
       const randomIndex = Math.floor(Math.random() * featureWell.length)
@@ -81,7 +83,7 @@ export default function Component(props) {
     }
   }, [featureWell])
 
-  // Ambil data menus
+  // Fetch menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
       first: 10,
@@ -90,7 +92,6 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'cache-first',
   })
@@ -158,7 +159,10 @@ export default function Component(props) {
             </Suspense>
           </div>
 
-          <div className="component-videos w-full" style={{ backgroundColor: '#008080' }}>
+          <div
+            className="component-videos w-full"
+            style={{ backgroundColor: '#008080' }}
+          >
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
               <FrontPageVideos />
             </div>
@@ -171,6 +175,7 @@ export default function Component(props) {
   )
 }
 
+// GraphQL Query
 Component.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}

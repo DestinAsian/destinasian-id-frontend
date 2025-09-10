@@ -10,14 +10,14 @@
   aspect-ratio: 3 / 2;
 
   @media (min-width: $breakpoint-large) {
-    width: 100vw;
+    width: 100%;
     height: calc(-6.25rem + 100vh);
   }
 }
 
 .image-wrapper {
   display: flex;
-  min-width: 100vw;
+  min-width: 100%;
   margin: 0 auto;
   padding: 0;
   flex-direction: column;

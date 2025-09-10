@@ -30,8 +30,8 @@
   padding: 0;
   margin: 0;
   background-color: var(--wpe--color--white--smoke);
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
+  margin-left: calc(-50% + 50%);
   position: relative;
   z-index: 1;
 }

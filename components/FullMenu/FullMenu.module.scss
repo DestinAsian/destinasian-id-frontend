@@ -137,7 +137,7 @@
     @media (min-width: $breakpoint-extra-small) {
       width: 20%;
       border-right: none;
-      padding-left: 1.25vw;
+      padding-left: 1.25%;
       padding-right: 0;
       margin-bottom: 0;
     }
@@ -177,7 +177,7 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 2rem;
-    width: calc(-2rem + 100vw);
+    width: calc(-2rem + 100%);
     row-gap: 2rem;
 
     @media (min-width: $breakpoint-extra-small) {
@@ -308,15 +308,15 @@
       border-top: none;
       border-left: 1px solid var(--wpe--color--white);
       padding-left: 1rem;
-      padding-right: 1.25vw;
+      padding-right: 1.25%;
       padding-top: 0;
       gap: 0.25rem;
     }
 
     .left-wrapper {
       display: flex;
-      width: calc(-2rem + 58vw);
-      margin-right: 2vw;
+      width: calc(-2rem + 58%);
+      margin-right: 2%;
       flex-direction: column;
       justify-content: space-between;
 
@@ -350,7 +350,7 @@
 
     .right-wrapper {
       display: flex;
-      width: calc(-2rem + 48vw);
+      width: calc(-2rem + 48%);
 
       @media (min-width: $breakpoint-extra-small) {
         width: 100%;

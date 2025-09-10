@@ -37,8 +37,10 @@ const CategoryUpdates = React.memo(({ data = [] }) => {
                           <Image
                             src={image.mediaItemUrl}
                             alt={image.title || post.title}
-                            fill
+                            width={400}
+                            height={300}
                             loading="lazy"
+                            draggable={false}
                             className={cx('thumbnail')}
                           />
                         </div>

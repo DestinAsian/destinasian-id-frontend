@@ -9,6 +9,7 @@ import Image from 'next/image'
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import styles from './CategoryNewsUpdates.module.scss'
+
 import 'swiper/css'
 import 'swiper/css/navigation'
 
@@ -18,7 +19,10 @@ const CategoryNewsUpdates = React.memo(() => {
     fetchPolicy: 'cache-first',
   })
 
-  const children = useMemo(() => data?.category?.children?.edges || [], [data])
+  const children = useMemo(
+    () => data?.category?.children?.edges || [],
+    [data]
+  )
 
   if (loading || !data) return null
   if (error) return <p className={styles.error}>Error: {error.message}</p>
@@ -41,10 +45,10 @@ const CategoryNewsUpdates = React.memo(() => {
               slidesPerView={1}
               className={styles.swiperContainer}
               preloadImages={false}
-              lazy="true"
             >
               {posts.map(({ node: post }) => {
                 const image = post.featuredImage?.node
+
                 return (
                   <SwiperSlide key={post.id}>
                     <div className={styles.slideWrapper}>
@@ -53,10 +57,11 @@ const CategoryNewsUpdates = React.memo(() => {
                           <Image
                             src={image.mediaItemUrl}
                             alt={image.title || post.title}
-                            width={800}
-                            height={600}
+                            width={800}    // fixed size → stabil
+                            height={600}   // 4:3 ratio
                             className={styles.thumbnail}
                             loading="lazy"
+                            draggable={false}
                           />
                           <div className={styles.overlay}>
                             <h3 className={styles.postTitle}>{post.title}</h3>

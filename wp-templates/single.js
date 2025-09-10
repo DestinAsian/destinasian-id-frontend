@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import Cookies from 'js-cookie'
-import {open_sans } from '../styles/fonts/fonts'
+import { open_sans } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
@@ -30,6 +30,7 @@ const MastHeadBottom = dynamic(() =>
 const MastHeadBottomMobile = dynamic(() =>
   import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'),
 )
+
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
@@ -41,43 +42,50 @@ export default function Component(props) {
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+
   const post = props?.data?.post ?? {}
   const categories = post?.categories?.edges ?? []
 
-  // Handle scroll dan responsif screen (desktop vs mobile)
+  // ✅ Stable scroll + responsive handling
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0)
 
-    const handleResize = () => {
-      const width = window.innerWidth
-      setIsMobile(width <= 768)
-      setIsDesktop(width > 768)
+    // Use matchMedia for stability
+    const desktopQuery = window.matchMedia('(min-width: 769px)')
+    const mobileQuery = window.matchMedia('(max-width: 768px)')
+
+    const updateDeviceState = () => {
+      setIsDesktop(desktopQuery.matches)
+      setIsMobile(mobileQuery.matches)
     }
 
     handleScroll()
-    handleResize()
+    updateDeviceState()
+
     window.addEventListener('scroll', handleScroll)
-    window.addEventListener('resize', handleResize)
+    desktopQuery.addEventListener('change', updateDeviceState)
+    mobileQuery.addEventListener('change', updateDeviceState)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleResize)
+      desktopQuery.removeEventListener('change', updateDeviceState)
+      mobileQuery.removeEventListener('change', updateDeviceState)
     }
   }, [])
 
-  // Lock scroll saat search/menu aktif
+  // ✅ Lock scroll when nav/search active
   useEffect(() => {
-    document.body.style.overflow =
-      searchQuery !== '' || isNavShown ? 'hidden' : 'visible'
+    if (searchQuery !== '' || isNavShown) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = '' // let browser use default
+    }
   }, [searchQuery, isNavShown])
 
-  // Password protection
+  // ✅ Password protection check
   useEffect(() => {
     const storedPassword = Cookies.get('postPassword')
-    if (
-      storedPassword &&
-      storedPassword === post?.passwordProtected?.password
-    ) {
+    if (storedPassword && storedPassword === post?.passwordProtected?.password) {
       setIsAuthenticated(true)
     }
   }, [post?.passwordProtected?.password])
@@ -101,7 +109,6 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
@@ -137,11 +144,10 @@ export default function Component(props) {
     }
   }
 
+  // ✅ Password screen
   if (post?.passwordProtected?.onOff && !isAuthenticated) {
     return (
-      <main
-        className={`${open_sans.variable}`}
-      >
+      <main className={`${open_sans.variable} overflow-x-hidden`}>
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
             enteredPassword={enteredPassword}
@@ -158,7 +164,7 @@ export default function Component(props) {
   }
 
   return (
-    <main>
+    <main className="overflow-x-hidden">
       <SEO
         title={post?.seo?.title}
         description={post?.seo?.metaDesc}
@@ -166,65 +172,45 @@ export default function Component(props) {
         url={post?.uri}
         focuskw={post?.seo?.focuskw}
       />
-      {/* Header */}
+
+      {/* ✅ Header */}
+      <SingleHeader
+        title={props?.data?.generalSettings?.title}
+        description={props?.data?.generalSettings?.description}
+        primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+        secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+        thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+        fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+        fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+        featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+        latestStories={allPosts}
+        menusLoading={menusLoading}
+        latestLoading={!latestStories}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isNavShown={isNavShown}
+        setIsNavShown={setIsNavShown}
+        isScrolled={isScrolled}
+      />
       {isDesktop ? (
-        <>
-          <SingleHeader
-            title={props?.data?.generalSettings?.title}
-            description={props?.data?.generalSettings?.description}
-            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-            latestStories={allPosts}
-            menusLoading={menusLoading}
-            latestLoading={!latestStories}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-          <SingleDesktopHeader
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-            isScrolled={isScrolled}
-          />
-        </>
+        <SingleDesktopHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
       ) : (
-        <>
-          <SingleHeader
-            title={props?.data?.generalSettings?.title}
-            description={props?.data?.generalSettings?.description}
-            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-            latestStories={allPosts}
-            menusLoading={menusLoading}
-            latestLoading={!latestStories}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-          <SecondaryHeader
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-            isScrolled={isScrolled}
-          />
-        </>
+        <SecondaryHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
       )}
 
+      {/* ✅ Main content */}
       <Main className="relative top-[-0.75rem] sm:top-[-1rem]">
         <SingleFeaturedImage image={post?.featuredImage?.node} />
         <SingleEntryHeader
@@ -237,6 +223,7 @@ export default function Component(props) {
           date={post?.date}
         />
         <ContentWrapperEditorial content={post?.content} images={images} />
+
         <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div>
 
         <EntryRelatedStories />

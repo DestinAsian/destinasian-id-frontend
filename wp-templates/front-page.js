@@ -16,6 +16,7 @@ import Footer from '../components/Footer/Footer'
 import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
 import SEO from '../components/SEO/SEO'
 import { open_sans } from '../styles/fonts/fonts'
+
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
@@ -35,7 +36,7 @@ export default function Component(props) {
     const onScroll = () => setIsScrolled(window.scrollY > 0)
     const onResize = () => setIsDesktop(window.innerWidth >= 1024)
     onResize()
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
     return () => {
       window.removeEventListener('scroll', onScroll)
@@ -43,11 +44,13 @@ export default function Component(props) {
     }
   }, [])
 
+  // Prevent background scroll when overlay/nav/search is open
   useEffect(() => {
     document.body.style.overflow =
-      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
+      searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'auto'
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
+  // Map homepage slides (ACF)
   const featureWell = useMemo(() => {
     return [1, 2, 3]
       .map((num) => ({
@@ -80,7 +83,6 @@ export default function Component(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION
     },
     fetchPolicy: 'cache-first',
   })
@@ -112,6 +114,7 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
+
       {isDesktop ? (
         <HomepageDestopHeader
           {...menuProps}
@@ -132,8 +135,9 @@ export default function Component(props) {
       )}
 
       <Main>
-        <div className="snap-y snap-mandatory">
-          <div className="snap-start">
+        {/* Removed snap scrolling to prevent scroll glitch */}
+        <div>
+          <div>
             {currentFeatureWell && (
               <Container>
                 <FeatureWell featureWells={featureWell} />
@@ -175,33 +179,15 @@ Component.query = gql`
       }
       ...FeaturedImageFragment
       acfHomepageSlider {
-        desktopSlide1 {
-          mediaItemUrl
-        }
-        desktopSlide2 {
-          mediaItemUrl
-        }
-        desktopSlide3 {
-          mediaItemUrl
-        }
-        mobileSlide1 {
-          mediaItemUrl
-        }
-        mobileSlide2 {
-          mediaItemUrl
-        }
-        mobileSlide3 {
-          mediaItemUrl
-        }
-        video1 {
-          mediaItemUrl
-        }
-        video2 {
-          mediaItemUrl
-        }
-        video3 {
-          mediaItemUrl
-        }
+        desktopSlide1 { mediaItemUrl }
+        desktopSlide2 { mediaItemUrl }
+        desktopSlide3 { mediaItemUrl }
+        mobileSlide1 { mediaItemUrl }
+        mobileSlide2 { mediaItemUrl }
+        mobileSlide3 { mediaItemUrl }
+        video1 { mediaItemUrl }
+        video2 { mediaItemUrl }
+        video3 { mediaItemUrl }
         slideCaption1
         slideCaption2
         slideCaption3

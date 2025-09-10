@@ -1,10 +1,11 @@
 import React from 'react'
-import styles from './BannerFokusDA.module.scss'
 import classNames from 'classnames/bind'
+import styles from './BannerFokusDA.module.scss'
 
 const cx = classNames.bind(styles)
 
 const BannerFokusDA = ({ bannerDa }) => {
+  // Return null if no banner data
   if (!bannerDa) return null
 
   const { linkBannerFokusHubDa, bannerFokusHubDa } = bannerDa

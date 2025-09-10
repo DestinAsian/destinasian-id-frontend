@@ -1,10 +1,10 @@
-import className from 'classnames/bind'
+import classNames from 'classnames/bind'
 import Heading from '../../components/Heading/Heading'
 import Container from '../../components/Container/Container'
 import styles from './SingleEntryHeader.module.scss'
 import Link from 'next/link'
 
-let cx = className.bind(styles)
+const cx = classNames.bind(styles)
 
 export default function SingleEntryHeader({
   title,
@@ -12,10 +12,9 @@ export default function SingleEntryHeader({
   parentCategory,
   categoryUri,
   categoryName,
-
 }) {
   return (
-    <div className={cx(['component', className])}>
+    <div className={cx('component', className)}>
       <Container>
         <div className={cx('header-wrapper')}>
           {parentCategory !== 'Rest of World' &&
@@ -27,10 +26,7 @@ export default function SingleEntryHeader({
                 </div>
               </Link>
             )}
-          <Heading className={cx('title')}>
-            {/* {parent || null} */}
-            {title}
-          </Heading>
+          <Heading className={cx('title')}>{title}</Heading>
         </div>
       </Container>
     </div>

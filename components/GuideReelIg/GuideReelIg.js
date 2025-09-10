@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 const cx = classNames.bind(styles)
 
 const GuideReelIg = ({ guideReelIg }) => {
-  // Exit early if no data to prevent unnecessary render
+  // Exit early if no data available
   if (
     !guideReelIg ||
     (!guideReelIg.titleReelIg &&
@@ -17,7 +17,6 @@ const GuideReelIg = ({ guideReelIg }) => {
   ) {
     return null
   }
-  
 
   const {
     titleReelIg,
@@ -31,7 +30,6 @@ const GuideReelIg = ({ guideReelIg }) => {
 
   return (
     <div className={styles.guideReelIgWrap}>
-      {/* Render title if exists */}
       {titleReelIg && (
         <div
           className={cx('titleWrapper')}
@@ -39,7 +37,6 @@ const GuideReelIg = ({ guideReelIg }) => {
         />
       )}
 
-      {/* Render content if exists */}
       {contentReelIg && (
         <div
           className={cx('contentWrapper')}
@@ -47,7 +44,7 @@ const GuideReelIg = ({ guideReelIg }) => {
         />
       )}
 
-      {/* TOP SECTION: Left Reel + Right Video */}
+      {/* Top Section: Left Reel + Right Video */}
       <div className={styles.topSection}>
         {reelGuideIg1 && (
           <div
@@ -63,13 +60,16 @@ const GuideReelIg = ({ guideReelIg }) => {
         )}
       </div>
 
-      {/* BOTTOM SECTION: Left Banner + Right Reel */}
+      {/* Bottom Section: Left Banner + Right Reel */}
       <div className={styles.bottomSection}>
         {bannerReelIg2?.mediaItemUrl && (
           <div className={styles.leftBanner}>
             <a href={linkUrlBannerReelIg2} target="_blank" rel="noopener noreferrer">
-              <img src={bannerReelIg2.mediaItemUrl} alt="Banner Reel" loading="lazy" />
-              {/* Note: Added `loading="lazy"` for image performance */}
+              <img
+                src={bannerReelIg2.mediaItemUrl}
+                alt="Banner Reel"
+                loading="lazy"
+              />
             </a>
           </div>
         )}

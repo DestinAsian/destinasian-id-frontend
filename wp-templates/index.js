@@ -1,10 +1,11 @@
 import category from './category'
 import tag from './tag'
+
 import frontPage from './front-page'
 import page from './page'
 import page404 from './page-404-page'
-import PagePreviewHomepage from "./page-preview-homepage";
 import pageContests from './page-contests'
+import pagePreviewHomepage from './page-preview-homepage'
 
 import single from './single'
 import singleContest from './single-contest'
@@ -18,10 +19,9 @@ export default {
   page,
   'page-404-page': page404,
   'page-contests': pageContests,
-  "page-preview-homepage": PagePreviewHomepage,
+  'page-preview-homepage': pagePreviewHomepage,
   single,
-  'single-travel-guide': singleTravelGuide,  
   'single-contest': singleContest,
   'single-luxury-travel': singleLuxuryTravel,
-
+  'single-travel-guide': singleTravelGuide,
 }
