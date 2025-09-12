@@ -60,7 +60,7 @@ export default function Component(props) {
 
   // FeatureWell slides
   const featureWell = useMemo(() => {
-    return [1, 2, 3]
+    return [1, 2, 3, 4, 5]
       .map((num) => ({
         type: acfHomepageSlider?.[`typeSlide${num}`],
         videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
@@ -193,30 +193,48 @@ Component.query = gql`
         desktopSlide1 { mediaItemUrl }
         desktopSlide2 { mediaItemUrl }
         desktopSlide3 { mediaItemUrl }
+        desktopSlide4 { mediaItemUrl }
+        desktopSlide5 { mediaItemUrl }
         mobileSlide1 { mediaItemUrl }
         mobileSlide2 { mediaItemUrl }
         mobileSlide3 { mediaItemUrl }
+        mobileSlide4 { mediaItemUrl }
+        mobileSlide5 { mediaItemUrl }
         video1 { mediaItemUrl }
         video2 { mediaItemUrl }
         video3 { mediaItemUrl }
+        video4 { mediaItemUrl }
+        video5 { mediaItemUrl }
         slideCaption1
         slideCaption2
         slideCaption3
+        slideCaption4
+        slideCaption5
         slideStandFirst1
         slideStandFirst2
         slideStandFirst3
+        slideStandFirst4
+        slideStandFirst5
         slideCategory1
         slideCategory2
         slideCategory3
+        slideCategory4
+        slideCategory5
         slideCategoryLink1
         slideCategoryLink2
         slideCategoryLink3
+        slideCategoryLink4
+        slideCategoryLink5
         slideLink1
         slideLink2
         slideLink3
+        slideLink4
+        slideLink5
         typeSlide1
         typeSlide2
         typeSlide3
+        typeSlide4
+        typeSlide5
       }
     }
     generalSettings {
