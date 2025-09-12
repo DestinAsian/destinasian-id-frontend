@@ -43,7 +43,7 @@ const TravelGuideCategories = ({ data }) => {
       <div className={cx('grid')}>
         {orderedCategories.map(({ id, name, uri, categoryImages }) => {
           const imageUrl = categoryImages?.categorySlide1?.mediaItemUrl
-          const isComingSoon = ['bandung', 'surabaya'].includes(normalize(name))
+          const isComingSoon = ['surabaya'].includes(normalize(name))
 
           const CardContent = (
             <div
