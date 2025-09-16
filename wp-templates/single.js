@@ -9,19 +9,18 @@ import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
-import Container from '../components/Container/Container'
 import ContentWrapperEditorial from '../components/ContentWrapperEditorial/ContentWrapperEditorial'
 import EntryRelatedStories from '../components/EntryRelatedStories/EntryRelatedStories'
 import Footer from '../components/Footer/Footer'
 import Main from '../components/Main/Main'
 import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
-import RelatedStories from '../components/RelatedStories/RelatedStories'
 import SEO from '../components/SEO/SEO'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
 import SingleEntryHeader from '../components/Single/SingleEntryHeader'
 import SingleFeaturedImage from '../components/Single/SingleFeaturedImage'
 import SingleHeader from '../components/SingleHeader/SingleHeader'
+import RelatedPosts from '../components/RelatedPosts/RelatedPosts'
 
 import dynamic from 'next/dynamic'
 const MastHeadBottom = dynamic(() =>
@@ -85,7 +84,10 @@ export default function Component(props) {
   // ✅ Password protection check
   useEffect(() => {
     const storedPassword = Cookies.get('postPassword')
-    if (storedPassword && storedPassword === post?.passwordProtected?.password) {
+    if (
+      storedPassword &&
+      storedPassword === post?.passwordProtected?.password
+    ) {
       setIsAuthenticated(true)
     }
   }, [post?.passwordProtected?.password])
@@ -210,7 +212,7 @@ export default function Component(props) {
         />
       )}
 
-      {/* ✅ Main content */}
+      {/* Main content */}
       <Main className="relative top-[-0.75rem] sm:top-[-1rem]">
         <SingleFeaturedImage image={post?.featuredImage?.node} />
         <SingleEntryHeader
@@ -225,22 +227,11 @@ export default function Component(props) {
         <ContentWrapperEditorial content={post?.content} images={images} />
 
         <div>{isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}</div>
-
         <EntryRelatedStories />
-        {props?.shuffledRelatedStories?.map((related) =>
-          related.node.title !== post.title ? (
-            <Container key={related.node.id}>
-              <RelatedStories
-                title={related.node.title}
-                excerpt={related.node.excerpt}
-                uri={related.node.uri}
-                category={related.node.categories.edges[0]?.node?.name}
-                categoryUri={related.node.categories.edges[0]?.node?.uri}
-                featuredImage={related.node.featuredImage?.node}
-              />
-            </Container>
-          ) : null,
-        )}
+        <RelatedPosts
+          tagIds={post?.tags?.edges?.map((edge) => edge.node.databaseId) || []}
+          excludeIds={[post.databaseId]}
+        />
       </Main>
 
       <Footer />
@@ -290,6 +281,14 @@ Component.query = gql`
                 }
               }
             }
+          }
+        }
+      }
+      tags {
+        edges {
+          node {
+            databaseId
+            name
           }
         }
       }

@@ -24,27 +24,30 @@ import SingleEntryHeaderTravelGuide from '../components/SingleEntryHeaderTravelG
 import ContentWrapperTravelGuide from '../components/ContentWrapperTravelGuide/ContentWrapperTravelGuide'
 import SingleSliderTravelGuide from '../components/SingleSliderTravelGuide/SingleSliderTravelGuide'
 import EntryMoreReviews from '../components/EntryMoreReviews/EntryMoreReviews'
-import MoreReviews from '../components/MoreReviews/MoreReviews'
-import PartnerContent from '../components/PartnerContent/PartnerContent'
 import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import FloatingButtons from '../components/FloatingButtons/FloatingButtons'
+import RelatedTravelGuides from '../components/RelatedPosts/RelatedTravelGuides'
 
 // Fonts
 import { open_sans } from '../styles/fonts/fonts'
 
 // Dynamic Ads
 const MastHeadTopGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides')
+  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
 )
 const MastHeadTopMobileSingleGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides')
+  import(
+    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
+  ),
 )
 const MastHeadBottomGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides')
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
 )
 const MastHeadBottomMobileGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides')
+  import(
+    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+  ),
 )
 
 export default function SingleTravelGuide(props) {
@@ -286,16 +289,23 @@ export default function SingleTravelGuide(props) {
           </Container>
 
           <div>
-            {isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />}
+            {isMobile ? (
+              <MastHeadBottomMobileGuides />
+            ) : (
+              <MastHeadBottomGuides />
+            )}
           </div>
 
-          <EntryMoreReviews
-            parentName={categories?.[0]?.node?.parent?.node?.name}
-            categoryName={categories?.[0]?.node?.name}
-            categoryUri={categories?.[0]?.node?.uri}
+          <EntryMoreReviews />
+
+          <RelatedTravelGuides
+            tagIds={
+              props?.data?.travelGuide?.tags?.edges?.map(
+                (edge) => edge.node.databaseId,
+              ) || []
+            }
+            excludeIds={[props?.data?.travelGuide?.databaseId]}
           />
-          <MoreReviews databaseId={databaseId} />
-          <PartnerContent parentName={categories?.[0]?.node?.parent?.node?.name} />
         </Main>
 
         <Footer />
@@ -381,12 +391,30 @@ SingleTravelGuide.query = gql`
           }
         }
       }
+      tags {
+        edges {
+          node {
+            databaseId
+            name
+          }
+        }
+      }
       acfPostSlider {
-        slide1 { mediaItemUrl }
-        slide2 { mediaItemUrl }
-        slide3 { mediaItemUrl }
-        slide4 { mediaItemUrl }
-        slide5 { mediaItemUrl }
+        slide1 {
+          mediaItemUrl
+        }
+        slide2 {
+          mediaItemUrl
+        }
+        slide3 {
+          mediaItemUrl
+        }
+        slide4 {
+          mediaItemUrl
+        }
+        slide5 {
+          mediaItemUrl
+        }
         slideCaption1
         slideCaption2
         slideCaption3
