@@ -1,0 +1,159 @@
+@import 'styles/breakpoints';
+@import 'styles/fonts/typography';
+
+.layoutWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 5rem 0;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+}
+
+.relatedPosts {
+  flex: 0 0 800px;
+  padding: 1rem 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (min-width: 480px) {
+    max-width: 800px;
+  }
+}
+
+.relatedItem {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+}
+
+.imageWrapper {
+  flex: 0 0 180px;
+
+  img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+  }
+}
+
+.content {
+  flex: 1;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.65rem; // lebih kecil default
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-weight: 200;
+  color: var(--wpe--color--teal--deep);
+  letter-spacing: 0.15rem;
+  margin: 0 0 0.75rem;
+
+  // @media (min-width: 768px) {
+
+  // }
+  @media (min-width: $breakpoint-extra-small) {
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+  }
+}
+
+.categoryLink {
+  text-decoration: none;
+  color: var(--wpe--color--teal--deep);
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.divider {
+    color: var(--wpe--color--teal--deep);
+    font-weight: 300;
+    font-size: 0.8em;
+    line-height: 1;
+    vertical-align: middle;
+    margin-top: -1px;
+  }
+  
+
+.title {
+  font-family: 'Scheherazade New';
+  font-size: 1rem;
+  line-height: 1.2;
+  font-weight: 300;
+  color: #000;
+  letter-spacing: 0.15rem;
+  margin: 0 0 0.75rem;
+
+  @media (min-width: 480px) {
+    font-size: 1.2rem;
+  }
+}
+
+.excerpt {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: calc(1.4em * 3);
+}
+
+.adsWrapper {
+  flex: 0 0 300px;
+  max-width: 300px;
+  position: relative;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.stickyAds {
+  position: sticky;
+  top: 2rem;
+  will-change: transform;
+  transition: transform 0.2s ease-out;
+}
+
+.adsMobile {
+  display: block;
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0 1rem;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+}
+
+.statusText {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 200;
+  color: var(--wpe--color--teal--deep);
+  letter-spacing: 0.15rem;
+  margin: 2rem 0;
+}

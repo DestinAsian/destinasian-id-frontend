@@ -1,0 +1,104 @@
+.relatedPosts {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 1rem 3rem 1rem;
+  }
+  
+  .relatedItem {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .imageWrapper {
+    flex: 0 0 180px;
+  
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+    }
+  }
+  
+  .content {
+    flex: 1;
+  }
+  
+  .category {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-weight: 200;
+    color: var(--wpe--color--teal--deep);
+    letter-spacing: 0.2rem;
+    margin: 0 0 1rem;
+  
+    @media (min-width: 480px) {
+      font-size: 1rem;
+    }
+  
+    @media (min-width: 1024px) {
+      font-size: 1rem;
+    }
+  }
+  
+  .title {
+    font-family: "Scheherazade New";
+    font-size: 0.9rem;
+    line-height: 1.2;
+    font-weight: 300;
+    color: #000;
+    letter-spacing: 0.15rem;
+    margin: 0 0 1rem;
+  
+    @media (min-width: 480px) {
+      font-size: 1rem;
+    }
+  
+    @media (min-width: 1024px) {
+      font-size: 1rem;
+    }
+  }
+  
+  .excerpt {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0 0 1rem;
+  
+    /* batasi hanya 3 baris */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    max-height: calc(1.4em * 3);
+  }
+  
+  .statusText {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 200;
+    color: var(--wpe--color--teal--deep);
+    letter-spacing: 0.15rem;
+    margin: 2rem 0;
+  
+    @media (min-width: 480px) {
+      font-size: 1.1rem;
+    }
+  
+    @media (min-width: 1024px) {
+      font-size: 1.2rem;
+    }
+  }
+  
