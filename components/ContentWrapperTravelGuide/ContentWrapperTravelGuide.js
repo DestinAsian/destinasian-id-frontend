@@ -26,7 +26,6 @@ export default function ContentWrapperTravelGuide({ content, children }) {
     return () => mediaQuery.removeEventListener('change', handleMediaChange)
   }, [])
 
-  // Handle sticky ad behavior on scroll
   useEffect(() => {
     let ticking = false
 
@@ -39,23 +38,28 @@ export default function ContentWrapperTravelGuide({ content, children }) {
           const content = contentRef.current
           const stop = stopRef.current
 
-          const stickyTop = 32
+          const stickyTop = 32 // jarak dari atas
+          const bannerHeight = 600 // tinggi banner fix
           const contentRect = content.getBoundingClientRect()
           const stopRect = stop.getBoundingClientRect()
-          const maxTranslateY = stopRect.top - sticky.offsetHeight - stickyTop
 
-          if (contentRect.top < stickyTop && maxTranslateY > stickyTop) {
-            sticky.style.position = 'fixed'
-            sticky.style.top = `${stickyTop}px`
-            sticky.style.transform = 'translateY(0)'
-          } else if (stopRect.top <= sticky.offsetHeight + stickyTop) {
-            sticky.style.position = 'absolute'
-            sticky.style.top = 'unset'
-            sticky.style.bottom = '0'
-          } else if (contentRect.top >= stickyTop) {
+          const maxTranslateY = stopRect.top - bannerHeight - stickyTop
+
+          if (contentRect.top >= stickyTop) {
+            // belum masuk area sticky
             sticky.style.position = 'static'
             sticky.style.top = 'unset'
             sticky.style.transform = 'none'
+          } else if (maxTranslateY > 0) {
+            // masih di area sticky → iklan fixed
+            sticky.style.position = 'fixed'
+            sticky.style.top = `${stickyTop}px`
+            sticky.style.bottom = 'unset'
+          } else {
+            // sudah lewat batas → iklan absolute di bawah
+            sticky.style.position = 'absolute'
+            sticky.style.top = 'unset'
+            sticky.style.bottom = '0'
           }
 
           ticking = false
@@ -75,7 +79,7 @@ export default function ContentWrapperTravelGuide({ content, children }) {
       const parser = new DOMParser()
       const cleanedContent = content.replaceAll(
         'https://destinasian.co.id',
-        'https://backend.destinasian.co.id'
+        'https://backend.destinasian.co.id',
       )
       const doc = parser.parseFromString(cleanedContent, 'text/html')
 
@@ -122,8 +126,15 @@ export default function ContentWrapperTravelGuide({ content, children }) {
       // Handle dropcaps
       const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
       const processDropcap = (node) => {
-        if (node.nodeType === 1 && node.tagName === 'P' && node.innerHTML.includes('[dropcap]')) {
-          node.innerHTML = node.innerHTML.replace(dropcapRegex, (_, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`)
+        if (
+          node.nodeType === 1 &&
+          node.tagName === 'P' &&
+          node.innerHTML.includes('[dropcap]')
+        ) {
+          node.innerHTML = node.innerHTML.replace(
+            dropcapRegex,
+            (_, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`,
+          )
         }
         node.childNodes?.forEach(processDropcap)
       }
@@ -136,7 +147,12 @@ export default function ContentWrapperTravelGuide({ content, children }) {
           return <GallerySlider key={index} gallerySlider={node} />
         }
 
-        return <div key={index} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+        return (
+          <div
+            key={index}
+            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+          />
+        )
       })
 
       setTransformedContent(elements)

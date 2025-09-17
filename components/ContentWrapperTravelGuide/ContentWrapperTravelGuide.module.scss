@@ -16,12 +16,12 @@
     justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
-  
+
     @media (max-width: 1024px) {
       flex-direction: column;
     }
   }
-  
+
   .content-wrapper {
     flex: 0 0 800px;
     padding: 1.75rem 1rem 0;
@@ -40,30 +40,29 @@
     flex: 0 0 300px;
     max-width: 300px;
     position: relative;
-  
+
     @media (max-width: 768px) {
       display: none;
     }
   }
-  
+
   .ads-mobile {
     display: block;
     width: 100%;
     margin-top: 2rem;
     padding: 0 1rem;
-  
+
     @media (min-width: 769px) {
       display: none;
     }
   }
-  
+
   .sticky-ads {
     position: sticky;
     top: 2rem;
-    will-change: transform; 
+    height: 600px;
+    will-change: transform;
   }
-  
-  
 
   /* Swiper styles */
   .swiper-container {
@@ -272,7 +271,7 @@
       font-weight: 600;
       // color: var(--wpe--color--teal--deep);
       color: var(--wpe--color--black);
-    
+
       text-align: center;
 
       &:hover,
