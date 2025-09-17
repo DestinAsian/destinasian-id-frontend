@@ -197,10 +197,10 @@
       }
     }
 
-    p:empty,
-    p:has(br:only-child) {
-      display: none;
-    }
+    // p:empty,
+    // p:has(br:only-child) {
+    //   display: none;
+    // }
 
     p {
       &:empty {
