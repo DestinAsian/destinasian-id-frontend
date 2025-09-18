@@ -23,9 +23,9 @@
       height: auto;
       aspect-ratio: 3/2;
       object-fit: cover;
+      display: block; 
     }
-  }
-  
+  }  
   .content {
     flex: 1;
   }

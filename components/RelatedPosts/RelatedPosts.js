@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { GetRelatedPosts } from '../../queries/GetRelatedPosts'
 import styles from './RelatedPosts.module.scss'
 
+// helper untuk bersihkan dropcap di excerpt
 const cleanExcerpt = (excerpt = '') =>
   excerpt
     .replace(/\[\/?dropcap\]/gi, '')
@@ -28,37 +29,43 @@ export default function RelatedPosts({ tagIds, excludeIds }) {
 
   return (
     <div className={styles.relatedPosts}>
-      {posts.map(({ node }) => (
-        <Link href={node.uri} key={node.databaseId} className={styles.relatedItem}>
-          <div className={styles.imageWrapper}>
-            {node.featuredImage?.node?.sourceUrl && (
-              <Image
-                src={node.featuredImage.node.sourceUrl}
-                alt={node.featuredImage.node.altText || node.title}
-                width={180}
-                height={120} // rasio 3:2
-                className={styles.image}
+      {posts.map(({ node }) => {
+        const category = node.categories?.edges?.[0]?.node
+
+        return (
+          <Link href={node.uri} key={node.databaseId} className={styles.relatedItem}>
+            <div className={styles.imageWrapper}>
+              {node.featuredImage?.node?.sourceUrl && (
+                <Image
+                  src={node.featuredImage.node.sourceUrl}
+                  alt={node.featuredImage.node.altText || node.title}
+                  width={180}
+                  height={120}
+                  className={styles.image}
+                />
+              )}
+            </div>
+
+            <div className={styles.content}>
+              {category && (
+                <div className={styles.category}>
+                  <Link href={category.uri}>
+                    <span>{category.name}</span>
+                  </Link>
+                </div>
+              )}
+
+              <h3 className={styles.title}>{node.title}</h3>
+              <div
+                className={styles.excerpt}
+                dangerouslySetInnerHTML={{
+                  __html: cleanExcerpt(node.excerpt),
+                }}
               />
-            )}
-          </div>
-
-          <div className={styles.content}>
-            {node.categories?.edges?.length > 0 && (
-              <div className={styles.category}>
-                <span>{node.categories.edges[0].node.name}</span>
-              </div>
-            )}
-
-            <h3 className={styles.title}>{node.title}</h3>
-            <div
-              className={styles.excerpt}
-              dangerouslySetInnerHTML={{
-                __html: cleanExcerpt(node.excerpt),
-              }}
-            />
-          </div>
-        </Link>
-      ))}
+            </div>
+          </Link>
+        )
+      })}
     </div>
   )
 }
