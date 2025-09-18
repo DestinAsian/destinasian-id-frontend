@@ -1,9 +1,12 @@
-import { WordPressTemplate, getNextPreviewProps } from '@faustwp/core';
+import { WordPressTemplate, getNextServerSideProps } from '@faustwp/core';
 
 export default function Preview(props) {
   return <WordPressTemplate {...props} />;
 }
 
-export async function getServerSideProps(context) {
-  return getNextPreviewProps({ context });
+export async function getServerSideProps(ctx) {
+  return getNextServerSideProps(ctx, {
+    Page: Preview,
+    props: {},
+  });
 }

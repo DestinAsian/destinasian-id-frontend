@@ -27,7 +27,9 @@ module.exports = withFaust({
   i18n: {
     locales: ['en'],
     defaultLocale: 'en',
+    localeDetection: false,
   },
+  
 
   async redirects() {
     return [

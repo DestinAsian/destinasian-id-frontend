@@ -349,8 +349,6 @@ Component.variables = ({ databaseId }, ctx) => {
     asPreview: ctx?.preview || false,
   }
 }
-
-
 export async function getStaticProps(ctx) {
   return getNextStaticProps(ctx, {
     Page: Component,
