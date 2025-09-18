@@ -10,4 +10,7 @@ export default setConfig({
   experimentalPlugins: [],
   experimentalToolbar: true,
   possibleTypes,
+
+  wpUrl: process.env.NEXT_PUBLIC_WORDPRESS_URL,
+  apiClientSecret: process.env.FAUST_SECRET_KEY,  
 });

@@ -4,7 +4,7 @@ import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import Cookies from 'js-cookie'
 import { open_sans } from '../styles/fonts/fonts'
-
+import { getNextStaticProps } from '@faustwp/core'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
@@ -35,6 +35,7 @@ export default function Component(props) {
 
   const [enteredPassword, setEnteredPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
@@ -43,9 +44,10 @@ export default function Component(props) {
   const [isMobile, setIsMobile] = useState(false)
 
   const post = props?.data?.post ?? {}
+  const isPreview = props?.asPreview
   const categories = post?.categories?.edges ?? []
 
-  // ✅ Stable scroll + responsive handling
+  // Stable scroll + responsive handling
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0)
 
@@ -72,7 +74,7 @@ export default function Component(props) {
     }
   }, [])
 
-  // ✅ Lock scroll when nav/search active
+  // Lock scroll when nav/search active
   useEffect(() => {
     if (searchQuery !== '' || isNavShown) {
       document.body.style.overflow = 'hidden'
@@ -81,7 +83,7 @@ export default function Component(props) {
     }
   }, [searchQuery, isNavShown])
 
-  // ✅ Password protection check
+  // Password protection check
   useEffect(() => {
     const storedPassword = Cookies.get('postPassword')
     if (
@@ -92,13 +94,14 @@ export default function Component(props) {
     }
   }, [post?.passwordProtected?.password])
 
-  const catVariable = useMemo(
-    () => ({ first: 1, id: post.databaseId }),
-    [post.databaseId],
-  )
+  const catVariable = useMemo(() => {
+    if (!post?.databaseId) return null
+    return { first: 1, id: post.databaseId }
+  }, [post?.databaseId])
 
   const { data } = useQuery(GetSecondaryHeader, {
     variables: catVariable,
+    skip: !catVariable,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
@@ -136,20 +139,27 @@ export default function Component(props) {
     ])
   }, [post])
 
+  // Handler submit password
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === post?.passwordProtected?.password) {
       setIsAuthenticated(true)
       Cookies.set('postPassword', enteredPassword, { expires: 1 })
+      setErrorMsg('') // reset error
     } else {
-      alert('Incorrect password.')
+      setErrorMsg('Incorrect password.')
     }
   }
 
-  // ✅ Password screen
+  // Password screen
   if (post?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main className={`${open_sans.variable} overflow-x-hidden`}>
+         {isPreview && (
+        <div className="bg-yellow-400 p-3 text-center font-semibold text-black">
+          Preview Mode, Konten ini belum dipublikasikan
+        </div>
+      )}
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
             enteredPassword={enteredPassword}
@@ -160,6 +170,11 @@ export default function Component(props) {
             url={post?.uri}
             focuskw={post?.seo?.focuskw}
           />
+          {errorMsg && (
+          <p className="mt-2 text-center text-sm font-medium text-red-600">
+            {errorMsg}
+          </p>
+        )}
         </form>
       </main>
     )
@@ -167,6 +182,12 @@ export default function Component(props) {
 
   return (
     <main className="overflow-x-hidden">
+      {isPreview && (
+        <div className="bg-yellow-400 p-3 text-center font-semibold text-black">
+          Preview Mode – Konten ini belum dipublikasikan
+        </div>
+      )}
+
       <SEO
         title={post?.seo?.title}
         description={post?.seo?.metaDesc}
@@ -322,7 +343,21 @@ Component.query = gql`
   }
 `
 
-Component.variables = ({ databaseId }, ctx) => ({
-  databaseId,
-  asPreview: ctx?.asPreview,
-})
+Component.variables = ({ databaseId }, ctx) => {
+  return {
+    databaseId,
+    asPreview: ctx?.preview || false,
+  }
+}
+
+
+export async function getStaticProps(ctx) {
+  return getNextStaticProps(ctx, {
+    Page: Component,
+    props: {
+      asPreview: ctx.preview || false,
+    },
+  })
+}
+
+
