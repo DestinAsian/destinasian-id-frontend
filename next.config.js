@@ -18,10 +18,7 @@ module.exports = withFaust({
         pathname: '/**',
       },
     ],
-    domains: [
-      'backend.destinasian.co.id',
-      'destinasian.co.id',
-    ],
+    domains: ['backend.destinasian.co.id', 'destinasian.co.id'],
   },
 
   i18n: {
@@ -53,16 +50,11 @@ module.exports = withFaust({
         source: '/sitemap_index.xml',
         destination: 'https://backend.destinasian.co.id/sitemap_index.xml',
       },
-      // Semua sitemap lain (misalnya post-sitemap.xml, page-sitemap.xml, category-sitemap.xml, dll)
+      // Semua sitemap lain (misalnya post-sitemap.xml, page-sitemap.xml, dll)
       {
         source: '/:slug*-sitemap.xml',
         destination: 'https://backend.destinasian.co.id/:slug*-sitemap.xml',
       },
-      // Robots.txt
-    {
-      source: '/robots.txt',
-      destination: 'https://backend.destinasian.co.id/robots.txt',
-    },
     ]
   },
 })
