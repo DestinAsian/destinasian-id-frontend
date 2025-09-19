@@ -57,4 +57,20 @@ module.exports = withFaust({
       },
     ]
   },
+  async headers() {
+    return [
+      {
+        source: '/sitemap_index.xml',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'all' },
+        ],
+      },
+      {
+        source: '/:slug*-sitemap.xml',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'all' },
+        ],
+      },
+    ]
+  },
 })
