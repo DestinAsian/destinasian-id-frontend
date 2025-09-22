@@ -43,34 +43,34 @@ module.exports = withFaust({
     ]
   },
 
-  async rewrites() {
-    return [
-      // Sitemap index
-      {
-        source: '/sitemap_index.xml',
-        destination: 'https://backend.destinasian.co.id/sitemap_index.xml',
-      },
-      // Semua sitemap lain (misalnya post-sitemap.xml, page-sitemap.xml, dll)
-      {
-        source: '/:slug*-sitemap.xml',
-        destination: 'https://backend.destinasian.co.id/:slug*-sitemap.xml',
-      },
-    ]
-  },
-  async headers() {
-    return [
-      {
-        source: '/sitemap_index.xml',
-        headers: [
-          { key: 'X-Robots-Tag', value: 'all' },
-        ],
-      },
-      {
-        source: '/:slug*-sitemap.xml',
-        headers: [
-          { key: 'X-Robots-Tag', value: 'all' },
-        ],
-      },
-    ]
-  },
+  // async rewrites() {
+  //   return [
+  //     // Sitemap index
+  //     {
+  //       source: '/sitemap_index.xml',
+  //       destination: 'https://backend.destinasian.co.id/sitemap_index.xml',
+  //     },
+  //     // Semua sitemap lain (misalnya post-sitemap.xml, page-sitemap.xml, dll)
+  //     {
+  //       source: '/:slug*-sitemap.xml',
+  //       destination: 'https://backend.destinasian.co.id/:slug*-sitemap.xml',
+  //     },
+  //   ]
+  // },
+  // async headers() {
+  //   return [
+  //     {
+  //       source: '/sitemap_index.xml',
+  //       headers: [
+  //         { key: 'X-Robots-Tag', value: 'all' },
+  //       ],
+  //     },
+  //     {
+  //       source: '/:slug*-sitemap.xml',
+  //       headers: [
+  //         { key: 'X-Robots-Tag', value: 'all' },
+  //       ],
+  //     },
+  //   ]
+  // },
 })
