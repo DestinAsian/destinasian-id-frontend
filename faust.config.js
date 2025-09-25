@@ -8,7 +8,7 @@ import possibleTypes from './possibleTypes.json';
 export default setConfig({
   templates,
   experimentalPlugins: [],
-  experimentalToolbar: false,
+  experimentalToolbar: true,
   possibleTypes,
 
   wpUrl: process.env.NEXT_PUBLIC_WORDPRESS_URL,

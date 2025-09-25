@@ -11,7 +11,7 @@
   "dependencies": {
     "@apollo/client": "^3.8.7",
     "@faustwp/cli": "^1.2.0",
-    "@faustwp/core": "^3.3.1",
+    "@faustwp/core": "^1.2.0",
     "@next/third-parties": "^14.2.3",
     "@nextui-org/select": "^2.1.27",
     "@nextui-org/system": "^2.1.2",
@@ -26,6 +26,7 @@
     "git": "^0.1.5",
     "graphql": "^16.6.0",
     "html-react-parser": "^5.2.4",
+    "http-proxy-middleware": "^3.0.5",
     "js-cookie": "^3.0.5",
     "js-cookies": "^1.0.4",
     "keen-slider": "^6.8.5",
