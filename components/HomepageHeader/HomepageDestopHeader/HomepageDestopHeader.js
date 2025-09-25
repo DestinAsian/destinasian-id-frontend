@@ -158,6 +158,11 @@ export default function HomepageDestopHeader({
 
             {/* Desktop menu*/}
             {!isNavShown && (
+              <div
+              className={cx('navigation-wrapper-desktop', {
+                sticky: isScrolled && !isNavShown && !isMenuOpen,
+              })}
+            >
               <div className={cx('navigation-wrapper-desktop')}>
                 <div className={cx('menu-wrapper-desktop')}>
                   <button
@@ -186,7 +191,10 @@ export default function HomepageDestopHeader({
                   })}
                 </div>
               </div>
+              </div>
+              
             )}
+            
             <div
               className={cx(
                 'full-menu-content-desktop',

@@ -42,11 +42,11 @@ body.menu-open {
 
     &:hover,
     &.active {
-      background-color: var(--wpe--color--teal--dark);
+      background-color: var(--wpe--color--teal--light);
       color: var(--wpe--color--white) !important;
       
       .menu-title {
-        background-color: var(--wpe--color--teal--dark);
+        // background-color: var(--wpe--color--teal--dark);
         font-weight: bold;
         color: var(--wpe--color--white) !important;
       }
@@ -431,16 +431,35 @@ body.menu-open {
 .navigation-wrapper-desktop {
   display: flex;
   align-items: center;
-  position: fixed;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 1rem;
-  width: 50vw;
+  top: 0.5rem;
+  width: 70%;
   z-index: 51;
-  padding: 0 7rem;
+  // padding: 0 7rem;
+  transition: all 0.3s ease;
 
-  @media (min-width: $breakpoint-large) {
-    top: 1rem;
+   // Saat sticky
+   &.sticky {
+    top: 0; // sejajar dengan logo & tombol menu
+    background-color: var(--wpe--main--background-color);
+    z-index: 1000;
+
+    .menu-title-desktop {
+      color: var(--wpe--color--black); // biar konsisten kayak logo
+    }
+
+    .menu-button-desktop:hover,
+    .menu-button-desktop.active {
+      background-color: var(--wpe--color--teal--light);
+      color: var(--wpe--color--white);
+
+      .menu-title-desktop {
+        color: var(--wpe--color--white);
+        font-weight: bold;
+      }
+    }
   }
 
   .menu-wrapper-desktop {
@@ -514,7 +533,7 @@ body.menu-open {
       background-color: var(--wpe--color--teal--light);
       color: var(--wpe--color--white);
       font-weight: bold;
-
+      
       * {
         color: var(--wpe--color--white);
       }
@@ -549,7 +568,7 @@ body.menu-open {
   width: 100vw;
   height: 100vh;
   position: fixed;
-  top: -150vh;
+  top: 150vh;
   z-index: 48;
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
@@ -589,7 +608,6 @@ body.menu-open {
   color:var(--wpe--color--black);
   &:hover,
   &.active {
-    background-color: var(--wpe--color--teal--light);
     color: var(--wpe--color--white);
     
     * {
