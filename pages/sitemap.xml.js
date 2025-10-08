@@ -9,43 +9,24 @@
 //   })
 // }
 
-
-// pages/sitemap.xml.js
-
-// pages/sitemap.xml.js
-
-// pages/sitemap.xml.js
+import fetch from 'node-fetch';
 
 export async function getServerSideProps({ res }) {
   const frontendUrl =
-    process.env.FRONTEND_URL?.replace(/\/$/, '') || 'https://destinasian.co.id'
+    process.env.FRONTEND_URL?.replace(/\/$/, '') || 'https://destinasian.co.id';
 
-  // 🔹 Daftar sitemap yang akan muncul di sitemap index
-  const sitemapFiles = [
-    'post-sitemap.xml',
-    'page-sitemap.xml',
-    'editorial-sitemap.xml',
-    'advertorial-sitemap.xml',
-    'honors-circle-sitemap.xml',
-    'update-sitemap.xml',
-    'luxe-list-sitemap.xml',
-    'readers-choice-award-sitemap.xml',
-    'luxury-travel-sitemap.xml',
-    'travel-guides-sitemap.xml',
-    'category-sitemap.xml',
-  ]
+  try {
+    const response = await fetch(`${frontendUrl}/sitemap.xml`);
+    if (!response.ok) throw new Error('Failed to fetch sitemap.xml');
+    const sitemapText = await response.text();
 
-  // 🔹 Buat list dengan lastmod otomatis (bisa diganti dengan tanggal update)
-  const sitemapList = sitemapFiles.map((fileName) => {
-    const now = new Date().toISOString()
-    return {
-      loc: `${frontendUrl}/sitemap.xml?sitemap=${fileName}`,
-      lastmod: now,
-    }
-  })
+    const locMatches = [...sitemapText.matchAll(/<loc>(.*?)<\/loc>/g)];
+    const sitemapList = locMatches.map((match) => ({
+      loc: match[1],
+      lastmod: new Date().toISOString(), // Bisa diganti sesuai kebutuhan
+    }));
 
-  // 🔹 Generate XML sitemapindex
-  const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>
+    const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapList
   .map(
@@ -56,40 +37,20 @@ ${sitemapList
   </sitemap>`
   )
   .join('')}
-</sitemapindex>`
+</sitemapindex>`;
 
-  // 🔹 Kirim response XML
-  res.setHeader('Content-Type', 'text/xml')
-  res.write(sitemapIndexXml)
-  res.end()
+    res.setHeader('Content-Type', 'text/xml');
+    res.write(sitemapIndexXml);
+    res.end();
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.statusCode = 500;
+    res.end('Error generating sitemap');
+  }
 
-  return { props: {} }
+  return { props: {} };
 }
 
-// 🔹 Tidak perlu render apa pun di sisi client
 export default function Sitemap() {
-  return null
+  return null;
 }
-
-
-
-
-// // pages/sitemap.xml.js
-// import { getSitemapProps } from '@faustwp/core'
-
-// export const getServerSideProps = async (ctx) => {
-//   const sitemap = await getSitemapProps(ctx, {
-//     frontendUrl: process.env.FRONTEND_URL,
-//   })
-
-//   ctx.res.setHeader('Content-Type', 'application/xml')
-//   ctx.res.write(sitemap.props?.content || '')
-//   ctx.res.end()
-
-//   return { props: {} }
-// }
-
-// export default function Sitemap() {
-//   // kosong, karena sudah di-handle di server response
-//   return null
-// }
