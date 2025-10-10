@@ -1,3 +1,4 @@
+
 'use client'
 
 import React, { useEffect, useState, useMemo } from 'react'
@@ -18,7 +19,7 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
   const [visibleCount, setVisibleCount] = useState(postsPerPage)
   const [delayedLoaded, setDelayedLoaded] = useState(false)
 
-  // Detect if the category is a travel guide
+  // Deteksi kategori travel guide
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.toLowerCase() || ''
@@ -42,7 +43,7 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
     nextFetchPolicy: 'cache-and-network',
   })
 
-  // Merge new posts when fetching more
+  // Merge data saat load more
   const updateQuery = (prev, { fetchMoreResult }) => {
     if (!fetchMoreResult) return prev
     const prevEdges = prev?.category?.contentNodes?.edges || []
@@ -71,7 +72,7 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
     }
   }
 
-  // Delay rendering of posts for smooth loading
+  // Delay rendering agar smooth
   useEffect(() => {
     const timeout = setTimeout(() => setDelayedLoaded(true), 500)
     return () => clearTimeout(timeout)
@@ -79,12 +80,20 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
 
   if (error) return <pre>{JSON.stringify(error)}</pre>
 
-  // Prepare all posts (pinned + fetched)
+  // Gabungkan pin post (1 & 2) + konten biasa
   const allPosts = useMemo(() => {
-    const content = data?.category?.contentNodes?.edges || []
-    const contentPosts = content.map((post) => post.node)
-    const allPin = pinPosts?.pinPost ? [pinPosts.pinPost] : []
-    return [...allPin, ...contentPosts].filter(
+    const contentEdges = data?.category?.contentNodes?.edges || []
+    const contentPosts = contentEdges.map((post) => post.node)
+
+    // Ambil pin pertama dan kedua dari ACF pinPosts
+    const pin1 = pinPosts?.pinPost ? [pinPosts.pinPost] : []
+    const pin2 = pinPosts?.secondPinPost ? [pinPosts.secondPinPost] : []
+
+    // Urutan: pin pertama, pin kedua, lalu post biasa
+    const combinedPins = [...pin1, ...pin2]
+
+    // Hilangkan duplikat berdasarkan ID
+    return [...combinedPins, ...contentPosts].filter(
       (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
     )
   }, [data, pinPosts])

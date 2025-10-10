@@ -33,11 +33,12 @@ const BannerFokusDA = ({ bannerDa }) => {
   )
 }
 
-export default function CategoryStoriesLatest({
+export default function CategorySecondStoriesLatest({
   categoryUri,
   name,
   parent,
   bannerDa,
+  pinPosts, // 🔹 terima pinPosts agar bisa cek secondPinPost
 }) {
   const uri = categoryUri || ''
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
@@ -56,7 +57,7 @@ export default function CategoryStoriesLatest({
 
   const { data, error, loading } = useQuery(GetCategoryStories, {
     variables: {
-      first: 3, // cukup ambil sedikit karena kita cuma butuh yang ke-2
+      first: 3,
       after: null,
       id: uri,
       contentTypes,
@@ -69,9 +70,14 @@ export default function CategoryStoriesLatest({
   if (shouldSkip || loading) return null
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
+  // 🔹 Jika ada secondPinPost dari ACF, gunakan itu.
+  // Jika tidak, fallback ke logika lama (ambil travel guide ke-2 dari hasil query)
+  const secondPinPost = pinPosts?.secondPinPost
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
-  const travelGuides = allPosts?.filter((item) => item.__typename === 'TravelGuide')
-  const travelGuide = travelGuides?.[1] // ambil yang ke-2
+  const travelGuides = allPosts?.filter(
+    (item) => item.__typename === 'TravelGuide',
+  )
+  const travelGuide = secondPinPost || travelGuides?.[1] // 🔹 prioritas secondPinPost
 
   if (!travelGuide) return null
 
@@ -86,7 +92,9 @@ export default function CategoryStoriesLatest({
             date={travelGuide.date}
             author={travelGuide.author?.node?.name}
             uri={travelGuide.uri}
-            parentCategory={travelGuide.categories?.edges?.[0]?.node?.parent?.node?.name}
+            parentCategory={
+              travelGuide.categories?.edges?.[0]?.node?.parent?.node?.name
+            }
             category={travelGuide.categories?.edges?.[0]?.node?.name}
             categoryUri={travelGuide.categories?.edges?.[0]?.node?.uri}
             featuredImage={travelGuide.featuredImage?.node}
@@ -100,7 +108,9 @@ export default function CategoryStoriesLatest({
               )}
               {guideInfo.linkLocation && guideInfo.guideLocation && (
                 <>
-                  {guideInfo.guideName && <span className={cx('separator')}>|</span>}
+                  {guideInfo.guideName && (
+                    <span className={cx('separator')}>|</span>
+                  )}
                   <a
                     href={guideInfo.linkLocation}
                     target="_blank"
@@ -116,12 +126,16 @@ export default function CategoryStoriesLatest({
                   {(guideInfo.guideName || guideInfo.guideLocation) && (
                     <span className={cx('separator')}>|</span>
                   )}
-                  <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
+                  <span className={cx('guide-price')}>
+                    {guideInfo.guidePrice}
+                  </span>
                 </>
               )}
               {guideInfo.linkBookNow && (
                 <>
-                  {(guideInfo.guideName || guideInfo.guideLocation || guideInfo.guidePrice) && (
+                  {(guideInfo.guideName ||
+                    guideInfo.guideLocation ||
+                    guideInfo.guidePrice) && (
                     <span className={cx('separator')}>|</span>
                   )}
                   <a
@@ -143,6 +157,7 @@ export default function CategoryStoriesLatest({
             uri={travelGuide.uri}
           />
         </div>
+
         <div className={cx('rightColumn')}>
           <BannerFokusDA bannerDa={bannerDa} />
         </div>

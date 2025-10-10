@@ -297,7 +297,10 @@ export default function Category({ loading, data: initialData }) {
 
           <CategoryStories
             categoryUri={databaseId}
-            pinPosts={pinPosts}
+            pinPosts={{
+              pinPost: pinPosts?.pinPost,
+              secondPinPost: pinPosts?.secondPinPost,
+            }}
             name={name}
             children={children}
             parent={parent?.node?.name}
@@ -433,6 +436,83 @@ Category.query = gql`
       pinPosts {
         pinPost {
           ... on Post {
+            id
+            title
+            uri
+            excerpt
+            ...FeaturedImageFragment
+            author {
+              node {
+                name
+              }
+            }
+            categories(first: 100, where: { childless: true }) {
+              edges {
+                node {
+                  name
+                  uri
+                  parent {
+                    node {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+          ... on TravelGuide {
+            id
+            title
+            uri
+            excerpt
+            ...FeaturedImageFragment
+            author {
+              node {
+                name
+              }
+            }
+            categories(first: 100, where: { childless: true }) {
+              edges {
+                node {
+                  name
+                  uri
+                  parent {
+                    node {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        secondPinPost {
+          ... on Post {
+            id
+            title
+            uri
+            excerpt
+            ...FeaturedImageFragment
+            author {
+              node {
+                name
+              }
+            }
+            categories(first: 100, where: { childless: true }) {
+              edges {
+                node {
+                  name
+                  uri
+                  parent {
+                    node {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+          ... on TravelGuide {
             id
             title
             uri
