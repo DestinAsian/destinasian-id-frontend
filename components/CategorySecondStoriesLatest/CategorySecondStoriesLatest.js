@@ -38,7 +38,7 @@ export default function CategorySecondStoriesLatest({
   name,
   parent,
   bannerDa,
-  pinPosts, // 🔹 terima pinPosts agar bisa cek secondPinPost
+  pinPosts,
 }) {
   const uri = categoryUri || ''
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
@@ -70,14 +70,14 @@ export default function CategorySecondStoriesLatest({
   if (shouldSkip || loading) return null
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
-  // 🔹 Jika ada secondPinPost dari ACF, gunakan itu.
+  // Jika ada secondPinPost dari ACF, gunakan itu.
   // Jika tidak, fallback ke logika lama (ambil travel guide ke-2 dari hasil query)
   const secondPinPost = pinPosts?.secondPinPost
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
   const travelGuides = allPosts?.filter(
     (item) => item.__typename === 'TravelGuide',
   )
-  const travelGuide = secondPinPost || travelGuides?.[1] // 🔹 prioritas secondPinPost
+  const travelGuide = secondPinPost || travelGuides?.[1] // prioritas secondPinPost
 
   if (!travelGuide) return null
 
