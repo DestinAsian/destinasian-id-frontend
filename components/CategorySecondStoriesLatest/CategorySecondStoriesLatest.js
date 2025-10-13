@@ -1,3 +1,5 @@
+'use client'
+
 import classNames from 'classnames/bind'
 import styles from './CategorySecondStoriesLatest.module.scss'
 import { useQuery } from '@apollo/client'
@@ -9,6 +11,7 @@ import GuideTextBlock from '../../components/GuideSecondLatestStories/GuideTextB
 
 const cx = classNames.bind(styles)
 
+// Banner component (right column)
 const BannerFokusDA = ({ bannerDa }) => {
   if (!bannerDa) return null
   const { linkBannerFokusHubDa, bannerFokusHubDa } = bannerDa
@@ -45,22 +48,23 @@ export default function CategorySecondStoriesLatest({
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
 
+  // Detect if this category is a Travel Guide category
   const isTravelGuideCategory =
     travelGuideRoots.includes(activeCategoryName) ||
     travelGuideRoots.includes(parentCategoryName)
 
-  const contentTypes = isTravelGuideCategory
-    ? [CONTENT_TYPES.TRAVEL_GUIDES]
-    : [CONTENT_TYPES.POST]
+  // Skip rendering completely if this is not a Travel Guide category
+  if (!isTravelGuideCategory) return null
 
   const shouldSkip = !uri
 
+  // Fetch only TRAVEL_GUIDES content type
   const { data, error, loading } = useQuery(GetCategoryStories, {
     variables: {
       first: 3,
       after: null,
       id: uri,
-      contentTypes,
+      contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
     },
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
@@ -70,14 +74,13 @@ export default function CategorySecondStoriesLatest({
   if (shouldSkip || loading) return null
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
-  // Jika ada secondPinPost dari ACF, gunakan itu.
-  // Jika tidak, fallback ke logika lama (ambil travel guide ke-2 dari hasil query)
+  // Get all Travel Guides from query
+  const allGuides = data?.category?.contentNodes?.edges?.map((post) => post.node)
+
+  // Use secondPinPost if available, otherwise use the 2nd Travel Guide from query
   const secondPinPost = pinPosts?.secondPinPost
-  const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
-  const travelGuides = allPosts?.filter(
-    (item) => item.__typename === 'TravelGuide',
-  )
-  const travelGuide = secondPinPost || travelGuides?.[1] // prioritas secondPinPost
+  const travelGuides = allGuides?.filter((item) => item.__typename === 'TravelGuide')
+  const travelGuide = secondPinPost || travelGuides?.[1] // Priority: ACF secondPinPost
 
   if (!travelGuide) return null
 
@@ -86,6 +89,7 @@ export default function CategorySecondStoriesLatest({
   return (
     <div className={cx('component')}>
       <div className={cx('gridWrapper')}>
+        {/* Left column with content */}
         <div className={cx('leftColumn')}>
           <GuideSecondLatestStories
             content={travelGuide.content}
@@ -101,6 +105,7 @@ export default function CategorySecondStoriesLatest({
             caption={travelGuide.featuredImage?.node?.caption}
           />
 
+          {/* Guide info section */}
           {guideInfo && (
             <div className={cx('guide-info')}>
               {guideInfo.guideName && (
@@ -151,6 +156,7 @@ export default function CategorySecondStoriesLatest({
             </div>
           )}
 
+          {/* Text block section */}
           <GuideTextBlock
             title={travelGuide.title}
             excerpt={travelGuide.excerpt}
@@ -158,6 +164,7 @@ export default function CategorySecondStoriesLatest({
           />
         </div>
 
+        {/* Right column banner */}
         <div className={cx('rightColumn')}>
           <BannerFokusDA bannerDa={bannerDa} />
         </div>
