@@ -1,20 +1,52 @@
-
 import { getWordPressProps, WordPressTemplate } from '@faustwp/core'
-
+import SEO from '../components/SEO/SEO'
 export default function Page(props) {
-  // const guidesPost =
-  // props?.__TEMPLATE_QUERY_DATA__?.post?.guides?.guidesPost === true
-  // const defaultPost =
-  // props?.__TEMPLATE_QUERY_DATA__?.post?.guides?.guidesPost !== true
+  const {
+    category,
+    contest,
+    editorial,
+    luxuryTravel,
+    page,
+    post,
+    tag,
+    update,
+  } = props?.__TEMPLATE_QUERY_DATA__ ?? {}
 
-  console.log(props.__TEMPLATE_QUERY_DATA__)
-  
+  const source =
+    category ||
+    contest ||
+    editorial ||
+    luxuryTravel ||
+    page ||
+    post ||
+    tag ||
+    update ||
+    {}
+
+  const { categoryImages, featuredImage, seo, uri } = source ?? {}
+
+  // Determine imageUrl: use categoryImages for tag or category, else use featuredImage
+  const isTagOrCategory = !!(tag || category)
+
+  const imageUrl = isTagOrCategory
+    ? categoryImages?.categorySlide1?.mediaItemUrl?.length
+      ? categoryImages.categorySlide1.mediaItemUrl
+      : categoryImages?.categoryImages?.mediaItemUrl
+    : featuredImage?.node?.sourceUrl ?? ''
+
   return (
-    <WordPressTemplate
-    {...props}
-    // guidesPost={guidesPost}
-    // defaultPost={defaultPost}
-    />
+    <>
+      <SEO
+        title={seo?.title}
+        description={seo?.metaDesc}
+        imageUrl={imageUrl}
+        url={uri}
+        focuskw={seo?.focuskw}
+      />
+      <WordPressTemplate
+        {...props}
+      />
+    </>
   )
 }
 
@@ -28,20 +60,3 @@ export async function getStaticPaths() {
     fallback: 'blocking',
   }
 }
-// import { getWordPressProps, WordPressTemplate } from '@faustwp/core'
-
-// export default function Page(props) {
-//   return <WordPressTemplate {...props} />
-// }
-
-// export function getStaticProps(ctx) {
-//   return getWordPressProps({ ctx, revalidate: 1 })
-// }
-
-// export async function getStaticPaths() {
-//   return {
-//     paths: [],
-//     fallback: 'blocking',
-//   }
-// }
-
