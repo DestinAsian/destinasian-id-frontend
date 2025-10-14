@@ -1,11 +1,7 @@
-
-'use client'
-
 import classNames from 'classnames/bind'
 import styles from './CategorySecondStoriesLatest.module.scss'
 import { useQuery } from '@apollo/client'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
-import { GetTravelGuidesMenu } from '../../queries/GetTravelGuidesMenu' // ✅ ambil data travel guides
 import * as CONTENT_TYPES from '../../constants/contentTypes'
 
 import GuideSecondLatestStories from '../../components/GuideSecondLatestStories/GuideSecondLatestStories'
@@ -45,21 +41,10 @@ export default function CategorySecondStoriesLatest({
   pinPosts,
 }) {
   const uri = categoryUri || ''
+  const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
 
-  // Ambil daftar root travel guide dari GraphQL
-  const { data: guidesMenuData } = useQuery(GetTravelGuidesMenu, {
-    fetchPolicy: 'cache-first',
-  })
-
-  // Ambil semua nama kategori travel guide (root + children + cucu)
-  const travelGuideRoots =
-    guidesMenuData?.categories?.edges?.map(
-      (edge) => edge.node?.slug?.toLowerCase(),
-    ) || []
-
-  // Tentukan apakah kategori sekarang masih dalam hierarki Travel Guide
   const isTravelGuideCategory =
     travelGuideRoots.includes(activeCategoryName) ||
     travelGuideRoots.includes(parentCategoryName)
@@ -85,19 +70,14 @@ export default function CategorySecondStoriesLatest({
   if (shouldSkip || loading) return null
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
-  // hanya tampilkan secondPinPost untuk travel guide
-  const secondPinPost =
-    isTravelGuideCategory && pinPosts?.secondPinPost
-      ? pinPosts.secondPinPost
-      : null
-
+  // Jika ada secondPinPost dari ACF, gunakan itu.
+  // Jika tidak, fallback ke logika lama (ambil travel guide ke-2 dari hasil query)
+  const secondPinPost = pinPosts?.secondPinPost
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
   const travelGuides = allPosts?.filter(
     (item) => item.__typename === 'TravelGuide',
   )
-
-  // prioritas ke secondPinPost kalau ada, jika tidak ambil ke-2 dari query
-  const travelGuide = secondPinPost || travelGuides?.[1]
+  const travelGuide = secondPinPost || travelGuides?.[1] // prioritas secondPinPost
 
   if (!travelGuide) return null
 
@@ -189,3 +169,4 @@ export default function CategorySecondStoriesLatest({
     </div>
   )
 }
+
