@@ -13,7 +13,9 @@ import Main from '../components/Main/Main'
 import FrontPageLayout from '../components/FrontPageLayout/FrontPageLayout'
 import Container from '../components/Container/Container'
 import Footer from '../components/Footer/Footer'
-import FrontPageVideos from '../components/FrontPageLayout/FrontPageVideos'
+const FrontPageVideos = React.lazy(() =>
+  import('../components/FrontPageLayout/FrontPageVideos'),
+)
 import SEO from '../components/SEO/SEO'
 import { open_sans } from '../styles/fonts/fonts'
 
@@ -114,7 +116,6 @@ export default function Component(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-
       {isDesktop ? (
         <HomepageDestopHeader
           {...menuProps}
@@ -149,12 +150,15 @@ export default function Component(props) {
               <FrontPageLayout />
             </Suspense>
           </div>
+
           <div
             className="component-videos w-full"
             style={{ backgroundColor: '#008080' }}
           >
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
-              <FrontPageVideos />
+              <Suspense fallback={<div>Loading videos...</div>}>
+                <FrontPageVideos />
+              </Suspense>
             </div>
           </div>
         </div>
@@ -179,21 +183,51 @@ Component.query = gql`
       }
       ...FeaturedImageFragment
       acfHomepageSlider {
-        desktopSlide1 { mediaItemUrl }
-        desktopSlide2 { mediaItemUrl }
-        desktopSlide3 { mediaItemUrl }
-        desktopSlide4 { mediaItemUrl }
-        desktopSlide5 { mediaItemUrl }
-        mobileSlide1 { mediaItemUrl }
-        mobileSlide2 { mediaItemUrl }
-        mobileSlide3 { mediaItemUrl }
-        mobileSlide4 { mediaItemUrl }
-        mobileSlide5 { mediaItemUrl }
-        video1 { mediaItemUrl }
-        video2 { mediaItemUrl }
-        video3 { mediaItemUrl }
-        video4 { mediaItemUrl }
-        video5 { mediaItemUrl }
+        desktopSlide1 {
+          mediaItemUrl
+        }
+        desktopSlide2 {
+          mediaItemUrl
+        }
+        desktopSlide3 {
+          mediaItemUrl
+        }
+        desktopSlide4 {
+          mediaItemUrl
+        }
+        desktopSlide5 {
+          mediaItemUrl
+        }
+        mobileSlide1 {
+          mediaItemUrl
+        }
+        mobileSlide2 {
+          mediaItemUrl
+        }
+        mobileSlide3 {
+          mediaItemUrl
+        }
+        mobileSlide4 {
+          mediaItemUrl
+        }
+        mobileSlide5 {
+          mediaItemUrl
+        }
+        video1 {
+          mediaItemUrl
+        }
+        video2 {
+          mediaItemUrl
+        }
+        video3 {
+          mediaItemUrl
+        }
+        video4 {
+          mediaItemUrl
+        }
+        video5 {
+          mediaItemUrl
+        }
         slideCaption1
         slideCaption2
         slideCaption3
