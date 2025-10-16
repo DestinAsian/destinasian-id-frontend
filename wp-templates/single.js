@@ -155,11 +155,11 @@ export default function Component(props) {
   if (post?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main className={`${open_sans.variable} overflow-x-hidden`}>
-         {isPreview && (
-        <div className="bg-yellow-400 p-3 text-center font-semibold text-black">
-          Preview Mode, Konten ini belum dipublikasikan
-        </div>
-      )}
+        {isPreview && (
+          <div className="bg-yellow-400 p-3 text-center font-semibold text-black">
+            Preview Mode, Konten ini belum dipublikasikan
+          </div>
+        )}
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
             enteredPassword={enteredPassword}
@@ -171,10 +171,10 @@ export default function Component(props) {
             focuskw={post?.seo?.focuskw}
           />
           {errorMsg && (
-          <p className="mt-2 text-center text-sm font-medium text-red-600">
-            {errorMsg}
-          </p>
-        )}
+            <p className="mt-2 text-center text-sm font-medium text-red-600">
+              {errorMsg}
+            </p>
+          )}
         </form>
       </main>
     )
@@ -195,8 +195,6 @@ export default function Component(props) {
         url={post?.uri}
         focuskw={post?.seo?.focuskw}
       />
-
-      {/* ✅ Header */}
       <SingleHeader
         title={props?.data?.generalSettings?.title}
         description={props?.data?.generalSettings?.description}
@@ -357,5 +355,3 @@ export async function getStaticProps(ctx) {
     },
   })
 }
-
-
