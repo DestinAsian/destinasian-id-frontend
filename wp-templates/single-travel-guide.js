@@ -429,7 +429,14 @@ SingleTravelGuide.query = gql`
   }
 `
 
-SingleTravelGuide.variables = ({ databaseId }, ctx) => ({
-  databaseId,
-  asPreview: ctx?.asPreview,
-})
+// SingleTravelGuide.variables = ({ databaseId }, ctx) => ({
+//   databaseId,
+//   asPreview: ctx?.asPreview,
+// })
+
+SingleTravelGuide.variables = ({ databaseId }, ctx) => {
+  return {
+    databaseId,
+    asPreview: ctx?.asPreview,
+  }
+}
