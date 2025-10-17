@@ -5,7 +5,7 @@ import { AdScript, AdConfig } from 'react-ad-manager'
 import { GetFavicon } from '../../queries/GetFavicon'
 import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import PageViewsCounter from '../PageViewsCounter/PageViewsCounter'
+// import PageViewsCounter from '../PageViewsCounter/PageViewsCounter'
 
 /**
  * Komponen SEO untuk halaman Next.js
@@ -160,7 +160,7 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
       </noscript>
 
       {/* 📊 StatCounter dan Clarity Tracking (dipanggil setelah GTM aktif) */}
-      {gtmLoaded && <PageViewsCounter />}
+      {/* {gtmLoaded && <PageViewsCounter />} */}
     </>
   )
 }
