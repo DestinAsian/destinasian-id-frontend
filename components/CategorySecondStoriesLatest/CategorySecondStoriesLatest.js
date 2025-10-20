@@ -45,16 +45,17 @@ export default function CategorySecondStoriesLatest({
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
 
+  // Deteksi kategori travel guide
   const isTravelGuideCategory =
     travelGuideRoots.includes(activeCategoryName) ||
     travelGuideRoots.includes(parentCategoryName)
 
-  const contentTypes = isTravelGuideCategory
-    ? [CONTENT_TYPES.TRAVEL_GUIDES]
-    : [CONTENT_TYPES.POST]
+  // Hanya gunakan TRAVEL_GUIDES, sembunyikan semua jika bukan
+  const contentTypes = [CONTENT_TYPES.TRAVEL_GUIDES]
 
   const shouldSkip = !uri
 
+  // Jalankan query hanya untuk TRAVEL_GUIDES
   const { data, error, loading } = useQuery(GetCategoryStories, {
     variables: {
       first: 3,
@@ -67,18 +68,24 @@ export default function CategorySecondStoriesLatest({
     skip: shouldSkip,
   })
 
+  // Loading dan error handling
   if (shouldSkip || loading) return null
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
-  // Jika ada secondPinPost dari ACF, gunakan itu.
-  // Jika tidak, fallback ke logika lama (ambil travel guide ke-2 dari hasil query)
-  const secondPinPost = pinPosts?.secondPinPost
+  // Ambil semua post hasil query
   const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
-  const travelGuides = allPosts?.filter(
-    (item) => item.__typename === 'TravelGuide',
-  )
-  const travelGuide = secondPinPost || travelGuides?.[1] // prioritas secondPinPost
 
+  // Filter hanya yang bertipe TravelGuide
+  const travelGuides = allPosts?.filter(
+    (item) => item.__typename === 'TravelGuide'
+  )
+
+  // Jika tidak ada TravelGuide, sembunyikan semua (termasuk kategori POST)
+  if (!travelGuides?.length) return null
+
+  // Gunakan secondPinPost jika ada, kalau tidak ambil item ke-2
+  const secondPinPost = pinPosts?.secondPinPost
+  const travelGuide = secondPinPost || travelGuides[1]
   if (!travelGuide) return null
 
   const guideInfo = travelGuide.guide_book_now
@@ -86,6 +93,7 @@ export default function CategorySecondStoriesLatest({
   return (
     <div className={cx('component')}>
       <div className={cx('gridWrapper')}>
+        {/* Kiri: konten utama */}
         <div className={cx('leftColumn')}>
           <GuideSecondLatestStories
             content={travelGuide.content}
@@ -101,6 +109,7 @@ export default function CategorySecondStoriesLatest({
             caption={travelGuide.featuredImage?.node?.caption}
           />
 
+          {/* Info tambahan guide */}
           {guideInfo && (
             <div className={cx('guide-info')}>
               {guideInfo.guideName && (
@@ -151,6 +160,7 @@ export default function CategorySecondStoriesLatest({
             </div>
           )}
 
+          {/* Teks dan link */}
           <GuideTextBlock
             title={travelGuide.title}
             excerpt={travelGuide.excerpt}
@@ -158,15 +168,16 @@ export default function CategorySecondStoriesLatest({
           />
         </div>
 
+        {/* Kanan: banner */}
         <div className={cx('rightColumn')}>
           <BannerFokusDA bannerDa={bannerDa} />
         </div>
       </div>
 
+      {/* Garis pemisah */}
       <div style={{ maxWidth: '1400px', margin: '1rem auto' }}>
         <hr style={{ border: 'none', borderTop: '1px solid black' }} />
       </div>
     </div>
   )
 }
-
