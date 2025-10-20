@@ -465,6 +465,13 @@ Category.query = gql`
             title
             uri
             excerpt
+            guide_book_now {
+              guideLocation
+              guideName
+              guidePrice
+              linkBookNow
+              linkLocation
+            }
             ...FeaturedImageFragment
             author {
               node {
@@ -517,6 +524,13 @@ Category.query = gql`
             title
             uri
             excerpt
+            guide_book_now {
+              guideLocation
+              guideName
+              guidePrice
+              linkBookNow
+              linkLocation
+            }
             ...FeaturedImageFragment
             author {
               node {
