@@ -2,65 +2,37 @@
 
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
-import styles from './CategoryStoriesLatest.module.scss'
 import { useQuery } from '@apollo/client'
+
+import styles from './CategoryStoriesLatest.module.scss'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
-import { GetTravelGuidesMenu } from '../../queries/GetTravelGuidesMenu'
 import * as CONTENT_TYPES from '../../constants/contentTypes'
 import GuideLatestStories from '../../components/GuideLatestStories/GuideLatestStories'
 
 const cx = classNames.bind(styles)
 
-export default function CategoryStoriesLatest({ categoryUri, pinPosts, name, parent }) {
+export default function CategoryStoriesLatest({ categoryUri, pinPosts }) {
   const uri = categoryUri?.categoryUri || categoryUri?.id || categoryUri || ''
-  const activeCategoryName = name?.toLowerCase() || ''
-  const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
   const shouldSkip = !uri
 
-  // Ambil daftar root Travel Guides dari GraphQL
-  const { data: guidesMenuData } = useQuery(GetTravelGuidesMenu, {
-    fetchPolicy: 'cache-first',
-  })
-
-  // Fallback list jika data belum ada
-  const staticFallback = ['bali', 'jakarta', 'bandung', 'surabaya']
-
-  const travelGuideRoots =
-    guidesMenuData?.categories?.edges?.map(
-      (edge) => edge?.node?.slug?.toLowerCase()
-    ) || staticFallback
-
-  // Deteksi apakah kategori saat ini termasuk Travel Guide
-  const isTravelGuideCategory =
-    travelGuideRoots.includes(activeCategoryName) ||
-    travelGuideRoots.includes(parentCategoryName)
-
-  const contentTypes = isTravelGuideCategory
-    ? [CONTENT_TYPES.TRAVEL_GUIDES]
-    : [CONTENT_TYPES.POST]
-
-  // Gunakan useState agar tidak langsung re-render sebelum data siap
+  // Gunakan state untuk mencegah hydration mismatch di Next.js
   const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
-  useEffect(() => {
-    // Jalankan hanya di client-side agar hindari hydration mismatch
-    setMounted(true)
-  }, [])
-
-  // Ambil data artikel
+  // Query data kategori hanya dengan contentType TRAVEL_GUIDES
   const { data, error, loading } = useQuery(GetCategoryStories, {
     variables: {
       first: 3,
       after: null,
       id: uri,
-      contentTypes,
+      contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
     },
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
-    skip: shouldSkip || !mounted, // ⛔ hindari query sebelum client siap
+    skip: shouldSkip || !mounted,
   })
 
-  // Saat belum mounted atau loading, tahan tampilan tetap stabil
+  // Placeholder saat loading
   if (!mounted || loading) {
     return (
       <div className={cx('component', 'stable-placeholder')}>
@@ -77,17 +49,13 @@ export default function CategoryStoriesLatest({ categoryUri, pinPosts, name, par
 
   if (shouldSkip || error) return null
 
+  // Ambil daftar post
   const fetchedPosts =
     data?.category?.contentNodes?.edges?.map((edge) => edge.node) || []
 
-  const pinned = isTravelGuideCategory ? pinPosts?.pinPost : null
-
-  const displayedPost = pinned
-    ? pinned
-    : fetchedPosts.find((item) => item.__typename === 'TravelGuide')
-
+  // Jika ada pinPost, tampilkan itu terlebih dahulu
+  const displayedPost = pinPosts?.pinPost || fetchedPosts[0]
   if (!displayedPost) return null
-  if (!isTravelGuideCategory && pinned) return null
 
   return (
     <div className={cx('component')}>
@@ -99,7 +67,9 @@ export default function CategoryStoriesLatest({ categoryUri, pinPosts, name, par
           date={displayedPost.date}
           author={displayedPost.author?.node?.name}
           uri={displayedPost.uri}
-          parentCategory={displayedPost.categories?.edges?.[0]?.node?.parent?.node?.name}
+          parentCategory={
+            displayedPost.categories?.edges?.[0]?.node?.parent?.node?.name
+          }
           category={displayedPost.categories?.edges?.[0]?.node?.name}
           categoryUri={displayedPost.categories?.edges?.[0]?.node?.uri}
           featuredImage={displayedPost.featuredImage?.node}
