@@ -11,15 +11,20 @@ import GuideLatestStories from '../../components/GuideLatestStories/GuideLatestS
 
 const cx = classNames.bind(styles)
 
-export default function CategoryStoriesLatest({ categoryUri, pinPosts }) {
+export default function CategoryStoriesLatest({ categoryUri, pinPosts, contentType = CONTENT_TYPES.TRAVEL_GUIDES }) {
   const uri = categoryUri?.categoryUri || categoryUri?.id || categoryUri || ''
   const shouldSkip = !uri
 
-  // Gunakan state untuk mencegah hydration mismatch di Next.js
+  // Hindari hydration mismatch di Next.js
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
-  // Query data kategori hanya dengan contentType TRAVEL_GUIDES
+  // Jika tipe konten adalah POST, maka sembunyikan semua (tidak render apapun)
+  if (contentType === CONTENT_TYPES.POST) {
+    return null
+  }
+
+  // Query hanya berjalan jika tipe konten TRAVEL_GUIDES
   const { data, error, loading } = useQuery(GetCategoryStories, {
     variables: {
       first: 3,
@@ -29,7 +34,7 @@ export default function CategoryStoriesLatest({ categoryUri, pinPosts }) {
     },
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
-    skip: shouldSkip || !mounted,
+    skip: shouldSkip || !mounted || contentType !== CONTENT_TYPES.TRAVEL_GUIDES,
   })
 
   // Placeholder saat loading
@@ -56,6 +61,11 @@ export default function CategoryStoriesLatest({ categoryUri, pinPosts }) {
   // Jika ada pinPost, tampilkan itu terlebih dahulu
   const displayedPost = pinPosts?.pinPost || fetchedPosts[0]
   if (!displayedPost) return null
+
+  // Hanya tampilkan jika konten bertipe TRAVEL_GUIDES
+  if (displayedPost.__typename !== 'TravelGuide') {
+    return null
+  }
 
   return (
     <div className={cx('component')}>
