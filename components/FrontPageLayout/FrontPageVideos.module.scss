@@ -9,7 +9,7 @@
 }
 
 .titleVideos {
-  font-size: 2rem;
+  font-size: clamp(2rem, 2vw + 1rem, 3rem);
   color: var(--wpe--color--white);
   font-family: 'Scheherazade New', serif;
   text-align: left;
@@ -17,11 +17,7 @@
   max-width: var(--wpe--container--max--width);
   margin-bottom: 1.5rem;
   font-weight: 530;
-
-  @media (min-width: $breakpoint-small) {
-    font-size: 3rem;
-    letter-spacing: 0.05em;
-  }
+  letter-spacing: 0.03em;
 }
 
 .newsUpdates {
@@ -36,65 +32,47 @@
     max-width: var(--wpe--container--max--width);
     position: relative;
     z-index: 3;
+    gap: 1.5rem;
 
     @media (min-width: $breakpoint-small) {
       flex-direction: row;
       align-items: flex-start;
+      gap: 5%;
     }
   }
 
   .leftColumn {
-    width: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     order: 1;
     z-index: 2;
-
-    @media (min-width: $breakpoint-small) {
-      width: 73%;
-    }
   }
 
   .rightColumn {
-    width: 100%;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+    flex: 0 0 20%;
     order: 2;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 
-    @media (min-width: $breakpoint-small) {
-      width: 20%;
-      margin-left: 5%;
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+      margin-top: 1.5rem;
     }
 
     .outnowWrapper {
-      margin-top: 2rem;
-
-      @media (min-width: $breakpoint-small) {
-        position: sticky;
-        top: 5rem;
-        margin-top: 0;
-      }
-    }
-
-    .outnowVideos {
-      background-color: var(--wpe--color--teal--deep);
-      padding: 0 1rem;
-
-      .outnow-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-      }
-
-      .outnow-content {
-        font-size: 1rem;
-        color: var(--wpe--color--dark);
-      }
+      position: sticky;
+      top: 5rem;
+      width: 100%;
+      min-height: 600px;
     }
   }
 }
 
 .videoWrapper {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }

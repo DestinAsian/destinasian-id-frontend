@@ -28,7 +28,6 @@ $font-title: 'Scheherazade New', serif;
 .logo {
   display: block;
   object-fit: contain;
-  /* Use fixed ratio for stability */
   width: 100px;
   height: auto;
 
@@ -46,8 +45,8 @@ $font-title: 'Scheherazade New', serif;
 .title {
   font-family: $font-title;
   font-size: 2rem;
-  text-align: center;
   font-weight: 530;
+  text-align: center;
   color: var(--wpe--color--black);
 
   @media (min-width: $breakpoint-small) {
@@ -78,16 +77,16 @@ $font-title: 'Scheherazade New', serif;
 
 .imageWrapper {
   width: 100%;
-  aspect-ratio: 4 / 3; /* ensures 4:3 ratio */
+  aspect-ratio: 4 / 3;
   position: relative;
   overflow: hidden;
 }
 
 .image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .textWrapper {

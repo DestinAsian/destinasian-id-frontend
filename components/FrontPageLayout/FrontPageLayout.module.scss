@@ -147,10 +147,11 @@
       }
     }
   }
-
-  // ========================
-  // OUTNOW SECTION
-  // ========================
-
+  .ad-slot {
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
 }

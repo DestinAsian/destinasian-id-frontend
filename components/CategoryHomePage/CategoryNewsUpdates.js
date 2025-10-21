@@ -19,10 +19,7 @@ const CategoryNewsUpdates = React.memo(() => {
     fetchPolicy: 'cache-first',
   })
 
-  const children = useMemo(
-    () => data?.category?.children?.edges || [],
-    [data]
-  )
+  const children = useMemo(() => data?.category?.children?.edges || [], [data])
 
   if (loading || !data) return null
   if (error) return <p className={styles.error}>Error: {error.message}</p>
@@ -57,11 +54,16 @@ const CategoryNewsUpdates = React.memo(() => {
                           <Image
                             src={image.mediaItemUrl}
                             alt={image.title || post.title}
-                            width={800}    // fixed size → stabil
-                            height={600}   // 4:3 ratio
+                            width={1022} // fixed size → stabil
+                            height={600} // 4:3 ratio
                             className={styles.thumbnail}
                             loading="lazy"
                             draggable={false}
+                            style={{
+                              width: '1022px',
+                              height: '600px',
+                              objectFit: 'cover',
+                            }}
                           />
                           <div className={styles.overlay}>
                             <h3 className={styles.postTitle}>{post.title}</h3>

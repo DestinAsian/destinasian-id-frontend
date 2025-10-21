@@ -1,28 +1,34 @@
 'use client'
 
-import React from 'react'
+import React, { memo, Suspense } from 'react'
 import { useQuery } from '@apollo/client'
+import dynamic from 'next/dynamic'
 import classNames from 'classnames/bind'
 import styles from './FrontPageVideos.module.scss'
 import { GetVideoHomepage } from '../../queries/GetVideoHomepage'
 
-import ContentWrapperVideo from '../ContentWrapperVideo/ContentWrapperVideo'
-import HalfPageHome2 from '../../components/AdUnit/HalfPage2/HalfPageHome2'
+// ✅ Lazy-load komponen berat (iklan & video wrapper)
+const ContentWrapperVideo = dynamic(() => import('../ContentWrapperVideo/ContentWrapperVideo'), {
+  ssr: false,
+  loading: () => <div style={{ minHeight: '400px' }} />,
+})
+const HalfPageHome2 = dynamic(() => import('../../components/AdUnit/HalfPage2/HalfPageHome2'), {
+  ssr: false,
+  loading: () => <div style={{ minHeight: '600px' }} />,
+})
 
 const cx = classNames.bind(styles)
 
-export default function FrontPageVideos() {
+function FrontPageVideos() {
   const { data, loading, error } = useQuery(GetVideoHomepage, {
     fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-only',
   })
 
-  const video = data?.videos?.edges?.[0]?.node
+  // ✅ Early return — hindari render berlebihan
+  if (loading || error) return null
 
-  if (loading) return null
-  if (error) {
-    console.error('Error fetching homepage videos:', error)
-    return null
-  }
+  const video = data?.videos?.edges?.[0]?.node
   if (!video) return null
 
   return (
@@ -31,17 +37,27 @@ export default function FrontPageVideos() {
 
       <div className={cx('newsUpdates')}>
         <div className={cx('twoColumns')}>
+          {/* === VIDEO LEFT === */}
           <div className={cx('leftColumn')}>
             <div className={cx('videoWrapper')}>
-              <ContentWrapperVideo video={video} />
+              <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
+                <ContentWrapperVideo video={video} />
+              </Suspense>
             </div>
           </div>
 
-          <div className={cx('rightColumn')}>
-            <HalfPageHome2 />
-          </div>
+          {/* === AD RIGHT === */}
+          <aside className={cx('rightColumn')}>
+            <div className={cx('outnowWrapper')}>
+              <Suspense fallback={<div style={{ minHeight: '600px' }} />}>
+                <HalfPageHome2 />
+              </Suspense>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
   )
 }
+
+export default memo(FrontPageVideos)

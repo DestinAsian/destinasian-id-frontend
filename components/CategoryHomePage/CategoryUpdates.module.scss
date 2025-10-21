@@ -47,13 +47,11 @@ $font-serif: 'Scheherazade New', serif;
 
 .cardInner {
   display: block;
-  padding: 0.25rem;
   text-decoration: none;
+  color: inherit;
 }
 
 .imageWrapper {
-  position: relative;
-  width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
 }
@@ -62,7 +60,6 @@ $font-serif: 'Scheherazade New', serif;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
 }
 
 .uri {

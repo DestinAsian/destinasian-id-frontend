@@ -50,7 +50,6 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  overflow: hidden; // ✅ Pastikan kelebihan gambar tidak bocor keluar
   display: block;
 }
 
@@ -135,8 +134,7 @@
     height: 30px;
     font-size: 14px;
 
-    // gunakan scale agar proporsional
-    transform: scale(0.5); // setengah dari ukuran default
+    transform: scale(0.5);
 
     @media (min-width: $breakpoint-medium) {
       width: 60px;

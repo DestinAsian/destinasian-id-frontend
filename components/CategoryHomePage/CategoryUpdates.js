@@ -3,37 +3,35 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import classNames from 'classnames/bind'
 import styles from './CategoryUpdates.module.scss'
 
-const cx = classNames.bind(styles)
-
 const CategoryUpdates = React.memo(({ data = [] }) => {
-  if (!data.length) return null
+  if (!data?.length) return null
 
   return (
-    <div className={cx('categoryUpdatesWrapper')}>
+    <div className={styles.categoryUpdatesWrapper}>
       {data.map(({ node: category }) => {
         const posts = category?.contentNodes?.edges?.slice(0, 8) || []
+        if (!posts.length) return null
 
         return (
-          <div key={category.id} className={cx('childCategory')}>
-            <Link href={category.uri}>
-              <h2 className={cx('title')}>{category.name}</h2>
+          <section key={category.id} className={styles.childCategory}>
+            <Link href={category.uri} className={styles.titleLink}>
+              <h2 className={styles.title}>{category.name}</h2>
             </Link>
 
             {category.description && (
-              <p className={cx('description')}>{category.description}</p>
+              <p className={styles.description}>{category.description}</p>
             )}
 
-            <div className={cx('postsWrapper')}>
+            <div className={styles.postsWrapper}>
               {posts.map(({ node: post }) => {
                 const image = post.featuredImage?.node
                 return (
-                  <div key={post.id} className={cx('card')}>
-                    <Link href={post.uri} className={cx('cardInner')}>
+                  <article key={post.id} className={styles.card}>
+                    <Link href={post.uri} className={styles.cardInner}>
                       {image?.mediaItemUrl && (
-                        <div className={cx('imageWrapper')}>
+                        <figure className={styles.imageWrapper}>
                           <Image
                             src={image.mediaItemUrl}
                             alt={image.title || post.title}
@@ -41,17 +39,17 @@ const CategoryUpdates = React.memo(({ data = [] }) => {
                             height={300}
                             loading="lazy"
                             draggable={false}
-                            className={cx('thumbnail')}
+                            className={styles.thumbnail}
                           />
-                        </div>
+                        </figure>
                       )}
-                      <p className={cx('uri')}>{post.title}</p>
+                      <p className={styles.uri}>{post.title}</p>
                     </Link>
-                  </div>
+                  </article>
                 )
               })}
             </div>
-          </div>
+          </section>
         )
       })}
     </div>
