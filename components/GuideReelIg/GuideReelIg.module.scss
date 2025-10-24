@@ -3,15 +3,13 @@
 
 .guideReelIgWrap {
   max-width: 1400px;
-  margin: 2rem auto;
-  padding: 1rem 0 2rem;
+  margin: 0 auto;
+  padding-block: 1rem 2rem 1rem 2rem;
+  padding-inline: 1rem;
+  box-sizing: border-box;
 
-  @media (max-width: $breakpoint-medium) {
-    padding: 0 1rem;
-  }
-
-  @media (max-width: $breakpoint-small) {
-    padding: 1rem;
+  @media (min-width: 1400px) {
+    padding-inline: 0;
   }
 }
 
@@ -78,7 +76,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin: 3rem 0 4rem;
+  margin: 3rem 0 3rem;
+  justify-content: space-between;
 
   @media (max-width: $breakpoint-medium) {
     flex-direction: column;
@@ -92,7 +91,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin-top: 4rem;
+  margin: 3rem 0 1rem;
+  justify-content: space-between;
 
   @media (max-width: $breakpoint-medium) {
     flex-direction: column;
@@ -114,6 +114,15 @@
     height: auto;
     display: block;
     object-fit: cover;
+    border-radius: 0.5rem;
+  }
+}
+
+.leftReel,
+.rightReel {
+  p {
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }
 
@@ -127,6 +136,10 @@
 
   .videoContent {
     border-radius: 0.5rem;
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    margin-bottom: 2rem;
   }
 }
 
