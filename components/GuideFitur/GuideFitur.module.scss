@@ -4,9 +4,14 @@
 .guideFiturSection {
   max-width: 1400px;
   margin: 2rem 0 3rem;
+  padding-inline: 1rem;
+  box-sizing: border-box;
 
   @media (min-width: $breakpoint-small) {
     margin: 4rem auto;
+  }
+  @media (min-width: 1400px) {
+    padding-inline: 0;
   }
 
   .sectionTitle {
@@ -14,7 +19,7 @@
     font-weight: 500;
     line-height: 1.1;
     text-align: center;
-    font-family: "Scheherazade New";
+    font-family: 'Scheherazade New';
     padding-bottom: 1rem;
 
     @media (min-width: $breakpoint-small) {
@@ -29,11 +34,6 @@
   flex-wrap: wrap;
   gap: 1.5rem;
   justify-content: space-between;
-  padding: 0 1rem;
-
-  @media (max-width: $breakpoint-small) {
-    margin: 0 auto; // fixed from padding: 0 auto;
-  }
 }
 
 .guideFiturItem {
@@ -67,7 +67,7 @@
 
 .titleOverlay {
   position: absolute;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
