@@ -13,10 +13,8 @@ $color-grey: #777;
   height: calc(-10.75rem + 100vh);
   overflow: auto;
   margin: 0 auto;
-
-  // Tambahan agar tampil paling depan
-  position: relative; // atau fixed jika ingin selalu terlihat
-  z-index: 9999; 
+  position: relative;
+  z-index: 9999;
 
   @media (min-width: $breakpoint-extra-small) {
     padding: 0 2rem 8rem;
@@ -25,40 +23,6 @@ $color-grey: #777;
     max-width: 700px;
   }
 }
-
-.image-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4/3; // 🔥 konsisten landscape, ubah sesuai desain
-  overflow: hidden;
-
-  img,
-  span {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
-  }
-}
-
-.left-wrapper {
-  flex-shrink: 0;
-  width: 30%; // konsisten lebar kiri
-
-  @media (min-width: $breakpoint-extra-small) {
-    width: 25%;
-  }
-}
-
-.right-wrapper {
-  width: 70%;
-
-  @media (min-width: $breakpoint-extra-small) {
-    width: 75%;
-  }
-}
-
-
 
 .content-wrapper {
   width: 100%;
@@ -75,44 +39,36 @@ $color-grey: #777;
   }
 }
 
+
 .left-wrapper {
-  width: 25%;
+  flex-shrink: 0;
+  width: 50%;
 
   @media (min-width: $breakpoint-extra-small) {
-    width: 20%;
+    width: 33.33%;
   }
 }
 
 .right-wrapper {
-  width: 75%;
+  width: 50%; 
 
   @media (min-width: $breakpoint-extra-small) {
-    width: 80%;
+    width: 66.67%; 
   }
 }
 
-.wrapper-image {
-  margin: 0 auto;
-  padding: 0;
-  display: flex;
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
 
-  figure,
-  .featured-image {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    position: relative;
-
-    // @media (min-width: $breakpoint-extra-small) {
-    //   height: 12rem;
-    // }
-
-    span,
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
+  img,
+  span {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
   }
 }
 
@@ -140,6 +96,22 @@ $color-grey: #777;
       font-size: 0.8rem;
     }
   }
+}
+
+.meta-date {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.divider {
+  display: inline-block;
+  width: 1px;
+  height: 12px;
+  margin-top: 0.4rem;
+  background-color: var(--wpe--color--white);
+  opacity: 0.4;
 }
 
 .icon-wrapper {
@@ -192,12 +164,11 @@ $color-grey: #777;
   font-weight: 300;
   font-size: 0.6rem;
   text-transform: none;
-
+  margin-top: 0.4rem;
   @media (min-width: $breakpoint-extra-small) {
     font-size: 0.8rem;
   }
 }
-
 
 .meta-hc {
   font-family: 'Open Sans', sans-serif;
@@ -213,20 +184,27 @@ $color-grey: #777;
 }
 
 .title {
-  // font-family: 'Open Sans', sans-serif;
-  font-family: "Scheherazade New";
+  font-family: 'Scheherazade New';
   font-weight: 500;
 }
 
 .title-hc {
-  font-family: "Scheherazade New";
+  font-family: 'Scheherazade New';
   font-weight: 700;
 }
 
-
 .title-contest {
-  font-family: "Scheherazade New";
+  font-family: 'Scheherazade New';
   font-weight: 700;
+}
+/* --- Title dibatasi 2 baris --- */
+.title.truncate a {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .main-category-post,
@@ -309,7 +287,6 @@ $color-grey: #777;
 .no-results {
   text-align: center;
   color: $color-grey;
-  // background-color: var(--wpe--main--background-color);
   display: flex;
   width: 100%;
   height: 100%;
@@ -331,4 +308,18 @@ $color-grey: #777;
 
 .no-results-text {
   font-size: 3rem;
+}
+
+.excerpt {
+  margin-top: 0.5rem;
+  p {
+    font-size: 0.8rem;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .more-link {
+    font-weight: 600;
+  }
 }
