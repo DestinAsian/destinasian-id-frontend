@@ -312,14 +312,29 @@ $color-grey: #777;
 
 .excerpt {
   margin-top: 0.5rem;
+  overflow: hidden;
+
   p {
     font-size: 0.8rem;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     line-height: 1.4;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (max-width: 768px) {
+      .excerpt p {
+        -webkit-line-clamp: 3;
+      }
+    }
   }
 
   .more-link {
     font-weight: 600;
   }
 }
+
