@@ -442,12 +442,11 @@ body.menu-open {
 
    // Saat sticky
    &.sticky {
-    top: 0; // sejajar dengan logo & tombol menu
     background-color: var(--wpe--main--background-color);
     z-index: 1000;
 
     .menu-title-desktop {
-      color: var(--wpe--color--black); // biar konsisten kayak logo
+      color: var(--wpe--color--black);
     }
 
     .menu-button-desktop:hover,
