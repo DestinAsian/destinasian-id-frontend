@@ -7,10 +7,11 @@ import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import Main from '../components/Main/Main'
 import Footer from '../components/Footer/Footer'
+import CategoryDesktopHeader from '../components/CategoryHeaderNew/CategoryDesktopHeader/CategoryDesktopHeader'
+
 import SecondaryDesktopHeader from '../components/Header/SecondaryDesktopHeader/SecondaryDesktopHeader'
 import CategoryHeader from '../components/CategoryHeader/CategoryHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
-import CategoryDesktopHeader from '../components/CategoryDesktopHeader/CategoryDesktopHeader'
 import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
 import CategoryStoriesLatest from '../components/CategoryStoriesLatest/CategoryStoriesLatest'
 import GuideFitur from '../components/GuideFitur/GuideFitur'
@@ -212,14 +213,11 @@ export default function Category({ loading, data: initialData }) {
 
       <main className={`${open_sans.variable}`}>
         {isDesktop ? (
-          <>
-            <CategoryDesktopHeader {...sharedHeaderProps} />
-            <SecondaryDesktopHeader
-              {...sharedHeaderProps}
-              isGuidesNavShown={isGuidesNavShown}
-              setIsGuidesNavShown={setIsGuidesNavShown}
-            />
-          </>
+          <CategoryDesktopHeader
+            {...sharedHeaderProps}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+          />
         ) : (
           <>
             <CategoryHeader {...sharedHeaderProps} />
