@@ -2,7 +2,7 @@
 
 .wrapper {
   max-width: 1400px;
-  margin: 2rem auto;
+  margin: 0 auto;
   width: 100%;
   padding: 0 1rem;
 }
@@ -14,7 +14,7 @@
   flex-wrap: wrap;
   gap: 3rem;
   margin: 0 auto;
-  padding:1rem 0;
+  padding:2rem 0 1rem;
 
   @media (min-width: $breakpoint-small) {
     padding: 2rem 0;

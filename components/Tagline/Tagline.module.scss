@@ -7,7 +7,11 @@
   align-items: center;       
   text-align: center;         
   width: 100%;               
-  padding: 2rem;             
+  padding: 2rem 0 0 0;
+  
+  @media screen and (min-width: $breakpoint-small) {
+    padding: 2rem 0 1rem 0;
+  }
 }
 
 .contentWrapper {

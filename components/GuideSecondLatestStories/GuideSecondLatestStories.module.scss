@@ -39,18 +39,19 @@
 
 .textWrapper {
   width: 100%;
-  margin-top: 1rem;
   text-align: start;
 
   .title {
     font-size: 2rem;
     font-weight: 500;
     line-height: 1.1;
-    margin: 0.5rem 0;
     font-family: "Scheherazade New";
     letter-spacing: -0.5px;
+    padding: 0 0 1rem 0;
+
     @media (min-width: $breakpoint-small) {
       font-size: 2.5rem;
+      padding: 1.5rem 0 2rem 0;
     }
   }
 

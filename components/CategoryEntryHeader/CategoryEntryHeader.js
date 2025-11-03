@@ -193,7 +193,16 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
   )
 
   return (
-    <div className={cx(['component', className])}>
+    // <div className={cx(['component', className])}>
+       <div
+    className={cx([
+      'component',
+      className,
+      {
+        'normal-category': isNormalCategory,
+        'guides-category': isGuide,
+      },
+    ])}>
       {isNormalCategory && (
         <Container>
           {/* Normal Category with Slider */}
