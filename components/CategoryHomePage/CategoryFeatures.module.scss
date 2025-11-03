@@ -7,12 +7,17 @@ $font-serif: 'Scheherazade New', serif;
 
 .CategoryFeaturesWrapper {
   width: 100%;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   font-family: $font-main;
   font-weight: 300;
+
+  @media screen and (min-width: $breakpoint-small) {
+  gap: 3.5rem;
+  padding-bottom: 2rem;
+  }
 }
 
 .title {
@@ -23,7 +28,7 @@ $font-serif: 'Scheherazade New', serif;
 
   @media (min-width: $breakpoint-small) {
     font-size: 3rem;
-    padding: 1rem 0 2rem 0;
+    padding: 1rem 0 0 0;
   }
 }
 
@@ -63,6 +68,7 @@ $font-serif: 'Scheherazade New', serif;
   position: relative;
   overflow: hidden;
   text-decoration: none;
+  padding: 0 0 1rem 0;
 }
 
 .slug {
@@ -74,13 +80,17 @@ $font-serif: 'Scheherazade New', serif;
   font-size: 13px;
   color: var(--wpe--color--black);
   line-height: 1.2;
-  margin: 0.5rem 0;
+  // margin: 0.5rem 0;
   display: -webkit-box;
   line-clamp: 4;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  padding: 1rem 0;
+  padding: 2rem 0 0 0;
+
+  @media (min-width: $breakpoint-small) {
+    padding: 2rem 0 0.5rem 0;
+  }
 }
 
 .imageWrapper {
@@ -113,13 +123,8 @@ $font-serif: 'Scheherazade New', serif;
 .readMore {
   font-size: 0.85rem;
   color: var(--wpe--color--black);
-  margin-top: 0.3rem;
-  font-weight: 300;
-  padding-top: 0.5rem;
-
-  @media (min-width: $breakpoint-small) {
-    padding-top: 2rem;
-  }
+  // margin-top: 0.3rem;
+  // font-weight: 300;
 }
 
 .date {

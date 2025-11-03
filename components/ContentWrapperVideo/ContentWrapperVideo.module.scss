@@ -8,7 +8,7 @@ $font-main: 'Open Sans', sans-serif;
   margin: 0 auto;
   color: var(--wpe--color--white);
   background-color: var(--wpe--color--teal--deep);
-  padding: 1rem 0;
+  // padding: 1rem 0;
 
   .first-wrapper {
     display: flex;
@@ -62,7 +62,7 @@ $font-main: 'Open Sans', sans-serif;
 
     @media (min-width: $breakpoint-medium) {
       font-size: 2rem;
-      padding: 2rem 0 0.25rem 0;
+      padding: 2rem 0 0 0;
       text-align: left;
       line-height: 1.2;
 
@@ -93,9 +93,9 @@ $font-main: 'Open Sans', sans-serif;
     font-size: 0.75rem;
     font-weight: 300;
     line-height: 1.2;
-    margin: 0.5rem 0;
+    // margin: 0.5rem 0;
     text-align: left;
-
+    padding: 1rem 0 ;
     display: -webkit-box;
     line-clamp: 2;
     -webkit-line-clamp: 2;
@@ -104,6 +104,7 @@ $font-main: 'Open Sans', sans-serif;
 
     @media (min-width: $breakpoint-medium) {
       font-size: 1rem;
+      padding: 1rem 0 ;
     }
 
     a {

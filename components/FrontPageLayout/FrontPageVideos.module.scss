@@ -6,6 +6,10 @@
   align-items: center;
   background-color: var(--wpe--color--teal--deep);
   padding: 2rem 0;
+
+  @media screen and (min-width: $breakpoint-small) {
+    padding: 3rem 0;
+  }
 }
 
 .titleVideos {
@@ -15,9 +19,13 @@
   text-align: left;
   width: 100%;
   max-width: var(--wpe--container--max--width);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   font-weight: 530;
   letter-spacing: 0.03em;
+
+  @media screen and (min-width: $breakpoint-small) {
+    margin-bottom: 3rem;
+  }
 }
 
 .newsUpdates {
@@ -32,12 +40,12 @@
     max-width: var(--wpe--container--max--width);
     position: relative;
     z-index: 3;
-    gap: 1.5rem;
+    gap: 1rem;
 
     @media (min-width: $breakpoint-small) {
       flex-direction: row;
       align-items: flex-start;
-      gap: 5%;
+      gap: 2.5%;
     }
   }
 
