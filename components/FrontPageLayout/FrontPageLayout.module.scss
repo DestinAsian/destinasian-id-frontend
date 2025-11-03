@@ -9,7 +9,6 @@
 
 // Category Updates Component
 .category-updates-component {
-
   .category-updates-title {
     font-size: 1.5rem;
     font-weight: bold;
@@ -49,19 +48,18 @@
   padding: 1rem 0;
 
   @media (min-width: $breakpoint-small) {
-  padding: 1.5rem 0;
+    padding: 1.5rem 0;
   }
 }
 .divider-news-updates {
   border: none;
   border-top: 1px solid #000000;
-  margin: 0 auto;
   width: 100%;
   max-width: 100%;
   margin: 3rem 0 2rem;
 
   @media (min-width: $breakpoint-small) {
-     margin-top: -4rem;
+    margin: 0;
   }
 }
 
@@ -141,7 +139,7 @@
     }
 
     .outnow-wrapper {
-      margin-top: 2rem;
+      margin-top: 0;
 
       @media (min-width: $breakpoint-small) {
         position: sticky;
@@ -156,5 +154,4 @@
     justify-content: center;
     align-items: center;
   }
-  
 }

@@ -26,6 +26,10 @@
 
 .childCategory {
   margin-bottom: 3rem;
+
+  @media screen and (min-width: $breakpoint-small) {
+    margin-bottom: 0;
+  }
 }
 
 .swiperContainer {
