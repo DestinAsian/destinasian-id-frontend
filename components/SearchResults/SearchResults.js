@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic'
 
 const PostInfo = dynamic(() => import('../../components/PostInfo/PostInfo'))
 const cx = classNames.bind(styles)
-  
+
 export default function SearchResults({ searchResults, isLoading }) {
   const [filteredResults, setFilteredResults] = useState([])
   const MAX_RESULTS = 20
@@ -32,7 +32,7 @@ export default function SearchResults({ searchResults, isLoading }) {
     let trimmed = cleanExcerpt(excerpt)?.substring(0, MAX_EXCERPT_LENGTH) ?? ''
     const lastSpace = trimmed.lastIndexOf(' ')
     if (lastSpace !== -1) trimmed = trimmed.substring(0, lastSpace) + '...'
-    return `${trimmed} <a class="more-link" href="${uri}">Continue reading <span class="screen-reader-text">${title}</span></a>`
+    return trimmed
   }
 
   if (!isLoading && !filteredResults.length) {
@@ -61,7 +61,7 @@ export default function SearchResults({ searchResults, isLoading }) {
           (node) =>
             node?.title ||
             node?.excerpt ||
-            node?.featuredImage?.node?.sourceUrl
+            node?.featuredImage?.node?.sourceUrl,
         )
         .slice(0, MAX_RESULTS)
         .map((node) => {
@@ -98,12 +98,6 @@ export default function SearchResults({ searchResults, isLoading }) {
                       </span>
                     </Link>
                   )}
-                  {node?.date && (
-                    <>
-                      <span className={cx('divider')}></span>
-                      <PostInfo date={node.date} className={cx('meta')} />
-                    </>
-                  )}
                 </div>
 
                 {/* Title dibatasi 2 baris */}
@@ -121,7 +115,7 @@ export default function SearchResults({ searchResults, isLoading }) {
                       __html: calculateTrimmedExcerpt(
                         node.excerpt,
                         node.uri,
-                        node.title
+                        node.title,
                       ),
                     }}
                   />
