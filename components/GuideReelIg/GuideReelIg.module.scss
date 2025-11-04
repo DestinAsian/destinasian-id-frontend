@@ -18,7 +18,7 @@
 .titleWrapper {
   text-align: center;
   margin: 0 auto 1rem auto;
-  font-family: "Scheherazade New";
+  font-family: 'Scheherazade New';
   font-weight: 500;
   font-size: 2.5rem;
   line-height: 1.1;
@@ -199,6 +199,7 @@
     video,
     embed {
       max-width: 250px;
+      margin-bottom: 1rem;
     }
   }
 }
