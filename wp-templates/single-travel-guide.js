@@ -272,7 +272,35 @@ export default function SingleTravelGuide(props) {
           </div>
 
           {firstSlider?.length > 0 && (
-            <SingleSliderTravelGuide images={images} />
+            <>
+              <div className="single-slider-wrapper">
+                <SingleSliderTravelGuide images={images} />
+              </div>
+
+              <style jsx>{`
+                .single-slider-wrapper {
+                  max-width: 1200px;
+                  margin: 0 auto;
+                  width: 100%;
+                  overflow: hidden;
+                }
+
+                .single-slider-wrapper img {
+                  width: 100%;
+                  height: auto;
+                  max-width: 1400px;
+                  display: block;
+                  margin: 0 auto;
+                  object-fit: cover;
+                }
+
+                @media (max-width: 768px) {
+                  .single-slider-wrapper {
+                    max-width: 100vw;
+                  }
+                }
+              `}</style>
+            </>
           )}
 
           <SingleEntryHeaderTravelGuide

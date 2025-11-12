@@ -19,6 +19,7 @@ import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeade
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
 import SingleEntryHeader from '../components/Single/SingleEntryHeader'
 import SingleFeaturedImage from '../components/Single/SingleFeaturedImage'
+import SingleSlider from '../components/SingleSlider/SingleSlider'
 import SingleHeader from '../components/SingleHeader/SingleHeader'
 import RelatedPosts from '../components/RelatedPosts/RelatedPosts'
 
@@ -233,7 +234,11 @@ export default function Component(props) {
 
       {/* Main content */}
       <Main className="relative top-[-0.75rem] sm:top-[-1rem]">
-        <SingleFeaturedImage image={post?.featuredImage?.node} />
+        {images.some((img) => img[0]) ? (
+          <SingleSlider images={images} />
+        ) : (
+          <SingleFeaturedImage image={post?.featuredImage?.node} />
+        )}
         <SingleEntryHeader
           image={post?.featuredImage?.node}
           title={post?.title}
