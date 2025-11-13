@@ -22,16 +22,20 @@ import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/
 
 // Ads (dynamic imports)
 const MastHeadTopGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides')
+  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
 )
 const MastHeadTopMobileSingleGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides')
+  import(
+    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
+  ),
 )
 const MastHeadBottomGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides')
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
 )
 const MastHeadBottomMobileGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides')
+  import(
+    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+  ),
 )
 
 export default function SingleContest(props) {
@@ -53,10 +57,8 @@ export default function SingleContest(props) {
     }
   }, [props?.data?.contest?.passwordProtected?.password])
 
-  const {
-    title: siteTitle,
-    description: siteDescription,
-  } = props?.data?.generalSettings
+  const { title: siteTitle, description: siteDescription } =
+    props?.data?.generalSettings
 
   const {
     title,
@@ -125,11 +127,26 @@ export default function SingleContest(props) {
   })
 
   const images = [
-    [acfPostSlider?.slide1?.mediaItemUrl || null, acfPostSlider?.slideCaption1 || null],
-    [acfPostSlider?.slide2?.mediaItemUrl || null, acfPostSlider?.slideCaption2 || null],
-    [acfPostSlider?.slide3?.mediaItemUrl || null, acfPostSlider?.slideCaption3 || null],
-    [acfPostSlider?.slide4?.mediaItemUrl || null, acfPostSlider?.slideCaption4 || null],
-    [acfPostSlider?.slide5?.mediaItemUrl || null, acfPostSlider?.slideCaption5 || null],
+    [
+      acfPostSlider?.slide1?.mediaItemUrl || null,
+      acfPostSlider?.slideCaption1 || null,
+    ],
+    [
+      acfPostSlider?.slide2?.mediaItemUrl || null,
+      acfPostSlider?.slideCaption2 || null,
+    ],
+    [
+      acfPostSlider?.slide3?.mediaItemUrl || null,
+      acfPostSlider?.slideCaption3 || null,
+    ],
+    [
+      acfPostSlider?.slide4?.mediaItemUrl || null,
+      acfPostSlider?.slideCaption4 || null,
+    ],
+    [
+      acfPostSlider?.slide5?.mediaItemUrl || null,
+      acfPostSlider?.slideCaption5 || null,
+    ],
   ]
 
   // Handle password submission
@@ -224,8 +241,34 @@ export default function SingleContest(props) {
         </>
       )}
       <Main>
-        <div>{isMobile ? <MastHeadTopMobileSingleGuides /> : <MastHeadTopGuides />}</div>
-        <SingleSlider images={images} />
+        <div>
+          {isMobile ? <MastHeadTopMobileSingleGuides /> : <MastHeadTopGuides />}
+        </div>
+
+        {images?.length > 0 && (
+          <>
+            <div className="single-slider-wrapper">
+              <SingleSlider images={images} />
+            </div>
+
+            <style jsx>{`
+              .single-slider-wrapper {
+                max-width: 1200px;
+                width: 100%;
+                margin: 0 auto;
+                overflow: hidden;
+              }
+
+              .single-slider-wrapper img {
+                width: 100%;
+                height: auto;
+                display: block;
+                object-fit: cover;
+              }
+            `}</style>
+          </>
+        )}
+
         <SingleContestEntryHeader
           title={title}
           categoryUri={categories?.[0]?.node?.uri}
@@ -235,7 +278,9 @@ export default function SingleContest(props) {
           date={date}
         />
         <ContentWrapperContest content={content} />
-        <div>{isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />}</div>
+        <div>
+          {isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />}
+        </div>
       </Main>
       <Footer />
     </main>
@@ -266,11 +311,21 @@ SingleContest.query = gql`
       }
       uri
       acfPostSlider {
-        slide1 { mediaItemUrl }
-        slide2 { mediaItemUrl }
-        slide3 { mediaItemUrl }
-        slide4 { mediaItemUrl }
-        slide5 { mediaItemUrl }
+        slide1 {
+          mediaItemUrl
+        }
+        slide2 {
+          mediaItemUrl
+        }
+        slide3 {
+          mediaItemUrl
+        }
+        slide4 {
+          mediaItemUrl
+        }
+        slide5 {
+          mediaItemUrl
+        }
       }
       ...FeaturedImageFragment
     }
