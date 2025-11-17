@@ -85,10 +85,10 @@ $font-serif: 'Scheherazade New', serif;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  padding: 2rem 0 0 0;
+  padding: 1rem 0 0 0;
 
   @media (min-width: $breakpoint-small) {
-    padding: 2rem 0 0.5rem 0;
+    padding: 1rem 0 0.5rem 0;
   }
 }
 
@@ -108,7 +108,7 @@ $font-serif: 'Scheherazade New', serif;
 .parentCategory {
   font-size: 1rem;
   color: var(--wpe--color--teal--deep);
-  padding-top: 1.75rem;
+  padding-top: 2rem;
   text-transform: uppercase;
   letter-spacing: 0.3em;
 }

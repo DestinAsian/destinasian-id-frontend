@@ -15,6 +15,7 @@ const CategoryFeatures = () => {
   })
 
   const posts = useMemo(() => data?.category?.posts?.edges || [], [data])
+
   if (loading || !data?.category) return null
   if (error) return <p className={styles.error}>Error: {error.message}</p>
 
@@ -26,6 +27,7 @@ const CategoryFeatures = () => {
         <Link href={uri}>
           <h2 className={styles.title}>{name}</h2>
         </Link>
+
         {categoryImages?.categoryImagesCaption && (
           <p className={styles.description}>
             {categoryImages.categoryImagesCaption}
@@ -36,7 +38,15 @@ const CategoryFeatures = () => {
       <div className={styles.gridSection}>
         {posts.map(({ node: post }) => {
           const image = post.featuredImage?.node?.mediaItemUrl
-          const category = post.categories?.edges?.[0]?.node
+
+          // Cari kategori yang punya parent
+          const categoryList = post.categories?.edges?.map((e) => e.node) || []
+
+          const categoryWithParent = categoryList.find((cat) => cat.parent?.node)
+
+          // Jika tidak ada, fallback ke kategori pertama
+          const category = categoryWithParent || categoryList[0]
+
           const parentCategory = category?.parent?.node?.name || ''
           const subCategory = category?.name || ''
 
@@ -57,9 +67,12 @@ const CategoryFeatures = () => {
                   </div>
                 )}
 
+                {/*Parent category tampil dengan benar */}
                 {parentCategory && (
                   <p className={styles.parentCategory}>{parentCategory}</p>
                 )}
+
+                {/*Sub category */}
                 {subCategory && (
                   <p className={styles.postCategory}>{subCategory}</p>
                 )}
