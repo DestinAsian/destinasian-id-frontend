@@ -38,9 +38,9 @@ export default function NewsletterEmbed() {
               width: 80%;
               max-width: 400px;
               text-align: left;
-              border: 1px solid #ccc;
+              border: 1px solid #ffffff;
               padding: 8px;
-              border-radius: 4px;
+              border-radius: 8px;
               transition: all 0.3s ease;
             }
 
@@ -58,10 +58,11 @@ export default function NewsletterEmbed() {
               margin: 0.5rem auto;
               background: transparent;
               border: 1px solid #ffffff;
-              border-radius: 4px;
+              border-radius: 8px;
               font-family: 'Open Sans', sans-serif !important;
               font-size: 14px;
               letter-spacing: 1px; 
+              text-transform: uppercase;
             }
 
             /* Responsif hanya untuk posisi di mobile */
