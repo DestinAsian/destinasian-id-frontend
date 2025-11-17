@@ -78,7 +78,7 @@ $color-grey: #777;
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   font-size: 0.6rem;
-  text-transform: uppercase;
+  text-transform: uppercase !important;
 
   @media (min-width: $breakpoint-extra-small) {
     font-size: 0.8rem;
