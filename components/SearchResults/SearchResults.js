@@ -38,12 +38,22 @@ export default function SearchResults({ searchResults, isLoading }) {
   if (!isLoading && !filteredResults.length) {
     return (
       <div className={styles['no-results']}>
-        <FaSearch className={styles['no-results-icon']} />
-        <div className={styles['no-results-text']}>No results</div>
+  
+        {/* Wrapper horizontal */}
+        <div className={styles['no-results-row']}>
+          <FaSearch className={styles['no-results-icon']} />
+          <span className={styles['no-results-text']}>No results found.</span>
+        </div>
+  
+        {/* Teks penjelasan */}
+        <div className={styles['no-results-subtext']}>
+          Please ensure the correct tags are entered.
+        </div>
+  
       </div>
     )
   }
-
+  
   if (isLoading) {
     return (
       <div className="mx-auto flex h-[88vh] max-w-[100vw] items-center justify-center sm:h-[95vh] md:max-w-[700px]">
