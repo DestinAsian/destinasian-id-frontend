@@ -6,20 +6,29 @@ export default function NewsletterEmbed() {
       dangerouslySetInnerHTML={{
         __html: `
         <div id="mc_embed_shell">
+          <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
           <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
           <style type="text/css">
             /* Styling default Mailchimp */
             #mc_embed_signup {
-              font: 14px Helvetica, Arial, sans-serif;
-              width: 600px;
+              font-family: 'Open Sans', sans-serif !important;
+              font-size: 14px;
+              width: 700px;
               margin: 0 auto; /* posisi form di tengah */
               text-align: center;
             }
 
             /* Styling h2 */
             #mc_embed_signup h2 {
+              font-weight: 300 !important;
               color: white !important;
               font-family: 'Open Sans', sans-serif !important;
+              font-size: 16px;
+              color: white !important;
+              margin-bottom: 20px;
+              line-height: 1.4;
+              text-transform: uppercase;
+              letter-spacing: 2px; 
             }
 
             /* Input email */
@@ -49,7 +58,10 @@ export default function NewsletterEmbed() {
               margin: 0.5rem auto;
               background: transparent;
               border: 1px solid #ffffff;
-               border-radius: 4px;
+              border-radius: 4px;
+              font-family: 'Open Sans', sans-serif !important;
+              font-size: 14px;
+              letter-spacing: 1px; 
             }
 
             /* Responsif hanya untuk posisi di mobile */
