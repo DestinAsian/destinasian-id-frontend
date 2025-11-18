@@ -1,11 +1,11 @@
-import { FaSearch, FaSpinner } from 'react-icons/fa'
+import { FaSpinner } from 'react-icons/fa'
 import classNames from 'classnames/bind'
 import styles from './SearchResults.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-
+import { IoSearchOutline } from 'react-icons/io5'
 const PostInfo = dynamic(() => import('../../components/PostInfo/PostInfo'))
 const cx = classNames.bind(styles)
 
@@ -38,22 +38,20 @@ export default function SearchResults({ searchResults, isLoading }) {
   if (!isLoading && !filteredResults.length) {
     return (
       <div className={styles['no-results']}>
-  
         {/* Wrapper horizontal */}
         <div className={styles['no-results-row']}>
-          <FaSearch className={styles['no-results-icon']} />
+          <IoSearchOutline className={styles['no-results-icon']} />
           <span className={styles['no-results-text']}>No results found.</span>
         </div>
-  
+
         {/* Teks penjelasan */}
         <div className={styles['no-results-subtext']}>
           Please ensure the correct tags are entered.
         </div>
-  
       </div>
     )
   }
-  
+
   if (isLoading) {
     return (
       <div className="mx-auto flex h-[88vh] max-w-[100vw] items-center justify-center sm:h-[95vh] md:max-w-[700px]">

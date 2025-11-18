@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { FaSearch, FaWindowClose } from 'react-icons/fa'
-
+import { IoSearchOutline } from 'react-icons/io5'
 import styles from './SearchInput.module.scss'
 
 /**
@@ -22,12 +21,11 @@ export default function SearchInput({
   // Clear and focus the input on initial render
   useEffect(() => {
     input.current.value = ''
-    // input.current.focus();
   }, [])
 
   return (
     <div className={styles.wrapper}>
-      <FaSearch className={styles.icon} />
+      <IoSearchOutline className={styles.icon} />
       <label className="sr-only" htmlFor="search">
         Search
       </label>
@@ -46,7 +44,7 @@ export default function SearchInput({
         // autoFocus
         // onFocus={(e) => e.target.select()}
         type="text"
-        autoComplete='off'
+        autoComplete="off"
         {...props}
       />
       <button onClick={clearSearch} className={styles.closeIcon}>

@@ -76,9 +76,7 @@ export const GetSearchResults = gql`
               contentTypes: [
                 POST
                 TRAVEL_GUIDE
-                HONORS_CIRCLE
                 CONTEST
-                LUXURY_TRAVEL
               ]
             }
             first: $first
@@ -163,39 +161,7 @@ export const GetSearchResults = gql`
                     }
                   }
                 }
-                ... on HonorsCircle {
-                  title
-                  excerpt
-                  date
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
-                      mediaDetails {
-                        width
-                        height
-                      }
-                    }
-                  }
-                }
-
                 ... on Contest {
-                  title
-                  excerpt
-                  date
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
-                      mediaDetails {
-                        width
-                        height
-                      }
-                    }
-                  }
-                }
-
-                ... on LuxuryTravel {
                   title
                   excerpt
                   date
