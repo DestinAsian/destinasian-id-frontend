@@ -22,7 +22,6 @@
   &.button-primary {
     color: var(--wpe--color--teal--deep);
     border-color: var(--wpe--color--teal--deep);
-    // background-color: var(--color-white);
   }
 
   &.button-secondary {
@@ -36,9 +35,4 @@
     background-color: var(--color-black);
     color: var(--wpe--color--teal--deep);
   }
-
-  // &:focus {
-  //   outline: 1px dotted;
-  //   outline: 1px auto -webkit-focus-ring-color;
-  // }
 }
