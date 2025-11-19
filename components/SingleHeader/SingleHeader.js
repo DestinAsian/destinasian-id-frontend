@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 import Link from 'next/link'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
-import { IoSearchOutline } from "react-icons/io5";
+import { IoSearchOutline } from 'react-icons/io5'
 
 import Container from '../../components/Container/Container'
 import FullMenu from '../../components/FullMenu/FullMenu'
@@ -63,8 +63,8 @@ export default function SingleHeader({
       search: searchQuery,
     },
     skip: searchQuery === '',
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Check if the search query is empty and no search results are loading, then hide the SearchResults component
@@ -163,7 +163,7 @@ export default function SingleHeader({
                     aria-controls={cx('full-menu-wrapper')}
                     aria-expanded={!isNavShown}
                   >
-                    <IoSearchOutline className={cx('search-icon')}  />
+                    <IoSearchOutline className={cx('search-icon')} />
                   </button>
                 </div>
                 <div className={cx('menu-button')}>

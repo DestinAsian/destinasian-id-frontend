@@ -8,24 +8,29 @@ import styles from './FrontPageVideos.module.scss'
 import { GetVideoHomepage } from '../../queries/GetVideoHomepage'
 
 // ✅ Lazy-load komponen berat (iklan & video wrapper)
-const ContentWrapperVideo = dynamic(() => import('../ContentWrapperVideo/ContentWrapperVideo'), {
-  ssr: false,
-  loading: () => <div style={{ minHeight: '400px' }} />,
-})
-const HalfPageHome2 = dynamic(() => import('../../components/AdUnit/HalfPage2/HalfPageHome2'), {
-  ssr: false,
-  loading: () => <div style={{ minHeight: '600px' }} />,
-})
+const ContentWrapperVideo = dynamic(
+  () => import('../ContentWrapperVideo/ContentWrapperVideo'),
+  {
+    ssr: false,
+    loading: () => <div style={{ minHeight: '400px' }} />,
+  },
+)
+const HalfPageHome2 = dynamic(
+  () => import('../../components/AdUnit/HalfPage2/HalfPageHome2'),
+  {
+    ssr: false,
+    loading: () => <div style={{ minHeight: '600px' }} />,
+  },
+)
 
 const cx = classNames.bind(styles)
 
 function FrontPageVideos() {
   const { data, loading, error } = useQuery(GetVideoHomepage, {
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-only',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
-  // ✅ Early return — hindari render berlebihan
   if (loading || error) return null
 
   const video = data?.videos?.edges?.[0]?.node

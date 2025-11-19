@@ -11,7 +11,11 @@ import GuideLatestStories from '../../components/GuideLatestStories/GuideLatestS
 
 const cx = classNames.bind(styles)
 
-export default function CategoryStoriesLatest({ categoryUri, pinPosts, contentType = CONTENT_TYPES.TRAVEL_GUIDES }) {
+export default function CategoryStoriesLatest({
+  categoryUri,
+  pinPosts,
+  contentType = CONTENT_TYPES.TRAVEL_GUIDES,
+}) {
   const uri = categoryUri?.categoryUri || categoryUri?.id || categoryUri || ''
   const shouldSkip = !uri
 
@@ -32,8 +36,8 @@ export default function CategoryStoriesLatest({ categoryUri, pinPosts, contentTy
       id: uri,
       contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
     },
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
     skip: shouldSkip || !mounted || contentType !== CONTENT_TYPES.TRAVEL_GUIDES,
   })
 

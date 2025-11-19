@@ -9,10 +9,10 @@ import { GetTagStories } from '../../queries/GetTagStories'
 import dynamic from 'next/dynamic'
 
 const PostTwoColumns = dynamic(() =>
-  import('../../components/PostTwoColumns/PostTwoColumns')
+  import('../../components/PostTwoColumns/PostTwoColumns'),
 )
 const TextTwoColumns = dynamic(() =>
-  import('../../components/PostTwoColumns/TextTwoColumns')
+  import('../../components/PostTwoColumns/TextTwoColumns'),
 )
 const Button = dynamic(() => import('../../components/Button/Button'))
 
@@ -31,8 +31,8 @@ export default function TagStories({ tagUri }) {
       id: tagUri,
       contentTypes: [CONTENT_TYPES.POST, CONTENT_TYPES.TRAVEL_GUIDES],
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Merge old + new data
@@ -98,7 +98,7 @@ export default function TagStories({ tagUri }) {
   const mergedPosts = useMemo(() => {
     return allPosts.filter(
       (post, index, self) =>
-        index === self.findIndex((p) => p?.id === post?.id)
+        index === self.findIndex((p) => p?.id === post?.id),
     )
   }, [allPosts])
 
@@ -149,7 +149,9 @@ export default function TagStories({ tagUri }) {
             {guideInfo?.guidePrice && (
               <>
                 <span className={cx('separator')}>|</span>
-                <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
+                <span className={cx('guide-price')}>
+                  {guideInfo.guidePrice}
+                </span>
               </>
             )}
             {guideInfo?.linkBookNow && (

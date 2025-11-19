@@ -16,7 +16,8 @@ export default function SecondaryHeader({
 }) {
   const { data, error, loading } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Lock/unlock body scroll when guides menu is toggled

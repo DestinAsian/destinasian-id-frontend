@@ -63,8 +63,8 @@ export default function CategorySecondStoriesLatest({
       id: uri,
       contentTypes,
     },
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
     skip: shouldSkip,
   })
 
@@ -77,7 +77,7 @@ export default function CategorySecondStoriesLatest({
 
   // Filter hanya yang bertipe TravelGuide
   const travelGuides = allPosts?.filter(
-    (item) => item.__typename === 'TravelGuide'
+    (item) => item.__typename === 'TravelGuide',
   )
 
   // Jika tidak ada TravelGuide, sembunyikan semua (termasuk kategori POST)

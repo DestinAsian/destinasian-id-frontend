@@ -93,7 +93,8 @@ export default function Component(props) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const menuProps = {
@@ -190,21 +191,51 @@ Component.query = gql`
       }
       ...FeaturedImageFragment
       acfHomepageSlider {
-        desktopSlide1 { mediaItemUrl }
-        desktopSlide2 { mediaItemUrl }
-        desktopSlide3 { mediaItemUrl }
-        desktopSlide4 { mediaItemUrl }
-        desktopSlide5 { mediaItemUrl }
-        mobileSlide1 { mediaItemUrl }
-        mobileSlide2 { mediaItemUrl }
-        mobileSlide3 { mediaItemUrl }
-        mobileSlide4 { mediaItemUrl }
-        mobileSlide5 { mediaItemUrl }
-        video1 { mediaItemUrl }
-        video2 { mediaItemUrl }
-        video3 { mediaItemUrl }
-        video4 { mediaItemUrl }
-        video5 { mediaItemUrl }
+        desktopSlide1 {
+          mediaItemUrl
+        }
+        desktopSlide2 {
+          mediaItemUrl
+        }
+        desktopSlide3 {
+          mediaItemUrl
+        }
+        desktopSlide4 {
+          mediaItemUrl
+        }
+        desktopSlide5 {
+          mediaItemUrl
+        }
+        mobileSlide1 {
+          mediaItemUrl
+        }
+        mobileSlide2 {
+          mediaItemUrl
+        }
+        mobileSlide3 {
+          mediaItemUrl
+        }
+        mobileSlide4 {
+          mediaItemUrl
+        }
+        mobileSlide5 {
+          mediaItemUrl
+        }
+        video1 {
+          mediaItemUrl
+        }
+        video2 {
+          mediaItemUrl
+        }
+        video3 {
+          mediaItemUrl
+        }
+        video4 {
+          mediaItemUrl
+        }
+        video5 {
+          mediaItemUrl
+        }
         slideCaption1
         slideCaption2
         slideCaption3

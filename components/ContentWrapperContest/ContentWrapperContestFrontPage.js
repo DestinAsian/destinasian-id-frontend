@@ -6,8 +6,9 @@ import { GetContestPages } from '../../queries/GetContestPages'
 import dynamic from 'next/dynamic'
 
 const Button = dynamic(() => import('../../components/Button/Button'))
-const ContestPost = dynamic(() => import('../../components/ContentWrapperContest/ContestPost'))
-
+const ContestPost = dynamic(() =>
+  import('../../components/ContentWrapperContest/ContestPost'),
+)
 
 let cx = className.bind(styles)
 
@@ -21,8 +22,8 @@ export default function ContentWrapperContestFrontPage() {
       first: postsPerPage,
       after: null,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const updateQuery = (prev, { fetchMoreResult }) => {

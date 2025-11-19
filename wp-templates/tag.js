@@ -89,15 +89,15 @@ export default function Component(props) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: "network-only",
   })
 
   // Get latest travel stories
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: "network-only",
   })
 
   const latestPosts = latestStories?.posts?.edges?.map((post) => post.node) ?? []

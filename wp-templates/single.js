@@ -103,8 +103,8 @@ export default function Component(props) {
   const { data } = useQuery(GetSecondaryHeader, {
     variables: catVariable,
     skip: !catVariable,
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
@@ -116,14 +116,14 @@ export default function Component(props) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const allPosts = useMemo(() => {

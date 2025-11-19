@@ -39,8 +39,8 @@ export default function CategorySecondStories(categoryUri) {
       id: uri,
       contentTypes,
     },
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const updateQuery = (prev, { fetchMoreResult }) => {
@@ -81,16 +81,23 @@ export default function CategorySecondStories(categoryUri) {
     )
   }
 
-  const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node) || []
+  const allPosts =
+    data?.category?.contentNodes?.edges?.map((post) => post.node) || []
   const allPinPosts = pinPosts?.pinPost ? [pinPosts.pinPost] : []
 
-  const mergedPosts = [...allPinPosts, ...allPosts].reduce((uniquePosts, post) => {
-    if (!uniquePosts.some((p) => p?.id === post?.id)) uniquePosts.push(post)
-    return uniquePosts
-  }, [])
+  const mergedPosts = [...allPinPosts, ...allPosts].reduce(
+    (uniquePosts, post) => {
+      if (!uniquePosts.some((p) => p?.id === post?.id)) uniquePosts.push(post)
+      return uniquePosts
+    },
+    [],
+  )
 
   const startIndex = isTravelGuideCategory ? 2 : 0
-  const postsToDisplay = mergedPosts.slice(startIndex, startIndex + visibleCount)
+  const postsToDisplay = mergedPosts.slice(
+    startIndex,
+    startIndex + visibleCount,
+  )
 
   return (
     <div className={cx('component')}>
@@ -110,12 +117,16 @@ export default function CategorySecondStories(categoryUri) {
                 {guideInfo && (
                   <div className={cx('guide-info')}>
                     {guideInfo?.guideName && (
-                      <span className={cx('guide-name')}>{guideInfo.guideName}</span>
+                      <span className={cx('guide-name')}>
+                        {guideInfo.guideName}
+                      </span>
                     )}
 
                     {guideInfo?.guideLocation && guideInfo?.linkLocation && (
                       <>
-                        {guideInfo?.guideName && <span className={cx('separator')}>|</span>}
+                        {guideInfo?.guideName && (
+                          <span className={cx('separator')}>|</span>
+                        )}
                         <a
                           href={guideInfo.linkLocation}
                           target="_blank"
@@ -132,7 +143,9 @@ export default function CategorySecondStories(categoryUri) {
                         {(guideInfo?.guideName || guideInfo?.guideLocation) && (
                           <span className={cx('separator')}>|</span>
                         )}
-                        <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
+                        <span className={cx('guide-price')}>
+                          {guideInfo.guidePrice}
+                        </span>
                       </>
                     )}
 

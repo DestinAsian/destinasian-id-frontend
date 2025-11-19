@@ -41,8 +41,6 @@ export default function SearchInput({
             onChange(e.target.value)
           }
         }}
-        // autoFocus
-        // onFocus={(e) => e.target.select()}
         type="text"
         autoComplete="off"
         {...props}

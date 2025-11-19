@@ -18,7 +18,8 @@ export default function HomepageSecondaryHeader({
 
   const { data, loading, error } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Default fallback categories (used when query fails or still loading)

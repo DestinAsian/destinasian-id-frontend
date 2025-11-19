@@ -122,14 +122,14 @@ export default function SingleTravelGuide(props) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // 🔹 Query Category
+  // Query Category
   const { data } = useQuery(GetSecondaryHeaderTravelGuide, {
     variables: { first: 1, id: databaseId },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
-  // 🔹 Query Menus
+  // Query Menus
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
       first: 10,
@@ -139,15 +139,15 @@ export default function SingleTravelGuide(props) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
-  // 🔹 Query Latest Stories
+  // Query Latest Stories
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const posts = latestStories?.posts?.edges?.map((p) => p.node) || []

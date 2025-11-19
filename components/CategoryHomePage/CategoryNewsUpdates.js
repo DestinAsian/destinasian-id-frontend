@@ -16,7 +16,8 @@ import 'swiper/css/navigation'
 const CategoryNewsUpdates = React.memo(() => {
   const { data, loading, error } = useQuery(GetCategoryUpdates, {
     variables: { include: ['41'] },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const children = useMemo(() => data?.category?.children?.edges || [], [data])

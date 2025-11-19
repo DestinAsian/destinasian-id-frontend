@@ -28,7 +28,7 @@ export default function MainCategoryMenu(categoryName) {
   const [HonorsCircleArray, setHonorsCircle] = useState([])
 
   // const mainCategory = categoryName?.categoryName
-  const mainCategory = categoryName?.categoryName ?? '' 
+  const mainCategory = categoryName?.categoryName ?? ''
   const AccordionCustomIcon = () => (
     <span className={cx('custom-icon')}>{'+'}</span>
   )
@@ -59,8 +59,8 @@ export default function MainCategoryMenu(categoryName) {
       first: 100,
       headerLocation: PRIMARY_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const primaryMenu = menusData?.headerMenuItems?.edges ?? []
@@ -108,8 +108,8 @@ export default function MainCategoryMenu(categoryName) {
     error: travelGuidesError,
   } = useQuery(GetTravelGuides, {
     variables: travelGuidesVariable,
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   if (travelGuidesError) {
@@ -125,7 +125,8 @@ export default function MainCategoryMenu(categoryName) {
         const response = await client.query({
           query: GetTravelGuides,
           variables: { search: category },
-          fetchPolicy: 'network-only',
+          fetchPolicy: 'cache-and-network',
+          nextFetchPolicy: 'network-only',
         })
         const processedData = processResults(response.data.tags.edges)
         allResults.push({ category, data: processedData })
@@ -145,9 +146,7 @@ export default function MainCategoryMenu(categoryName) {
       const contentHonorsCircle = []
 
       travelGuidesData?.tags?.edges?.forEach((contentNodes) => {
-        if (
-          contentNodes?.node?.honorsCircles?.edges?.length !== 0
-        ) {
+        if (contentNodes?.node?.honorsCircles?.edges?.length !== 0) {
           contentNodes.node?.honorsCircles?.edges.forEach((post) => {
             const { databaseId } = post.node
             if (!uniqueDatabaseIds.has(databaseId)) {
@@ -234,12 +233,12 @@ export default function MainCategoryMenu(categoryName) {
         <Accordion arrowIcon={AccordionCustomIcon} theme={AccordionCustomTheme}>
           {items.map((item, index) => {
             const { id, path, label, children, connectedNode } = item
-  
+
             // @TODO - Remove guard clause after ghost menu items are no longer appended to array.
             if (!item.hasOwnProperty('__typename')) {
               return null
             }
-  
+
             return (
               <Accordion.Panel id={id}>
                 <div key={id} id={id} className={cx('accordion-wrapper')}>
@@ -265,7 +264,9 @@ export default function MainCategoryMenu(categoryName) {
                                               ?.sourceUrl && (
                                               <Link href={honorsCircle?.uri}>
                                                 <div
-                                                  className={cx('image-wrapper')}
+                                                  className={cx(
+                                                    'image-wrapper',
+                                                  )}
                                                 >
                                                   <div className={cx('image')}>
                                                     <Image
@@ -286,7 +287,7 @@ export default function MainCategoryMenu(categoryName) {
                                         </>
                                       )}
                                     </>
-                                  )
+                                  ),
                                 )}
                                 {results[index]?.data?.honorsCircles?.length ===
                                   0 && (
@@ -295,24 +296,24 @@ export default function MainCategoryMenu(categoryName) {
                                       getHonorsCircle[0]?.title &&
                                       getHonorsCircle[0]?.featuredImage?.node
                                         ?.sourceUrl && (
-                                      <Link href={getHonorsCircle[0]?.uri}>
-                                        <div className={cx('image-wrapper')}>
-                                          <div className={cx('image')}>
-                                            <Image
-                                              src={
-                                                getHonorsCircle[0]
-                                                  ?.featuredImage?.node
-                                                  ?.sourceUrl
-                                              }
-                                              alt={getHonorsCircle[0]?.title}
-                                              fill
-                                              sizes="100%"
-                                              priority
-                                            />
+                                        <Link href={getHonorsCircle[0]?.uri}>
+                                          <div className={cx('image-wrapper')}>
+                                            <div className={cx('image')}>
+                                              <Image
+                                                src={
+                                                  getHonorsCircle[0]
+                                                    ?.featuredImage?.node
+                                                    ?.sourceUrl
+                                                }
+                                                alt={getHonorsCircle[0]?.title}
+                                                fill
+                                                sizes="100%"
+                                                priority
+                                              />
+                                            </div>
                                           </div>
-                                        </div>
-                                      </Link>
-                                    )}
+                                        </Link>
+                                      )}
                                   </>
                                 )}
                               </div>
@@ -337,7 +338,7 @@ export default function MainCategoryMenu(categoryName) {
                                               >
                                                 <div
                                                   className={cx(
-                                                    'content-name-wrapper'
+                                                    'content-name-wrapper',
                                                   )}
                                                 >
                                                   <span className={cx('name')}>
@@ -350,16 +351,16 @@ export default function MainCategoryMenu(categoryName) {
                                             </Link>
                                           )}
                                       </div>
-                                    )
+                                    ),
                                   )}
-                                  {results[index]?.data?.honorsCircles?.length ===
-                                    0 && (
+                                  {results[index]?.data?.honorsCircles
+                                    ?.length === 0 && (
                                     <>
                                       {getHonorsCircle?.map(
                                         (honorsCircle, index, array) => (
                                           <div
                                             className={cx(
-                                              'posts-content-wrapper'
+                                              'posts-content-wrapper',
                                             )}
                                             key={honorsCircle?.databaseId}
                                           >
@@ -367,11 +368,13 @@ export default function MainCategoryMenu(categoryName) {
                                               honorsCircle?.uri && (
                                                 <Link href={honorsCircle?.uri}>
                                                   <div
-                                                    className={cx('name-wrapper')}
+                                                    className={cx(
+                                                      'name-wrapper',
+                                                    )}
                                                   >
                                                     <div
                                                       className={cx(
-                                                        'content-name-wrapper'
+                                                        'content-name-wrapper',
                                                       )}
                                                     >
                                                       <span
@@ -387,7 +390,7 @@ export default function MainCategoryMenu(categoryName) {
                                                 </Link>
                                               )}
                                           </div>
-                                        )
+                                        ),
                                       )}
                                     </>
                                   )}
@@ -434,7 +437,8 @@ export default function MainCategoryMenu(categoryName) {
                                 <Link href={path}>
                                   <span className={cx('title')}>
                                     {connectedNode?.node?.parent &&
-                                      connectedNode?.node?.parent?.node?.name}{' '}
+                                      connectedNode?.node?.parent?.node
+                                        ?.name}{' '}
                                     {label ?? ''}
                                   </span>
                                 </Link>
@@ -452,7 +456,7 @@ export default function MainCategoryMenu(categoryName) {
                                         <div className={cx('name-wrapper')}>
                                           <div
                                             className={cx(
-                                              'content-name-wrapper'
+                                              'content-name-wrapper',
                                             )}
                                           >
                                             <span className={cx('name')}>
@@ -465,7 +469,7 @@ export default function MainCategoryMenu(categoryName) {
                                       </Link>
                                     )}
                                   </div>
-                                )
+                                ),
                               )}
                             </div>
                           </div>
@@ -481,7 +485,7 @@ export default function MainCategoryMenu(categoryName) {
       </div>
     )
   }
-  
+
   return (
     <div className={cx('component')}>
       {/* Full menu */}

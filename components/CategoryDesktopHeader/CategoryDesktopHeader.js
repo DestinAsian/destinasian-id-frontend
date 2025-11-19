@@ -12,12 +12,11 @@ import Container from '../../components/Container/Container'
 import FullMenu from '../../components/FullMenu/FullMenu'
 import TravelGuidesMenu from '../../components/TravelGuidesMenu/TravelGuidesMenu'
 const SearchResults = dynamic(() =>
-  import('../../components/SearchResults/SearchResults')
+  import('../../components/SearchResults/SearchResults'),
 )
 import styles from './CategoryDesktopHeader.module.scss'
 import { GetSearchResults } from '../../queries/GetSearchResults'
 import { GetSecondaryHeaders } from '../../queries/GetSecondaryHeaders'
-
 
 let cx = classNames.bind(styles)
 
@@ -68,8 +67,8 @@ export default function CategoryDesktopHeader({
       search: searchQuery,
     },
     skip: searchQuery === '',
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Check if the search query is empty and no search results are loading, then hide the SearchResults component
@@ -82,10 +81,10 @@ export default function CategoryDesktopHeader({
   const contentNodesPosts = []
   const { data, error } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
-  
+
   if (error) return <div>Error loading categories!</div>
 
   const categories = data?.categories?.edges || []
@@ -159,41 +158,49 @@ export default function CategoryDesktopHeader({
 
             {/* Desktop menu*/}
             {!isNavShown && (
-              <div
-              className={cx('navigation-wrapper-desktop')}
-            >
               <div className={cx('navigation-wrapper-desktop')}>
-                <div className={cx('menu-wrapper-desktop')}>
-                  <button
-                    type="button"
-                    className={cx('menu-button-desktop', 'menu-button-guides', {
-                      active: isGuidesNavShown,
-                    })}
-                    onClick={() => {
-                      setIsGuidesNavShown(!isGuidesNavShown)
-                      setSearchQuery('')
-                    }}
-                    aria-label="Toggle navigation"
-                  >
-                    <div className={cx('menu-title-desktop' , 'menu-button-guides')}>{`Guides`}</div>
-                  </button>
+                <div className={cx('navigation-wrapper-desktop')}>
+                  <div className={cx('menu-wrapper-desktop')}>
+                    <button
+                      type="button"
+                      className={cx(
+                        'menu-button-desktop',
+                        'menu-button-guides',
+                        {
+                          active: isGuidesNavShown,
+                        },
+                      )}
+                      onClick={() => {
+                        setIsGuidesNavShown(!isGuidesNavShown)
+                        setSearchQuery('')
+                      }}
+                      aria-label="Toggle navigation"
+                    >
+                      <div
+                        className={cx(
+                          'menu-title-desktop',
+                          'menu-button-guides',
+                        )}
+                      >{`Guides`}</div>
+                    </button>
 
-                  {categories.map((category) => {
-                    const { id, name, uri } = category.node
-                    return (
-                      <Link key={id} href={`${uri}`}>
-                        <div className={cx('menu-button-desktop')}>
-                          <div className={cx('menu-title-desktop')}>{name}</div>
-                        </div>
-                      </Link>
-                    )
-                  })}
+                    {categories.map((category) => {
+                      const { id, name, uri } = category.node
+                      return (
+                        <Link key={id} href={`${uri}`}>
+                          <div className={cx('menu-button-desktop')}>
+                            <div className={cx('menu-title-desktop')}>
+                              {name}
+                            </div>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
-              </div>
-              
             )}
-            
+
             <div
               className={cx(
                 'full-menu-content-desktop',
@@ -222,7 +229,7 @@ export default function CategoryDesktopHeader({
                       aria-controls={cx('full-menu-wrapper')}
                       aria-expanded={!isNavShown}
                     >
-                    <IoSearchOutline className={cx('search-icon')}  />
+                      <IoSearchOutline className={cx('search-icon')} />
                     </button>
                   </div>
                   <div className={cx('menu-button')}>

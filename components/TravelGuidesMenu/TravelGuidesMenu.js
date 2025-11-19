@@ -19,7 +19,8 @@ export default function TravelGuidesMenu({ className }) {
   // Primary menu (header)
   const { data: menusData } = useQuery(GetPrimaryMenu, {
     variables: { first: 20, headerLocation: PRIMARY_LOCATION },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
   const primaryMenu = menusData?.headerMenuItems?.edges ?? []
 
@@ -29,7 +30,7 @@ export default function TravelGuidesMenu({ className }) {
         .map((post) => post?.node?.connectedNode?.node?.name)
         .filter(Boolean)
         .slice(0, 6),
-    [primaryMenu]
+    [primaryMenu],
   )
 
   // Fetch Travel Guides by category
@@ -43,9 +44,10 @@ export default function TravelGuidesMenu({ className }) {
             client.query({
               query: GetTravelGuides,
               variables: { search: category },
-              fetchPolicy: 'cache-first',
-            })
-          )
+              fetchPolicy: 'cache-and-network',
+              nextFetchPolicy: 'network-only',
+            }),
+          ),
         )
 
         const formatted = responses.map((res, index) => ({
@@ -72,14 +74,15 @@ export default function TravelGuidesMenu({ className }) {
     GetTravelGuidesMenu,
     {
       variables: { first: 30, footerHeaderLocation: FOOTER_LOCATION },
-      fetchPolicy: 'cache-first',
-    }
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'network-only',
+    },
   )
 
   const footerMenu = footerMenusData?.footerHeaderMenuItems?.nodes ?? []
   const hierarchicalMenuItems = useMemo(
     () => flatListToHierarchical(footerMenu),
-    [footerMenu]
+    [footerMenu],
   )
 
   // Render menu recursively
@@ -97,7 +100,7 @@ export default function TravelGuidesMenu({ className }) {
               <span
                 className={cx(
                   'title',
-                  className === 'dark-color' ? 'title-dark' : ''
+                  className === 'dark-color' ? 'title-dark' : '',
                 )}
               >
                 {parentName}
@@ -118,7 +121,7 @@ export default function TravelGuidesMenu({ className }) {
                       <h2
                         className={cx(
                           'nav-name',
-                          className === 'dark-color' ? 'nav-name-dark' : ''
+                          className === 'dark-color' ? 'nav-name-dark' : '',
                         )}
                       >
                         {childName}

@@ -7,7 +7,9 @@ import { GetPartnerContent } from '../../queries/GetPartnerContent'
 import dynamic from 'next/dynamic'
 
 const Button = dynamic(() => import('../../components/Button/Button'))
-const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
+const FeaturedImage = dynamic(() =>
+  import('../../components/FeaturedImage/FeaturedImage'),
+)
 import Link from 'next/link'
 
 let cx = classNames.bind(styles)
@@ -45,33 +47,19 @@ export default function PartnerContent({ parentName }) {
 
   const hcFrontPage = '/honors-circle'
 
-  // // Get Stories
-  // const { data, error, loading } = useQuery(GetPartnerContent, {
-  //   variables: {
-  //     first: contentPerPage,
-  //     search: parentName,
-  //     id: '/honors-circle',
-  //   },
-  //   fetchPolicy: 'network-only',
-  //   nextFetchPolicy: 'cache-and-network',
-  // })
-
-
-
   // Get HC Stories
   const { data: honorsCirclesData, error: honorsCirclesError } = useQuery(
     GetHCStories,
     {
       variables: { search: parentName }, // Use the modified variables
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'network-only',
     },
   )
 
   if (honorsCirclesError) {
     return <pre>{JSON.stringify(error)}</pre>
   }
-
 
   // HC Stories
   useEffect(() => {
@@ -113,13 +101,11 @@ export default function PartnerContent({ parentName }) {
     shuffleHCPost()
   }, [honorsCirclesData])
 
-
   // Declare 2 HC Post
   const getHCPost = [HCArray[0] || null, HCArray[1] || null]
 
   return (
     <>
-
       {/* HC Content */}
       <div className={cx('hc-component')}>
         {getHCPost[0] !== null && getHCPost[0]?.uri && (

@@ -35,8 +35,8 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
 
   // Ambil favicon dari GraphQL
   const { data } = useQuery(GetFavicon, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
   const favicon = data?.favicon
 
@@ -94,17 +94,13 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
             <meta
               property="og:url"
               content={
-                url.startsWith('http')
-                  ? url
-                  : 'https://destinasian.co.id' + url
+                url.startsWith('http') ? url : 'https://destinasian.co.id' + url
               }
             />
             <meta
               property="twitter:url"
               content={
-                url.startsWith('http')
-                  ? url
-                  : 'https://destinasian.co.id' + url
+                url.startsWith('http') ? url : 'https://destinasian.co.id' + url
               }
             />
           </>

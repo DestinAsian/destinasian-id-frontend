@@ -16,16 +16,24 @@ import CategoryUpdates from '../CategoryHomePage/CategoryUpdates'
 import CategoryNewsUpdates from '../CategoryHomePage/CategoryNewsUpdates'
 import CategoryFeatures from '../CategoryHomePage/CategoryFeatures'
 
-// ✅ Dynamic imports hanya untuk komponen iklan berat
-const MastHeadTopHome = dynamic(() => import('../AdUnit/MastHeadTop/MastHeadTopHome'))
-const MastHeadTopMobileHome = dynamic(() => import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'))
-const MastHeadBottomHome = dynamic(() => import('../AdUnit/MastHeadBottom/MastHeadBottomHome'))
-const MastHeadBottomMobileHome = dynamic(() => import('../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'))
+// Dynamic imports hanya untuk komponen iklan berat
+const MastHeadTopHome = dynamic(() =>
+  import('../AdUnit/MastHeadTop/MastHeadTopHome'),
+)
+const MastHeadTopMobileHome = dynamic(() =>
+  import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'),
+)
+const MastHeadBottomHome = dynamic(() =>
+  import('../AdUnit/MastHeadBottom/MastHeadBottomHome'),
+)
+const MastHeadBottomMobileHome = dynamic(() =>
+  import('../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'),
+)
 const HalfPageHome1 = dynamic(() => import('../AdUnit/HalfPage1/HalfPageHome1'))
 
 const cx = classNames.bind(styles)
 
-// ✅ Hook lebih efisien (resize di-throttle)
+// Hook lebih efisien (resize di-throttle)
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
@@ -44,10 +52,32 @@ function useIsMobile(breakpoint = 768) {
 function FrontPageLayout() {
   const isMobile = useIsMobile()
 
-  // ✅ Gunakan parallel query loading untuk efisiensi render
-  const { data: travelGuideData, loading: travelGuideLoading } = useQuery(GetChildrenTravelGuides, { fetchPolicy: 'cache-first' })
-  const { data: updatesData, loading: updatesLoading } = useQuery(GetCategoryUpdates, { variables: { include: ['41'] }, fetchPolicy: 'cache-first' })
-  const { data: featuresData, loading: featuresLoading } = useQuery(GetCategoryFeatures, { variables: { id: '20' }, fetchPolicy: 'cache-first' })
+  // Gunakan parallel query loading untuk efisiensi render
+  const { data: travelGuideData, loading: travelGuideLoading } = useQuery(
+    GetChildrenTravelGuides,
+    {
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'network-only',
+    },
+  )
+
+  const { data: updatesData, loading: updatesLoading } = useQuery(
+    GetCategoryUpdates,
+    {
+      variables: { include: ['41'] },
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'network-only',
+    },
+  )
+
+  const { data: featuresData, loading: featuresLoading } = useQuery(
+    GetCategoryFeatures,
+    {
+      variables: { id: '20' },
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'network-only',
+    },
+  )
 
   const categoryEdges = updatesData?.category?.children?.edges || []
   const categoryFeatures = featuresData?.category
@@ -94,7 +124,10 @@ function FrontPageLayout() {
         const parentName = category?.parent?.node?.name || ''
         const childName = category.name
         return (
-          <section key={category.id} className={cx('category-updates-component')}>
+          <section
+            key={category.id}
+            className={cx('category-updates-component')}
+          >
             <Link href={category.uri}>
               <h2 className={styles.title}>
                 {parentName ? `${parentName} ${childName}` : childName}

@@ -20,11 +20,22 @@ import Cookies from 'js-cookie'
 
 // Dynamic Imports (iklan/ad components)
 import dynamic from 'next/dynamic'
-const MastHeadTopGuides = dynamic(() => import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'))
-const MastHeadTopMobileSingleGuides = dynamic(() => import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'))
-const MastHeadBottomGuides = dynamic(() => import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'))
-const MastHeadBottomMobileGuides = dynamic(() => import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'))
-
+const MastHeadTopGuides = dynamic(() =>
+  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
+)
+const MastHeadTopMobileSingleGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
+  ),
+)
+const MastHeadBottomGuides = dynamic(() =>
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
+)
+const MastHeadBottomMobileGuides = dynamic(() =>
+  import(
+    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+  ),
+)
 
 export default function SingleLuxuryTravel(props) {
   // Loading state for previews
@@ -96,10 +107,9 @@ export default function SingleLuxuryTravel(props) {
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      // featureHeaderLocation: MENUS.FEATURE_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const images = [
@@ -138,9 +148,7 @@ export default function SingleLuxuryTravel(props) {
 
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
-      <main
-        className={`${open_sans.variable}`}
-      >
+      <main className={`${open_sans.variable}`}>
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
             enteredPassword={enteredPassword}
@@ -157,9 +165,7 @@ export default function SingleLuxuryTravel(props) {
   }
 
   return (
-    <main
-      className={` ${open_sans.variable}`}
-    >
+    <main className={` ${open_sans.variable}`}>
       <SEO
         title={seo?.title}
         description={seo?.metaDesc}

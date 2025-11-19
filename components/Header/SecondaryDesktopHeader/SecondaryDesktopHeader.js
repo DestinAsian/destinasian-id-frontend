@@ -16,7 +16,8 @@ export default function SecondaryDesktopHeader({
 }) {
   const { data, error, loading } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   if (error || loading || !data?.categories?.edges?.length) return null

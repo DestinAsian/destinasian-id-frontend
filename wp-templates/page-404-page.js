@@ -36,7 +36,8 @@ export default function Component(props) {
 
   // Lock body scroll when search or nav is active
   useEffect(() => {
-    document.body.style.overflow = searchQuery || isNavShown ? 'hidden' : 'visible'
+    document.body.style.overflow =
+      searchQuery || isNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown])
 
   // Add sticky header on scroll
@@ -56,8 +57,8 @@ export default function Component(props) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
@@ -72,9 +73,9 @@ export default function Component(props) {
     GetLatestStories,
     {
       variables: { first: 5 },
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-and-network',
-    }
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'network-only',
+    },
   )
 
   // Merge all posts
@@ -85,7 +86,7 @@ export default function Component(props) {
   ]
 
   const allPosts = mainCatPosts.sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
+    (a, b) => new Date(b.date) - new Date(a.date),
   )
 
   return (

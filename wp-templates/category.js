@@ -99,20 +99,22 @@ export default function Category({ loading, data: initialData }) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Latest stories query
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Secondary header query
   const { data: dataSecondaryHeader } = useQuery(GetSecondaryHeader, {
     variables: { id: databaseId },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const isGuidesCategory =

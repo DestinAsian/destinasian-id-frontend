@@ -1,4 +1,3 @@
-
 'use client'
 
 import React, { useEffect, useState, useMemo } from 'react'
@@ -14,7 +13,12 @@ import TextTwoColumns from '../PostTwoColumns/TextTwoColumns'
 
 const cx = classNames.bind(styles)
 
-export default function CategoryStories({ categoryUri, pinPosts, name, parent }) {
+export default function CategoryStories({
+  categoryUri,
+  pinPosts,
+  name,
+  parent,
+}) {
   const postsPerPage = 4
   const [visibleCount, setVisibleCount] = useState(postsPerPage)
   const [delayedLoaded, setDelayedLoaded] = useState(false)
@@ -39,8 +43,8 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
       id: categoryUri,
       contentTypes,
     },
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   // Merge data saat load more
@@ -129,7 +133,9 @@ export default function CategoryStories({ categoryUri, pinPosts, name, parent })
             {guideInfo?.guidePrice && (
               <>
                 <span className={cx('separator')}>|</span>
-                <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
+                <span className={cx('guide-price')}>
+                  {guideInfo.guidePrice}
+                </span>
               </>
             )}
             {guideInfo?.linkBookNow && (

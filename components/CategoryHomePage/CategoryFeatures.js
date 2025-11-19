@@ -11,7 +11,8 @@ import styles from './CategoryFeatures.module.scss'
 const CategoryFeatures = () => {
   const { data, loading, error } = useQuery(GetCategoryFeatures, {
     variables: { id: '20' },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const posts = useMemo(() => data?.category?.posts?.edges || [], [data])
@@ -42,7 +43,9 @@ const CategoryFeatures = () => {
           // Cari kategori yang punya parent
           const categoryList = post.categories?.edges?.map((e) => e.node) || []
 
-          const categoryWithParent = categoryList.find((cat) => cat.parent?.node)
+          const categoryWithParent = categoryList.find(
+            (cat) => cat.parent?.node,
+          )
 
           // Jika tidak ada, fallback ke kategori pertama
           const category = categoryWithParent || categoryList[0]
