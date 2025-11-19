@@ -1,3 +1,7 @@
+
+
+'use client'
+
 import { useEffect, useState, useRef } from 'react'
 import classNames from 'classnames/bind'
 import styles from './ContentWrapperTravelGuide.module.scss'
@@ -10,164 +14,156 @@ import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
 const cx = classNames.bind(styles)
 
 export default function ContentWrapperTravelGuide({ content, children }) {
-  const [transformedContent, setTransformedContent] = useState('')
+  const [nodes, setNodes] = useState([])
   const [isMobile, setIsMobile] = useState(false)
   const contentRef = useRef(null)
   const stickyRef = useRef(null)
   const stopRef = useRef(null)
 
-  // Detect mobile screen
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 768px)')
-    const handleMediaChange = (e) => setIsMobile(e.matches)
+  //  MOBILE DETECTION
 
-    setIsMobile(mediaQuery.matches)
-    mediaQuery.addEventListener('change', handleMediaChange)
-    return () => mediaQuery.removeEventListener('change', handleMediaChange)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    setIsMobile(mq.matches)
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
   }, [])
 
+//  STICKY SCROLL LOGIC – optimized
   useEffect(() => {
-    let ticking = false
+    let running = false
 
-    const handleScroll = () => {
-      if (!stickyRef.current || !contentRef.current || !stopRef.current) return
+    const onScroll = () => {
+      if (running) return
+      running = true
 
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const sticky = stickyRef.current
-          const content = contentRef.current
-          const stop = stopRef.current
+      requestAnimationFrame(() => {
+        const sticky = stickyRef.current
+        const content = contentRef.current
+        const stop = stopRef.current
+        if (!sticky || !content || !stop) {
+          running = false
+          return
+        }
 
-          const stickyTop = 32 // jarak dari atas
-          const bannerHeight = 600 // tinggi banner fix
-          const contentRect = content.getBoundingClientRect()
-          const stopRect = stop.getBoundingClientRect()
+        const stickyTop = 32
+        const bannerHeight = 600
 
-          const maxTranslateY = stopRect.top - bannerHeight - stickyTop
+        const cRect = content.getBoundingClientRect()
+        const sRect = stop.getBoundingClientRect()
+        const maxY = sRect.top - bannerHeight - stickyTop
 
-          if (contentRect.top >= stickyTop) {
-            // belum masuk area sticky
-            sticky.style.position = 'static'
-            sticky.style.top = 'unset'
-            sticky.style.transform = 'none'
-          } else if (maxTranslateY > 0) {
-            // masih di area sticky → iklan fixed
-            sticky.style.position = 'fixed'
-            sticky.style.top = `${stickyTop}px`
-            sticky.style.bottom = 'unset'
-          } else {
-            // sudah lewat batas → iklan absolute di bawah
-            sticky.style.position = 'absolute'
-            sticky.style.top = 'unset'
-            sticky.style.bottom = '0'
-          }
+        if (cRect.top >= stickyTop) {
+          sticky.style.position = 'static'
+        } else if (maxY > 0) {
+          sticky.style.position = 'fixed'
+          sticky.style.top = `${stickyTop}px`
+        } else {
+          sticky.style.position = 'absolute'
+          sticky.style.bottom = '0'
+          sticky.style.top = 'unset'
+        }
 
-          ticking = false
-        })
-
-        ticking = true
-      }
+        running = false
+      })
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Transform HTML content: images, galleries, dropcaps
+  /** ----------------------------------------------------
+   * OPTIMIZED HTML TRANSFORM
+   * - Single pass
+   * - Replace IMG
+   * - Dropcap
+   * - Gallery detection
+   * ---------------------------------------------------- */
   useEffect(() => {
-    const extractHTMLData = () => {
-      const parser = new DOMParser()
-      const cleanedContent = content.replaceAll(
-        'https://destinasian.co.id',
-        'https://backend.destinasian.co.id',
-      )
-      const doc = parser.parseFromString(cleanedContent, 'text/html')
+    if (!content) return
 
-      // Replace <img> with Next.js Image component
-      const replaceImages = (node) => {
-        if (
-          node?.nodeType === 1 &&
-          node.tagName === 'IMG' &&
-          node.getAttribute('src')?.includes(BACKEND_URL)
-        ) {
-          if (node.closest('.gallery')) return
-          if (node.hasAttribute('style')) return
+    const parser = new DOMParser()
 
-          let src = node.getAttribute('src') || ''
-          let srcset = node.getAttribute('srcset') || ''
-          const alt = node.getAttribute('alt') || 'Image'
-          const width = node.getAttribute('width') || 800
-          const height = node.getAttribute('height') || 600
+    // Fast domain fix
+    const fixedHTML = content.replaceAll('https://destinasian.co.id', BACKEND_URL)
 
-          const testDomain = 'https://destinasian.co.id'
-          const newDomain = 'https://backend.destinasian.co.id'
-          src = src.replace(testDomain, newDomain)
-          srcset = srcset.replaceAll(testDomain, newDomain)
+    const doc = parser.parseFromString(fixedHTML, 'text/html')
+    const bodyNodes = [...doc.body.childNodes]
 
-          const imageComponent = (
-            <Image
-              src={src}
-              alt={alt}
-              width={width}
-              height={height}
-              style={{ objectFit: 'contain' }}
-              priority
-            />
-          )
+    const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/i
 
-          node.outerHTML = renderToStaticMarkup(imageComponent)
-        } else {
-          node.childNodes?.forEach(replaceImages)
-        }
+    const processNode = (node) => {
+      if (node.nodeType !== 1) return
+
+      // 1. DROP CAP
+      if (node.tagName === 'P' && dropcapRegex.test(node.innerHTML)) {
+        node.innerHTML = node.innerHTML.replace(
+          dropcapRegex,
+          (_, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`
+        )
       }
 
-      Array.from(doc.body.childNodes).forEach(replaceImages)
+      // 2. IMG → Next Image
+      if (
+        node.tagName === 'IMG' &&
+        node.src.includes(BACKEND_URL) &&
+        !node.closest('.gallery') &&
+        !node.hasAttribute('style')
+      ) {
+        const src = node.getAttribute('src')
+        const alt = node.getAttribute('alt') || 'Image'
+        const width = node.getAttribute('width') || 800
+        const height = node.getAttribute('height') || 600
 
-      // Handle dropcaps
-      const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
-      const processDropcap = (node) => {
-        if (
-          node.nodeType === 1 &&
-          node.tagName === 'P' &&
-          node.innerHTML.includes('[dropcap]')
-        ) {
-          node.innerHTML = node.innerHTML.replace(
-            dropcapRegex,
-            (_, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`,
-          )
-        }
-        node.childNodes?.forEach(processDropcap)
-      }
-
-      Array.from(doc.body.childNodes).forEach(processDropcap)
-
-      // Convert gallery and normal nodes to React components
-      const elements = Array.from(doc.body.childNodes).map((node, index) => {
-        if (node.nodeType === 1 && node.matches('div.gallery')) {
-          return <GallerySlider key={index} gallerySlider={node} />
-        }
-
-        return (
-          <div
-            key={index}
-            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+        node.outerHTML = renderToStaticMarkup(
+          <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            style={{ objectFit: 'contain' }}
+            priority
           />
         )
-      })
 
-      setTransformedContent(elements)
+        return
+      }
+
+      // Recursive children
+      node.childNodes?.forEach(processNode)
     }
 
-    extractHTMLData()
+    bodyNodes.forEach(processNode)
+
+// CREATE FINAL REACT ELEMENTS
+    const final = bodyNodes.map((node, i) => {
+      // Gallery
+      if (node.nodeType === 1 && node.matches('div.gallery')) {
+        return <GallerySlider key={`g-${i}`} gallerySlider={node} />
+      }
+
+      // Normal nodes
+      return (
+        <div
+          key={`n-${i}`}
+          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+        />
+      )
+    })
+
+    setNodes(final)
   }, [content])
+
 
   return (
     <article className={cx('component')}>
       <div className={cx('layout-wrapper')} ref={contentRef}>
         <div className={cx('content-wrapper')}>
-          {transformedContent}
+          {nodes}
           {children}
           <div ref={stopRef} style={{ height: '1px' }} />
+
           {isMobile && (
             <div className={cx('ads-mobile')}>
               <HalfPageGuides1 />
