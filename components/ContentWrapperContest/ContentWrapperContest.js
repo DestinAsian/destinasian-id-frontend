@@ -1,3 +1,5 @@
+'use client'
+
 import className from 'classnames/bind'
 import styles from './ContentWrapperContest.module.scss'
 import { useEffect, useState, useRef } from 'react'
@@ -7,7 +9,7 @@ import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
 import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
 
-let cx = className.bind(styles)
+const cx = className.bind(styles)
 
 export default function ContentWrapperContest({ content, children }) {
   const [transformedContent, setTransformedContent] = useState('')
@@ -16,26 +18,16 @@ export default function ContentWrapperContest({ content, children }) {
   const stickyRef = useRef(null)
   const stopRef = useRef(null)
 
-
-  // NOTE: Perbaiki cara deteksi mobile
+  // DETEKSI MOBILE
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)')
-
-    const handleMediaChange = (e) => {
-      setIsMobile(e.matches)
-    }
-
-    // Set awal
+    const handler = (e) => setIsMobile(e.matches)
     setIsMobile(mediaQuery.matches)
-
-    // Listener untuk perubahan ukuran layar
-    mediaQuery.addEventListener('change', handleMediaChange)
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaChange)
-    }
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
   }, [])
 
+  // STICKY ADS
   useEffect(() => {
     const handleScroll = () => {
       if (!stickyRef.current || !contentRef.current || !stopRef.current) return
@@ -44,69 +36,59 @@ export default function ContentWrapperContest({ content, children }) {
       const content = contentRef.current
       const stop = stopRef.current
 
+      const stickyTop = 32
+      const stickyHeight = sticky.offsetHeight
       const contentRect = content.getBoundingClientRect()
       const stopRect = stop.getBoundingClientRect()
-
-      const maxTranslateY = stopRect.top - sticky.offsetHeight - 32 // 32 = top offset (2rem)
-      const stickyTop = 32 // sticky top
+      const maxTranslateY = stopRect.top - stickyHeight - stickyTop
 
       if (contentRect.top < stickyTop && maxTranslateY > stickyTop) {
         sticky.style.position = 'fixed'
         sticky.style.top = `${stickyTop}px`
-      } else {
-        sticky.style.position = 'static'
-      }
-
-      if (stopRect.top <= sticky.offsetHeight + stickyTop) {
+        sticky.style.bottom = 'unset'
+      } else if (stopRect.top <= stickyHeight + stickyTop) {
         sticky.style.position = 'absolute'
         sticky.style.top = 'unset'
         sticky.style.bottom = '0'
+      } else {
+        sticky.style.position = 'static'
+        sticky.style.top = 'unset'
+        sticky.style.bottom = 'unset'
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // TRANSFORM HTML CONTENT (IMAGES + DROPCAP + GALLERY)
   useEffect(() => {
-    const extractHTMLData = () => {
-      const parser = new DOMParser()
+    if (!content) return
 
-      const cleanedContent = content.replaceAll(
-        'https://destinasian.co.id',
-        'https://backend.destinasian.co.id',
-      )
-      // const doc = parser.parseFromString(content, 'text/html')
-      const doc = parser.parseFromString(cleanedContent, 'text/html')
-      // Recursively extract all images and their captions
-      const extractImagesRecursively = (node) => {
-        if (
-          typeof node === 'object' &&
-          node.nodeType === 1 &&
-          node.tagName === 'IMG' &&
-          typeof node.getAttribute === 'function' &&
-          node.getAttribute('src')?.includes(BACKEND_URL)
-        ) {
-          // Skip images inside .gallery-slider
-          const insideGallerySlider = node.closest('.gallery')
-          if (insideGallerySlider) return
+    const parser = new DOMParser()
+    const cleanedContent = content.replaceAll(
+      'https://destinasian.co.id',
+      'https://backend.destinasian.co.id'
+    )
+    const doc = parser.parseFromString(cleanedContent, 'text/html')
 
-          // Skip if img has inline styles
-          const hasInlineStyle = node.hasAttribute('style')
-          if (hasInlineStyle) return
-          // if (node.hasAttribute('style')) return
+    const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
+
+    // traversal sekaligus untuk img & dropcap
+    const traverseNode = (node) => {
+      if (!node || node.nodeType !== 1) return
+
+      // REPLACE <IMG> biasa (bukan gallery)
+      if (node.tagName === 'IMG' && node.getAttribute('src')?.includes(BACKEND_URL)) {
+        if (!node.closest('.gallery') && !node.hasAttribute('style')) {
           let src = node.getAttribute('src') || ''
           let srcset = node.getAttribute('srcset') || ''
-
-          // const src = node.getAttribute('src')
           const alt = node.getAttribute('alt') || 'Image'
           const width = node.getAttribute('width') || 800
           const height = node.getAttribute('height') || 600
 
-          const testDomain = 'https://destinasian.co.id'
-          const newDomain = 'https://backend.destinasian.co.id'
-          src = src.replace(testDomain, newDomain)
-          srcset = srcset.replaceAll(testDomain, newDomain)
+          src = src.replace('https://destinasian.co.id', BACKEND_URL)
+          srcset = srcset.replaceAll('https://destinasian.co.id', BACKEND_URL)
 
           const imageComponent = (
             <Image
@@ -118,58 +100,32 @@ export default function ContentWrapperContest({ content, children }) {
               priority
             />
           )
-
-          const imageHtmlString = renderToStaticMarkup(imageComponent)
-          node.outerHTML = imageHtmlString
-        } else {
-          // Traverse child nodes
-          node.childNodes?.forEach(extractImagesRecursively)
+          node.outerHTML = renderToStaticMarkup(imageComponent)
+          return
         }
       }
 
-      // Process the content's root element to find all <img> nodes and replace them
-      Array.from(doc.body.childNodes).forEach(extractImagesRecursively)
-
-      const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
-
-      const processDropcap = (node) => {
-        if (
-          node.nodeType === 1 &&
-          node.tagName === 'P' &&
-          node.innerHTML.includes('[dropcap]')
-        ) {
-          node.innerHTML = node.innerHTML.replace(
-            dropcapRegex,
-            (match, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`,
-          )
-        }
-
-        node.childNodes?.forEach(processDropcap)
+      // PROCESS DROPCAP
+      if (node.tagName === 'P' && node.innerHTML.includes('[dropcap]')) {
+        node.innerHTML = node.innerHTML.replace(dropcapRegex, (_, p1) => {
+          return `<span class="dropcap">${p1.toUpperCase()}</span>`
+        })
       }
 
-      Array.from(doc.body.childNodes).forEach(processDropcap)
-
-      // Handle Instagram blockquote
-      const elements = Array.from(doc.body.childNodes).map((node, index) => {
-        // Gallery Slider
-        if (node?.nodeType === 1 && node?.matches('div.gallery')) {
-          const gallerySlider = node
-
-          return <GallerySlider gallerySlider={gallerySlider} />
-        }
-
-        return (
-          <div
-            key={index}
-            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-          />
-        )
-      })
-
-      setTransformedContent(elements)
+      node.childNodes?.forEach(traverseNode)
     }
 
-    extractHTMLData()
+    Array.from(doc.body.childNodes).forEach(traverseNode)
+
+    // RENDER KE REACT
+    const elements = Array.from(doc.body.childNodes).map((node, index) => {
+      if (node.nodeType === 1 && node.matches('div.gallery')) {
+        return <GallerySlider key={`gallery-${index}`} gallerySlider={node} />
+      }
+      return <div key={`content-${index}`} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+    })
+
+    setTransformedContent(elements)
   }, [content])
 
   return (

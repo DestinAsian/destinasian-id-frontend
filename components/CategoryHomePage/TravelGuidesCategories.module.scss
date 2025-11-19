@@ -23,6 +23,7 @@ $font-title: 'Scheherazade New', serif;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 2.5rem;
+
   @media screen and (min-width: $breakpoint-small) {
     margin-bottom: 3.5rem;
   }
@@ -30,18 +31,15 @@ $font-title: 'Scheherazade New', serif;
 
 .logo {
   display: block;
-  object-fit: contain;
   width: 100px;
-  height: auto;
+  object-fit: contain;
 
   @media (min-width: $breakpoint-small) {
     width: 150px;
-    height: auto;
   }
 
   @media (min-width: $breakpoint-large) {
     width: 200px;
-    height: auto;
   }
 }
 
@@ -86,10 +84,10 @@ $font-title: 'Scheherazade New', serif;
 }
 
 .image {
-  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .textWrapper {
@@ -104,14 +102,14 @@ $font-title: 'Scheherazade New', serif;
 }
 
 .nameOverlay {
-  color: white;
   font-family: $font-main;
-  font-weight: 400;
   font-size: 1rem;
+  font-weight: 400;
+  color: white;
   text-align: center;
-  padding: 0 1rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
+  padding: 0 1rem;
 
   @media (min-width: $breakpoint-small) {
     font-size: 1.5rem;
@@ -123,13 +121,13 @@ $font-title: 'Scheherazade New', serif;
 }
 
 .comingsoon {
-  color: white;
   font-family: $font-main;
   font-weight: 400;
-  font-size: 0.8rem;
+  color: white;
   text-align: center;
-  padding: 0 1rem;
   text-transform: uppercase;
+  font-size: 0.8rem;
+  padding: 0 1rem;
 
   @media (min-width: $breakpoint-small) {
     font-size: 1rem;

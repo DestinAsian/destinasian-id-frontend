@@ -9,51 +9,54 @@ import styles from './TravelGuidesCategories.module.scss'
 import logohilton from '../../assets/logo/logo_hilton.png'
 
 const cx = classNames.bind(styles)
-const ORDER = ['bali', 'jakarta', 'bandung', 'surabaya']
 
-// Normalisasi nama kategori
+const ORDER = ['bali', 'jakarta', 'bandung', 'surabaya']
 const normalize = (str = '') => str.toLowerCase().trim()
 
-const TravelGuideCategories = ({ data }) => {
-  const categories = data?.category?.children?.edges?.map(({ node }) => node) || []
+// Tambahkan slug kategori yang Coming Soon di sini
+const COMING_SOON = new Set([])
+export default function TravelGuideCategories({ data }) {
+  const categories =
+    data?.category?.children?.edges?.map((e) => e.node) ?? []
+
   if (!categories.length) return null
 
-  // Buat map berdasarkan nama kategori untuk lookup cepat
-  const byName = categories.reduce((acc, cat) => {
-    acc[normalize(cat.name)] = cat
-    return acc
-  }, {})
+  // Convert menjadi map sekali saja → lebih efisien
+  const mapByName = Object.fromEntries(
+    categories.map((c) => [normalize(c.name), c])
+  )
 
-  // Urutkan kategori sesuai daftar ORDER
-  const orderedCategories = ORDER.map(key => byName[key]).filter(Boolean)
+  // Urutkan kategori sesuai ORDER
+  const ordered = ORDER.map((key) => mapByName[key]).filter(Boolean)
 
   return (
     <div className={cx('wrapper')}>
-      {/* Header */}
+      {/* HEADER */}
       <div className={cx('titleWrapper')}>
         <h2 className={cx('title')}>Guides</h2>
 
-        {/* Hilton logo */}
         <Image
           src={logohilton}
           alt="Hilton Logo"
-          width={100}
-          height={100}
+          width={120}
+          height={120}
           className={cx('logo')}
           priority
           draggable={false}
         />
       </div>
 
-      {/* Grid kategori */}
+      {/* GRID */}
       <div className={cx('grid')}>
-        {orderedCategories.map(({ id, name, uri, categoryImages }) => {
+        {ordered.map((cat) => {
+          const { id, name, uri, categoryImages } = cat
           const imageUrl = categoryImages?.categorySlide1?.mediaItemUrl
-          const isComingSoon = [''].includes(normalize(name)) // tidak aktif saat ini
+          const slug = normalize(name)
+          const comingSoon = COMING_SOON.has(slug)
 
-          const CardContent = (
+          const content = (
             <div
-              className={cx('card', { comingSoon: isComingSoon })}
+              className={cx('card', { comingSoon })}
               draggable={false}
             >
               <div className={cx('imageWrapper')}>
@@ -71,7 +74,7 @@ const TravelGuideCategories = ({ data }) => {
 
                 <div className={cx('textWrapper')}>
                   <h3 className={cx('nameOverlay')}>{name}</h3>
-                  {isComingSoon && (
+                  {comingSoon && (
                     <p className={cx('comingsoon')}>(Coming Soon)</p>
                   )}
                 </div>
@@ -79,11 +82,11 @@ const TravelGuideCategories = ({ data }) => {
             </div>
           )
 
-          return isComingSoon ? (
-            <div key={id}>{CardContent}</div>
+          return comingSoon ? (
+            <div key={id}>{content}</div>
           ) : (
             <Link key={id} href={uri} draggable={false}>
-              {CardContent}
+              {content}
             </Link>
           )
         })}
@@ -91,5 +94,3 @@ const TravelGuideCategories = ({ data }) => {
     </div>
   )
 }
-
-export default TravelGuideCategories
