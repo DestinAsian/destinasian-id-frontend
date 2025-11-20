@@ -79,6 +79,8 @@ export default function SingleLuxuryTravel(props) {
   const [isNavShown, setIsNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+
 
   useEffect(() => {
     if (searchQuery !== '') {
@@ -197,6 +199,8 @@ export default function SingleLuxuryTravel(props) {
           <SingleDesktopHeader
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
             isScrolled={isScrolled}
           />
         </>
@@ -221,9 +225,12 @@ export default function SingleLuxuryTravel(props) {
           <SecondaryHeader
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
             isScrolled={isScrolled}
           />
         </>
+
       )}
       <Main>
         <>
