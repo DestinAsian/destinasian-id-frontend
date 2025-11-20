@@ -68,9 +68,12 @@ export default function SingleLuxuryTravel(props) {
     acfPostSlider,
     seo,
     uri,
+    author,
+    date,
     passwordProtected,
   } = props?.data?.luxuryTravel
 
+  const categories = props?.data?.luxuryTravel.categories?.edges ?? []
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
@@ -233,7 +236,13 @@ export default function SingleLuxuryTravel(props) {
           </div>
           <SingleLTContainer>
             <SingleSlider images={images} />
-            <SingleLTEntryHeader title={title} />
+            <SingleLTEntryHeader title={title} 
+            categoryUri={categories?.[0]?.node?.uri}
+            parentCategory={categories?.[0]?.node?.parent?.node?.name}
+            categoryName={categories?.[0]?.node?.name}
+            author={author?.node?.name}
+            date={date}
+            />
             <ContentWrapperLuxuryTravel content={content} />
             <div>
               {isMobile ? (
