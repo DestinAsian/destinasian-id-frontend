@@ -1,0 +1,96 @@
+@import 'styles/variables';
+@import 'styles/fonts/typography';
+@import 'styles/breakpoints';
+
+.gallerySliderWrapper {
+  width: 100%;
+  position: relative;
+}
+
+.swiperContainer {
+  :global(.swiper-button-next),
+  :global(.swiper-button-prev) {
+    color: rgb(255, 255, 255) !important;
+    fill: rgb(255, 255, 255) !important;
+    stroke: rgb(255, 255, 255) !important;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    top: 9rem;
+    transform: scale(0.5);
+
+    @media (min-width: $breakpoint-extra-small) {
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      transform: scale(1);
+      top: 15.5rem;
+    }
+  }
+
+  :global(.swiper-button-next:hover),
+  :global(.swiper-button-prev:hover) {
+    opacity: 0.8;
+  }
+}
+
+.slideWrapper {
+  position: relative;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.thumbnail {
+  object-fit: cover;
+}
+
+.caption-wrapper {
+  position: absolute;
+  bottom: -1.3rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  z-index: 2;
+  padding: 1rem 0 1.8rem;
+  pointer-events: none;
+  width: 100%;
+
+  @media (min-width: $breakpoint-extra-small) {
+    bottom: -1.2rem;
+    padding: 1rem 0 1.8rem;
+  }
+}
+
+/* === CAPTION STYLE === */
+.caption {
+  background-color: var(--wpe--color--white--smoke) !important;
+  color: var(--wpe--color--grey);
+  padding: 0.5rem 1rem 1rem;
+  width: 100%;
+  text-align: left;
+  pointer-events: auto;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  box-sizing: border-box;
+  font-style: italic;
+  padding-left: 1rem !important;
+
+  @media (min-width: $breakpoint-extra-small) {
+    padding: 0.5rem 0 1rem;
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 0.5rem 1rem;
+  }
+
+  * {
+    padding: 0;
+  }
+}

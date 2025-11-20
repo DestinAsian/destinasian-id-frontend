@@ -23,16 +23,11 @@
   }
 
   :global {
-    // Scope WordPress block styles within ContentWrapper.
     @import 'styles/blocks';
 
     * {
       max-width: 100%;
-      padding: 0 0 0.5rem;
-
-      @media (min-width: $breakpoint-small) {
-        padding: 0 0 1rem;
-      }
+      line-height: 1.5rem;
     }
 
     i,
