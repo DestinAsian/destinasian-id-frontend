@@ -25,16 +25,16 @@ import { GetLatestStories } from '../queries/GetLatestStories'
 
 // Ads (lazy)
 const MastHeadTop = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTop')
+  import('../components/AdUnit/MastHeadTop/MastHeadTop'),
 )
 const MastHeadTopMobile = dynamic(() =>
-  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile')
+  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobile'),
 )
 const MastHeadBottom = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottom/MastHeadBottom')
+  import('../components/AdUnit/MastHeadBottom/MastHeadBottom'),
 )
 const MastHeadBottomMobile = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile')
+  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobile'),
 )
 
 export default function Component(props) {
@@ -50,7 +50,8 @@ export default function Component(props) {
   const [isMobile, setIsMobile] = useState(false)
 
   const { generalSettings, page } = props?.data || {}
-  const { title: siteTitle, description: siteDescription } = generalSettings || {}
+  const { title: siteTitle, description: siteDescription } =
+    generalSettings || {}
 
   const {
     title,
@@ -106,6 +107,7 @@ export default function Component(props) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
     fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
@@ -121,7 +123,8 @@ export default function Component(props) {
     {
       variables: { first: 5 },
       fetchPolicy: 'cache-and-network',
-    }
+      nextFetchPolicy: 'network-only',
+    },
   )
 
   const allPosts =
@@ -241,7 +244,9 @@ export default function Component(props) {
       )}
 
       <Main>
-        {!headerFooterVisibility?.headerVisibility && <EntryHeader title={title} />}
+        {!headerFooterVisibility?.headerVisibility && (
+          <EntryHeader title={title} />
+        )}
 
         {isMobile ? <MastHeadTopMobile /> : <MastHeadTop />}
 
@@ -264,6 +269,7 @@ Component.query = gql`
   query GetPageData($databaseId: ID!, $asPreview: Boolean = false) {
     page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
       ...PageFragment
+      id
     }
     generalSettings {
       ...BlogInfoFragment
@@ -271,7 +277,9 @@ Component.query = gql`
   }
 `
 
-Component.variables = ({ databaseId }, ctx) => ({
-  databaseId,
-  asPreview: ctx?.asPreview,
-})
+Component.variables = ({ databaseId }, ctx) => {
+  return {
+    databaseId,
+    asPreview: ctx?.asPreview,
+  }
+}

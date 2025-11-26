@@ -292,6 +292,7 @@ SingleContest.query = gql`
   ${FeaturedImage.fragments.entry}
   query GetPost($databaseId: ID!, $asPreview: Boolean = false) {
     contest(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      id
       title
       content
       date

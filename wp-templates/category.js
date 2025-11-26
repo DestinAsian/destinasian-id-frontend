@@ -334,6 +334,7 @@ Category.query = gql`
   ${FeaturedImage.fragments.entry}
   query GetCategoryPage($databaseId: ID!) {
     category(id: $databaseId, idType: DATABASE_ID) {
+      id
       name
       description
       databaseId
@@ -442,15 +443,18 @@ Category.query = gql`
             ...FeaturedImageFragment
             author {
               node {
+                id
                 name
               }
             }
             categories(first: 100, where: { childless: true }) {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
+                    id
                     node {
                       name
                     }
@@ -474,16 +478,19 @@ Category.query = gql`
             ...FeaturedImageFragment
             author {
               node {
+                id
                 name
               }
             }
             categories(first: 100, where: { childless: true }) {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -501,16 +508,19 @@ Category.query = gql`
             ...FeaturedImageFragment
             author {
               node {
+                id
                 name
               }
             }
             categories(first: 100, where: { childless: true }) {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -533,16 +543,19 @@ Category.query = gql`
             ...FeaturedImageFragment
             author {
               node {
+                id
                 name
               }
             }
             categories(first: 100, where: { childless: true }) {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -554,11 +567,13 @@ Category.query = gql`
       }
       parent {
         node {
+          id
           name
           uri
           children(first: 100, where: { childless: true }) {
             edges {
               node {
+                id
                 name
                 uri
               }
@@ -575,6 +590,7 @@ Category.query = gql`
       children {
         edges {
           node {
+            id
             name
             uri
           }

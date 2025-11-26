@@ -81,7 +81,6 @@ export default function SingleLuxuryTravel(props) {
   const [isMobile, setIsMobile] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
 
-
   useEffect(() => {
     if (searchQuery !== '') {
       document.body.style.overflow = 'hidden'
@@ -230,7 +229,6 @@ export default function SingleLuxuryTravel(props) {
             isScrolled={isScrolled}
           />
         </>
-
       )}
       <Main>
         <>
@@ -243,12 +241,13 @@ export default function SingleLuxuryTravel(props) {
           </div>
           <SingleLTContainer>
             <SingleSlider images={images} />
-            <SingleLTEntryHeader title={title} 
-            categoryUri={categories?.[0]?.node?.uri}
-            parentCategory={categories?.[0]?.node?.parent?.node?.name}
-            categoryName={categories?.[0]?.node?.name}
-            author={author?.node?.name}
-            date={date}
+            <SingleLTEntryHeader
+              title={title}
+              categoryUri={categories?.[0]?.node?.uri}
+              parentCategory={categories?.[0]?.node?.parent?.node?.name}
+              categoryName={categories?.[0]?.node?.name}
+              author={author?.node?.name}
+              date={date}
             />
             <ContentWrapperLuxuryTravel content={content} />
             <div>
@@ -271,6 +270,7 @@ SingleLuxuryTravel.query = gql`
   ${FeaturedImage.fragments.entry}
   query GetPost($databaseId: ID!, $asPreview: Boolean = false) {
     luxuryTravel(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      id
       title
       databaseId
       content
@@ -282,6 +282,7 @@ SingleLuxuryTravel.query = gql`
       parent {
         node {
           ... on LuxuryTravel {
+            id
             title
           }
         }
@@ -289,6 +290,7 @@ SingleLuxuryTravel.query = gql`
       ...FeaturedImageFragment
       author {
         node {
+          id
           name
         }
       }

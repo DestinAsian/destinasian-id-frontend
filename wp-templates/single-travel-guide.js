@@ -347,7 +347,6 @@ export default function SingleTravelGuide(props) {
   )
 }
 
-// 🔹 GraphQL Query
 SingleTravelGuide.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}
@@ -363,6 +362,7 @@ SingleTravelGuide.query = gql`
       }
       author {
         node {
+          id
           name
         }
       }
@@ -389,10 +389,12 @@ SingleTravelGuide.query = gql`
       categories(where: { childless: true }) {
         edges {
           node {
+            id
             name
             uri
             parent {
               node {
+                id
                 name
                 uri
                 countryCode {
@@ -401,6 +403,7 @@ SingleTravelGuide.query = gql`
                 children {
                   edges {
                     node {
+                      id
                       name
                       uri
                     }
@@ -411,6 +414,7 @@ SingleTravelGuide.query = gql`
             children {
               edges {
                 node {
+                  id
                   name
                   uri
                 }
@@ -422,6 +426,7 @@ SingleTravelGuide.query = gql`
       tags {
         edges {
           node {
+            id
             databaseId
             name
           }
@@ -456,12 +461,6 @@ SingleTravelGuide.query = gql`
     }
   }
 `
-
-// SingleTravelGuide.variables = ({ databaseId }, ctx) => ({
-//   databaseId,
-//   asPreview: ctx?.asPreview,
-// })
-
 SingleTravelGuide.variables = ({ databaseId }, ctx) => {
   return {
     databaseId,

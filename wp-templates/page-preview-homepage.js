@@ -182,6 +182,7 @@ Component.query = gql`
   ${FeaturedImage.fragments.entry}
   query GetPageData($databaseId: ID!, $asPreview: Boolean = false) {
     page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      id
       title
       uri
       seo {

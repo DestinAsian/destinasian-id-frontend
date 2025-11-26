@@ -268,6 +268,7 @@ Component.query = gql`
   ${FeaturedImage.fragments.entry}
   query GetPost($databaseId: ID!, $asPreview: Boolean = false) {
     post(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      id
       title
       databaseId
       content
@@ -281,6 +282,7 @@ Component.query = gql`
       }
       author {
         node {
+          id
           name
         }
       }
@@ -294,10 +296,12 @@ Component.query = gql`
       categories(where: { childless: true }) {
         edges {
           node {
+            id
             name
             uri
             parent {
               node {
+                id
                 name
                 uri
                 destinationGuides {
@@ -311,6 +315,7 @@ Component.query = gql`
       tags {
         edges {
           node {
+            id
             databaseId
             name
           }

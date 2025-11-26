@@ -90,17 +90,18 @@ export default function Component(props) {
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
     fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: "network-only",
+    nextFetchPolicy: 'network-only',
   })
 
   // Get latest travel stories
   const { data: latestStories } = useQuery(GetLatestStories, {
     variables: { first: 5 },
     fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: "network-only",
+    nextFetchPolicy: 'network-only',
   })
 
-  const latestPosts = latestStories?.posts?.edges?.map((post) => post.node) ?? []
+  const latestPosts =
+    latestStories?.posts?.edges?.map((post) => post.node) ?? []
   const latestAllPosts = latestPosts.sort(
     (a, b) => new Date(b.date) - new Date(a.date),
   )
@@ -216,6 +217,7 @@ export default function Component(props) {
 Component.query = gql`
   query GetTagPage($databaseId: ID!) {
     tag(id: $databaseId, idType: DATABASE_ID) {
+      id
       name
       databaseId
       uri

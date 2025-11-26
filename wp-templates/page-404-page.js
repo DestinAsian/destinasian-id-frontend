@@ -145,6 +145,7 @@ Component.query = gql`
   ${FeaturedImage.fragments.entry}
   query GetPageData($databaseId: ID = "133415", $asPreview: Boolean = false) {
     page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      id
       title
       content
       ...FeaturedImageFragment
