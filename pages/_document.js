@@ -10,11 +10,6 @@ export default function Document() {
           async
           src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"
         ></script>
-
-        <link
-          rel="stylesheet"
-          href="https://cloud.typography.com/7429004/6477832/css/fonts.css"
-        />
       </Head>
       <body>
         <Main />
