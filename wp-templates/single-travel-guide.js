@@ -352,6 +352,7 @@ SingleTravelGuide.query = gql`
   ${FeaturedImage.fragments.entry}
   query GettravelGuide($databaseId: ID!, $asPreview: Boolean = false) {
     travelGuide(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      id
       title
       databaseId
       content
