@@ -454,8 +454,8 @@ Category.query = gql`
                   name
                   uri
                   parent {
-                    id
                     node {
+                      id
                       name
                     }
                   }
