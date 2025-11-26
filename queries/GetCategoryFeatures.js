@@ -18,7 +18,6 @@ export const GetCategoryFeatures = gql`
             excerpt
             categories {
               edges {
-                id
                 node {
                   parent {
                     node {
