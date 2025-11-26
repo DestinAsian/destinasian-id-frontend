@@ -5,12 +5,14 @@ export const GetRelatedPosts = gql`
     posts(first: 4, where: { tagIn: $tagIn, notIn: $notIn }) {
       edges {
         node {
+          id
           databaseId
           title
           uri
           excerpt
           featuredImage {
             node {
+              id
               sourceUrl
               altText
             }
@@ -18,6 +20,7 @@ export const GetRelatedPosts = gql`
           categories {
             edges {
               node {
+                id
                 name
                 uri
               }
@@ -26,6 +29,7 @@ export const GetRelatedPosts = gql`
           tags {
             edges {
               node {
+                id
                 databaseId
                 name
               }

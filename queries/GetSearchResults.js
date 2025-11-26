@@ -13,18 +13,21 @@ export const GetSearchResults = gql`
       }
       edges {
         node {
+          id
           uri
           databaseId
           name
           description
           parent {
             node {
+              id
               name
             }
           }
           children {
             edges {
               node {
+                id
                 name
                 uri
               }
@@ -42,9 +45,13 @@ export const GetSearchResults = gql`
           destinationGuides {
             guidesTitle
           }
-          contentNodes(first: 10, where: { contentTypes: [ POST, TRAVEL_GUIDE ] }) {
+          contentNodes(
+            first: 10
+            where: { contentTypes: [POST, TRAVEL_GUIDE] }
+          ) {
             edges {
               node {
+                id
                 ... on Post {
                   title
                   uri
@@ -73,11 +80,7 @@ export const GetSearchResults = gql`
           contentNodes(
             where: {
               status: PUBLISH
-              contentTypes: [
-                POST
-                TRAVEL_GUIDE
-                CONTEST
-              ]
+              contentTypes: [POST, TRAVEL_GUIDE, CONTEST]
             }
             first: $first
           ) {

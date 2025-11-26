@@ -1,12 +1,9 @@
 import { gql } from '@apollo/client'
 
 export const GetTagStories = gql`
-  query GetTagStories(
-    $first: Int
-    $after: String
-    $id: ID!
-  ) {
+  query GetTagStories($first: Int, $after: String, $id: ID!) {
     tag(id: $id, idType: DATABASE_ID) {
+      id
       name
       contentNodes(
         first: $first
@@ -43,16 +40,19 @@ export const GetTagStories = gql`
               }
               author {
                 node {
+                  id
                   name
                 }
               }
               categories(where: { childless: true }) {
                 edges {
                   node {
+                    id
                     name
                     uri
                     parent {
                       node {
+                        id
                         name
                       }
                     }
@@ -60,7 +60,7 @@ export const GetTagStories = gql`
                 }
               }
             }
-              ... on TravelGuide {
+            ... on TravelGuide {
               id
               title
               uri
@@ -86,16 +86,19 @@ export const GetTagStories = gql`
               }
               author {
                 node {
+                  id
                   name
                 }
               }
               categories(where: { childless: true }) {
                 edges {
                   node {
+                    id
                     name
                     uri
                     parent {
                       node {
+                        id
                         name
                       }
                     }

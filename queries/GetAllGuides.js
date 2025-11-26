@@ -1,7 +1,3 @@
-
-
-
-
 import { gql } from '@apollo/client'
 
 export const GetAllGuides = gql`
@@ -17,6 +13,7 @@ export const GetAllGuides = gql`
           link
           featuredImage {
             node {
+              id
               mediaItemUrl
               title
             }

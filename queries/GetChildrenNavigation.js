@@ -5,11 +5,13 @@ export const GetChildrenNavigation = gql`
     category(id: $id, idType: DATABASE_ID) {
       parent {
         node {
+          id
           name
           uri
           children(where: { childless: true }) {
             edges {
               node {
+                id
                 name
                 uri
               }
@@ -17,6 +19,7 @@ export const GetChildrenNavigation = gql`
           }
           parent {
             node {
+              id
               name
             }
           }

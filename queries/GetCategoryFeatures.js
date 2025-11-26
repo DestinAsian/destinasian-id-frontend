@@ -18,9 +18,11 @@ export const GetCategoryFeatures = gql`
             excerpt
             categories {
               edges {
+                id
                 node {
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -29,6 +31,7 @@ export const GetCategoryFeatures = gql`
             }
             featuredImage {
               node {
+                id
                 mediaItemUrl
               }
             }

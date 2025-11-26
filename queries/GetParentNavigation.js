@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 export const GetParentNavigation = gql`
   query GetParentNavigation($id: ID!) {
     category(id: $id, idType: DATABASE_ID) {
+      id
       name
       uri
       countryCode {
@@ -14,6 +15,7 @@ export const GetParentNavigation = gql`
       children {
         edges {
           node {
+            id
             name
             uri
           }

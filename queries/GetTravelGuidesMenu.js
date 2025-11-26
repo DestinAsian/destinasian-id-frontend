@@ -17,6 +17,7 @@ export const GetTravelGuidesMenu = gql`
         connectedNode {
           node {
             ... on Category {
+              id
               name
               uri
               categoryImages {
@@ -60,6 +61,7 @@ export const GetTravelGuidesMenu = gql`
 
                     parent {
                       node {
+                        id
                         name
                       }
                     }

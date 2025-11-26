@@ -6,10 +6,12 @@ export const GetSingleNavigationTravelGuide = gql`
       categories(where: { childless: true }) {
         edges {
           node {
+            id
             name
             uri
             parent {
               node {
+                id
                 name
                 uri
                 countryCode {
@@ -18,6 +20,7 @@ export const GetSingleNavigationTravelGuide = gql`
                 children {
                   edges {
                     node {
+                      id
                       name
                       uri
                     }

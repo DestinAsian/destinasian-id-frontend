@@ -3,9 +3,11 @@ import { gql } from '@apollo/client'
 export const GetCategoryStories = gql`
   query GetCategoryStories($first: Int, $after: String, $id: ID!) {
     category(id: $id, idType: DATABASE_ID) {
+      id
       name
       parent {
         node {
+          id
           name
         }
       }
@@ -48,10 +50,12 @@ export const GetCategoryStories = gql`
               categories(where: { childless: true }) {
                 edges {
                   node {
+                    id
                     name
                     uri
                     parent {
                       node {
+                        id
                         name
                       }
                     }
@@ -85,16 +89,19 @@ export const GetCategoryStories = gql`
               }
               author {
                 node {
+                  id
                   name
                 }
               }
               categories(where: { childless: true }) {
                 edges {
                   node {
+                    id
                     name
                     uri
                     parent {
                       node {
+                        id
                         name
                       }
                     }

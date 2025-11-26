@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import  FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 
 export const GetHomepageStories = gql`
   ${FeaturedImage.fragments.entry}
@@ -30,10 +30,12 @@ export const GetHomepageStories = gql`
             categories {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
                     node {
+                      id
                       name
                     }
                   }

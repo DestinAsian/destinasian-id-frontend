@@ -30,6 +30,7 @@ export const GetPrimaryMenu = gql`
                       }
                       parent {
                         node {
+                          id
                           name
                         }
                       }

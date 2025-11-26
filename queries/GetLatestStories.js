@@ -17,10 +17,12 @@ export const GetLatestStories = gql`
           categories {
             edges {
               node {
+                id
                 name
                 uri
                 parent {
                   node {
+                    id
                     name
                   }
                 }
@@ -30,6 +32,5 @@ export const GetLatestStories = gql`
         }
       }
     }
-    
   }
 `

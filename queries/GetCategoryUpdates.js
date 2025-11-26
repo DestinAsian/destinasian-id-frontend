@@ -13,18 +13,15 @@ export const GetCategoryUpdates = gql`
             uri
             parent {
               node {
+                id
                 name
               }
             }
             contentNodes(first: 10) {
               edges {
-                cursor
                 node {
-                  id
                   uri
-                  contentTypeName
                   ... on Post {
-                    id
                     title
                     uri
                     featuredImage {
@@ -34,6 +31,7 @@ export const GetCategoryUpdates = gql`
                     }
                     categories {
                       nodes {
+                        id
                         name
                       }
                     }

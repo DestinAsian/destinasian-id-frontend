@@ -6,9 +6,11 @@ export const GetMoreReviews = gql`
       categories(first: 1, where: { childless: true }) {
         edges {
           node {
+            id
             posts(first: 10, where: { notIn: $notIn }) {
               edges {
                 node {
+                  id
                   title
                   uri
                 }

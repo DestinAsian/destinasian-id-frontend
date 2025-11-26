@@ -24,10 +24,12 @@ export const GetHomepagePinPosts = gql`
             categories(where: { childless: true }) {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -60,6 +62,7 @@ export const GetHomepagePinPosts = gql`
                   name
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -88,10 +91,12 @@ export const GetHomepagePinPosts = gql`
             categories(where: { childless: true }) {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -124,6 +129,7 @@ export const GetHomepagePinPosts = gql`
                   name
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -152,10 +158,12 @@ export const GetHomepagePinPosts = gql`
             categories(where: { childless: true }) {
               edges {
                 node {
+                  id
                   name
                   uri
                   parent {
                     node {
+                      id
                       name
                     }
                   }
@@ -188,6 +196,7 @@ export const GetHomepagePinPosts = gql`
                   name
                   parent {
                     node {
+                      id
                       name
                     }
                   }
