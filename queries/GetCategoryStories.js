@@ -44,6 +44,7 @@ export const GetCategoryStories = gql`
               }
               author {
                 node {
+                  id
                   name
                 }
               }
