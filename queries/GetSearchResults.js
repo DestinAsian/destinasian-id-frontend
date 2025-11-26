@@ -53,10 +53,12 @@ export const GetSearchResults = gql`
               node {
                 id
                 ... on Post {
+                  id
                   title
                   uri
                 }
                 ... on TravelGuide {
+                  id
                   title
                   uri
                 }
@@ -77,6 +79,7 @@ export const GetSearchResults = gql`
       }
       edges {
         node {
+          id
           contentNodes(
             where: {
               status: PUBLISH
@@ -86,20 +89,24 @@ export const GetSearchResults = gql`
           ) {
             edges {
               node {
+                id
                 uri
                 databaseId
                 contentType {
                   node {
+                    id
                     label
                     graphqlPluralName
                   }
                 }
                 ... on Post {
+                  id
                   title
                   excerpt
                   date
                   featuredImage {
                     node {
+                      id
                       sourceUrl
                       altText
                       mediaDetails {
@@ -111,10 +118,12 @@ export const GetSearchResults = gql`
                   categories(where: { childless: true }) {
                     edges {
                       node {
+                        id
                         name
                         uri
                         parent {
                           node {
+                            id
                             name
                           }
                         }
@@ -123,11 +132,13 @@ export const GetSearchResults = gql`
                   }
                 }
                 ... on TravelGuide {
+                  id
                   title
                   excerpt
                   date
                   featuredImage {
                     node {
+                      id
                       sourceUrl
                       altText
                       mediaDetails {
@@ -139,10 +150,12 @@ export const GetSearchResults = gql`
                   categories(where: { childless: true }) {
                     edges {
                       node {
+                        id
                         name
                         uri
                         parent {
                           node {
+                            id
                             name
                           }
                         }
@@ -151,10 +164,12 @@ export const GetSearchResults = gql`
                   }
                 }
                 ... on Page {
+                  id
                   title
                   date
                   featuredImage {
                     node {
+                      id
                       sourceUrl
                       altText
                       mediaDetails {
@@ -165,11 +180,13 @@ export const GetSearchResults = gql`
                   }
                 }
                 ... on Contest {
+                  id
                   title
                   excerpt
                   date
                   featuredImage {
                     node {
+                      id
                       sourceUrl
                       altText
                       mediaDetails {

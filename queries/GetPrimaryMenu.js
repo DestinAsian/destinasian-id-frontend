@@ -8,6 +8,7 @@ export const GetPrimaryMenu = gql`
     ) {
       edges {
         node {
+          id
           connectedNode {
             node {
               ... on Category {

@@ -56,9 +56,7 @@ export default function TravelGuidesMenu({ className }) {
         }))
 
         if (isMounted) setResults(formatted)
-      } catch (err) {
-        // Log only critical errors
-        console.error('Failed to fetch travel guides:', err)
+      } catch{
       }
     }
 

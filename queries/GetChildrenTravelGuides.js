@@ -12,7 +12,8 @@ export const GetChildrenTravelGuides = gql`
             uri
             categoryImages {
               categorySlide1 {
-                  mediaItemUrl
+                id
+                mediaItemUrl
               }
             }
           }

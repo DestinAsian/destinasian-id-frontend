@@ -10,7 +10,7 @@ export const GetHomepageStories = gql`
       where: {
         status: PUBLISH
         orderby: { field: DATE, order: DESC }
-        contentTypes: [GUIDE]
+        contentTypes: [TRAVEL_GUIDE]
       }
     ) {
       pageInfo {
@@ -21,7 +21,7 @@ export const GetHomepageStories = gql`
         node {
           id
           uri
-          ... on Guide {
+          ... on TravelGuide{
             title
             contentTypeName
             content
