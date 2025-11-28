@@ -3,7 +3,6 @@ import { gql, useQuery } from '@apollo/client'
 import Cookies from 'js-cookie'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import { eb_garamond, rubik, rubik_mono_one } from '../styles/fonts/fonts'
 
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
@@ -154,7 +153,7 @@ export default function SingleContest(props) {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
       setIsAuthenticated(true)
-      Cookies.set('contestPassword', enteredPassword, { expires: 1 }) // 1 day expiry
+      Cookies.set('contestPassword', enteredPassword, { expires: 1 })
     } else {
       alert('Incorrect password. Please try again.')
     }
@@ -292,7 +291,6 @@ SingleContest.query = gql`
   ${FeaturedImage.fragments.entry}
   query GetPost($databaseId: ID!, $asPreview: Boolean = false) {
     contest(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
-      id
       title
       content
       date

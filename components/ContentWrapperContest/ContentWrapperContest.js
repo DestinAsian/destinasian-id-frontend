@@ -5,14 +5,15 @@ import styles from './ContentWrapperContest.module.scss'
 import { useEffect, useState, useRef } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
-import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
 import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
 
 const cx = className.bind(styles)
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL
+
 export default function ContentWrapperContest({ content, children }) {
-  const [transformedContent, setTransformedContent] = useState('')
+  const [transformedContent, setTransformedContent] = useState([])
   const [isMobile, setIsMobile] = useState(false)
   const contentRef = useRef(null)
   const stickyRef = useRef(null)
@@ -68,18 +69,20 @@ export default function ContentWrapperContest({ content, children }) {
     const parser = new DOMParser()
     const cleanedContent = content.replaceAll(
       'https://destinasian.co.id',
-      'https://backend.destinasian.co.id'
+      BACKEND_URL
     )
     const doc = parser.parseFromString(cleanedContent, 'text/html')
-
     const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
 
-    // traversal sekaligus untuk img & dropcap
+    // traversal untuk img & dropcap
     const traverseNode = (node) => {
       if (!node || node.nodeType !== 1) return
 
       // REPLACE <IMG> biasa (bukan gallery)
-      if (node.tagName === 'IMG' && node.getAttribute('src')?.includes(BACKEND_URL)) {
+      if (
+        node.tagName === 'IMG' &&
+        node.getAttribute('src')?.includes(BACKEND_URL)
+      ) {
         if (!node.closest('.gallery') && !node.hasAttribute('style')) {
           let src = node.getAttribute('src') || ''
           let srcset = node.getAttribute('srcset') || ''
@@ -97,6 +100,7 @@ export default function ContentWrapperContest({ content, children }) {
               width={width}
               height={height}
               style={{ objectFit: 'contain' }}
+              onError={(e) => (e.currentTarget.src = '/fallback-image.jpg')}
               priority
             />
           )
@@ -122,7 +126,12 @@ export default function ContentWrapperContest({ content, children }) {
       if (node.nodeType === 1 && node.matches('div.gallery')) {
         return <GallerySlider key={`gallery-${index}`} gallerySlider={node} />
       }
-      return <div key={`content-${index}`} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+      return (
+        <div
+          key={`content-${index}`}
+          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+        />
+      )
     })
 
     setTransformedContent(elements)
