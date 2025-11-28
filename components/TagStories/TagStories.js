@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import classNames from 'classnames/bind'
 import styles from './TagStories.module.scss'
 import { useQuery } from '@apollo/client'
@@ -54,7 +54,6 @@ export default function TagStories({ tagUri }) {
     }
   }, [])
 
-  // Load more posts
   const fetchMorePosts = useCallback(() => {
     if (!isFetchingMore && data?.tag?.contentNodes?.pageInfo?.hasNextPage) {
       setIsFetchingMore(true)
@@ -68,33 +67,27 @@ export default function TagStories({ tagUri }) {
     }
   }, [isFetchingMore, data, fetchMore, updateQuery])
 
-  // Auto-load on scroll
   useEffect(() => {
     const handleScroll = () => {
       const scrolledToBottom =
         window.scrollY + window.innerHeight >=
         document.documentElement.scrollHeight - 50
-
       if (scrolledToBottom) fetchMorePosts()
     }
-
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [fetchMorePosts])
 
-  // Delay for smoother rendering
   useEffect(() => {
     const timeout = setTimeout(() => setDelayedLoaded(true), 500)
     return () => clearTimeout(timeout)
   }, [])
 
-  // Collect all posts
   const allPosts = useMemo(() => {
     const edges = data?.tag?.contentNodes?.edges || []
     return edges.map((post) => post.node)
   }, [data])
 
-  // Remove duplicates
   const mergedPosts = useMemo(() => {
     return allPosts.filter(
       (post, index, self) =>
@@ -107,9 +100,7 @@ export default function TagStories({ tagUri }) {
     ? mergedPosts.slice(postsPerPage, visibleCount)
     : []
 
-  if (error) {
-    return <pre>{JSON.stringify(error, null, 2)}</pre>
-  }
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
   if (loading && !data) {
     return (
@@ -119,7 +110,6 @@ export default function TagStories({ tagUri }) {
     )
   }
 
-  // Render individual post
   const renderPost = (post) => {
     const guideInfo = post?.guide_book_now
 
@@ -149,9 +139,7 @@ export default function TagStories({ tagUri }) {
             {guideInfo?.guidePrice && (
               <>
                 <span className={cx('separator')}>|</span>
-                <span className={cx('guide-price')}>
-                  {guideInfo.guidePrice}
-                </span>
+                <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
               </>
             )}
             {guideInfo?.linkBookNow && (
@@ -174,9 +162,9 @@ export default function TagStories({ tagUri }) {
           title={post?.title}
           excerpt={post?.excerpt}
           uri={post?.uri}
-          parentCategory={post?.categories?.edges[0]?.node?.parent?.node?.name}
-          category={post?.categories?.edges[0]?.node?.name}
-          categoryUri={post?.categories?.edges[0]?.node?.uri}
+          parentCategory={post?.categories?.edges?.[0]?.node?.parent?.node?.name}
+          category={post?.categories?.edges?.[0]?.node?.name}
+          categoryUri={post?.categories?.edges?.[0]?.node?.uri}
         />
       </div>
     )
