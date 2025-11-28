@@ -49,32 +49,33 @@ const CategoryNewsUpdates = React.memo(() => {
 
                 return (
                   <SwiperSlide key={post.id}>
-                    <div className={styles.slideWrapper}>
-                      {image?.mediaItemUrl && (
-                        <div className={styles.imageWrapper}>
-                          <Image
-                            src={image.mediaItemUrl}
-                            alt={image.title || post.title}
-                            width={1022} // fixed size → stabil
-                            height={600} // 4:3 ratio
-                            className={styles.thumbnail}
-                            loading="lazy"
-                            draggable={false}
-                            style={{
-                              width: '1022px',
-                              height: '600px',
-                              objectFit: 'cover',
-                            }}
-                          />
-                          <div className={styles.overlay}>
-                            <h3 className={styles.postTitle}>{post.title}</h3>
-                            <Link href={post.uri} className={styles.readMore}>
-                              Read More →
-                            </Link>
+                    {/* Seluruh area slide clickable */}
+                    <Link href={post.uri} className={styles.slideLink}>
+                      <div className={styles.slideWrapper}>
+                        {image?.mediaItemUrl && (
+                          <div className={styles.imageWrapper}>
+                            <Image
+                              src={image.mediaItemUrl}
+                              alt={image.title || post.title}
+                              width={1022}
+                              height={600}
+                              className={styles.thumbnail}
+                              loading="lazy"
+                              draggable={false}
+                              style={{
+                                width: '1022px',
+                                height: '600px',
+                                objectFit: 'cover',
+                              }}
+                            />
+                            <div className={styles.overlay}>
+                              <h3 className={styles.postTitle}>{post.title}</h3>
+                              <span className={styles.readMore}>Read More →</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    </Link>
                   </SwiperSlide>
                 )
               })}
