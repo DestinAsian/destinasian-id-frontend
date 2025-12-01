@@ -10,3 +10,14 @@
 @import "animation";
 @import "fonts/typography";
 @import "base";
+
+
+/* styles/globals.scss (atau styles/globals.css) */
+.global-highlight {
+    background-color: var(--wpe--color--teal--dark);
+    color: #fff;
+    padding: 0 4px;
+    border-radius: 3px;
+    font-weight: 400;
+  }
+  
