@@ -3,16 +3,12 @@ import classNames from 'classnames/bind'
 import Link from 'next/link'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
-import dynamic from 'next/dynamic'
-import { IoSearchOutline } from "react-icons/io5";
+import { IoSearchOutline } from 'react-icons/io5'
 import Container from '../../components/Container/Container'
 import FullMenu from '../../components/FullMenu/FullMenu'
-const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
 import styles from './HomepageHeader.module.scss'
 import { useMediaQuery } from 'react-responsive'
 import Image from 'next/image'
-import { useQuery } from '@apollo/client'
-import { GetSearchResults } from '../../queries/GetSearchResults'
 
 let cx = classNames.bind(styles)
 
@@ -33,7 +29,6 @@ export default function HomepageHeader({
   isScrolled,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 })
-  const postsPerPage = 1000
   const [isMenuOpen, setMenuOpen] = useState(false)
   // Tambahkan class "menu-open" ke <body> saat menu dibuka
   useEffect(() => {
@@ -48,69 +43,23 @@ export default function HomepageHeader({
     setSearchQuery('') // Reset the search query
   }
 
-  // Add search query function
-  const {
-    data: searchResultsData,
-    loading: searchResultsLoading,
-    error: searchResultsError,
-  } = useQuery(GetSearchResults, {
-    variables: {
-      first: postsPerPage,
-      after: null,
-      search: searchQuery,
-    },
-    skip: searchQuery === '',
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
+ 
 
-  // Check if the search query is empty and no search results are loading, then hide the SearchResults component
   const isSearchResultsVisible = !!searchQuery
 
-  // Create a Set to store unique databaseId values
-  const uniqueDatabaseIds = new Set()
 
-  // Initialize an array to store unique posts
-  const contentNodesPosts = []
-
-  // Loop through categories (assuming similar structure)
-  searchResultsData?.categories?.edges?.forEach((post) => {
-    const { databaseId } = post.node
-
-    if (!uniqueDatabaseIds.has(databaseId)) {
-      uniqueDatabaseIds.add(databaseId)
-      contentNodesPosts.push(post.node)
-    }
-  })
-
-  // Loop through tags
-  searchResultsData?.tags?.edges?.forEach((contentNodes) => {
-    contentNodes.node?.contentNodes?.edges.forEach((post) => {
-      const { databaseId } = post.node
-
-      if (!uniqueDatabaseIds.has(databaseId)) {
-        uniqueDatabaseIds.add(databaseId)
-        contentNodesPosts.push(post.node)
-      }
-    })
-  })
-
-  // Sort contentNodesPosts array by date
-  contentNodesPosts.sort((a, b) => {
-    // Assuming your date is stored in 'date' property of the post objects
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-
-    // Compare the dates
-    return dateB - dateA
-  })
+ 
 
   return (
     <header className={cx('component', { white: isNavShown })}>
       {/* Responsive header */}
       {isDesktop || (!isDesktop && !isNavShown) ? (
         <Container>
-          <div className={cx('navbar', { sticky: isScrolled && !isNavShown && !isMenuOpen,})}>
+          <div
+            className={cx('navbar', {
+              sticky: isScrolled && !isNavShown && !isMenuOpen,
+            })}
+          >
             {/* DAI logo */}
 
             <Link href="/" className={cx('title')}>
@@ -157,12 +106,12 @@ export default function HomepageHeader({
                       aria-controls={cx('full-menu-wrapper')}
                       aria-expanded={!isNavShown}
                     >
-                    <IoSearchOutline className={cx('search-icon')}  />
+                      <IoSearchOutline className={cx('search-icon')} />
                     </button>
                   </div>
                   <div className={cx('menu-button')}>
-                     {/* Divider */}
-                     {isScrolled ? (
+                    {/* Divider */}
+                    {isScrolled ? (
                       <div className={cx('divider-vertical')} />
                     ) : (
                       <div className={cx('divider-vertical-white')} />
@@ -309,8 +258,8 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
               type="button"
               className={cx('close-icon')}
               onClick={() => {
-                setIsNavShown(!isNavShown) // Toggle navigation
-                clearSearch // Clear search input
+                setIsNavShown(!isNavShown)
+                clearSearch
               }}
               aria-label="Toggle navigation"
               aria-controls={cx('primary-navigation')}
@@ -347,24 +296,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
         </Container>
       )}
 
-      {/* Search Bar */}
-      <div className={cx('search-bar-wrapper')}>
-        <div className={cx('search-result-wrapper')}>
-          {searchResultsError && (
-            <div className={cx('alert-error')}>
-              {'An error has occurred. Please refresh and try again.'}
-            </div>
-          )}
-          {/* Conditionally render the SearchResults component */}
-          {isSearchResultsVisible && (
-            <SearchResults
-              searchResults={contentNodesPosts}
-              isLoading={searchResultsLoading}
-            />
-          )}
-        </div>
-      </div>
-
       {/* Full menu */}
       <div
         className={cx(['full-menu-wrapper', isNavShown ? 'show' : undefined])}
@@ -382,9 +313,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           setSearchQuery={setSearchQuery}
           menusLoading={menusLoading}
           latestLoading={latestLoading}
-          contentNodesPosts={contentNodesPosts}
-          searchResultsLoading={searchResultsLoading}
-          searchResultsError={searchResultsError}
           isSearchResultsVisible={isSearchResultsVisible}
         />
       </div>

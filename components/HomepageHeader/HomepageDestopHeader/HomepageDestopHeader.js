@@ -4,18 +4,13 @@ import { useMediaQuery } from 'react-responsive'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import Image from 'next/image'
-import dynamic from 'next/dynamic'
 import { IoSearchOutline } from 'react-icons/io5'
 import destinasianLogoBlk from '../../../assets/logo/destinasian-indo-logo.png'
 import destinasianLogoWht from '../../../assets/logo/DAI_logo.png'
 import Container from '../../../components/Container/Container'
 import FullMenu from '../../../components/FullMenu/FullMenu'
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
-const SearchResults = dynamic(() =>
-  import('../../../components/SearchResults/SearchResults'),
-)
 import styles from './HomepageDestopHeader.module.scss'
-import { GetSearchResults } from '../../../queries/GetSearchResults'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 
 let cx = classNames.bind(styles)
@@ -39,10 +34,7 @@ export default function HomepageDestopHeader({
   setIsGuidesNavShown,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 })
-  const postsPerPage = 1000
-
   const [isMenuOpen, setMenuOpen] = useState(false)
-  // Tambahkan class "menu-open" ke <body> saat menu dibuka
   useEffect(() => {
     if (isMenuOpen) {
       document.body.classList.add('menu-open')
@@ -55,27 +47,7 @@ export default function HomepageDestopHeader({
     setSearchQuery('')
   }
 
-  // Add search query function
-  const {
-    data: searchResultsData,
-    loading: searchResultsLoading,
-    error: searchResultsError,
-  } = useQuery(GetSearchResults, {
-    variables: {
-      first: postsPerPage,
-      after: null,
-      search: searchQuery,
-    },
-    skip: searchQuery === '',
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  // Check if the search query is empty and no search results are loading, then hide the SearchResults component
   const isSearchResultsVisible = !!searchQuery
-
-  // Create a Set to store unique databaseId values
-  const uniqueDatabaseIds = new Set()
 
   // Initialize an array to store unique posts
   const contentNodesPosts = []
@@ -88,35 +60,6 @@ export default function HomepageDestopHeader({
   if (error) return <div>Error loading categories!</div>
 
   const categories = data?.categories?.edges || []
-  // Loop through categories (assuming similar structure)
-  searchResultsData?.categories?.edges?.forEach((post) => {
-    const { databaseId } = post.node
-
-    if (!uniqueDatabaseIds.has(databaseId)) {
-      uniqueDatabaseIds.add(databaseId)
-      contentNodesPosts.push(post.node)
-    }
-  })
-
-  // Loop through tags
-  searchResultsData?.tags?.edges?.forEach((contentNodes) => {
-    contentNodes.node?.contentNodes?.edges.forEach((post) => {
-      const { databaseId } = post.node
-
-      if (!uniqueDatabaseIds.has(databaseId)) {
-        uniqueDatabaseIds.add(databaseId)
-        contentNodesPosts.push(post.node)
-      }
-    })
-  })
-
-  contentNodesPosts.sort((a, b) => {
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-
-    // Compare the dates
-    return dateB - dateA
-  })
 
   return (
     <header className={cx('component', { white: isNavShown })}>
@@ -422,24 +365,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
         </Container>
       )}
 
-      {/* Search Bar */}
-      <div className={cx('search-bar-wrapper')}>
-        <div className={cx('search-result-wrapper')}>
-          {searchResultsError && (
-            <div className={cx('alert-error')}>
-              {'An error has occurred. Please refresh and try again.'}
-            </div>
-          )}
-          {/* Conditionally render the SearchResults component */}
-          {isSearchResultsVisible && (
-            <SearchResults
-              searchResults={contentNodesPosts}
-              isLoading={searchResultsLoading}
-            />
-          )}
-        </div>
-      </div>
-
       {/* Full menu */}
       <div
         className={cx(['full-menu-wrapper', isNavShown ? 'show' : undefined])}
@@ -458,8 +383,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           menusLoading={menusLoading}
           latestLoading={latestLoading}
           contentNodesPosts={contentNodesPosts}
-          searchResultsLoading={searchResultsLoading}
-          searchResultsError={searchResultsError}
           isSearchResultsVisible={isSearchResultsVisible}
         />
       </div>
