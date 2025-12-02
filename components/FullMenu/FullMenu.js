@@ -8,8 +8,8 @@ import styles from './FullMenu.module.scss'
 
 const cx = classNames.bind(styles)
 
-const SearchPosts = dynamic(
-  () => import('../../components/SearchPosts/SearchPosts'),
+const SearchTags = dynamic(
+  () => import('../../components/SearchTags/SearchTags'),
   { ssr: false }
 )
 
@@ -53,7 +53,7 @@ export default function FullMenu({
 
         {/* SEARCH BAR */}
         <div className={cx('search-bar-wrapper')}>
-          <SearchPosts setIsSearchResultsVisible={setIsSearchResultsVisible} />
+          <SearchTags setIsSearchResultsVisible={setIsSearchResultsVisible} />
         </div>
 
         {/* MENU WRAPPER – otomatis hidden jika search aktif */}
