@@ -20,7 +20,7 @@ export default function ContentWrapperEditorial({ content, children }) {
     // Domain replace (lebih ringan)
     const cleaned = content.replaceAll(
       'https://destinasian.co.id',
-      ''
+      BACKEND_URL
     )
 
     const doc = parser.parseFromString(cleaned, 'text/html')

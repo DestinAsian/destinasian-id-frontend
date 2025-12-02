@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './ContentWrapper.module.scss'
 import { useEffect, useState } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
@@ -9,85 +8,100 @@ import GallerySlider from '../../components/GallerySlider/GallerySlider'
 const cx = classNames.bind(styles)
 
 export default function ContentWrapper({ content, children }) {
-  const [transformedContent, setTransformedContent] = useState([])
+  const [output, setOutput] = useState([])
 
   useEffect(() => {
-    const extractHTMLData = () => {
-      const parser = new DOMParser()
-      const cleanedContent = content.replaceAll(
-        'https://destinasian.co.id',
-        'https://backend.destinasian.co.id'
-      )
-      const doc = parser.parseFromString(cleanedContent, 'text/html')
+    if (!content) return
 
-      // Recursive function to replace images with Next.js Image components
-      const extractImagesRecursively = (node) => {
-        if (
-          node?.nodeType === 1 &&
-          node.tagName === 'IMG' &&
-          typeof node.getAttribute === 'function' &&
-          node.getAttribute('src')?.includes(BACKEND_URL)
-        ) {
-          // Skip images inside gallery
-          if (node.closest('.gallery')) return
+    const parser = new DOMParser()
 
-          // Skip images with inline styles
-          if (node.hasAttribute('style')) return
+    // Replace domain dalam satu langkah lebih cepat
+    const cleaned = content.replaceAll(
+      'https://destinasian.co.id',
+      BACKEND_URL
+    )
 
-          let src = node.getAttribute('src') || ''
-          let srcset = node.getAttribute('srcset') || ''
-          const alt = node.getAttribute('alt') || 'Image'
-          const width = node.getAttribute('width') || 800
-          const height = node.getAttribute('height') || 600
+    const doc = parser.parseFromString(cleaned, 'text/html')
+    const nodes = Array.from(doc.body.childNodes)
 
-          // Replace domain for backend
-          const testDomain = 'https://destinasian.co.id'
-          const newDomain = 'https://backend.destinasian.co.id'
-          src = src.replace(testDomain, newDomain)
-          srcset = srcset.replaceAll(testDomain, newDomain)
-
-          const imageComponent = (
-            <Image
-              src={src}
-              alt={alt}
-              width={width}
-              height={height}
-              style={{ objectFit: 'contain' }}
-              priority
-            />
-          )
-
-          node.outerHTML = renderToStaticMarkup(imageComponent)
-        } else {
-          node.childNodes?.forEach(extractImagesRecursively)
-        }
+    const result = nodes.map((node, index) => {
+      // Jika galeri
+      if (node.nodeType === 1 && node.classList.contains('gallery')) {
+        return <GallerySlider key={index} gallerySlider={node} />
       }
 
-      Array.from(doc.body.childNodes).forEach(extractImagesRecursively)
+      // Jika IMG langsung di root
+      if (node.nodeType === 1 && node.tagName === 'IMG') {
+        return convertImage(node, index)
+      }
 
-      const elements = Array.from(doc.body.childNodes).map((node, index) => {
-        if (node?.nodeType === 1 && node.matches('div.gallery')) {
-          return <GallerySlider key={index} gallerySlider={node} />
-        }
+      // Cek IMG secara child (1 level, cukup)
+      if (node.querySelector?.('img')) {
+        convertImagesInside(node)
+      }
 
-        return (
-          <div
-            key={index}
-            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-          />
-        )
-      })
+      return (
+        <div
+          key={index}
+          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+        />
+      )
+    })
 
-      setTransformedContent(elements)
-    }
-
-    extractHTMLData()
+    setOutput(result)
   }, [content])
 
   return (
     <article className={cx('component')}>
-      <div className={cx('content-wrapper')}>{transformedContent}</div>
+      <div className={cx('content-wrapper')}>{output}</div>
       {children}
     </article>
   )
+}
+
+/** Convert IMG → Next/Image */
+function convertImage(img, index) {
+  let src = img.getAttribute('src') || ''
+  const alt = img.getAttribute('alt') || 'Image'
+  const width = parseInt(img.getAttribute('width')) || 800
+  const height = parseInt(img.getAttribute('height')) || 600
+
+  return (
+    <Image
+      key={index}
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      style={{ objectFit: 'contain' }}
+      priority
+    />
+  )
+}
+
+/** Convert IMG inside node */
+function convertImagesInside(node) {
+  const imgs = node.querySelectorAll('img')
+
+  imgs.forEach((img) => {
+    if (img.closest('.gallery')) return
+
+    const src = img.getAttribute('src')
+    const alt = img.getAttribute('alt') || 'Image'
+    const width = parseInt(img.getAttribute('width')) || 800
+    const height = parseInt(img.getAttribute('height')) || 600
+
+    // Replace <img> → <Image> string
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = `
+      <img 
+        src="${src}" 
+        alt="${alt}" 
+        width="${width}" 
+        height="${height}" 
+        style="object-fit:contain"
+      />
+    `
+    img.replaceWith(wrapper.firstChild)
+  })
 }
