@@ -1,19 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/client'
 import { useMediaQuery } from 'react-responsive'
 import Image from 'next/image'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import classNames from 'classnames/bind'
 import { IoSearchOutline } from 'react-icons/io5'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
 import destinasianLogoWht from '../../assets/logo/DAI_logo.png'
 import FullMenu from '../../components/FullMenu/FullMenu'
-const SearchInput = dynamic(() => import('../../components/SearchInput/SearchInput'))
-const SearchResults = dynamic(() => import('../../components/SearchResults/SearchResults'))
-import styles from './Header.module.scss'
-import { GetSearchResults } from '../../queries/GetSearchResults'
 
+import styles from './Header.module.scss'
 
 let cx = classNames.bind(styles)
 
@@ -34,109 +29,51 @@ export default function Header({
   isScrolled,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 })
-  const postsPerPage = 1000
-
   // Clear search input
   const clearSearch = () => {
-    setSearchQuery('') // Reset the search query
+    setSearchQuery('')
   }
 
-  // Add search query function
-  const {
-    data: searchResultsData,
-    loading: searchResultsLoading,
-    error: searchResultsError,
-  } = useQuery(GetSearchResults, {
-    variables: {
-      first: postsPerPage,
-      after: null,
-      search: searchQuery,
-    },
-    skip: searchQuery === '',
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
-  })
-
-  // Check if the search query is empty and no search results are loading, then hide the SearchResults component
   const isSearchResultsVisible = !!searchQuery
-
-  // Create a Set to store unique databaseId values
-  const uniqueDatabaseIds = new Set()
-
-  // Initialize an array to store unique posts
-  const contentNodesPosts = []
-
-  // Loop through categories (assuming similar structure)
-  searchResultsData?.categories?.edges?.forEach((post) => {
-    const { databaseId } = post.node
-
-    if (!uniqueDatabaseIds.has(databaseId)) {
-      uniqueDatabaseIds.add(databaseId)
-      contentNodesPosts.push(post.node)
-    }
-  })
-
-  // Loop through tags
-  searchResultsData?.tags?.edges?.forEach((contentNodes) => {
-    contentNodes.node?.contentNodes?.edges.forEach((post) => {
-      const { databaseId } = post.node
-
-      if (!uniqueDatabaseIds.has(databaseId)) {
-        uniqueDatabaseIds.add(databaseId)
-        contentNodesPosts.push(post.node)
-      }
-    })
-  })
-
-  // Sort contentNodesPosts array by date
-  contentNodesPosts.sort((a, b) => {
-    // Assuming your date is stored in 'date' property of the post objects
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-
-    // Compare the dates
-    return dateB - dateA
-  })
-
   return (
     <header
-    className={cx('component', {
-      sticky: isScrolled,
-      navShown: isNavShown,
-      'menu-active': isNavShown,
-    })}
-  >
-    {/* Responsive header */}
-    {isDesktop || (!isDesktop && !isNavShown) ? (
-      <>
-        <div
-          className={cx('navbar', {
-            sticky: isScrolled && !isNavShown,
-            'menu-active': isNavShown,
-          })}
-        >
-          {/* DAI logo */}
-          <Link href="/" className={cx('title')}>
-            <div className={cx('brand')}>
-              {isNavShown ? (
-                <Image
-                  src={destinasianLogoWht.src}
-                  alt="Destinasian Logo"
-                  fill
-                  sizes="100%"
-                  priority
-                />
-              ) : (
-                <Image
-                  src={destinasianLogoBlk.src}
-                  alt="Destinasian Logo"
-                  fill
-                  sizes="100%"
-                  priority
-                />
-              )}
-            </div>
-          </Link>
+      className={cx('component', {
+        sticky: isScrolled,
+        navShown: isNavShown,
+        'menu-active': isNavShown,
+      })}
+    >
+      {/* Responsive header */}
+      {isDesktop || (!isDesktop && !isNavShown) ? (
+        <>
+          <div
+            className={cx('navbar', {
+              sticky: isScrolled && !isNavShown,
+              'menu-active': isNavShown,
+            })}
+          >
+            {/* DAI logo */}
+            <Link href="/" className={cx('title')}>
+              <div className={cx('brand')}>
+                {isNavShown ? (
+                  <Image
+                    src={destinasianLogoWht.src}
+                    alt="Destinasian Logo"
+                    fill
+                    sizes="100%"
+                    priority
+                  />
+                ) : (
+                  <Image
+                    src={destinasianLogoBlk.src}
+                    alt="Destinasian Logo"
+                    fill
+                    sizes="100%"
+                    priority
+                  />
+                )}
+              </div>
+            </Link>
 
             {/* Menu Button */}
             {isNavShown == false ? (
@@ -231,7 +168,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           </div>
         </>
       ) : (
-        <>
           <div className={cx('close-button', { sticky: isScrolled })}>
             {/* close button */}
             <button
@@ -273,33 +209,7 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
               </svg>
             </button>
           </div>
-        </>
       )}
-
-      {/* Search Bar */}
-      <div className={cx('search-bar-wrapper')}>
-        {/* <div className={cx('search-input-wrapper')}>
-          <SearchInput
-            value={searchQuery}
-            onChange={(newValue) => setSearchQuery(newValue)}
-            clearSearch={clearSearch}
-          />
-        </div> */}
-        <div className={cx('search-result-wrapper')}>
-          {searchResultsError && (
-            <div className={cx('alert-error')}>
-              {'An error has occurred. Please refresh and try again.'}
-            </div>
-          )}
-
-          {isSearchResultsVisible && (
-            <SearchResults
-              searchResults={contentNodesPosts}
-              isLoading={searchResultsLoading}
-            />
-          )}
-        </div>
-      </div>
 
       {/* Full menu */}
       <div
@@ -318,9 +228,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           setSearchQuery={setSearchQuery}
           menusLoading={menusLoading}
           latestLoading={latestLoading}
-          contentNodesPosts={contentNodesPosts}
-          searchResultsLoading={searchResultsLoading}
-          searchResultsError={searchResultsError}
           isSearchResultsVisible={isSearchResultsVisible}
         />
       </div>
