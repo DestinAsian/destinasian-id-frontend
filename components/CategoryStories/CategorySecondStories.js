@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+'use client'
+
+import React, { useState, useMemo } from 'react'
 import classNames from 'classnames/bind'
 import styles from './CategorySecondStories.module.scss'
 import { useQuery } from '@apollo/client'
@@ -11,30 +13,44 @@ import TextTwoColumns from '../../components/PostTwoColumns/TextTwoColumns'
 
 const cx = classNames.bind(styles)
 
-export default function CategorySecondStories(categoryUri) {
+export default function CategorySecondStories({
+  categoryUri,
+  pinPosts,
+  name,
+  parent,
+}) {
   const postsPerPage = 6
   const [visibleCount, setVisibleCount] = useState(postsPerPage)
 
-  const uri = categoryUri?.categoryUri
-  const pinPosts = categoryUri?.pinPosts
-  const name = categoryUri?.name
-  const parent = categoryUri?.parent
-
+  const uri = categoryUri
   const travelGuideRoots = ['bali', 'jakarta', 'bandung', 'surabaya']
-  const activeCategoryName = name?.toLowerCase() || ''
-  const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
 
-  const isTravelGuideCategory =
-    travelGuideRoots.includes(activeCategoryName) ||
-    travelGuideRoots.includes(parentCategoryName)
+  /** =========================
+   *  CATEGORY TYPE CHECK
+   *  ========================= */
+  const isTravelGuideCategory = useMemo(() => {
+    const active = name?.toLowerCase() || ''
+    const parentName = parent?.node?.name?.toLowerCase() || ''
+    return (
+      travelGuideRoots.includes(active) ||
+      travelGuideRoots.includes(parentName)
+    )
+  }, [name, parent])
 
-  const contentTypes = isTravelGuideCategory
-    ? [CONTENT_TYPES.TRAVEL_GUIDES]
-    : [CONTENT_TYPES.POST]
+  const contentTypes = useMemo(
+    () =>
+      isTravelGuideCategory
+        ? [CONTENT_TYPES.TRAVEL_GUIDES]
+        : [CONTENT_TYPES.POST],
+    [isTravelGuideCategory],
+  )
 
+  /** =========================
+   *  APOLLO QUERY
+   *  ========================= */
   const { data, error, loading, fetchMore } = useQuery(GetCategoryStories, {
     variables: {
-      first: 20,
+      first: 30,
       after: null,
       id: uri,
       contentTypes,
@@ -43,61 +59,77 @@ export default function CategorySecondStories(categoryUri) {
     nextFetchPolicy: 'network-only',
   })
 
-  const updateQuery = (prev, { fetchMoreResult }) => {
-    if (!fetchMoreResult) return prev
+  /** =========================
+   *  APOLLO MERGE HANDLING
+   *  ========================= */
+  const handleFetchMore = () => {
+    const pageInfo = data?.category?.contentNodes?.pageInfo
+    if (!pageInfo?.hasNextPage) return
 
-    const prevEdges = data?.category?.contentNodes?.edges || []
-    const newEdges = fetchMoreResult?.category?.contentNodes?.edges || []
+    fetchMore({
+      variables: { after: pageInfo.endCursor },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
 
-    return {
-      ...data,
-      category: {
-        ...data?.category,
-        contentNodes: {
-          ...data?.category?.contentNodes,
-          edges: [...prevEdges, ...newEdges],
-          pageInfo: fetchMoreResult?.category?.contentNodes?.pageInfo,
-        },
+        return {
+          ...prev,
+          category: {
+            ...prev.category,
+            contentNodes: {
+              ...prev.category.contentNodes,
+              edges: [
+                ...prev.category.contentNodes.edges,
+                ...fetchMoreResult.category.contentNodes.edges,
+              ],
+              pageInfo: fetchMoreResult.category.contentNodes.pageInfo,
+            },
+          },
+        }
       },
-    }
+    })
   }
 
   const fetchMorePosts = () => {
     setVisibleCount((prev) => prev + postsPerPage)
-    if (!loading && data?.category?.contentNodes?.pageInfo?.hasNextPage) {
-      fetchMore({
-        variables: { after: data?.category?.contentNodes?.pageInfo?.endCursor },
-        updateQuery,
-      })
-    }
+    handleFetchMore()
   }
 
-  if (error) return <pre>{JSON.stringify(error)}</pre>
-  if (loading) {
+  /** =========================
+   *  POST PROCESSING
+   *  ========================= */
+  const mergedPosts = useMemo(() => {
+    const allPosts = data?.category?.contentNodes?.edges?.map((p) => p.node) || []
+    const pinned = pinPosts?.pinPost ? [pinPosts.pinPost] : []
+
+    const merged = [...pinned, ...allPosts]
+    const unique = []
+
+    for (const post of merged) {
+      if (post && !unique.some((x) => x?.id === post.id)) {
+        unique.push(post)
+      }
+    }
+    return unique
+  }, [data, pinPosts])
+
+  const startIndex = isTravelGuideCategory ? 2 : 0
+  const postsToDisplay = mergedPosts.slice(startIndex, startIndex + visibleCount)
+
+  /** =========================
+   *  RENDERING
+   *  ========================= */
+  if (error)
+    return <pre className="text-red-500">{JSON.stringify(error, null, 2)}</pre>
+
+  if (!data && loading) {
     return (
       <div className="mx-auto flex max-w-full justify-center md:max-w-[700px]">
-        <Button className="gap-x-4">Loading...</Button>
+        <Button disabled className="gap-x-4 opacity-60">
+          Loading...
+        </Button>
       </div>
     )
   }
-
-  const allPosts =
-    data?.category?.contentNodes?.edges?.map((post) => post.node) || []
-  const allPinPosts = pinPosts?.pinPost ? [pinPosts.pinPost] : []
-
-  const mergedPosts = [...allPinPosts, ...allPosts].reduce(
-    (uniquePosts, post) => {
-      if (!uniquePosts.some((p) => p?.id === post?.id)) uniquePosts.push(post)
-      return uniquePosts
-    },
-    [],
-  )
-
-  const startIndex = isTravelGuideCategory ? 2 : 0
-  const postsToDisplay = mergedPosts.slice(
-    startIndex,
-    startIndex + visibleCount,
-  )
 
   return (
     <div className={cx('component')}>
@@ -114,6 +146,7 @@ export default function CategorySecondStories(categoryUri) {
                   featuredImage={post?.featuredImage?.node}
                 />
 
+                {/* GUIDE META */}
                 {guideInfo && (
                   <div className={cx('guide-info')}>
                     {guideInfo?.guideName && (
@@ -184,14 +217,18 @@ export default function CategorySecondStories(categoryUri) {
           })}
         </div>
       ) : (
-        <div className="mx-auto flex min-h-60 max-w-full items-center justify-center md:max-w-[700px]">
+        <div className="mx-auto flex min-h-60 items-center justify-center">
           There are no results in this category...
         </div>
       )}
 
       {mergedPosts.length - startIndex > visibleCount && (
         <div className="mx-auto flex w-full justify-center">
-          <Button onClick={fetchMorePosts} className="gap-x-4">
+          <Button
+            onClick={fetchMorePosts}
+            disabled={loading}
+            className="gap-x-4"
+          >
             {loading ? 'Loading...' : 'LOAD MORE...'}
           </Button>
         </div>

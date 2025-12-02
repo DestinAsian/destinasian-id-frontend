@@ -6,8 +6,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 0;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto;
   width: 100%;
   position: relative;
 
@@ -32,6 +31,7 @@
     width: 100%;
   }
 }
+
 .fokusLayoutGrid {
   display: flex;
   gap: 2rem;
@@ -50,15 +50,13 @@
   flex: 0 0 70%;
 }
 
-
 .guide-info {
-  margin: 1.5rem 1rem 0 1rem;
+  margin: 1.5rem 1rem 0;
   font-size: 0.95rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
   font-family: 'Inter', sans-serif;
 
   .separator {
@@ -66,31 +64,21 @@
     font-weight: bold;
   }
 
-.guide-name {
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-.guide-location {
-  color: #000000;
-  font-size: 0.95rem;
-  &:hover {
-    color: var(--wpe--color--teal--deep);
+  .guide-name {
+    font-weight: bold;
+    font-size: 1rem;
   }
-}
-.guide-price {
-  color: #000000;
-  font-size: 0.95rem;
-}
 
-.book-now-button {
-  color: rgb(0, 0, 0);
-  font-size: 0.95rem;
-  text-decoration: none;
-  transition: background 0.2s;
+  .guide-location,
+  .guide-price,
+  .book-now-button {
+    color: #000;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
 
-  &:hover {
-    color: var(--wpe--color--teal--deep);
+    &:hover {
+      color: var(--wpe--color--teal--deep);
+    }
   }
-}
 }
