@@ -1,8 +1,5 @@
 const { withFaust, getWpHostname } = require('@faustwp/core')
 
-/**
- * @type {import('next').NextConfig}
- **/
 module.exports = withFaust({
   reactStrictMode: true,
   sassOptions: {
@@ -18,7 +15,7 @@ module.exports = withFaust({
         pathname: '/**',
       },
     ],
-    domains: ['backend.destinasian.co.id', 'destinasian.co.id'],
+    domains: ['backend.destinasian.co.id/id/wp', 'destinasian.co.id'],
   },
 
   i18n: {
@@ -37,40 +34,8 @@ module.exports = withFaust({
       {
         source: '/advertorial/:slug*',
         destination: '/partner-content/:slug*',
-        permanent: true, // 301 permanent redirect
+        permanent: true,
       },
-      // Tambahkan redirect lain sesuai kebutuhan
     ]
   },
-
-  // async rewrites() {
-  //   return [
-  //     // Sitemap index
-  //     {
-  //       source: '/sitemap_index.xml',
-  //       destination: 'https://backend.destinasian.co.id/sitemap_index.xml',
-  //     },
-  //     // Semua sitemap lain (misalnya post-sitemap.xml, page-sitemap.xml, dll)
-  //     {
-  //       source: '/:slug*-sitemap.xml',
-  //       destination: 'https://backend.destinasian.co.id/:slug*-sitemap.xml',
-  //     },
-  //   ]
-  // },
-  // async headers() {
-  //   return [
-  //     {
-  //       source: '/sitemap_index.xml',
-  //       headers: [
-  //         { key: 'X-Robots-Tag', value: 'all' },
-  //       ],
-  //     },
-  //     {
-  //       source: '/:slug*-sitemap.xml',
-  //       headers: [
-  //         { key: 'X-Robots-Tag', value: 'all' },
-  //       ],
-  //     },
-  //   ]
-  // },
 })
