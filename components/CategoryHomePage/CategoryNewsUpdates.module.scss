@@ -43,6 +43,7 @@
   height: 60vw;
   max-height: 600px;
   overflow: hidden;
+  cursor: pointer;
 
   @media (min-width: $breakpoint-medium) {
     height: 600px;
@@ -82,14 +83,13 @@
 }
 
 .postTitle {
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-family: 'Scheherazade New', serif;
   color: var(--wpe--color--white);
-  padding: 0 6rem 0 0;
+  padding: 0 2rem 0 0;
   display: block;
   text-align: left;
   width: 100%;
-  // letter-spacing: -0.5px;
   text-transform: uppercase;
   line-height: 1.3rem;
 

@@ -81,14 +81,18 @@ $font-serif: 'Scheherazade New', serif;
   color: var(--wpe--color--black);
   line-height: 1.2;
   display: -webkit-box;
-  line-clamp: 4;
+  // line-clamp: 4;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
   padding: 1rem 0 0 0;
 
   @media (min-width: $breakpoint-small) {
-    padding: 1rem 0 0.5rem 0;
+    padding: 1rem 0 0 0;
+  }
+  p {
+    margin: 0;
   }
 }
 
@@ -119,6 +123,9 @@ $font-serif: 'Scheherazade New', serif;
   margin-bottom: 8px;
 }
 
+.footer {
+  padding-top: 1rem;
+}
 .readMore {
   font-size: 0.85rem;
   color: var(--wpe--color--black);

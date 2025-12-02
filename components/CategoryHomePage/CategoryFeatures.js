@@ -1,26 +1,17 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { useQuery } from '@apollo/client'
-import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import Link from 'next/link'
 import Image from 'next/image'
 import { format } from 'date-fns'
 import styles from './CategoryFeatures.module.scss'
 
-const CategoryFeatures = () => {
-  const { data, loading, error } = useQuery(GetCategoryFeatures, {
-    variables: { id: '20' },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+const CategoryFeatures = ({ data }) => {
+  if (!data) return null
 
-  const posts = useMemo(() => data?.category?.posts?.edges || [], [data])
+  const { name, uri, categoryImages, posts } = data
 
-  if (loading || !data?.category) return null
-  if (error) return <p className={styles.error}>Error: {error.message}</p>
-
-  const { name, uri, categoryImages } = data.category
+  const postEdges = useMemo(() => posts?.edges || [], [posts])
 
   return (
     <section className={styles.CategoryFeaturesWrapper}>
@@ -37,17 +28,11 @@ const CategoryFeatures = () => {
       </header>
 
       <div className={styles.gridSection}>
-        {posts.map(({ node: post }) => {
+        {postEdges.map(({ node: post }) => {
           const image = post.featuredImage?.node?.mediaItemUrl
 
-          // Cari kategori yang punya parent
           const categoryList = post.categories?.edges?.map((e) => e.node) || []
-
-          const categoryWithParent = categoryList.find(
-            (cat) => cat.parent?.node,
-          )
-
-          // Jika tidak ada, fallback ke kategori pertama
+          const categoryWithParent = categoryList.find(cat => cat.parent?.node)
           const category = categoryWithParent || categoryList[0]
 
           const parentCategory = category?.parent?.node?.name || ''
@@ -70,12 +55,10 @@ const CategoryFeatures = () => {
                   </div>
                 )}
 
-                {/*Parent category tampil dengan benar */}
                 {parentCategory && (
                   <p className={styles.parentCategory}>{parentCategory}</p>
                 )}
 
-                {/*Sub category */}
                 {subCategory && (
                   <p className={styles.postCategory}>{subCategory}</p>
                 )}
