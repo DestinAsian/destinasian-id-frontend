@@ -1,84 +1,79 @@
 @import 'styles/breakpoints';
 
+/* WRAPPER UTAMA */
 .componentVideos {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: var(--wpe--color--teal--deep);
-  padding: 2rem 0;
-
-  @media screen and (min-width: $breakpoint-small) {
-    padding: 3rem 0;
-  }
+  padding: clamp(2rem, 3vw, 3rem) 0;
 }
 
+/* TITLE VIDEOS */
 .titleVideos {
-  font-size: clamp(2rem, 2vw + 1rem, 3rem);
-  color: var(--wpe--color--white);
-  font-family: 'Scheherazade New', serif;
-  text-align: left;
   width: 100%;
   max-width: var(--wpe--container--max--width);
-  margin-bottom: 2rem;
+  margin-bottom: clamp(2rem, 3vw, 3rem);
+  font-family: 'Scheherazade New', serif;
+  font-size: clamp(2rem, 2vw + 1rem, 3rem);
   font-weight: 530;
   letter-spacing: 0.03em;
-
-  @media screen and (min-width: $breakpoint-small) {
-    margin-bottom: 3rem;
-  }
+  text-align: left;
+  color: var(--wpe--color--white);
 }
 
+/* SECTION GRID */
 .newsUpdates {
+  width: 100%;
   display: flex;
   justify-content: center;
+}
+
+/* CONTENT WRAPPER */
+.twoColumns {
   width: 100%;
+  max-width: var(--wpe--container--max--width);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 3;
 
-  .twoColumns {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: var(--wpe--container--max--width);
-    position: relative;
-    z-index: 3;
-    gap: 1rem;
-
-    @media (min-width: $breakpoint-small) {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 2.5%;
-    }
-  }
-
-  .leftColumn {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    order: 1;
-    z-index: 2;
-  }
-
-  .rightColumn {
-    flex: 0 0 20%;
-    order: 2;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
     align-items: flex-start;
-
-    @media (max-width: $breakpoint-small) {
-      width: 100%;
-      margin-top: 1.5rem;
-    }
-
-    .outnowWrapper {
-      position: sticky;
-      top: 5rem;
-      width: 100%;
-      min-height: 600px;
-    }
+    gap: 2.5%;
   }
 }
 
+/* LEFT — VIDEO AREA */
+.leftColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+/* RIGHT — ADS AREA */
+.rightColumn {
+  flex: 0 0 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: normal;
+
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+
+  .outnowWrapper {
+    position: sticky;
+    top: 5rem; 
+    width: 100%;
+    min-height: 600px;
+  }
+}
+
+/* VIDEO WRAPPER */
 .videoWrapper {
   width: 100%;
   display: flex;

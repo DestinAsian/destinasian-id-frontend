@@ -1,6 +1,12 @@
 'use client'
 
-import React, { Suspense, useEffect, useState, memo } from 'react'
+import React, {
+  Suspense,
+  useEffect,
+  useState,
+  useRef,
+  memo,
+} from 'react'
 import { useQuery } from '@apollo/client'
 import dynamic from 'next/dynamic'
 import classNames from 'classnames/bind'
@@ -16,7 +22,7 @@ import CategoryUpdates from '../CategoryHomePage/CategoryUpdates'
 import CategoryNewsUpdates from '../CategoryHomePage/CategoryNewsUpdates'
 import CategoryFeatures from '../CategoryHomePage/CategoryFeatures'
 
-// Dynamic imports hanya untuk komponen iklan berat
+// Dynamic import untuk komponen ads berat
 const MastHeadTopHome = dynamic(() =>
   import('../AdUnit/MastHeadTop/MastHeadTopHome'),
 )
@@ -29,30 +35,43 @@ const MastHeadBottomHome = dynamic(() =>
 const MastHeadBottomMobileHome = dynamic(() =>
   import('../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'),
 )
-const HalfPageHome1 = dynamic(() => import('../AdUnit/HalfPage1/HalfPageHome1'))
+const HalfPageHome1 = dynamic(() =>
+  import('../AdUnit/HalfPage1/HalfPageHome1'),
+)
 
 const cx = classNames.bind(styles)
 
-// Hook lebih efisien (resize di-throttle)
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(false)
+  const timerRef = useRef(null)
+
   useEffect(() => {
-    const resize = () => setIsMobile(window.innerWidth <= breakpoint)
+    const update = () => setIsMobile(window.innerWidth <= breakpoint)
+
     const throttled = () => {
-      clearTimeout(resize._timer)
-      resize._timer = setTimeout(resize, 150)
+      if (timerRef.current) clearTimeout(timerRef.current)
+      timerRef.current = setTimeout(update, 150)
     }
-    resize()
+
+    update()
     window.addEventListener('resize', throttled, { passive: true })
-    return () => window.removeEventListener('resize', throttled)
+
+    return () => {
+      clearTimeout(timerRef.current)
+      window.removeEventListener('resize', throttled)
+    }
   }, [breakpoint])
+
   return isMobile
 }
 
+/* -------------------------------
+        MAIN COMPONENT
+-------------------------------- */
 function FrontPageLayout() {
   const isMobile = useIsMobile()
 
-  // Gunakan parallel query loading untuk efisiensi render
+  // === QUERY ===
   const { data: travelGuideData, loading: travelGuideLoading } = useQuery(
     GetChildrenTravelGuides,
     {
@@ -79,9 +98,11 @@ function FrontPageLayout() {
     },
   )
 
+  // === DATA EXTRACT ===
   const categoryEdges = updatesData?.category?.children?.edges || []
+  const hasGuides =
+    travelGuideData?.category?.children?.edges?.length > 0
   const categoryFeatures = featuresData?.category
-  const hasGuides = travelGuideData?.category?.children?.edges?.length > 0
 
   return (
     <>
@@ -90,7 +111,7 @@ function FrontPageLayout() {
         {isMobile ? <MastHeadTopMobileHome /> : <MastHeadTopHome />}
       </div>
 
-      {/* === TRAVEL GUIDE === */}
+      {/* === TRAVEL GUIDES === */}
       {!travelGuideLoading && hasGuides && (
         <>
           <section className={cx('component-updates')}>
@@ -121,8 +142,7 @@ function FrontPageLayout() {
 
       {/* === CATEGORY TITLES === */}
       {categoryEdges.map(({ node: category }) => {
-        const parentName = category?.parent?.node?.name || ''
-        const childName = category.name
+        const parent = category?.parent?.node?.name
         return (
           <section
             key={category.id}
@@ -130,14 +150,14 @@ function FrontPageLayout() {
           >
             <Link href={category.uri}>
               <h2 className={styles.title}>
-                {parentName ? `${parentName} ${childName}` : childName}
+                {parent ? `${parent} ${category.name}` : category.name}
               </h2>
             </Link>
           </section>
         )
       })}
 
-      {/* === CATEGORY NEWS + HALF PAGE === */}
+      {/* === NEWS + HALF PAGE === */}
       {categoryEdges.length > 0 && (
         <>
           <section className={cx('component-news-updates')}>

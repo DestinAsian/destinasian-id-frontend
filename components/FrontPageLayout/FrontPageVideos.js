@@ -7,34 +7,53 @@ import classNames from 'classnames/bind'
 import styles from './FrontPageVideos.module.scss'
 import { GetVideoHomepage } from '../../queries/GetVideoHomepage'
 
-// ✅ Lazy-load komponen berat (iklan & video wrapper)
+const cx = classNames.bind(styles)
+
+// Skeleton fallback
+const Skeleton400 = () => <div style={{ minHeight: '400px' }} />
+const Skeleton600 = () => <div style={{ minHeight: '600px' }} />
+
+// Dynamic imports
 const ContentWrapperVideo = dynamic(
   () => import('../ContentWrapperVideo/ContentWrapperVideo'),
-  {
-    ssr: false,
-    loading: () => <div style={{ minHeight: '400px' }} />,
-  },
-)
-const HalfPageHome2 = dynamic(
-  () => import('../../components/AdUnit/HalfPage2/HalfPageHome2'),
-  {
-    ssr: false,
-    loading: () => <div style={{ minHeight: '600px' }} />,
-  },
+  { ssr: false, loading: Skeleton400 }
 )
 
-const cx = classNames.bind(styles)
+const HalfPageHome2 = dynamic(
+  () => import('../../components/AdUnit/HalfPage2/HalfPageHome2'),
+  { ssr: false, loading: Skeleton600 }
+)
 
 function FrontPageVideos() {
   const { data, loading, error } = useQuery(GetVideoHomepage, {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'network-only',
+    ssr: false,
   })
 
-  if (loading || error) return null
-
+  // Ambil langsung tanpa useMemo → lebih ringan
   const video = data?.videos?.edges?.[0]?.node
-  if (!video) return null
+
+  // Saat loading → jaga struktur layout
+  if (loading) {
+    return (
+      <section className={cx('componentVideos')}>
+        <h2 className={cx('titleVideos')}>Videos</h2>
+        <div className={cx('newsUpdates')}>
+          <div className={cx('twoColumns')}>
+            <div className={cx('leftColumn')}>
+              <Skeleton400 />
+            </div>
+            <aside className={cx('rightColumn')}>
+              <Skeleton600 />
+            </aside>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error || !video) return null
 
   return (
     <section className={cx('componentVideos')}>
@@ -42,23 +61,21 @@ function FrontPageVideos() {
 
       <div className={cx('newsUpdates')}>
         <div className={cx('twoColumns')}>
-          {/* === VIDEO LEFT === */}
+
+          {/* LEFT - VIDEO */}
           <div className={cx('leftColumn')}>
-            <div className={cx('videoWrapper')}>
-              <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
-                <ContentWrapperVideo video={video} />
-              </Suspense>
-            </div>
+            <Suspense fallback={<Skeleton400 />}>
+              <ContentWrapperVideo video={video} />
+            </Suspense>
           </div>
 
-          {/* === AD RIGHT === */}
+          {/* RIGHT - AD */}
           <aside className={cx('rightColumn')}>
-            <div className={cx('outnowWrapper')}>
-              <Suspense fallback={<div style={{ minHeight: '600px' }} />}>
-                <HalfPageHome2 />
-              </Suspense>
-            </div>
+            <Suspense fallback={<Skeleton600 />}>
+              <HalfPageHome2 />
+            </Suspense>
           </aside>
+
         </div>
       </div>
     </section>
