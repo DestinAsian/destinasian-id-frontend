@@ -5,10 +5,10 @@ import Image from 'next/image'
 import { IoSearchOutline } from 'react-icons/io5'
 import classNames from 'classnames/bind'
 import FullMenu from '../../components/FullMenu/FullMenu'
-import SearchResults from '../../components/SearchResults/SearchResults'
+// import SearchResults from '../../components/SearchResults/SearchResults'
 import destinasianLogo from '../../assets/logo/destinasian-indo-logo.png'
 import styles from './CategoryHeader.module.scss'
-import { GetSearchResults } from '../../queries/GetSearchResults'
+// import { GetSearchResults } from '../../queries/GetSearchResults'
 
 let cx = classNames.bind(styles)
 
@@ -29,69 +29,13 @@ export default function CategoryHeader({
   isScrolled,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 })
-  const postsPerPage = 1000
 
   // Clear search input
   const clearSearch = () => {
     setSearchQuery('') // Reset the search query
   }
 
-  // Add search query function
-  const {
-    data: searchResultsData,
-    loading: searchResultsLoading,
-    error: searchResultsError,
-  } = useQuery(GetSearchResults, {
-    variables: {
-      first: postsPerPage,
-      after: null,
-      search: searchQuery,
-    },
-    skip: searchQuery === '',
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
 
-  // Check if the search query is empty and no search results are loading, then hide the SearchResults component
-  const isSearchResultsVisible = !!searchQuery
-
-  // Create a Set to store unique databaseId values
-  const uniqueDatabaseIds = new Set()
-
-  // Initialize an array to store unique posts
-  const contentNodesPosts = []
-
-  // Loop through categories (assuming similar structure)
-  searchResultsData?.categories?.edges?.forEach((post) => {
-    const { databaseId } = post.node
-
-    if (!uniqueDatabaseIds.has(databaseId)) {
-      uniqueDatabaseIds.add(databaseId)
-      contentNodesPosts.push(post.node)
-    }
-  })
-
-  // Loop through tags
-  searchResultsData?.tags?.edges?.forEach((contentNodes) => {
-    contentNodes.node?.contentNodes?.edges.forEach((post) => {
-      const { databaseId } = post.node
-
-      if (!uniqueDatabaseIds.has(databaseId)) {
-        uniqueDatabaseIds.add(databaseId)
-        contentNodesPosts.push(post.node)
-      }
-    })
-  })
-
-  // Sort contentNodesPosts array by date
-  contentNodesPosts.sort((a, b) => {
-    // Assuming your date is stored in 'date' property of the post objects
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-
-    // Compare the dates
-    return dateB - dateA
-  })
 
   return (
     <header
@@ -252,30 +196,7 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
         </>
       )}
 
-      {/* Search Bar */}
-      <div className={cx('search-bar-wrapper')}>
-        {/* <div className={cx('search-input-wrapper')}>
-          <SearchInput
-            value={searchQuery}
-            onChange={(newValue) => setSearchQuery(newValue)}
-            clearSearch={clearSearch}
-          />
-        </div> */}
-        <div className={cx('search-result-wrapper')}>
-          {searchResultsError && (
-            <div className={cx('alert-error')}>
-              {'An error has occurred. Please refresh and try again.'}
-            </div>
-          )}
-
-          {isSearchResultsVisible && (
-            <SearchResults
-              searchResults={contentNodesPosts}
-              isLoading={searchResultsLoading}
-            />
-          )}
-        </div>
-      </div>
+   
 
       {/* Full menu */}
       <div
@@ -294,10 +215,10 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           setSearchQuery={setSearchQuery}
           menusLoading={menusLoading}
           latestLoading={latestLoading}
-          contentNodesPosts={contentNodesPosts}
-          searchResultsLoading={searchResultsLoading}
-          searchResultsError={searchResultsError}
-          isSearchResultsVisible={isSearchResultsVisible}
+          // contentNodesPosts={contentNodesPosts}
+          // searchResultsLoading={searchResultsLoading}
+          // searchResultsError={searchResultsError}
+          // isSearchResultsVisible={isSearchResultsVisible}
         />
       </div>
     </header>
