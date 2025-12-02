@@ -311,8 +311,8 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
               type="button"
               className={cx('close-icon')}
               onClick={() => {
-                setIsNavShown(!isNavShown) // Toggle navigation
-                clearSearch // Clear search input
+                setIsNavShown(!isNavShown) 
+                clearSearch
               }}
               aria-label="Toggle navigation"
               aria-controls={cx('primary-navigation')}

@@ -1,14 +1,11 @@
-import { useQuery } from '@apollo/client'
 import { useMediaQuery } from 'react-responsive'
 import Link from 'next/link'
 import Image from 'next/image'
 import { IoSearchOutline } from 'react-icons/io5'
 import classNames from 'classnames/bind'
 import FullMenu from '../../components/FullMenu/FullMenu'
-// import SearchResults from '../../components/SearchResults/SearchResults'
 import destinasianLogo from '../../assets/logo/destinasian-indo-logo.png'
 import styles from './CategoryHeader.module.scss'
-// import { GetSearchResults } from '../../queries/GetSearchResults'
 
 let cx = classNames.bind(styles)
 
@@ -215,10 +212,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           setSearchQuery={setSearchQuery}
           menusLoading={menusLoading}
           latestLoading={latestLoading}
-          // contentNodesPosts={contentNodesPosts}
-          // searchResultsLoading={searchResultsLoading}
-          // searchResultsError={searchResultsError}
-          // isSearchResultsVisible={isSearchResultsVisible}
         />
       </div>
     </header>
