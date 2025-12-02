@@ -42,9 +42,6 @@ export default function HomepageHeader({
   const clearSearch = () => {
     setSearchQuery('') // Reset the search query
   }
-
- 
-
   const isSearchResultsVisible = !!searchQuery
 
 
