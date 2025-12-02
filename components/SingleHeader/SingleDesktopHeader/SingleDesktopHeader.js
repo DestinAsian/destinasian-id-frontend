@@ -2,9 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './SingleDesktopHeader.module.scss'
-
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
-
 import Link from 'next/link'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 
