@@ -39,178 +39,132 @@ export default function FeatureWell({ featureWells }) {
   }, [])
 
   return (
-    <>
-      <Div100vh>
-        <Swiper
-          onSlideChange={(swiper) => {
-            // Get the current slide index from Swiper
-            const currentSlideIndex = swiper.activeIndex
-            const currentSlide = featureWells[currentSlideIndex]
+    <Div100vh>
+      <Swiper
+        onSlideChange={(swiper) => {
+          const currentSlideIndex = swiper.activeIndex
+          const currentSlide = featureWells[currentSlideIndex]
 
-            if (currentSlide.type === 'video') {
-              const videoElement = document.getElementById(
-                `video-${currentSlideIndex}`,
-              )
-
-              if (videoElement) {
-                videoElement.currentTime = 0 // Start the video from the beginning
-                videoElement.play() // Play the video
-              }
+          if (currentSlide.type === 'video') {
+            const videoElement = document.getElementById(
+              `video-${currentSlideIndex}`,
+            )
+            if (videoElement) {
+              videoElement.currentTime = 0
+              videoElement.play()
             }
-          }}
-          effect={'fade'}
-          autoplay={{
-            delay: 15000,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            el: '.swiper-custom-pagination',
-            clickable: 'true',
-            type: 'bullets',
-            renderBullet: function (i, className) {
-              return `
+          }
+        }}
+        effect={'fade'}
+        autoplay={{
+          delay: 15000,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          el: '.swiper-custom-pagination',
+          clickable: true,
+          type: 'bullets',
+          renderBullet: (i, className) => `
             <button class="${className}">
-            <svg class= "progress">
-            <circle class="circle-origin" cx="16" cy="16" r="10.5"></circle>
-            </svg>
-            <span></span>
+              <svg class="progress">
+                <circle class="circle-origin" cx="16" cy="16" r="10.5"></circle>
+              </svg>
+              <span></span>
             </button>
-            `
-            },
-          }}
-          modules={[EffectFade, Autoplay, Pagination]}
-          className="fw-swiper-wrapper"
-        >
-          {featureWells?.map((featureWell, index) => (
-            <SwiperSlide key={index}>
-              {featureWell.type === 'image' && featureWell.url && (
-                <Link href={featureWell.url}>
-                  {isDesktop && (
-                    <div className={cx('image-wrapper')}>
-                      <Image
-                        src={featureWell.desktopSrc}
-                        alt="Feature Well Image"
-                        fill
-                        sizes="100%"
-                        priority
-                      />
-                      <div className={cx('caption-wrapper')}>
-                        {featureWell.category && featureWell.categoryLink && (
-                          <div className={cx('category-wrapper')}>
-                            <Link href={featureWell.categoryLink}>
-                              <h1 className={cx('category')}>
-                                {featureWell.category}
-                              </h1>
-                            </Link>
-                          </div>
-                        )}
-                        {featureWell.caption && (
-                          <h1
-                            ref={(el) => (captionRefs.current[index] = el)}
-                            className={cx('caption')}
-                          >
-                            {featureWell.caption}
+          `,
+        }}
+        modules={[EffectFade, Autoplay, Pagination]}
+        className="fw-swiper-wrapper"
+      >
+        {featureWells?.map((featureWell, index) => (
+          <SwiperSlide key={index}>
+            {featureWell.type === 'image' && featureWell.url && (
+              <Link href={featureWell.url}>
+                <div className={cx('image-wrapper')}>
+                  <Image
+                    src={isDesktop ? featureWell.desktopSrc : featureWell.mobileSrc}
+                    alt="Feature Well Image"
+                    fill
+                    sizes="100vw"
+                    priority
+                  />
+                  <div className={cx('caption-wrapper')}>
+                    {featureWell.category && featureWell.categoryLink && (
+                      <div className={cx('category-wrapper')}>
+                        <Link href={featureWell.categoryLink}>
+                          <h1 className={cx('category')}>
+                            {featureWell.category}
                           </h1>
-                        )}
-                        {featureWell.standFirst && (
-                          <div className={cx('stand-first-wrapper')}>
-                            <h2 className={cx('stand-first')}>
-                              {featureWell.standFirst}
-                            </h2>
-                          </div>
-                        )}
+                        </Link>
                       </div>
-                      <div className={cx('bottom-gradient')}></div>
-                    </div>
-                  )}
-                  {isMobile && (
-                    <div className={cx('image-wrapper')}>
-                      <Image
-                        src={featureWell.mobileSrc}
-                        alt="Feature Well Image"
-                        fill
-                        sizes="100%"
-                        priority
-                      />
-                      <div className={cx('caption-wrapper')}>
-                        {featureWell.category && featureWell.categoryLink && (
-                          <div className={cx('category-wrapper')}>
-                            <Link href={featureWell.categoryLink}>
-                              <h1 className={cx('category')}>
-                                {featureWell.category}
-                              </h1>
-                            </Link>
-                          </div>
-                        )}
-                        {featureWell.caption && (
-                          <h1
-                            ref={(el) => (captionRefs.current[index] = el)}
-                            className={cx('caption')}
-                          >
-                            {featureWell.caption}
-                          </h1>
-                        )}
-                        {featureWell.standFirst && (
-                          <div className={cx('stand-first-wrapper')}>
-                            <h2 className={cx('stand-first')}>
-                              {featureWell.standFirst}
-                            </h2>
-                          </div>
-                        )}
+                    )}
+                    {featureWell.caption && (
+                      <h1
+                        ref={(el) => (captionRefs.current[index] = el)}
+                        className={cx('caption')}
+                      >
+                        {featureWell.caption}
+                      </h1>
+                    )}
+                    {featureWell.standFirst && (
+                      <div className={cx('stand-first-wrapper')}>
+                        <h2 className={cx('stand-first')}>
+                          {featureWell.standFirst}
+                        </h2>
                       </div>
-                      <div className={cx('bottom-gradient')}></div>
-                    </div>
-                  )}
-                </Link>
-              )}
-              {featureWell.type === 'video' && featureWell.url && (
-                <Link href={featureWell.url}>
-                  <div className={cx('video-wrapper')}>
-                    <video
-                      id={`video-${index}`}
-                      src={featureWell.videoSrc}
-                      className="video-content"
-                      loop
-                      autoPlay
-                      playsInline
-                      muted
-                    />
-
-                    <div className={cx('caption-wrapper')}>
-                      {featureWell.category && featureWell.categoryLink && (
-                        <div className={cx('category-wrapper')}>
-                          <Link href={featureWell.categoryLink}>
-                            <h1 className={cx('category')}>
-                              {featureWell.category}
-                            </h1>
-                          </Link>
-                        </div>
-                      )}
-                      {featureWell.caption && (
-                        <h1
-                          ref={(el) => (captionRefs.current[index] = el)}
-                          className={cx('caption')}
-                        >
-                          {featureWell.caption}
-                        </h1>
-                      )}
-                      {featureWell.standFirst && (
-                        <div className={cx('stand-first-wrapper')}>
-                          <h2 className={cx('stand-first')}>
-                            {featureWell.standFirst}
-                          </h2>
-                        </div>
-                      )}
-                    </div>
-                    <div className={cx('bottom-gradient')}></div>
+                    )}
                   </div>
-                </Link>
-              )}
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        <div class="swiper-custom-pagination"></div>
-      </Div100vh>
-    </>
+                  <div className={cx('bottom-gradient')}></div>
+                </div>
+              </Link>
+            )}
+
+            {featureWell.type === 'video' && featureWell.url && (
+              <Link href={featureWell.url}>
+                <div className={cx('video-wrapper')}>
+                  <video
+                    id={`video-${index}`}
+                    src={featureWell.videoSrc}
+                    className="video-content"
+                    loop
+                    autoPlay
+                    playsInline
+                    muted
+                  />
+                  <div className={cx('caption-wrapper')}>
+                    {featureWell.category && featureWell.categoryLink && (
+                      <div className={cx('category-wrapper')}>
+                        <Link href={featureWell.categoryLink}>
+                          <h1 className={cx('category')}>
+                            {featureWell.category}
+                          </h1>
+                        </Link>
+                      </div>
+                    )}
+                    {featureWell.caption && (
+                      <h1
+                        ref={(el) => (captionRefs.current[index] = el)}
+                        className={cx('caption')}
+                      >
+                        {featureWell.caption}
+                      </h1>
+                    )}
+                    {featureWell.standFirst && (
+                      <div className={cx('stand-first-wrapper')}>
+                        <h2 className={cx('stand-first')}>
+                          {featureWell.standFirst}
+                        </h2>
+                      </div>
+                    )}
+                  </div>
+                  <div className={cx('bottom-gradient')}></div>
+                </div>
+              </Link>
+            )}
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      <div className="swiper-custom-pagination"></div>
+    </Div100vh>
   )
 }
