@@ -1,4 +1,3 @@
-
 import { gql } from '@apollo/client'
 
 export const GetContentNodesSearch = gql`
@@ -10,7 +9,7 @@ export const GetContentNodesSearch = gql`
         databaseId
         uri
         slug
-
+        date
         ... on NodeWithTitle {
           title
         }
@@ -33,23 +32,27 @@ export const GetContentNodesSearch = gql`
         }
 
         ... on Post {
+          date
           categories {
             edges {
               node {
                 name
                 uri
               }
+              isPrimary
             }
           }
         }
 
         ... on TravelGuide {
+          date
           categories {
             edges {
               node {
                 name
                 uri
               }
+              isPrimary
             }
           }
         }

@@ -237,3 +237,13 @@
 .search-input:focus-visible {
   outline: none;
 }
+
+.meta-date .meta:last-child {
+  opacity: 0.7;
+}
+
+.meta-date {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}

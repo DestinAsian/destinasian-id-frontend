@@ -1,6 +1,12 @@
 'use client'
 
-import React, { useState, useDeferredValue, useRef, useEffect, useMemo } from 'react'
+import React, {
+  useState,
+  useDeferredValue,
+  useRef,
+  useEffect,
+  useMemo,
+} from 'react'
 import { useQuery } from '@apollo/client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,6 +16,7 @@ import { FaSpinner } from 'react-icons/fa'
 
 import styles from './SearchTags.module.scss'
 import { GetContentNodesSearch } from '../../queries/GetContentNodesSearch'
+import PostInfo from '../../components/PostInfo/PostInfo'
 
 const cx = classNames.bind(styles)
 
@@ -28,11 +35,8 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
     }
   }
 
-  /* ----------------------------------------------
-     SEARCH CONTENT NODES
-  ------------------------------------------------*/
   const { data, loading, error } = useQuery(GetContentNodesSearch, {
-    variables: { search: deferred, first: 50 },
+    variables: { search: deferred, first: 1000 },
     skip: !isReady,
     fetchPolicy: 'no-cache',
   })
@@ -51,25 +55,20 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
     })
   }, [data])
 
-  /* ----------------------------------------------
-     UPDATE FULL MENU VISIBILITY — SAMA DENGAN SEARCHPOSTS
-  ------------------------------------------------*/
   useEffect(() => {
     if (setIsSearchResultsVisible) {
       setIsSearchResultsVisible(keyword.length > 0 || results.length > 0)
     }
   }, [keyword, results, setIsSearchResultsVisible])
 
-  /* ----------------------------------------------
-     HELPERS
-  ------------------------------------------------*/
   const highlight = (text, key) => {
     if (!key || !text) return text
     const regex = new RegExp(`(${key})`, 'gi')
     return text.replace(regex, '<mark class="global-highlight">$1</mark>')
   }
 
-  const cleanExcerpt = (excerpt) => excerpt?.replace(/\[\/?dropcap\]/g, '') || ''
+  const cleanExcerpt = (excerpt) =>
+    excerpt?.replace(/\[\/?dropcap\]/g, '') || ''
 
   const trimExcerpt = (excerpt) => {
     const MAX = 110
@@ -81,27 +80,17 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
 
   const extractImage = (node) => node?.featuredImage?.node?.sourceUrl || null
 
-  const extractCategory = (node) => {
-    switch (node?.__typename) {
-      case 'Post':
-        return node?.categories?.edges?.[0]?.node?.name || ''
-      case 'TravelGuide':
-        return 'Travel Guide'
-      default:
-        return node?.contentType?.node?.label || ''
+  const extractPrimaryCategory = (node) => {
+    if (node?.categories?.edges?.length) {
+      const primary = node.categories.edges.find((e) => e?.node?.isPrimary)
+      return primary?.node?.name || node.categories.edges[0]?.node?.name || ''
     }
+    return ''
   }
 
-  const extractTags = (node) =>
-    node?.tags?.edges?.map((t) => t.node.name) || []
-
-  /* ----------------------------------------------
-     RENDER
-  ------------------------------------------------*/
   return (
     <div className={cx('component')}>
-
-      {/* SEARCH INPUT — UI SAMA DENGAN SearchPosts */}
+      {/* SEARCH INPUT */}
       <div className={cx('search-wrapper', 'fixed-search')}>
         <IoSearchOutline className={cx('search-icon')} />
 
@@ -124,7 +113,6 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
       {/* RESULTS */}
       {(keyword.length > 0 || results.length > 0) && (
         <div className={cx('results-scroll')}>
-
           {error && (
             <div className={cx('no-results')}>Error: {error.message}</div>
           )}
@@ -150,9 +138,7 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
             <div className={cx('no-results')}>
               <div className={cx('no-results-row')}>
                 <IoSearchOutline className={cx('no-results-icon')} />
-                <span className={cx('no-results-text')}>
-                  No results found.
-                </span>
+                <span className={cx('no-results-text')}>No results found.</span>
               </div>
             </div>
           )}
@@ -161,12 +147,9 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
           {results.length > 0 &&
             results.map((node) => {
               const img = extractImage(node)
-              const category = extractCategory(node)
-              const tags = extractTags(node)
-
+              const category = extractPrimaryCategory(node)
               return (
                 <div key={node?.id} className={cx('content-wrapper')}>
-                  
                   {/* LEFT IMAGE */}
                   <div className={cx('left-wrapper')}>
                     {img && (
@@ -184,33 +167,32 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
                       </Link>
                     )}
                   </div>
-
-                  {/* RIGHT SIDE */}
                   <div className={cx('right-wrapper')}>
+                    {/* CATEGORY + DATE*/}
                     <div className={cx('meta-date')}>
-                      {category && <span className={cx('meta')}>{category}</span>}
+                      {category && node?.date && (
+                        <>
+                          <span className={cx('meta')}>{category}</span>
+                          <span className={cx('meta')}> | </span>
+                          <PostInfo date={node?.date} className={cx('meta')} />
+                        </>
+                      )}
+                      {category && !node?.date && (
+                        <span className={cx('meta')}>{category}</span>
+                      )}
+                      {!category && node?.date && (
+                        <PostInfo date={node?.date} className={cx('meta')} />
+                      )}
                     </div>
 
-                    {tags.length > 0 && (
-                      <div className={cx('tags-row')}>
-                        {tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className={cx('tag')}
-                            dangerouslySetInnerHTML={{
-                              __html: highlight(tag, deferred),
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
-
+                    {/* TITLE */}
                     {node.title && (
                       <h2 className={cx('title', 'truncate')}>
                         <Link href={node.uri}>{node.title}</Link>
                       </h2>
                     )}
 
+                    {/* EXCERPT */}
                     {node.excerpt && (
                       <div
                         className={cx('excerpt')}
