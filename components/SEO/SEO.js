@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Script from 'next/script'
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
+import { GoogleTagManager } from '@next/third-parties/google'
 import { AdScript, AdConfig } from 'react-ad-manager'
 import { GetFavicon } from '../../queries/GetFavicon'
 import { useQuery } from '@apollo/client'
@@ -124,13 +124,13 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
         />
       </Head>
 
-      {/* 📊 Google Tag Manager */}
+      {/* Google Tag Manager */}
       <GoogleTagManager gtmId="GTM-K9B9SVH6" />
 
-      {/* 📈 Google Analytics */}
-      <GoogleAnalytics gaId="G-QXZNKCNDB2" />
+      {/* Google Analytics */}
+      {/* <GoogleAnalytics gaId="G-QXZNKCNDB2" /> */}
 
-      {/* 💻 GTM Backup (Script Manual untuk SSR) */}
+      {/* GTM Backup (Script Manual untuk SSR) */}
       <Script
         id="manual-gtm-init"
         strategy="beforeInteractive"
@@ -145,7 +145,7 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
         }}
       />
 
-      {/* 🧱 GTM noscript fallback */}
+      {/* GTM noscript fallback */}
       <noscript>
         <iframe
           src="https://www.googletagmanager.com/ns.html?id=GTM-K9B9SVH6"
@@ -155,7 +155,7 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
         ></iframe>
       </noscript>
 
-      {/* 📊 StatCounter dan Clarity Tracking (dipanggil setelah GTM aktif) */}
+      {/* StatCounter dan Clarity Tracking (dipanggil setelah GTM aktif) */}
       {/* {gtmLoaded && <PageViewsCounter />} */}
     </>
   )
