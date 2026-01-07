@@ -2,61 +2,74 @@
 
 import className from 'classnames/bind'
 import styles from './ContentWrapperEditorial.module.scss'
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import useSWR from 'swr'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
 
 const cx = className.bind(styles)
 
-export default function ContentWrapperEditorial({ content, children }) {
-  const [output, setOutput] = useState([])
+/* =========================
+   SWR FETCHER (BROWSER ONLY)
+========================= */
+const parseContent = async (content) => {
+  if (!content || typeof window === 'undefined') return []
 
-  useEffect(() => {
-    if (!content) return
+  const parser = new DOMParser()
 
-    const parser = new DOMParser()
+  const cleaned = content.replaceAll(
+    'https://destinasian.co.id',
+    BACKEND_URL
+  )
 
-    // Domain replace (lebih ringan)
-    const cleaned = content.replaceAll(
-      'https://destinasian.co.id',
-      BACKEND_URL
+  const doc = parser.parseFromString(cleaned, 'text/html')
+  const nodes = [...doc.body.childNodes]
+
+  return nodes.map((node, index) => {
+    // GALLERY
+    if (node.nodeType === 1 && node.classList.contains('gallery')) {
+      return <GallerySlider key={`g-${index}`} gallerySlider={node} />
+    }
+
+    // IMG ROOT
+    if (node.nodeType === 1 && node.tagName === 'IMG') {
+      return renderConvertedImage(node, index)
+    }
+
+    // IMG INSIDE
+    if (node.querySelector?.('img')) {
+      convertImagesInside(node)
+    }
+
+    // DROPCAP
+    if (node.innerHTML?.includes('[dropcap]')) {
+      applyDropcap(node)
+    }
+
+    return (
+      <div
+        key={index}
+        dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+      />
     )
+  })
+}
 
-    const doc = parser.parseFromString(cleaned, 'text/html')
-    const nodes = [...doc.body.childNodes]
+/* =========================
+   COMPONENT
+========================= */
+export default function ContentWrapperEditorial({ content, children }) {
+  const isBrowser = typeof window !== 'undefined'
 
-    const processed = nodes.map((node, index) => {
-      // 1) === HANDLE GALLERY
-      if (node.nodeType === 1 && node.classList.contains('gallery')) {
-        return <GallerySlider key={`g-${index}`} gallerySlider={node} />
-      }
-
-      // 2) === HANDLE IMG DI ROOT
-      if (node.nodeType === 1 && node.tagName === 'IMG') {
-        return renderConvertedImage(node, index)
-      }
-
-      // 3) === HANDLE IMG DI DALAM NODE (1 level cek cukup)
-      if (node.querySelector?.('img')) {
-        convertImagesInside(node)
-      }
-
-      // 4) === HANDLE DROPCAP (lebih cepat)
-      if (node.innerHTML?.includes('[dropcap]')) {
-        applyDropcap(node)
-      }
-
-      return (
-        <div
-          key={index}
-          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-        />
-      )
-    })
-
-    setOutput(processed)
-  }, [content])
+  const { data: output = [] } = useSWR(
+    isBrowser && content ? ['editorial', content] : null,
+    () => parseContent(content),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000, // 🔥 cache 1 menit
+    }
+  )
 
   return (
     <article className={cx('component')}>
@@ -68,10 +81,12 @@ export default function ContentWrapperEditorial({ content, children }) {
   )
 }
 
-    // FUNCTION: CONVERT IMG (BISA + CAPTION)
+/* =========================
+   HELPERS (UNCHANGED)
+========================= */
+
 function renderConvertedImage(img, index) {
   const { src, alt, width, height } = extractImageMeta(img)
-
   const caption = extractCaption(img)
 
   return (
@@ -85,82 +100,65 @@ function renderConvertedImage(img, index) {
         priority
       />
       {caption && (
-        <figcaption
-          dangerouslySetInnerHTML={{ __html: caption }}
-        />
+        <figcaption dangerouslySetInnerHTML={{ __html: caption }} />
       )}
     </figure>
   )
 }
 
-    // FUNCTION: EXTRACT IMG PROPERTIES
 function extractImageMeta(img) {
   return {
     src: img.getAttribute('src') || '',
     alt: img.getAttribute('alt') || 'Image',
-    width: parseInt(img.getAttribute('width')) || 800,
-    height: parseInt(img.getAttribute('height')) || 600,
+    width: Number(img.getAttribute('width')) || 800,
+    height: Number(img.getAttribute('height')) || 600,
   }
 }
 
-    // FUNCTION: CONVERT IMG DI DALAM NODE
 function convertImagesInside(node) {
-  const imgs = node.querySelectorAll('img')
-
-  imgs.forEach((img) => {
+  node.querySelectorAll('img').forEach((img) => {
     if (img.closest('.gallery')) return
     if (img.hasAttribute('style')) return
 
     const figure = document.createElement('figure')
-    figure.classList.add('figure')
+    figure.className = 'figure'
 
     const { src, alt, width, height } = extractImageMeta(img)
 
-    const imgElement = document.createElement('img')
-    imgElement.src = src
-    imgElement.alt = alt
-    imgElement.width = width
-    imgElement.height = height
-    imgElement.style.objectFit = 'contain'
+    const imgEl = document.createElement('img')
+    imgEl.src = src
+    imgEl.alt = alt
+    imgEl.width = width
+    imgEl.height = height
+    imgEl.style.objectFit = 'contain'
 
-    figure.appendChild(imgElement)
+    figure.appendChild(imgEl)
 
     const caption = extractCaption(img)
     if (caption) {
-      const captionEl = document.createElement('figcaption')
-      captionEl.innerHTML = caption
-      figure.appendChild(captionEl)
+      const cap = document.createElement('figcaption')
+      cap.innerHTML = caption
+      figure.appendChild(cap)
     }
 
     img.replaceWith(figure)
   })
 }
 
-    // FUNCTION: EXTRACT CAPTION (FIGURE OR ALT)
 function extractCaption(img) {
-  let caption = ''
-
   const fig = img.closest('figure')
-  if (fig) {
-    const cap = fig.querySelector('figcaption')
-    if (cap) {
-      caption = cap.innerHTML
-      cap.remove()
-    }
+  const cap = fig?.querySelector('figcaption')
+  if (cap) {
+    const html = cap.innerHTML
+    cap.remove()
+    return html
   }
-
-  if (!caption && img.alt && img.alt !== 'Image') {
-    caption = img.alt
-  }
-
-  return caption
+  return img.alt && img.alt !== 'Image' ? img.alt : ''
 }
 
-    // FUNCTION: DROPCAP PROCESSOR
 function applyDropcap(node) {
-  const regex = /\[dropcap\](.*?)\[\/dropcap\]/gi
   node.innerHTML = node.innerHTML.replace(
-    regex,
-    (_, text) => `<span class="dropcap">${text.toUpperCase()}</span>`
+    /\[dropcap\](.*?)\[\/dropcap\]/gi,
+    (_, t) => `<span class="dropcap">${t.toUpperCase()}</span>`
   )
 }

@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 let cx = classNames.bind(styles)
 
-const MAX_CONTENT_LENGTH = 150 // Adjust the maximum length as needed
+const MAX_CONTENT_LENGTH = 150
 
 export default function GuidePost({
   title,

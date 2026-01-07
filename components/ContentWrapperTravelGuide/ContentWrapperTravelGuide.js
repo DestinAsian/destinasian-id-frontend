@@ -1,5 +1,3 @@
-
-
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
@@ -7,21 +5,93 @@ import classNames from 'classnames/bind'
 import styles from './ContentWrapperTravelGuide.module.scss'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
+import useSWR from 'swr'
+
 import { BACKEND_URL } from '../../constants/backendUrl'
-import GallerySlider from '../../components/GallerySlider/GallerySlider'
+import GallerySlider from '../../components/GallerySliderSingle/GallerySliderSingle'
 import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
 
 const cx = classNames.bind(styles)
 
+/* ======================================================
+   SWR FETCHER — LOGIKA ASLI DIPINDAHKAN UTUH
+====================================================== */
+const contentFetcher = (content) => {
+  if (!content) return []
+
+  const parser = new DOMParser()
+  const fixedHTML = content.replaceAll('https://destinasian.co.id', BACKEND_URL)
+
+  const doc = parser.parseFromString(fixedHTML, 'text/html')
+  const bodyNodes = [...doc.body.childNodes]
+  const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/i
+
+  const processNode = (node) => {
+    if (node.nodeType !== 1) return
+
+    // DROP CAP
+    if (node.tagName === 'P' && dropcapRegex.test(node.innerHTML)) {
+      node.innerHTML = node.innerHTML.replace(
+        dropcapRegex,
+        (_, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`,
+      )
+    }
+
+    // IMG → Next Image
+    if (
+      node.tagName === 'IMG' &&
+      node.src?.includes(BACKEND_URL) &&
+      !node.closest('.gallery') &&
+      !node.hasAttribute('style')
+    ) {
+      const src = node.getAttribute('src')
+      const alt = node.getAttribute('alt') || 'Image'
+      const width = node.getAttribute('width') || 800
+      const height = node.getAttribute('height') || 600
+
+      const img = document.createElement('img')
+
+      img.src = src
+      img.alt = alt
+      img.width = Number(width)
+      img.height = Number(height)
+      img.style.objectFit = 'contain'
+      img.loading = 'eager'
+
+      node.replaceWith(img)
+
+      return
+    }
+
+    node.childNodes?.forEach(processNode)
+  }
+
+  bodyNodes.forEach(processNode)
+
+  // CREATE FINAL REACT ELEMENTS
+  return bodyNodes.map((node, i) => {
+    if (node.nodeType === 1 && node.matches('div.gallery')) {
+      return <GallerySlider key={`g-${i}`} gallerySlider={node} />
+    }
+
+    return (
+      <div
+        key={`n-${i}`}
+        dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+      />
+    )
+  })
+}
+
 export default function ContentWrapperTravelGuide({ content, children }) {
-  const [nodes, setNodes] = useState([])
   const [isMobile, setIsMobile] = useState(false)
   const contentRef = useRef(null)
   const stickyRef = useRef(null)
   const stopRef = useRef(null)
 
-  //  MOBILE DETECTION
-
+  /* ============================
+     MOBILE DETECTION
+  ============================ */
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)')
     setIsMobile(mq.matches)
@@ -30,7 +100,9 @@ export default function ContentWrapperTravelGuide({ content, children }) {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-//  STICKY SCROLL LOGIC – optimized
+  /* ============================
+     STICKY SCROLL LOGIC (UNCHANGED)
+  ============================ */
   useEffect(() => {
     let running = false
 
@@ -73,88 +145,18 @@ export default function ContentWrapperTravelGuide({ content, children }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  /** ----------------------------------------------------
-   * OPTIMIZED HTML TRANSFORM
-   * - Single pass
-   * - Replace IMG
-   * - Dropcap
-   * - Gallery detection
-   * ---------------------------------------------------- */
-  useEffect(() => {
-    if (!content) return
-
-    const parser = new DOMParser()
-
-    // Fast domain fix
-    const fixedHTML = content.replaceAll('https://destinasian.co.id', BACKEND_URL)
-
-    const doc = parser.parseFromString(fixedHTML, 'text/html')
-    const bodyNodes = [...doc.body.childNodes]
-
-    const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/i
-
-    const processNode = (node) => {
-      if (node.nodeType !== 1) return
-
-      // 1. DROP CAP
-      if (node.tagName === 'P' && dropcapRegex.test(node.innerHTML)) {
-        node.innerHTML = node.innerHTML.replace(
-          dropcapRegex,
-          (_, p1) => `<span class="dropcap">${p1.toUpperCase()}</span>`
-        )
-      }
-
-      // 2. IMG → Next Image
-      if (
-        node.tagName === 'IMG' &&
-        node.src.includes(BACKEND_URL) &&
-        !node.closest('.gallery') &&
-        !node.hasAttribute('style')
-      ) {
-        const src = node.getAttribute('src')
-        const alt = node.getAttribute('alt') || 'Image'
-        const width = node.getAttribute('width') || 800
-        const height = node.getAttribute('height') || 600
-
-        node.outerHTML = renderToStaticMarkup(
-          <Image
-            src={src}
-            alt={alt}
-            width={width}
-            height={height}
-            style={{ objectFit: 'contain' }}
-            priority
-          />
-        )
-
-        return
-      }
-
-      // Recursive children
-      node.childNodes?.forEach(processNode)
-    }
-
-    bodyNodes.forEach(processNode)
-
-// CREATE FINAL REACT ELEMENTS
-    const final = bodyNodes.map((node, i) => {
-      // Gallery
-      if (node.nodeType === 1 && node.matches('div.gallery')) {
-        return <GallerySlider key={`g-${i}`} gallerySlider={node} />
-      }
-
-      // Normal nodes
-      return (
-        <div
-          key={`n-${i}`}
-          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-        />
-      )
-    })
-
-    setNodes(final)
-  }, [content])
-
+  /* ============================
+     SWR — CONTENT TRANSFORM
+  ============================ */
+  const { data: nodes = [] } = useSWR(
+    content ? ['content-wrapper-travel-guide', content] : null,
+    () => contentFetcher(content),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000,
+    },
+  )
 
   return (
     <article className={cx('component')}>
