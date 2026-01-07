@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import useSWR from 'swr'
+// import { gql } from '@apollo/client'
 import * as MENUS from '../constants/menus'
-import { BlogInfoFragment } from '../fragments/GeneralSettings'
+// import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import Main from '../components/Main/Main'
 import Container from '../components/Container/Container'
 import SEO from '../components/SEO/SEO'
@@ -9,9 +10,10 @@ import EntryHeader from '../components/EntryHeader/EntryHeader'
 import ContentWrapperContestFrontPage from '../components/ContentWrapperContest/ContentWrapperContestFrontPage'
 import Header from '../components/Header/Header'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
-import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+// import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
+import { graphQLFetcher } from '../lib/graphqlFetcher'
 
 export default function Component(props) {
   if (props.loading) {
@@ -41,19 +43,23 @@ export default function Component(props) {
     document.body.style.overflow = isNavShown ? 'hidden' : 'visible'
   }, [isNavShown])
 
-  // Get menus
-  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-    variables: {
-      first: 20,
-      headerLocation: MENUS.PRIMARY_LOCATION,
-      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-      thirdHeaderLocation: MENUS.THIRD_LOCATION,
-      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+  const { data: menusData, isLoading: menusLoading } = useSWR(
+    [
+      GetMenus,
+      {
+        first: 20,
+        headerLocation: MENUS.PRIMARY_LOCATION,
+        secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+        thirdHeaderLocation: MENUS.THIRD_LOCATION,
+        fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+        fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+      },
+    ],
+    ([query, variables]) => graphQLFetcher(query, variables),
+    {
+      revalidateOnFocus: false,
     },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  )
 
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
@@ -62,20 +68,19 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
-  // Get latest stories
-  const { data: latestStories, loading: latestLoading } = useQuery(
-    GetLatestStories,
+  const { data: latestStories, isLoading: latestLoading } = useSWR(
+    [GetLatestStories, { first: 5 }],
+    ([query, variables]) => graphQLFetcher(query, variables),
     {
-      variables: { first: 5 },
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'network-only',
+      revalidateOnFocus: false,
     },
   )
 
   const posts = latestStories?.posts?.edges?.map((edge) => edge.node) ?? []
   const editorials =
     latestStories?.editorials?.edges?.map((edge) => edge.node) ?? []
-  const updates = latestStories?.updates?.edges?.map((edge) => edge.node) ?? []
+  const updates =
+    latestStories?.updates?.edges?.map((edge) => edge.node) ?? []
 
   const allPosts = [...posts, ...editorials, ...updates].sort(
     (a, b) => new Date(b.date) - new Date(a.date),
@@ -127,29 +132,3 @@ export default function Component(props) {
     </main>
   )
 }
-
-Component.query = gql`
-  ${BlogInfoFragment}
-  ${FeaturedImage.fragments.entry}
-  query GetPageData($databaseId: ID = "147", $asPreview: Boolean = false) {
-    page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
-      id
-      title
-      ...FeaturedImageFragment
-      seo {
-        title
-        metaDesc
-        focuskw
-      }
-      uri
-    }
-    generalSettings {
-      ...BlogInfoFragment
-    }
-  }
-`
-
-Component.variables = ({ databaseId }, ctx) => ({
-  databaseId,
-  asPreview: ctx?.asPreview,
-})

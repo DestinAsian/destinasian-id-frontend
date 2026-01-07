@@ -1,108 +1,130 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
-import * as MENUS from '../constants/menus'
-import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
-import { GetMenus } from '../queries/GetMenus'
-import SingleLTEntryHeader from '../components/SingleLuxuryTravel/SingleLTEntryHeader'
-import ContentWrapperLuxuryTravel from '../components/ContentWrapperLuxuryTravel/ContentWrapperLuxuryTravel'
-import SingleHeader from '../components/SingleHeader/SingleHeader'
-import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
-import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
-import SEO from '../components/SEO/SEO'
-import Footer from '../components/Footer/Footer'
-import Main from '../components/Main/Main'
-import SingleSlider from '../components/SingleSlider/SingleSlider'
-import SingleLTContainer from '../components/SingleLuxuryTravel/SingleLTContainer'
-import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
-import { open_sans } from '../styles/fonts/fonts'
+import dynamic from 'next/dynamic'
 import Cookies from 'js-cookie'
 
-// Dynamic Imports (iklan/ad components)
-import dynamic from 'next/dynamic'
+import * as MENUS from '../constants/menus'
+import { BlogInfoFragment } from '../fragments/GeneralSettings'
+import { GetMenus } from '../queries/GetMenus'
+import { open_sans } from '../styles/fonts/fonts'
+
+import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
+import SEO from '../components/SEO/SEO'
+import Main from '../components/Main/Main'
+import Footer from '../components/Footer/Footer'
+import SingleHeader from '../components/SingleHeader/SingleHeader'
+import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
+import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
+import SingleSlider from '../components/SingleSlider/SingleSlider'
+import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
+
+import SingleLTEntryHeader from '../components/SingleLuxuryTravel/SingleLTEntryHeader'
+import ContentWrapperLuxuryTravel from '../components/ContentWrapperLuxuryTravel/ContentWrapperLuxuryTravel'
+import SingleLTContainer from '../components/SingleLuxuryTravel/SingleLTContainer'
+
+/* =====================
+   ADS (LAZY)
+===================== */
 const MastHeadTopGuides = dynamic(() =>
   import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
 )
 const MastHeadTopMobileSingleGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
-  ),
+  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'),
 )
 const MastHeadBottomGuides = dynamic(() =>
   import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
 )
 const MastHeadBottomMobileGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
-  ),
+  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'),
 )
 
-export default function SingleLuxuryTravel(props) {
-  // Loading state for previews
-  if (props.loading) {
-    return <>Loading...</>
-  }
+export default function SingleLuxuryTravel({ data, loading }) {
+  if (loading) return <>Loading...</>
 
+  const luxury = data?.luxuryTravel
+  const site = data?.generalSettings
+
+  /* =====================
+     PASSWORD
+  ===================== */
   const [enteredPassword, setEnteredPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  // Check for stored password in cookies on mount
   useEffect(() => {
-    const storedPassword = Cookies.get('luxuryTravelPassword')
-    if (
-      storedPassword &&
-      storedPassword === props?.data?.luxuryTravel?.passwordProtected?.password
-    ) {
+    if (!luxury?.passwordProtected?.onOff) return
+
+    const stored = Cookies.get('luxuryTravelPassword')
+    if (stored === luxury.passwordProtected.password) {
       setIsAuthenticated(true)
     }
-  }, [props?.data?.luxuryTravel?.passwordProtected?.password])
+  }, [luxury?.passwordProtected])
 
-  const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings
-  const {
-    title,
-    databaseId,
-    content,
-    parent,
-    featuredImage,
-    acfPostSlider,
-    seo,
-    uri,
-    author,
-    date,
-    passwordProtected,
-  } = props?.data?.luxuryTravel
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault()
+    if (enteredPassword === luxury?.passwordProtected?.password) {
+      Cookies.set('luxuryTravelPassword', enteredPassword, { expires: 1 })
+      setIsAuthenticated(true)
+    } else {
+      alert('Incorrect password. Please try again.')
+    }
+  }
 
-  const categories = props?.data?.luxuryTravel.categories?.edges ?? []
+  if (luxury?.passwordProtected?.onOff && !isAuthenticated) {
+    return (
+      <main className={open_sans.variable}>
+        <form onSubmit={handlePasswordSubmit}>
+          <PasswordProtected
+            enteredPassword={enteredPassword}
+            setEnteredPassword={setEnteredPassword}
+            title={luxury?.seo?.title}
+            description={luxury?.seo?.metaDesc}
+            imageUrl={luxury?.featuredImage?.node?.sourceUrl}
+            url={luxury?.uri}
+            focuskw={luxury?.seo?.focuskw}
+          />
+        </form>
+      </main>
+    )
+  }
+
+  /* =====================
+     UI STATES
+  ===================== */
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
 
+  // scroll
   useEffect(() => {
-    if (searchQuery !== '') {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'visible'
-    }
-  }, [searchQuery])
-
-  // desktop
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth
-      setIsDesktop(width >= 1024)
-      setIsMobile(width <= 768)
-    }
-
-    handleResize() // cek saat mount
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    const onScroll = () => setIsScrolled(window.scrollY > 0)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Get menus
+  // resize
+  useEffect(() => {
+    const onResize = () => {
+      const w = window.innerWidth
+      setIsDesktop(w >= 1024)
+      setIsMobile(w <= 768)
+    }
+    onResize()
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  // body lock
+  useEffect(() => {
+    document.body.style.overflow =
+      searchQuery || isNavShown ? 'hidden' : ''
+  }, [searchQuery, isNavShown])
+
+  /* =====================
+     MENUS (APOLLO)
+  ===================== */
   const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
     variables: {
       first: 10,
@@ -116,155 +138,106 @@ export default function SingleLuxuryTravel(props) {
     nextFetchPolicy: 'network-only',
   })
 
-  const images = [
-    [
-      acfPostSlider.slide1 != null ? acfPostSlider.slide1.mediaItemUrl : null,
-      acfPostSlider.slideCaption1 != null ? acfPostSlider.slideCaption1 : null,
-    ],
-    [
-      acfPostSlider.slide2 != null ? acfPostSlider.slide2.mediaItemUrl : null,
-      acfPostSlider.slideCaption2 != null ? acfPostSlider.slideCaption2 : null,
-    ],
-    [
-      acfPostSlider.slide3 != null ? acfPostSlider.slide3.mediaItemUrl : null,
-      acfPostSlider.slideCaption3 != null ? acfPostSlider.slideCaption3 : null,
-    ],
-    [
-      acfPostSlider.slide4 != null ? acfPostSlider.slide4.mediaItemUrl : null,
-      acfPostSlider.slideCaption4 != null ? acfPostSlider.slideCaption4 : null,
-    ],
-    [
-      acfPostSlider.slide5 != null ? acfPostSlider.slide5.mediaItemUrl : null,
-      acfPostSlider.slideCaption5 != null ? acfPostSlider.slideCaption5 : null,
-    ],
-  ]
+  /* =====================
+     SLIDER IMAGES (SAFE)
+  ===================== */
+  const images = useMemo(() => {
+    const s = luxury?.acfPostSlider
+    if (!s) return []
 
-  // Handle password submission
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    if (enteredPassword === passwordProtected?.password) {
-      setIsAuthenticated(true)
-      Cookies.set('luxuryTravelPassword', enteredPassword, { expires: 1 }) // Set cookie to expire in 1 day
-    } else {
-      alert('Incorrect password. Please try again.')
-    }
-  }
+    return [
+      [s.slide1?.mediaItemUrl, s.slideCaption1],
+      [s.slide2?.mediaItemUrl, s.slideCaption2],
+      [s.slide3?.mediaItemUrl, s.slideCaption3],
+      [s.slide4?.mediaItemUrl, s.slideCaption4],
+      [s.slide5?.mediaItemUrl, s.slideCaption5],
+    ].filter(([url]) => Boolean(url))
+  }, [luxury?.acfPostSlider])
 
-  if (passwordProtected?.onOff && !isAuthenticated) {
-    return (
-      <main className={`${open_sans.variable}`}>
-        <form onSubmit={handlePasswordSubmit}>
-          <PasswordProtected
-            enteredPassword={enteredPassword}
-            setEnteredPassword={setEnteredPassword}
-            title={seo?.title}
-            description={seo?.metaDesc}
-            imageUrl={featuredImage?.node?.sourceUrl}
-            url={uri}
-            focuskw={seo?.focuskw}
-          />
-        </form>
-      </main>
-    )
-  }
+  const category = luxury?.categories?.edges?.[0]?.node
 
   return (
-    <main className={` ${open_sans.variable}`}>
+    <main className={open_sans.variable}>
       <SEO
-        title={seo?.title}
-        description={seo?.metaDesc}
-        imageUrl={featuredImage?.node?.sourceUrl}
-        url={uri}
-        focuskw={seo?.focuskw}
+        title={luxury?.seo?.title}
+        description={luxury?.seo?.metaDesc}
+        imageUrl={luxury?.featuredImage?.node?.sourceUrl}
+        url={luxury?.uri}
+        focuskw={luxury?.seo?.focuskw}
       />
+
+      <SingleHeader
+        title={site?.title}
+        description={site?.description}
+        primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+        secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+        thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+        fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+        fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+        featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+        menusLoading={menusLoading}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isNavShown={isNavShown}
+        setIsNavShown={setIsNavShown}
+        isScrolled={isScrolled}
+      />
+
       {isDesktop ? (
-        <>
-          <SingleHeader
-            title={props?.data?.generalSettings?.title}
-            description={props?.data?.generalSettings?.description}
-            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-            menusLoading={menusLoading}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-          <SingleDesktopHeader
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-            isScrolled={isScrolled}
-          />
-        </>
+        <SingleDesktopHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
       ) : (
-        <>
-          <SingleHeader
-            title={props?.data?.generalSettings?.title}
-            description={props?.data?.generalSettings?.description}
-            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-            menusLoading={menusLoading}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-          <SecondaryHeader
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-            isScrolled={isScrolled}
-          />
-        </>
+        <SecondaryHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
       )}
+
       <Main>
-        <>
-          <div>
-            {isMobile ? (
-              <MastHeadTopMobileSingleGuides />
-            ) : (
-              <MastHeadTopGuides />
-            )}
-          </div>
-          <SingleLTContainer>
-            <SingleSlider images={images} />
-            <SingleLTEntryHeader
-              title={title}
-              categoryUri={categories?.[0]?.node?.uri}
-              parentCategory={categories?.[0]?.node?.parent?.node?.name}
-              categoryName={categories?.[0]?.node?.name}
-              author={author?.node?.name}
-              date={date}
-            />
-            <ContentWrapperLuxuryTravel content={content} />
-            <div>
-              {isMobile ? (
-                <MastHeadBottomMobileGuides />
-              ) : (
-                <MastHeadBottomGuides />
-              )}
-            </div>
-          </SingleLTContainer>
-        </>
+        {isMobile ? (
+          <MastHeadTopMobileSingleGuides />
+        ) : (
+          <MastHeadTopGuides />
+        )}
+
+        <SingleLTContainer>
+          {images.length > 0 && <SingleSlider images={images} />}
+
+          <SingleLTEntryHeader
+            title={luxury?.title}
+            categoryUri={category?.uri}
+            parentCategory={category?.parent?.node?.name}
+            categoryName={category?.name}
+            author={luxury?.author?.node?.name}
+            date={luxury?.date}
+          />
+
+          <ContentWrapperLuxuryTravel content={luxury?.content} />
+
+          {isMobile ? (
+            <MastHeadBottomMobileGuides />
+          ) : (
+            <MastHeadBottomGuides />
+          )}
+        </SingleLTContainer>
       </Main>
+
       <Footer />
     </main>
   )
 }
 
+/* =====================
+   GRAPHQL
+===================== */
 SingleLuxuryTravel.query = gql`
   ${BlogInfoFragment}
   ${FeaturedImage.fragments.entry}
@@ -300,23 +273,12 @@ SingleLuxuryTravel.query = gql`
         focuskw
       }
       uri
-
       acfPostSlider {
-        slide1 {
-          mediaItemUrl
-        }
-        slide2 {
-          mediaItemUrl
-        }
-        slide3 {
-          mediaItemUrl
-        }
-        slide4 {
-          mediaItemUrl
-        }
-        slide5 {
-          mediaItemUrl
-        }
+        slide1 { mediaItemUrl }
+        slide2 { mediaItemUrl }
+        slide3 { mediaItemUrl }
+        slide4 { mediaItemUrl }
+        slide5 { mediaItemUrl }
         slideCaption1
         slideCaption2
         slideCaption3
@@ -330,9 +292,7 @@ SingleLuxuryTravel.query = gql`
   }
 `
 
-SingleLuxuryTravel.variables = ({ databaseId }, ctx) => {
-  return {
-    databaseId,
-    asPreview: ctx?.asPreview,
-  }
-}
+SingleLuxuryTravel.variables = ({ databaseId }, ctx) => ({
+  databaseId,
+  asPreview: ctx?.asPreview,
+})

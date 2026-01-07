@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import useSWR from 'swr'
+import { gql } from '@apollo/client'
 import dynamic from 'next/dynamic'
 import Cookies from 'js-cookie'
 
@@ -22,6 +23,9 @@ import PasswordProtected from '../components/PasswordProtected/PasswordProtected
 // Queries
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
+
+// GraphQL fetcher (FaustWP)
+import { graphQLFetcher } from '../lib/graphqlFetcher'
 
 // Ads (lazy)
 const MastHeadTop = dynamic(() =>
@@ -63,7 +67,9 @@ export default function Component(props) {
     passwordProtected,
   } = page || {}
 
-  // Check password from cookies
+  // ======================
+  // PASSWORD FROM COOKIE
+  // ======================
   useEffect(() => {
     const storedPassword = Cookies.get('pagePassword')
     if (storedPassword && storedPassword === passwordProtected?.password) {
@@ -71,13 +77,17 @@ export default function Component(props) {
     }
   }, [passwordProtected?.password])
 
-  // Prevent body scroll when search or nav is active
+  // ======================
+  // BODY SCROLL LOCK
+  // ======================
   useEffect(() => {
     const shouldLock = searchQuery || isNavShown
     document.body.style.overflow = shouldLock ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown])
 
-  // Scroll state + responsive detection
+  // ======================
+  // SCROLL & RESPONSIVE
+  // ======================
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0)
     const handleResize = () => {
@@ -90,25 +100,28 @@ export default function Component(props) {
     handleResize()
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('resize', handleResize)
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
     }
   }, [])
 
-  // Menus query
-  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-    variables: {
-      first: 10,
-      headerLocation: MENUS.PRIMARY_LOCATION,
-      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-      thirdHeaderLocation: MENUS.THIRD_LOCATION,
-      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-    },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  // ======================
+  // MENUS (SWR)
+  // ======================
+  const { data: menusData, isLoading: menusLoading } = useSWR(
+    ['menus'],
+    () =>
+      graphQLFetcher(GetMenus, {
+        first: 10,
+        headerLocation: MENUS.PRIMARY_LOCATION,
+        secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+        thirdHeaderLocation: MENUS.THIRD_LOCATION,
+        fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+        fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+      }),
+  )
 
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
   const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
@@ -117,14 +130,12 @@ export default function Component(props) {
   const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
   const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
 
-  // Latest posts query
-  const { data: latestStories, loading: latestLoading } = useQuery(
-    GetLatestStories,
-    {
-      variables: { first: 5 },
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'network-only',
-    },
+  // ======================
+  // LATEST STORIES (SWR)
+  // ======================
+  const { data: latestStories, isLoading: latestLoading } = useSWR(
+    ['latestStories'],
+    () => graphQLFetcher(GetLatestStories, { first: 5 }),
   )
 
   const allPosts =
@@ -132,7 +143,9 @@ export default function Component(props) {
       ?.map((e) => e?.node)
       ?.sort((a, b) => new Date(b?.date) - new Date(a?.date)) ?? []
 
-  // Password submit
+  // ======================
+  // PASSWORD SUBMIT
+  // ======================
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
@@ -143,7 +156,9 @@ export default function Component(props) {
     }
   }
 
-  // Password-protected page
+  // ======================
+  // PASSWORD PAGE
+  // ======================
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main>
@@ -162,6 +177,9 @@ export default function Component(props) {
     )
   }
 
+  // ======================
+  // RENDER
+  // ======================
   return (
     <main>
       <SEO
@@ -262,7 +280,9 @@ export default function Component(props) {
   )
 }
 
-// GraphQL query: BlogInfo + PageFragment
+// ======================
+// PAGE QUERY (TETAP)
+// ======================
 Component.query = gql`
   ${BlogInfoFragment}
   ${PageFragment}
@@ -277,9 +297,7 @@ Component.query = gql`
   }
 `
 
-Component.variables = ({ databaseId }, ctx) => {
-  return {
-    databaseId,
-    asPreview: ctx?.asPreview,
-  }
-}
+Component.variables = ({ databaseId }, ctx) => ({
+  databaseId,
+  asPreview: ctx?.asPreview,
+})

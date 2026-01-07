@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import useSWR from 'swr'
+import { gql } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 
@@ -8,7 +11,6 @@ import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import Main from '../components/Main/Main'
 import Footer from '../components/Footer/Footer'
 import CategoryDesktopHeader from '../components/CategoryDesktopHeader/CategoryDesktopHeader'
-
 import CategoryHeader from '../components/CategoryHeader/CategoryHeader'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import CategoryEntryHeader from '../components/CategoryEntryHeader/CategoryEntryHeader'
@@ -37,37 +39,60 @@ import MastHeadBottomMobileGuides from '../components/AdUnit/MastHeadBottomMobil
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
+import { useSWRGraphQL } from '../lib/useSWRGraphQL'
 
-export default function Category({ loading, data: initialData }) {
+const fetcher = async (query, variables = {}) => {
+  const res = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+  })
+
+  if (!res.ok) {
+    throw new Error('Network error')
+  }
+
+  const json = await res.json()
+
+  if (json.errors) {
+    console.error(json.errors)
+    throw new Error('GraphQL error')
+  }
+
+  return json.data
+}
+
+export default function Category({ data: initialData, loading }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+
+  const [viewport, setViewport] = useState({ isDesktop: false })
 
   useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth
-      setIsDesktop(width >= 1024)
-      setIsMobile(width <= 768)
+    const onResize = () => {
+      setViewport({ isDesktop: window.innerWidth >= 1024 })
     }
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0)
-    }
-
-    handleResize() // run on mount
-    window.addEventListener('resize', handleResize)
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      window.removeEventListener('scroll', handleScroll)
-    }
+    onResize()
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  // Lock body scroll when search or nav is open
+  const isDesktop = viewport.isDesktop
+  const isMobile = !viewport.isDesktop
+
+  useEffect(() => {
+    const className = 'no-scroll'
+    if (searchQuery || isNavShown || isGuidesNavShown) {
+      document.body.classList.add(className)
+    } else {
+      document.body.classList.remove(className)
+    }
+
+    return () => document.body.classList.remove(className)
+  }, [searchQuery, isNavShown, isGuidesNavShown])
+
   useEffect(() => {
     document.body.style.overflow =
       searchQuery || isNavShown || isGuidesNavShown ? 'hidden' : 'visible'
@@ -89,9 +114,10 @@ export default function Category({ loading, data: initialData }) {
     tagline,
   } = category || {}
 
-  // Menus query
-  const { data: menusData } = useQuery(GetMenus, {
-    variables: {
+  const { data: menusData } = useSWRGraphQL(
+    ['menus', MENUS.PRIMARY_LOCATION],
+    GetMenus,
+    {
       first: 10,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
@@ -99,29 +125,23 @@ export default function Category({ loading, data: initialData }) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  )
 
-  // Latest stories query
-  const { data: latestStories } = useQuery(GetLatestStories, {
-    variables: { first: 5 },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const isMenuReady = menusData?.headerMenuItems?.nodes?.length > 0
 
-  // Secondary header query
-  const { data: dataSecondaryHeader } = useQuery(GetSecondaryHeader, {
-    variables: { id: databaseId },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const { data: latestStories } = useSWR('latest-stories', () =>
+    fetcher(GetLatestStories, { first: 5 }),
+  )
+
+  const { data: dataSecondaryHeader } = useSWR(
+    databaseId ? `secondary-header-${databaseId}` : null,
+    () => fetcher(GetSecondaryHeader, { id: databaseId }),
+  )
 
   const isGuidesCategory =
     dataSecondaryHeader?.category?.destinationGuides?.destinationGuides ===
     'yes'
 
-  // Merge latest stories + updates, sorted by date
   const latestPosts = useMemo(() => {
     const posts = [
       ...(latestStories?.posts?.edges || []),
@@ -132,7 +152,6 @@ export default function Category({ loading, data: initialData }) {
       .sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [latestStories])
 
-  // Prepare category slider images and captions
   const categorySlider = useMemo(
     () =>
       [1, 2, 3, 4, 5].map((i) => [
@@ -142,7 +161,6 @@ export default function Category({ loading, data: initialData }) {
     [categoryImages],
   )
 
-  // Shared header props for multiple components
   const sharedHeaderProps = useMemo(
     () => ({
       title: generalSettings?.title,
@@ -171,31 +189,33 @@ export default function Category({ loading, data: initialData }) {
     ],
   )
 
-  // Helper to render ad component depending on category and device type
   const renderAdComponent = useCallback(
     (pos) => {
-      const position = pos === 'top' ? 'Top' : 'Bottom'
-      const key = `${isGuidesCategory ? 'Guides' : ''}${
-        isMobile ? 'Mobile' : 'Desktop'
-      }`
-
-      const componentMap = {
-        Top: {
-          Desktop: MastHeadTop,
-          Mobile: MastHeadTopMobile,
-          GuidesDesktop: MastHeadTopGuides,
-          GuidesMobile: MastHeadTopMobileGuides,
+      const map = {
+        top: {
+          desktop: MastHeadTop,
+          mobile: MastHeadTopMobile,
+          guidesDesktop: MastHeadTopGuides,
+          guidesMobile: MastHeadTopMobileGuides,
         },
-        Bottom: {
-          Desktop: MastHeadBottom,
-          Mobile: MastHeadBottomMobile,
-          GuidesDesktop: MastHeadBottomGuides,
-          GuidesMobile: MastHeadBottomMobileGuides,
+        bottom: {
+          desktop: MastHeadBottom,
+          mobile: MastHeadBottomMobile,
+          guidesDesktop: MastHeadBottomGuides,
+          guidesMobile: MastHeadBottomMobileGuides,
         },
       }
 
-      const Component = componentMap[position][key]
-      return Component ? <Component /> : null
+      const key = isGuidesCategory
+        ? isMobile
+          ? 'guidesMobile'
+          : 'guidesDesktop'
+        : isMobile
+        ? 'mobile'
+        : 'desktop'
+
+      const Ad = map[pos]?.[key]
+      return Ad ? <Ad /> : null
     },
     [isMobile, isGuidesCategory],
   )
@@ -205,30 +225,31 @@ export default function Category({ loading, data: initialData }) {
   return (
     <>
       <SEO
-        title={category?.seo?.title || category?.name}
-        description={category?.seo?.metaDesc || category?.description}
+        title={category?.seo?.title || name}
+        description={category?.seo?.metaDesc || description}
         imageUrl={category?.categoryImages?.categoryImages?.mediaItemUrl}
         url={category?.uri}
         focuskw={category?.seo?.focuskw}
       />
 
       <main className={`${open_sans.variable}`}>
-        {isDesktop ? (
-          <CategoryDesktopHeader
-            {...sharedHeaderProps}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-          />
-        ) : (
-          <>
-            <CategoryHeader {...sharedHeaderProps} />
-            <SecondaryHeader
+        {isMenuReady &&
+          (isDesktop ? (
+            <CategoryDesktopHeader
               {...sharedHeaderProps}
               isGuidesNavShown={isGuidesNavShown}
               setIsGuidesNavShown={setIsGuidesNavShown}
             />
-          </>
-        )}
+          ) : (
+            <>
+              <CategoryHeader {...sharedHeaderProps} />
+              <SecondaryHeader
+                {...sharedHeaderProps}
+                isGuidesNavShown={isGuidesNavShown}
+                setIsGuidesNavShown={setIsGuidesNavShown}
+              />
+            </>
+          ))}
 
         <CategoryEntryHeader
           parent={parent?.node?.name}
@@ -245,7 +266,6 @@ export default function Category({ loading, data: initialData }) {
 
         <Main style={{ position: 'relative', zIndex: 1 }}>
           {tagline && <Tagline tagline={tagline} />}
-
           {isGuidesCategory && (
             <hr
               style={{
@@ -256,9 +276,7 @@ export default function Category({ loading, data: initialData }) {
               }}
             />
           )}
-
           {renderAdComponent('top')}
-
           <hr
             style={{
               border: 'none',
@@ -281,7 +299,6 @@ export default function Category({ loading, data: initialData }) {
           {isGuidesCategory && guidesfitur && (
             <GuideFitur guidesfitur={guidesfitur} />
           )}
-
           <CategorySecondStoriesLatest
             categoryUri={databaseId}
             pinPosts={pinPosts}
@@ -291,9 +308,7 @@ export default function Category({ loading, data: initialData }) {
             bannerDa={guideStorie}
             guideStories={guideStorie}
           />
-
           {guideReelIg && <GuideReelIg guideReelIg={guideReelIg} />}
-
           <CategoryStories
             categoryUri={databaseId}
             pinPosts={{
@@ -306,7 +321,6 @@ export default function Category({ loading, data: initialData }) {
           />
 
           <BannerPosterGuide guideStorie={guideStorie} />
-
           <hr
             style={{
               border: 'none',
@@ -315,7 +329,6 @@ export default function Category({ loading, data: initialData }) {
               maxWidth: '1400px',
             }}
           />
-
           {renderAdComponent('bottom')}
         </Main>
 

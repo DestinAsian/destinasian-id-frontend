@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import React, { useState, useEffect, useMemo } from 'react'
+import { gql } from '@apollo/client'
+import useSWR from 'swr'
 import Cookies from 'js-cookie'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
@@ -7,7 +8,7 @@ import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import dynamic from 'next/dynamic'
-
+import { useSWRGraphQL } from '../lib/useSWRGraphQL'
 import SEO from '../components/SEO/SEO'
 import Footer from '../components/Footer/Footer'
 import Main from '../components/Main/Main'
@@ -18,232 +19,209 @@ import ContentWrapperContest from '../components/ContentWrapperContest/ContentWr
 import PasswordProtected from '../components/PasswordProtected/PasswordProtected'
 import SecondaryHeader from '../components/Header/SecondaryHeader/SecondaryHeader'
 import SingleDesktopHeader from '../components/SingleHeader/SingleDesktopHeader/SingleDesktopHeader'
+import { GetSecondaryHeaders } from '../queries/GetSecondaryHeaders'
 
-// Ads (dynamic imports)
-const MastHeadTopGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
+import { graphQLFetcher } from '../lib/graphqlFetcher'
+
+const MastHeadTopGuides = dynamic(
+  () =>
+    import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
+  { ssr: false },
 )
-const MastHeadTopMobileSingleGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
-  ),
+const MastHeadTopMobileSingleGuides = dynamic(
+  () =>
+    import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'),
+  { ssr: false },
 )
-const MastHeadBottomGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
+const MastHeadBottomGuides = dynamic(
+  () =>
+    import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
+  { ssr: false },
 )
-const MastHeadBottomMobileGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
-  ),
+const MastHeadBottomMobileGuides = dynamic(
+  () =>
+    import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'),
+  { ssr: false },
 )
 
-export default function SingleContest(props) {
-  if (props.loading) {
-    return <>Loading...</>
-  }
+export default function SingleContest({ data, loading }) {
+  if (loading) return <>Loading...</>
 
+  const contest = data?.contest
+  const site = data?.generalSettings
+
+  /* ======================
+     PASSWORD PROTECTION
+  ====================== */
   const [enteredPassword, setEnteredPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  // Check password from cookies on mount
   useEffect(() => {
-    const storedPassword = Cookies.get('contestPassword')
-    if (
-      storedPassword &&
-      storedPassword === props?.data?.contest?.passwordProtected?.password
-    ) {
+    if (!contest?.passwordProtected?.onOff) return
+
+    const saved = Cookies.get('contestPassword')
+    if (saved === contest.passwordProtected.password) {
       setIsAuthenticated(true)
     }
-  }, [props?.data?.contest?.passwordProtected?.password])
+  }, [contest?.passwordProtected])
 
-  const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings
-
-  const {
-    title,
-    content,
-    featuredImage,
-    acfPostSlider,
-    seo,
-    uri,
-    passwordProtected,
-    author,
-    date,
-  } = props?.data?.contest
-
-  const categories = props?.data?.contest.categories?.edges ?? []
-
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isNavShown, setIsNavShown] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  // Disable body scroll when search is active
-  useEffect(() => {
-    document.body.style.overflow = searchQuery ? 'hidden' : ''
-  }, [searchQuery])
-
-  // Add sticky header on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // Disable body scroll when navigation menu is open
-  useEffect(() => {
-    document.body.style.overflow = isNavShown ? 'hidden' : ''
-  }, [isNavShown])
-
-  // Detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth
-      setIsDesktop(width >= 1024)
-      setIsMobile(width <= 768)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  // Fetch menus
-  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-    variables: {
-      first: 10,
-      headerLocation: MENUS.PRIMARY_LOCATION,
-      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-      thirdHeaderLocation: MENUS.THIRD_LOCATION,
-      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-    },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
-
-  const images = [
-    [
-      acfPostSlider?.slide1?.mediaItemUrl || null,
-      acfPostSlider?.slideCaption1 || null,
-    ],
-    [
-      acfPostSlider?.slide2?.mediaItemUrl || null,
-      acfPostSlider?.slideCaption2 || null,
-    ],
-    [
-      acfPostSlider?.slide3?.mediaItemUrl || null,
-      acfPostSlider?.slideCaption3 || null,
-    ],
-    [
-      acfPostSlider?.slide4?.mediaItemUrl || null,
-      acfPostSlider?.slideCaption4 || null,
-    ],
-    [
-      acfPostSlider?.slide5?.mediaItemUrl || null,
-      acfPostSlider?.slideCaption5 || null,
-    ],
-  ]
-
-  // Handle password submission
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
-    if (enteredPassword === passwordProtected?.password) {
-      setIsAuthenticated(true)
+
+    if (enteredPassword === contest?.passwordProtected?.password) {
       Cookies.set('contestPassword', enteredPassword, { expires: 1 })
+      setIsAuthenticated(true)
     } else {
       alert('Incorrect password. Please try again.')
     }
   }
 
-  if (passwordProtected?.onOff && !isAuthenticated) {
+  if (contest?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main>
         <form onSubmit={handlePasswordSubmit}>
           <PasswordProtected
             enteredPassword={enteredPassword}
             setEnteredPassword={setEnteredPassword}
-            title={seo?.title}
-            description={seo?.metaDesc}
-            imageUrl={featuredImage?.node?.sourceUrl}
-            url={uri}
-            focuskw={seo?.focuskw}
+            title={contest?.seo?.title}
+            description={contest?.seo?.metaDesc}
+            imageUrl={contest?.featuredImage?.node?.sourceUrl}
+            url={contest?.uri}
+            focuskw={contest?.seo?.focuskw}
           />
         </form>
       </main>
     )
   }
 
+  /* ======================
+     HEADER UI STATES
+  ====================== */
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  const { data: secondaryHeaderData, isLoading: secondaryHeaderLoading } =
+    useSWRGraphQL('secondary-headers', GetSecondaryHeaders, {
+      include: ['20', '29', '3'],
+    })
+
+  const secondaryCategories = useMemo(() => {
+    return secondaryHeaderData?.categories?.edges ?? []
+  }, [secondaryHeaderData])
+
+  // scroll
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 0)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // resize
+  useEffect(() => {
+    const onResize = () => {
+      const w = window.innerWidth
+      setIsDesktop(w >= 1024)
+      setIsMobile(w <= 768)
+    }
+    onResize()
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  // body lock
+  useEffect(() => {
+    document.body.style.overflow = searchQuery || isNavShown ? 'hidden' : ''
+  }, [searchQuery, isNavShown])
+
+  /* ======================
+     MENUS (SWR)
+  ====================== */
+  const { data: menusData, isLoading: menusLoading } = useSWR(
+    [
+      GetMenus,
+      {
+        first: 10,
+        headerLocation: MENUS.PRIMARY_LOCATION,
+        secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+        thirdHeaderLocation: MENUS.THIRD_LOCATION,
+        fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+        fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+      },
+    ],
+    ([query, variables]) => graphQLFetcher(query, variables),
+    { revalidateOnFocus: false },
+  )
+
+  const images = useMemo(() => {
+    const slides = contest?.acfPostSlider
+    if (!slides) return []
+
+    return [
+      slides.slide1?.mediaItemUrl,
+      slides.slide2?.mediaItemUrl,
+      slides.slide3?.mediaItemUrl,
+      slides.slide4?.mediaItemUrl,
+      slides.slide5?.mediaItemUrl,
+    ]
+      .filter(Boolean)
+      .map((url) => [url, null])
+  }, [contest?.acfPostSlider])
+
+  const category = contest?.categories?.edges?.[0]?.node
+
   return (
     <main>
       <SEO
-        title={seo?.title}
-        description={seo?.metaDesc}
-        imageUrl={featuredImage?.node?.sourceUrl}
-        url={uri}
-        focuskw={seo?.focuskw}
+        title={contest?.seo?.title}
+        description={contest?.seo?.metaDesc}
+        imageUrl={contest?.featuredImage?.node?.sourceUrl}
+        url={contest?.uri}
+        focuskw={contest?.seo?.focuskw}
+      />
+
+      <SingleHeader
+        title={site?.title}
+        description={site?.description}
+        primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+        secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+        thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+        fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+        fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+        featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+        menusLoading={menusLoading}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isNavShown={isNavShown}
+        setIsNavShown={setIsNavShown}
+        isScrolled={isScrolled}
       />
       {isDesktop ? (
-        <>
-          <SingleHeader
-            title={siteTitle}
-            description={siteDescription}
-            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-            menusLoading={menusLoading}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-          <SingleDesktopHeader
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-            isScrolled={isScrolled}
-          />
-        </>
+        <SingleDesktopHeader
+          categories={secondaryCategories}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
       ) : (
-        <>
-          <SingleHeader
-            title={siteTitle}
-            description={siteDescription}
-            primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-            secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-            thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-            fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-            fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-            featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-            menusLoading={menusLoading}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isNavShown={isNavShown}
-            setIsNavShown={setIsNavShown}
-            isScrolled={isScrolled}
-          />
-          <SecondaryHeader
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isGuidesNavShown={isGuidesNavShown}
-            setIsGuidesNavShown={setIsGuidesNavShown}
-            isScrolled={isScrolled}
-          />
-        </>
+        <SecondaryHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isGuidesNavShown={isGuidesNavShown}
+          setIsGuidesNavShown={setIsGuidesNavShown}
+          isScrolled={isScrolled}
+        />
       )}
+
       <Main>
         <div>
           {isMobile ? <MastHeadTopMobileSingleGuides /> : <MastHeadTopGuides />}
         </div>
-
         {images?.length > 0 && (
           <>
             <div className="single-slider-wrapper">
@@ -269,18 +247,19 @@ export default function SingleContest(props) {
         )}
 
         <SingleContestEntryHeader
-          title={title}
-          categoryUri={categories?.[0]?.node?.uri}
-          parentCategory={categories?.[0]?.node?.parent?.node?.name}
-          categoryName={categories?.[0]?.node?.name}
-          author={author?.node?.name}
-          date={date}
+          title={contest?.title}
+          categoryUri={category?.uri}
+          parentCategory={category?.parent?.node?.name}
+          categoryName={category?.name}
+          author={contest?.author?.node?.name}
+          date={contest?.date}
         />
-        <ContentWrapperContest content={content} />
-        <div>
-          {isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />}
-        </div>
+
+        <ContentWrapperContest content={contest?.content} />
+
+        {isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />}
       </Main>
+
       <Footer />
     </main>
   )

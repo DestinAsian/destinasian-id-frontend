@@ -2,14 +2,16 @@ import { gql } from '@apollo/client'
 
 export const GetContentNodesSearch = gql`
   query GetContentNodesSearch($search: String!, $first: Int = 30) {
-    contentNodes(where: { search: $search, status: PUBLISH }, first: $first) {
+    contentNodes(
+      where: { search: $search, status: PUBLISH, contentTypes: [POST, TRAVEL_GUIDE] }
+      first: $first
+    ) {
       nodes {
         __typename
         id
-        databaseId
         uri
-        slug
         date
+
         ... on NodeWithTitle {
           title
         }
@@ -18,26 +20,19 @@ export const GetContentNodesSearch = gql`
           excerpt
         }
 
-        ... on NodeWithContentEditor {
-          content
-        }
-
         ... on NodeWithFeaturedImage {
           featuredImage {
             node {
               sourceUrl
-              altText
             }
           }
         }
 
         ... on Post {
-          date
           categories {
             edges {
               node {
                 name
-                uri
               }
               isPrimary
             }
@@ -45,21 +40,13 @@ export const GetContentNodesSearch = gql`
         }
 
         ... on TravelGuide {
-          date
           categories {
             edges {
               node {
                 name
-                uri
               }
               isPrimary
             }
-          }
-        }
-
-        contentType {
-          node {
-            label
           }
         }
       }

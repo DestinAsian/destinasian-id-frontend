@@ -1,7 +1,7 @@
-// wp-template/page-404-page.js
+'use client'
 
-import React, { useState, useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import React, { useState, useEffect, useMemo } from 'react'
+import { gql } from '@apollo/client'
 
 // Constants & Fragments
 import * as MENUS from '../constants/menus'
@@ -20,75 +20,115 @@ import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 
-export default function Component(props) {
+// SWR
+import { useSWRGraphQL } from '../lib/useSWRGraphQL'
+
+export default function Page404(props) {
   if (props.loading) return <>Loading...</>
 
-  // Site & page data
-  const { title: siteTitle, description: siteDescription } =
-    props?.data?.generalSettings
-  const { title, content, featuredImage, seo, uri } = props?.data?.page ?? {}
+  /* ===============================
+     CLIENT READY (ANTI HYDRATION)
+  =============================== */
+  const [mounted, setMounted] = useState(false)
 
-  // UI states
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
+  /* ===============================
+     SITE & PAGE DATA (SSR)
+  =============================== */
+  const { generalSettings, page } = props?.data ?? {}
+
+  const siteTitle = generalSettings?.title
+  const siteDescription = generalSettings?.description
+
+  const {
+    title,
+    content,
+    featuredImage,
+    seo,
+    uri,
+  } = page ?? {}
+
+  /* ===============================
+     UI STATES
+  =============================== */
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
 
-  // Lock body scroll when search or nav is active
+  /* ===============================
+     BODY SCROLL LOCK
+  =============================== */
   useEffect(() => {
     document.body.style.overflow =
       searchQuery || isNavShown ? 'hidden' : 'visible'
   }, [searchQuery, isNavShown])
 
-  // Add sticky header on scroll
+  /* ===============================
+     SCROLL DETECTOR
+  =============================== */
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => setIsScrolled(window.scrollY > 0)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Menus
-  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-    variables: {
+  /* ===============================
+     MENUS (SWR)
+  =============================== */
+  const { data: menusData } = useSWRGraphQL(
+    'menus-404',
+    GetMenus,
+    {
       first: 20,
       headerLocation: MENUS.PRIMARY_LOCATION,
       secondHeaderLocation: MENUS.SECONDARY_LOCATION,
       thirdHeaderLocation: MENUS.THIRD_LOCATION,
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-    },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+    }
+  )
 
-  const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
-  const secondaryMenu = menusData?.secondHeaderMenuItems?.nodes ?? []
-  const thirdMenu = menusData?.thirdHeaderMenuItems?.nodes ?? []
-  const fourthMenu = menusData?.fourthHeaderMenuItems?.nodes ?? []
-  const fifthMenu = menusData?.fifthHeaderMenuItems?.nodes ?? []
-  const featureMenu = menusData?.featureHeaderMenuItems?.nodes ?? []
+  const menusLoading = !menusData
 
-  // Latest stories
-  const { data: latestStories, loading: latestLoading } = useQuery(
+  const {
+    headerMenuItems,
+    secondHeaderMenuItems,
+    thirdHeaderMenuItems,
+    fourthHeaderMenuItems,
+    fifthHeaderMenuItems,
+    featureHeaderMenuItems,
+  } = menusData ?? {}
+
+  /* ===============================
+     LATEST STORIES (SWR)
+  =============================== */
+  const { data: latestStories } = useSWRGraphQL(
+    'latest-stories-404',
     GetLatestStories,
-    {
-      variables: { first: 5 },
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'network-only',
-    },
+    { first: 5 }
   )
 
-  // Merge all posts
-  const mainCatPosts = [
-    ...(latestStories?.posts?.edges ?? []).map((p) => p.node),
-    ...(latestStories?.editorials?.edges ?? []).map((p) => p.node),
-    ...(latestStories?.updates?.edges ?? []).map((p) => p.node),
-  ]
+  const latestLoading = !latestStories
 
-  const allPosts = mainCatPosts.sort(
-    (a, b) => new Date(b.date) - new Date(a.date),
-  )
+  const allPosts = useMemo(() => {
+    const posts = [
+      ...(latestStories?.posts?.edges ?? []).map((e) => e.node),
+      ...(latestStories?.editorials?.edges ?? []).map((e) => e.node),
+      ...(latestStories?.updates?.edges ?? []).map((e) => e.node),
+    ]
 
+    return posts.sort((a, b) => new Date(b.date) - new Date(a.date))
+  }, [latestStories])
+
+  /* ===============================
+     RENDER
+  =============================== */
   return (
     <main>
       <SEO
@@ -102,12 +142,12 @@ export default function Component(props) {
       <Header
         title={siteTitle}
         description={siteDescription}
-        primaryMenuItems={primaryMenu}
-        secondaryMenuItems={secondaryMenu}
-        thirdMenuItems={thirdMenu}
-        fourthMenuItems={fourthMenu}
-        fifthMenuItems={fifthMenu}
-        featureMenuItems={featureMenu}
+        primaryMenuItems={headerMenuItems?.nodes ?? []}
+        secondaryMenuItems={secondHeaderMenuItems?.nodes ?? []}
+        thirdMenuItems={thirdHeaderMenuItems?.nodes ?? []}
+        fourthMenuItems={fourthHeaderMenuItems?.nodes ?? []}
+        fifthMenuItems={fifthHeaderMenuItems?.nodes ?? []}
+        featureMenuItems={featureHeaderMenuItems?.nodes ?? []}
         latestStories={allPosts}
         menusLoading={menusLoading}
         latestLoading={latestLoading}
@@ -138,32 +178,3 @@ export default function Component(props) {
     </main>
   )
 }
-
-// GraphQL query
-Component.query = gql`
-  ${BlogInfoFragment}
-  ${FeaturedImage.fragments.entry}
-  query GetPageData($databaseId: ID = "133415", $asPreview: Boolean = false) {
-    page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
-      id
-      title
-      content
-      ...FeaturedImageFragment
-      seo {
-        title
-        metaDesc
-        focuskw
-      }
-      uri
-    }
-    generalSettings {
-      ...BlogInfoFragment
-    }
-  }
-`
-
-// Query variables
-Component.variables = ({ databaseId }, ctx) => ({
-  databaseId,
-  asPreview: ctx?.asPreview,
-})

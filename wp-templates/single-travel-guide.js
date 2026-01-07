@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { gql, useQuery } from '@apollo/client'
+'use client'
+
+import React, { useEffect, useState, useMemo } from 'react'
+import { gql } from '@apollo/client'
 import dynamic from 'next/dynamic'
 import Cookies from 'js-cookie'
+import { useSWRGraphQL } from '../lib/useSWRGraphQL'
 
 // Constants & Fragments
 import * as MENUS from '../constants/menus'
@@ -11,6 +14,7 @@ import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeaderTravelGuide } from '../queries/GetSecondaryHeaderTravelGuide'
+import { GetSecondaryHeaders } from '../queries/GetSecondaryHeaders'
 
 // Components
 import SEO from '../components/SEO/SEO'
@@ -32,43 +36,42 @@ import RelatedTravelGuides from '../components/RelatedPosts/RelatedTravelGuides'
 // Fonts
 import { open_sans } from '../styles/fonts/fonts'
 
-// Dynamic Ads
-const MastHeadTopGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
+const MastHeadTopGuides = dynamic(
+  () => import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
+  { ssr: false },
 )
-const MastHeadTopMobileSingleGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
-  ),
+const MastHeadTopMobileSingleGuides = dynamic(
+  () =>
+    import(
+      '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
+    ),
+  { ssr: false },
 )
-const MastHeadBottomGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
+const MastHeadBottomGuides = dynamic(
+  () => import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
+  { ssr: false },
 )
-const MastHeadBottomMobileGuides = dynamic(() =>
-  import(
-    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
-  ),
+const MastHeadBottomMobileGuides = dynamic(
+  () =>
+    import(
+      '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+    ),
+  { ssr: false },
 )
 
 export default function SingleTravelGuide(props) {
-  // 🔹 Loading state awal
   if (props.loading) return <>Loading...</>
 
-  // Password Protection
   const [enteredPassword, setEnteredPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  useEffect(() => {
-    const storedPassword = Cookies.get('travelGuidePassword')
-    if (
-      storedPassword &&
-      storedPassword === props?.data?.travelGuide?.passwordProtected?.password
-    ) {
-      setIsAuthenticated(true)
-    }
-  }, [props?.data?.travelGuide?.passwordProtected?.password])
-
-  // Extract Data
+  const travelGuide = props?.data?.travelGuide || {}
   const {
     title,
     content,
@@ -80,87 +83,94 @@ export default function SingleTravelGuide(props) {
     passwordProtected,
     author,
     date,
-  } = props?.data?.travelGuide
+  } = travelGuide
 
-  const categories = props?.data?.travelGuide.categories?.edges ?? []
-  const { description: siteDescription } = props?.data?.generalSettings
+  const categories = travelGuide?.categories?.edges ?? []
 
-  // Search & Nav
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isNavShown, setIsNavShown] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const siteDescription = props?.data?.generalSettings?.description
 
-  // Handle Scroll Lock saat search aktif
   useEffect(() => {
-    document.body.style.overflow = searchQuery ? 'hidden' : 'visible'
-  }, [searchQuery])
+    const storedPassword = Cookies.get('travelGuidePassword')
+    if (storedPassword === passwordProtected?.password) {
+      setIsAuthenticated(true)
+    }
+  }, [passwordProtected?.password])
 
-  // Sticky Header
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // Handle Scroll Lock saat nav aktif
-  useEffect(() => {
-    document.body.style.overflow = isNavShown ? 'hidden' : 'visible'
-  }, [isNavShown])
-
-  // Responsive (desktop vs mobile)
   useEffect(() => {
     const handleResize = () => {
-      const width = window.innerWidth
-      setIsDesktop(width >= 1024)
-      setIsMobile(width <= 768)
+      const w = window.innerWidth
+      setIsDesktop(w >= 1024)
+      setIsMobile(w < 1024)
     }
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+
     handleResize()
+    handleScroll()
+
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
-  // Query Category
-  const { data } = useQuery(GetSecondaryHeaderTravelGuide, {
-    variables: { first: 1, id: databaseId },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
+  useEffect(() => {
+    const shouldLock = searchQuery !== '' || isNavShown || isGuidesNavShown
+
+    document.body.style.overflow = shouldLock ? 'hidden' : ''
+  }, [searchQuery, isNavShown, isGuidesNavShown])
+
+  // Secondary Header (Category)
+  useSWRGraphQL(
+    databaseId ? 'secondary-header-travel-guide' : null,
+    GetSecondaryHeaderTravelGuide,
+    { first: 1, id: databaseId },
+  )
+
+  // Menus
+  const { data: menusData } = useSWRGraphQL('menus', GetMenus, {
+    first: 10,
+    headerLocation: MENUS.PRIMARY_LOCATION,
+    secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+    thirdHeaderLocation: MENUS.THIRD_LOCATION,
+    fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+    fifthHeaderLocation: MENUS.FIFTH_LOCATION,
   })
 
-  // Query Menus
-  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-    variables: {
-      first: 10,
-      headerLocation: MENUS.PRIMARY_LOCATION,
-      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-      thirdHeaderLocation: MENUS.THIRD_LOCATION,
-      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-    },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const { data: secondaryHeaderData, isLoading: secondaryHeaderLoading } =
+    useSWRGraphQL('secondary-headers', GetSecondaryHeaders, {
+      include: ['20', '29', '3'],
+    })
 
-  // Query Latest Stories
-  const { data: latestStories } = useQuery(GetLatestStories, {
-    variables: { first: 5 },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const secondaryCategories = useMemo(() => {
+    return secondaryHeaderData?.categories?.edges ?? []
+  }, [secondaryHeaderData])
 
-  const posts = latestStories?.posts?.edges?.map((p) => p.node) || []
-  const allPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date))
+  // Latest Stories
+  const { data: latestStories } = useSWRGraphQL(
+    'latest-stories',
+    GetLatestStories,
+    { first: 5 },
+  )
 
-  // Slider Images
+  const allPosts = useMemo(() => {
+    const posts = latestStories?.posts?.edges?.map((p) => p.node) || []
+
+    return [...posts].sort((a, b) => new Date(b.date) - new Date(a.date))
+  }, [latestStories])
+
   const images = [1, 2, 3, 4, 5].map((n) => [
     acfPostSlider?.[`slide${n}`]?.mediaItemUrl || null,
     acfPostSlider?.[`slideCaption${n}`] || null,
   ])
+
   const firstSlider = images[0]?.filter(Boolean)
 
-  // Password Protection Handler
   const handlePasswordSubmit = (e) => {
     e.preventDefault()
     if (enteredPassword === passwordProtected?.password) {
@@ -171,7 +181,6 @@ export default function SingleTravelGuide(props) {
     }
   }
 
-  // Password Protected Page
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main className={open_sans.variable}>
@@ -193,7 +202,6 @@ export default function SingleTravelGuide(props) {
   return (
     <>
       <main className={open_sans.variable}>
-        {/* SEO */}
         <SEO
           title={seo?.title}
           description={seo?.metaDesc}
@@ -201,75 +209,44 @@ export default function SingleTravelGuide(props) {
           url={uri}
           focuskw={seo?.focuskw}
         />
+        <SingleHeader
+          title={props?.data?.generalSettings?.title}
+          description={siteDescription}
+          primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
+          secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
+          thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
+          fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
+          fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
+          featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
+          latestStories={allPosts}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isNavShown={isNavShown}
+          setIsNavShown={setIsNavShown}
+          isScrolled={isScrolled}
+        />
 
-        {/* Header */}
         {isDesktop ? (
-          <>
-            <SingleHeader
-              title={props?.data?.generalSettings?.title}
-              description={siteDescription}
-              primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-              secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-              thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-              fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-              fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-              featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-              latestStories={allPosts}
-              menusLoading={menusLoading}
-              latestLoading={!latestStories}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              isNavShown={isNavShown}
-              setIsNavShown={setIsNavShown}
-              isScrolled={isScrolled}
-            />
-            <SingleDesktopHeader
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              isGuidesNavShown={isGuidesNavShown}
-              setIsGuidesNavShown={setIsGuidesNavShown}
-              isScrolled={isScrolled}
-            />
-          </>
+          <SingleDesktopHeader
+            categories={secondaryCategories}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
         ) : (
-          <>
-            <SingleHeader
-              title={props?.data?.generalSettings?.title}
-              description={siteDescription}
-              primaryMenuItems={menusData?.headerMenuItems?.nodes || []}
-              secondaryMenuItems={menusData?.secondHeaderMenuItems?.nodes || []}
-              thirdMenuItems={menusData?.thirdHeaderMenuItems?.nodes || []}
-              fourthMenuItems={menusData?.fourthHeaderMenuItems?.nodes || []}
-              fifthMenuItems={menusData?.fifthHeaderMenuItems?.nodes || []}
-              featureMenuItems={menusData?.featureHeaderMenuItems?.nodes || []}
-              latestStories={allPosts}
-              menusLoading={menusLoading}
-              latestLoading={!latestStories}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              isNavShown={isNavShown}
-              setIsNavShown={setIsNavShown}
-              isScrolled={isScrolled}
-            />
-            <SecondaryHeader
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              isGuidesNavShown={isGuidesNavShown}
-              setIsGuidesNavShown={setIsGuidesNavShown}
-              isScrolled={isScrolled}
-            />
-          </>
+          <SecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
         )}
 
-        {/* Main Content */}
         <Main>
-          <div>
-            {isMobile ? (
-              <MastHeadTopMobileSingleGuides />
-            ) : (
-              <MastHeadTopGuides />
-            )}
-          </div>
+          {isMobile ? <MastHeadTopMobileSingleGuides /> : <MastHeadTopGuides />}
 
           {firstSlider?.length > 0 && (
             <>
@@ -332,14 +309,13 @@ export default function SingleTravelGuide(props) {
                 (edge) => edge.node.databaseId,
               ) || []
             }
-            excludeIds={[props?.data?.travelGuide?.databaseId]}
+            excludeIds={[databaseId]}
           />
         </Main>
 
         <Footer />
       </main>
 
-      {/* Floating Button */}
       {props?.data?.travelGuide?.buttontopup && (
         <FloatingButtons buttonTopUp={props.data.travelGuide.buttontopup} />
       )}

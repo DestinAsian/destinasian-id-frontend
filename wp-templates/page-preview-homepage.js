@@ -1,15 +1,18 @@
+'use client'
+
 import React, { useState, useEffect, Suspense, useMemo } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import { gql } from '@apollo/client'
+import useSWR from 'swr'
 
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { GetMenus } from '../queries/GetMenus'
+import { graphQLFetcher } from '../lib/graphqlFetcher'
 
 // Components
-import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import HomepageHeader from '../components/HomepageHeader/HomepageHeader'
 import HomepageSecondaryHeader from '../components/HomepageHeader/HomepageSecondaryHeader/HomepageSecondaryHeader'
-import HomepageDestopHeader from '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
+import HomepageDesktopHeader from '../components/HomepageHeader/HomepageDestopHeader/HomepageDestopHeader'
 import FeatureWell from '../components/FeatureWell/FeatureWell'
 import Main from '../components/Main/Main'
 import FrontPageLayout from '../components/FrontPageLayout/FrontPageLayout'
@@ -21,25 +24,35 @@ import SEO from '../components/SEO/SEO'
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
-  // Global data
+  /* =====================
+     DATA
+  ===================== */
   const { title: siteTitle, description: siteDescription } =
     props?.data?.generalSettings || {}
-  const { featuredImage, uri, seo, acfHomepageSlider } = props?.data?.page || {}
 
-  // UI States
+  const { featuredImage, uri, seo, acfHomepageSlider } =
+    props?.data?.page || {}
+
+  /* =====================
+     UI STATES
+  ===================== */
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
-  const [currentFeatureWell, setCurrentFeatureWell] = useState(null)
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0)
 
-  // Scroll & resize listener
+  /* =====================
+     SCROLL & RESIZE
+  ===================== */
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 0)
     const onResize = () => setIsDesktop(window.innerWidth >= 1024)
 
     onResize()
+    onScroll()
+
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
 
@@ -49,53 +62,61 @@ export default function Component(props) {
     }
   }, [])
 
-  // Prevent body scroll when menus or search are active
+  /* =====================
+     BODY SCROLL LOCK
+  ===================== */
   useEffect(() => {
-    if (searchQuery || isNavShown || isGuidesNavShown) {
-      document.body.classList.add('no-scroll')
-    } else {
-      document.body.classList.remove('no-scroll')
-    }
+    const shouldLock = searchQuery || isNavShown || isGuidesNavShown
+    document.body.classList.toggle('no-scroll', !!shouldLock)
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
-  // FeatureWell slides
-  const featureWell = useMemo(() => {
+  /* =====================
+     FEATURE WELL DATA
+  ===================== */
+  const featureWells = useMemo(() => {
+    if (!acfHomepageSlider) return []
+
     return [1, 2, 3, 4, 5]
-      .map((num) => ({
-        type: acfHomepageSlider?.[`typeSlide${num}`],
-        videoSrc: acfHomepageSlider?.[`video${num}`]?.mediaItemUrl,
-        desktopSrc: acfHomepageSlider?.[`desktopSlide${num}`]?.mediaItemUrl,
-        mobileSrc: acfHomepageSlider?.[`mobileSlide${num}`]?.mediaItemUrl,
-        url: acfHomepageSlider?.[`slideLink${num}`],
-        category: acfHomepageSlider?.[`slideCategory${num}`],
-        categoryLink: acfHomepageSlider?.[`slideCategoryLink${num}`],
-        caption: acfHomepageSlider?.[`slideCaption${num}`],
-        standFirst: acfHomepageSlider?.[`slideStandFirst${num}`],
+      .map((i) => ({
+        type: acfHomepageSlider[`typeSlide${i}`],
+        videoSrc: acfHomepageSlider[`video${i}`]?.mediaItemUrl,
+        desktopSrc: acfHomepageSlider[`desktopSlide${i}`]?.mediaItemUrl,
+        mobileSrc: acfHomepageSlider[`mobileSlide${i}`]?.mediaItemUrl,
+        url: acfHomepageSlider[`slideLink${i}`],
+        category: acfHomepageSlider[`slideCategory${i}`],
+        categoryLink: acfHomepageSlider[`slideCategoryLink${i}`],
+        caption: acfHomepageSlider[`slideCaption${i}`],
+        standFirst: acfHomepageSlider[`slideStandFirst${i}`],
       }))
       .filter((slide) => slide.type)
   }, [acfHomepageSlider])
 
-  // Pick a random starting slide
+  /* =====================
+     RANDOM SLIDE (CLIENT ONLY)
+  ===================== */
   useEffect(() => {
-    if (featureWell.length) {
-      const randomIndex = Math.floor(Math.random() * featureWell.length)
-      setCurrentFeatureWell(featureWell[randomIndex])
-    }
-  }, [featureWell])
+    if (!featureWells.length) return
+    setActiveSlideIndex(Math.floor(Math.random() * featureWells.length))
+  }, [featureWells.length])
 
-  // Fetch menus
-  const { data: menusData, loading: menusLoading } = useQuery(GetMenus, {
-    variables: {
-      first: 10,
-      headerLocation: MENUS.PRIMARY_LOCATION,
-      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-      thirdHeaderLocation: MENUS.THIRD_LOCATION,
-      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-    },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  /* =====================
+     MENUS (SWR)
+  ===================== */
+  const { data: menusData, isLoading: menusLoading } = useSWR(
+    [
+      GetMenus,
+      {
+        first: 10,
+        headerLocation: MENUS.PRIMARY_LOCATION,
+        secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+        thirdHeaderLocation: MENUS.THIRD_LOCATION,
+        fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+        fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+      },
+    ],
+    ([query, variables]) => graphQLFetcher(query, variables),
+    { revalidateOnFocus: false },
+  )
 
   const menuProps = {
     title: siteTitle,
@@ -115,6 +136,9 @@ export default function Component(props) {
     isScrolled,
   }
 
+  /* =====================
+     RENDER
+  ===================== */
   return (
     <main>
       <SEO
@@ -126,7 +150,7 @@ export default function Component(props) {
       />
 
       {isDesktop ? (
-        <HomepageDestopHeader
+        <HomepageDesktopHeader
           {...menuProps}
           isGuidesNavShown={isGuidesNavShown}
           setIsGuidesNavShown={setIsGuidesNavShown}
@@ -147,9 +171,12 @@ export default function Component(props) {
       <Main>
         <div className="snap-y snap-mandatory">
           <div className="snap-start">
-            {currentFeatureWell && (
+            {featureWells.length > 0 && (
               <Container>
-                <FeatureWell featureWells={featureWell} />
+                <FeatureWell
+                  featureWells={featureWells}
+                  initialIndex={activeSlideIndex}
+                />
               </Container>
             )}
           </div>
@@ -160,10 +187,7 @@ export default function Component(props) {
             </Suspense>
           </div>
 
-          <div
-            className="component-videos w-full"
-            style={{ backgroundColor: '#008080' }}
-          >
+          <div className="component-videos w-full bg-[#008080]">
             <div className="mx-auto max-w-[calc(1400px+2rem)] px-4">
               <FrontPageVideos />
             </div>
@@ -175,107 +199,3 @@ export default function Component(props) {
     </main>
   )
 }
-
-// GraphQL Query
-Component.query = gql`
-  ${BlogInfoFragment}
-  ${FeaturedImage.fragments.entry}
-  query GetPageData($databaseId: ID!, $asPreview: Boolean = false) {
-    page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
-      id
-      title
-      uri
-      seo {
-        title
-        metaDesc
-        focuskw
-      }
-      ...FeaturedImageFragment
-      acfHomepageSlider {
-        desktopSlide1 {
-          mediaItemUrl
-        }
-        desktopSlide2 {
-          mediaItemUrl
-        }
-        desktopSlide3 {
-          mediaItemUrl
-        }
-        desktopSlide4 {
-          mediaItemUrl
-        }
-        desktopSlide5 {
-          mediaItemUrl
-        }
-        mobileSlide1 {
-          mediaItemUrl
-        }
-        mobileSlide2 {
-          mediaItemUrl
-        }
-        mobileSlide3 {
-          mediaItemUrl
-        }
-        mobileSlide4 {
-          mediaItemUrl
-        }
-        mobileSlide5 {
-          mediaItemUrl
-        }
-        video1 {
-          mediaItemUrl
-        }
-        video2 {
-          mediaItemUrl
-        }
-        video3 {
-          mediaItemUrl
-        }
-        video4 {
-          mediaItemUrl
-        }
-        video5 {
-          mediaItemUrl
-        }
-        slideCaption1
-        slideCaption2
-        slideCaption3
-        slideCaption4
-        slideCaption5
-        slideStandFirst1
-        slideStandFirst2
-        slideStandFirst3
-        slideStandFirst4
-        slideStandFirst5
-        slideCategory1
-        slideCategory2
-        slideCategory3
-        slideCategory4
-        slideCategory5
-        slideCategoryLink1
-        slideCategoryLink2
-        slideCategoryLink3
-        slideCategoryLink4
-        slideCategoryLink5
-        slideLink1
-        slideLink2
-        slideLink3
-        slideLink4
-        slideLink5
-        typeSlide1
-        typeSlide2
-        typeSlide3
-        typeSlide4
-        typeSlide5
-      }
-    }
-    generalSettings {
-      ...BlogInfoFragment
-    }
-  }
-`
-
-Component.variables = ({ databaseId }, ctx) => ({
-  databaseId,
-  asPreview: ctx?.asPreview,
-})
