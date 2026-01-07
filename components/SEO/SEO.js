@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Script from 'next/script'
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 import { AdScript, AdConfig } from 'react-ad-manager'
 import { GetFavicon } from '../../queries/GetFavicon'
 import { useQuery } from '@apollo/client'
@@ -128,7 +128,7 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
       <GoogleTagManager gtmId="GTM-K9B9SVH6" />
 
       {/* Google Analytics */}
-      {/* <GoogleAnalytics gaId="G-QXZNKCNDB2" /> */}
+      <GoogleAnalytics gaId="G-QXZNKCNDB2" />
 
       {/* GTM Backup (Script Manual untuk SSR) */}
       <Script

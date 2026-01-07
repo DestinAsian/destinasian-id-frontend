@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react'
 import Script from 'next/script'
 
-/**
- * Komponen tambahan untuk tracking pengunjung:
- * - Microsoft Clarity
- * - StatCounter
- * (Hanya aktif di produksi, bukan localhost)
- */
 export default function PageViewsCounter() {
   const [isLocalhost, setIsLocalhost] = useState(true)
 

@@ -28,8 +28,8 @@ export default function MoreReviews({ databaseId }) {
       id: databaseId,
       notIn: databaseId,
     },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'network-only',
   })
 
   const moreReviews = data?.post?.categories?.edges[0]?.node?.posts?.edges ?? []
