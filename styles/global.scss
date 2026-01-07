@@ -21,3 +21,17 @@
     font-weight: 400;
   }
   
+
+  /* Mode Screenshot: sembunyikan semua popup/menu/overlay */
+.ss-mode .popup,
+.ss-mode .dropdown,
+.ss-mode .menu-overlay,
+.ss-mode .modal {
+  display: none !important;
+}
+
+/* Fix header/sticky yang kadang muncul saat SS */
+.ss-mode .fixed,
+.ss-mode .sticky {
+  position: static !important;
+}

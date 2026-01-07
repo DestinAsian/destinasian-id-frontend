@@ -1,4 +1,10 @@
+# *
 User-agent: *
 Allow: /
 
+# Host
+Host: https://destinasian.co.id
+
+# Sitemaps
 Sitemap: https://destinasian.co.id/sitemap.xml
+Sitemap: https://destinasian.co.id/server-sitemap.xml
