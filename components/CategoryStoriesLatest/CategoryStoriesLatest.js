@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
-import { useQuery } from '@apollo/client'
+import useSWR from 'swr'
 
 import styles from './CategoryStoriesLatest.module.scss'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
 import * as CONTENT_TYPES from '../../constants/contentTypes'
 import GuideLatestStories from '../../components/GuideLatestStories/GuideLatestStories'
+import { graphQLFetcher } from '../../lib/graphqlFetcher'
 
 const cx = classNames.bind(styles)
 
@@ -19,30 +20,41 @@ export default function CategoryStoriesLatest({
   const uri = categoryUri?.categoryUri || categoryUri?.id || categoryUri || ''
   const shouldSkip = !uri
 
-  // Hindari hydration mismatch di Next.js
+  // Hindari hydration mismatch (LOGIKA TETAP)
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
-  // Jika tipe konten adalah POST, maka sembunyikan semua (tidak render apapun)
+  // Jika POST → jangan render
   if (contentType === CONTENT_TYPES.POST) {
     return null
   }
 
-  // Query hanya berjalan jika tipe konten TRAVEL_GUIDES
-  const { data, error, loading } = useQuery(GetCategoryStories, {
-    variables: {
-      first: 3,
-      after: null,
-      id: uri,
-      contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
-    },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-    skip: shouldSkip || !mounted || contentType !== CONTENT_TYPES.TRAVEL_GUIDES,
-  })
+  const swrKey =
+    mounted &&
+    !shouldSkip &&
+    contentType === CONTENT_TYPES.TRAVEL_GUIDES
+      ? [
+          GetCategoryStories,
+          {
+            first: 3,
+            after: null,
+            id: uri,
+            contentTypes: [CONTENT_TYPES.TRAVEL_GUIDES],
+          },
+        ]
+      : null
 
-  // Placeholder saat loading
-  if (!mounted || loading) {
+  const { data, error, isLoading } = useSWR(
+    swrKey,
+    ([query, variables]) => graphQLFetcher(query, variables),
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    }
+  )
+
+  // Placeholder loading (TETAP SAMA)
+  if (!mounted || isLoading) {
     return (
       <div className={cx('component', 'stable-placeholder')}>
         <div className={cx('skeleton')}>
@@ -58,15 +70,13 @@ export default function CategoryStoriesLatest({
 
   if (shouldSkip || error) return null
 
-  // Ambil daftar post
+  // Ambil post
   const fetchedPosts =
     data?.category?.contentNodes?.edges?.map((edge) => edge.node) || []
 
-  // Jika ada pinPost, tampilkan itu terlebih dahulu
   const displayedPost = pinPosts?.pinPost || fetchedPosts[0]
   if (!displayedPost) return null
 
-  // Hanya tampilkan jika konten bertipe TRAVEL_GUIDES
   if (displayedPost.__typename !== 'TravelGuide') {
     return null
   }

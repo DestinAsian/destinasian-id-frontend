@@ -1,8 +1,12 @@
+'use client'
+
 import classNames from 'classnames/bind'
+import useSWR from 'swr'
 import styles from './CategorySecondStoriesLatest.module.scss'
-import { useQuery } from '@apollo/client'
+
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
 import * as CONTENT_TYPES from '../../constants/contentTypes'
+import { graphQLFetcher } from '../../lib/graphqlFetcher'
 
 import GuideSecondLatestStories from '../../components/GuideSecondLatestStories/GuideSecondLatestStories'
 import GuideTextBlock from '../../components/GuideSecondLatestStories/GuideTextBlock'
@@ -45,45 +49,49 @@ export default function CategorySecondStoriesLatest({
   const activeCategoryName = name?.toLowerCase() || ''
   const parentCategoryName = parent?.node?.name?.toLowerCase() || ''
 
-  // Deteksi kategori travel guide
   const isTravelGuideCategory =
     travelGuideRoots.includes(activeCategoryName) ||
     travelGuideRoots.includes(parentCategoryName)
 
-  // Hanya gunakan TRAVEL_GUIDES, sembunyikan semua jika bukan
   const contentTypes = [CONTENT_TYPES.TRAVEL_GUIDES]
-
   const shouldSkip = !uri
 
-  // Jalankan query hanya untuk TRAVEL_GUIDES
-  const { data, error, loading } = useQuery(GetCategoryStories, {
-    variables: {
-      first: 3,
-      after: null,
-      id: uri,
-      contentTypes,
-    },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-    skip: shouldSkip,
-  })
+  const swrKey = shouldSkip
+    ? null
+    : [
+        GetCategoryStories,
+        {
+          first: 3,
+          after: null,
+          id: uri,
+          contentTypes,
+        },
+      ]
 
-  // Loading dan error handling
-  if (shouldSkip || loading) return null
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
-
-  // Ambil semua post hasil query
-  const allPosts = data?.category?.contentNodes?.edges?.map((post) => post.node)
-
-  // Filter hanya yang bertipe TravelGuide
-  const travelGuides = allPosts?.filter(
-    (item) => item.__typename === 'TravelGuide',
+  const { data, error, isLoading } = useSWR(
+    swrKey,
+    ([query, variables]) => graphQLFetcher(query, variables),
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    }
   )
 
-  // Jika tidak ada TravelGuide, sembunyikan semua (termasuk kategori POST)
-  if (!travelGuides?.length) return null
+  // Loading & skip handling (LOGIKA TETAP)
+  if (shouldSkip || isLoading) return null
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
-  // Gunakan secondPinPost jika ada, kalau tidak ambil item ke-2
+  // Ambil semua post
+  const allPosts =
+    data?.category?.contentNodes?.edges?.map((post) => post.node) || []
+
+  // Filter TravelGuide saja
+  const travelGuides = allPosts.filter(
+    (item) => item.__typename === 'TravelGuide'
+  )
+
+  if (!travelGuides.length) return null
+
   const secondPinPost = pinPosts?.secondPinPost
   const travelGuide = secondPinPost || travelGuides[1]
   if (!travelGuide) return null
@@ -93,7 +101,7 @@ export default function CategorySecondStoriesLatest({
   return (
     <div className={cx('component')}>
       <div className={cx('gridWrapper')}>
-        {/* Kiri: konten utama */}
+        {/* Kiri */}
         <div className={cx('leftColumn')}>
           <GuideSecondLatestStories
             content={travelGuide.content}
@@ -109,12 +117,14 @@ export default function CategorySecondStoriesLatest({
             caption={travelGuide.featuredImage?.node?.caption}
           />
 
-          {/* Info tambahan guide */}
           {guideInfo && (
             <div className={cx('guide-info')}>
               {guideInfo.guideName && (
-                <span className={cx('guide-name')}>{guideInfo.guideName}</span>
+                <span className={cx('guide-name')}>
+                  {guideInfo.guideName}
+                </span>
               )}
+
               {guideInfo.linkLocation && guideInfo.guideLocation && (
                 <>
                   {guideInfo.guideName && (
@@ -130,6 +140,7 @@ export default function CategorySecondStoriesLatest({
                   </a>
                 </>
               )}
+
               {guideInfo.guidePrice && (
                 <>
                   {(guideInfo.guideName || guideInfo.guideLocation) && (
@@ -140,6 +151,7 @@ export default function CategorySecondStoriesLatest({
                   </span>
                 </>
               )}
+
               {guideInfo.linkBookNow && (
                 <>
                   {(guideInfo.guideName ||
@@ -160,7 +172,6 @@ export default function CategorySecondStoriesLatest({
             </div>
           )}
 
-          {/* Teks dan link */}
           <GuideTextBlock
             title={travelGuide.title}
             excerpt={travelGuide.excerpt}
@@ -168,13 +179,12 @@ export default function CategorySecondStoriesLatest({
           />
         </div>
 
-        {/* Kanan: banner */}
+        {/* Kanan */}
         <div className={cx('rightColumn')}>
           <BannerFokusDA bannerDa={bannerDa} />
         </div>
       </div>
 
-      {/* Garis pemisah */}
       <div style={{ maxWidth: '1400px', margin: '1rem auto' }}>
         <hr style={{ border: 'none', borderTop: '1px solid black' }} />
       </div>

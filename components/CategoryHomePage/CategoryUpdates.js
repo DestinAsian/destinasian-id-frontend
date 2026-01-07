@@ -1,16 +1,33 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState, memo } from 'react'
+import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './CategoryUpdates.module.scss'
 
-const CategoryUpdates = React.memo(({ data = [] }) => {
-  if (!data?.length) return null
+const CategoryUpdates = memo(({ data = [] }) => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const { data: swrData } = useSWR(
+    mounted ? 'category-updates' : null,
+    null,
+    {
+      fallbackData: data,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  if (!mounted || !swrData?.length) return null
 
   return (
     <div className={styles.categoryUpdatesWrapper}>
-      {data.map(({ node: category }) => {
+      {swrData.map(({ node: category }) => {
         const posts = category?.contentNodes?.edges?.slice(0, 8) || []
         if (!posts.length) return null
 
@@ -27,6 +44,7 @@ const CategoryUpdates = React.memo(({ data = [] }) => {
             <div className={styles.postsWrapper}>
               {posts.map(({ node: post }) => {
                 const image = post.featuredImage?.node
+
                 return (
                   <article key={post.id} className={styles.card}>
                     <Link href={post.uri} className={styles.cardInner}>

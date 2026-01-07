@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { format } from 'date-fns'
@@ -10,13 +10,12 @@ const CategoryFeatures = ({ data }) => {
   if (!data) return null
 
   const { name, uri, categoryImages, posts } = data
-
-  const postEdges = useMemo(() => posts?.edges || [], [posts])
+  const postEdges = posts?.edges ?? []
 
   return (
     <section className={styles.CategoryFeaturesWrapper}>
       <header className={styles.childCategory}>
-        <Link href={uri}>
+        <Link href={uri} className={styles.titleLink}>
           <h2 className={styles.title}>{name}</h2>
         </Link>
 
@@ -29,27 +28,34 @@ const CategoryFeatures = ({ data }) => {
 
       <div className={styles.gridSection}>
         {postEdges.map(({ node: post }) => {
+          if (!post) return null
+
           const image = post.featuredImage?.node?.mediaItemUrl
+          const categories = post.categories?.edges?.map(e => e.node) ?? []
 
-          const categoryList = post.categories?.edges?.map((e) => e.node) || []
-          const categoryWithParent = categoryList.find(cat => cat.parent?.node)
-          const category = categoryWithParent || categoryList[0]
+          const categoryWithParent = categories.find(cat => cat?.parent?.node)
+          const category = categoryWithParent || categories[0]
 
-          const parentCategory = category?.parent?.node?.name || ''
-          const subCategory = category?.name || ''
+          const parentCategory = category?.parent?.node?.name
+          const subCategory = category?.name
+
+          const safeDate = post.date
+            ? format(new Date(post.date), 'dd MMMM yyyy')
+            : null
 
           return (
-            <Link key={post.id} href={post.uri}>
-              <article className={styles.card}>
+            <article key={post.id} className={styles.card}>
+              <Link href={post.uri} className={styles.cardLink}>
                 {image && (
                   <div className={styles.imageWrapper}>
                     <Image
                       src={image}
-                      alt={post.title}
+                      alt={post.title || 'Article image'}
                       width={800}
                       height={600}
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className={styles.thumbnail}
-                      loading="lazy"
+                      priority={false}
                       draggable={false}
                     />
                   </div>
@@ -63,20 +69,24 @@ const CategoryFeatures = ({ data }) => {
                   <p className={styles.postCategory}>{subCategory}</p>
                 )}
 
-                <div
-                  className={styles.excerpt}
-                  dangerouslySetInnerHTML={{ __html: post.excerpt }}
-                />
+                {post.excerpt && (
+                  <div
+                    className={styles.excerpt}
+                    dangerouslySetInnerHTML={{ __html: post.excerpt }}
+                  />
+                )}
 
                 <footer className={styles.footer}>
                   <span className={styles.readMore}>Read More →</span>
                 </footer>
 
-                <time className={styles.date}>
-                  {format(new Date(post.date), 'dd MMMM yyyy')}
-                </time>
-              </article>
-            </Link>
+                {safeDate && (
+                  <time className={styles.date} dateTime={post.date}>
+                    {safeDate}
+                  </time>
+                )}
+              </Link>
+            </article>
           )
         })}
       </div>

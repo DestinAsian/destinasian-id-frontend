@@ -1,11 +1,13 @@
 'use client'
 
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
+import useSWR from 'swr'
 import classNames from 'classnames/bind'
 import styles from './CategoryStories.module.scss'
-import { useQuery } from '@apollo/client'
+
 import * as CONTENT_TYPES from '../../constants/contentTypes'
 import { GetCategoryStories } from '../../queries/GetCategoryStories'
+import { graphQLFetcher } from '../../lib/graphqlFetcher'
 
 import Button from '../Button/Button'
 import PostTwoColumns from '../PostTwoColumns/PostTwoColumns'
@@ -19,14 +21,16 @@ export default function CategoryStories({
   name,
   parent,
 }) {
-
   const POSTS_PER_LOAD = 4
+
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_LOAD)
 
-  // Menyimpan preload post yang datang diam-diam
+  // preload result (pengganti fetchMore)
   const [preloadedEdges, setPreloadedEdges] = useState([])
 
-
+  /* ===========================
+     1. CONTENT TYPE LOGIC (TIDAK DIUBAH)
+     =========================== */
   const TRAVEL_GUIDE_ROOTS = ['bali', 'jakarta', 'bandung', 'surabaya']
 
   const isTravelGuideCategory =
@@ -37,48 +41,81 @@ export default function CategoryStories({
     ? [CONTENT_TYPES.TRAVEL_GUIDES]
     : [CONTENT_TYPES.POST]
 
-
-  const { data, error, loading, fetchMore } = useQuery(GetCategoryStories, {
-    variables: {
-      first: POSTS_PER_LOAD,
-      after: null,
-      id: categoryUri,
-      contentTypes,
-    },
-    fetchPolicy: 'cache-and-network',
-  })
-
-  useEffect(() => {
-    if (!loading && data?.category?.contentNodes?.pageInfo?.hasNextPage) {
-      fetchMore({
-        variables: {
-          first: 30, // jumlah preload besar → bebas, user tetap cepat
-          after: data.category.contentNodes.pageInfo.endCursor,
-        },
-      }).then((res) => {
-        const newEdges = res?.data?.category?.contentNodes?.edges || []
-        setPreloadedEdges(newEdges)
-      })
+  /* ===========================
+     2. INITIAL FETCH (SWR)
+     =========================== */
+  const { data, error } = useSWR(
+    categoryUri
+      ? [
+          GetCategoryStories,
+          {
+            first: POSTS_PER_LOAD,
+            after: null,
+            id: categoryUri,
+            contentTypes,
+          },
+        ]
+      : null,
+    ([query, variables]) => graphQLFetcher(query, variables),
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
     }
-  }, [loading, data, fetchMore])
+  )
+
+  useSWR(
+    data?.category?.contentNodes?.pageInfo?.hasNextPage
+      ? [
+          GetCategoryStories,
+          {
+            first: 30, // preload besar, tetap aman
+            after: data.category.contentNodes.pageInfo.endCursor,
+            id: categoryUri,
+            contentTypes,
+          },
+        ]
+      : null,
+    ([query, variables]) =>
+      graphQLFetcher(query, variables).then((res) => {
+        const edges =
+          res?.category?.contentNodes?.edges || []
+
+        setPreloadedEdges(edges)
+        return res
+      }),
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    }
+  )
 
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
+  /* ===========================
+     4. MERGE DATA (TIDAK DIUBAH)
+     =========================== */
   const allPosts = useMemo(() => {
-    const initialEdges = data?.category?.contentNodes?.edges || []
-    const loadedPosts = [...initialEdges, ...preloadedEdges].map((e) => e.node)
+    const initialEdges =
+      data?.category?.contentNodes?.edges || []
+
+    const loadedPosts = [...initialEdges, ...preloadedEdges].map(
+      (e) => e.node
+    )
 
     const pin1 = pinPosts?.pinPost ? [pinPosts.pinPost] : []
-    const pin2 = pinPosts?.secondPinPost ? [pinPosts.secondPinPost] : []
+    const pin2 = pinPosts?.secondPinPost
+      ? [pinPosts.secondPinPost]
+      : []
 
     return [...pin1, ...pin2, ...loadedPosts].filter(
-      (v, i, a) => a.findIndex((t) => t.id === v.id) === i
+      (v, i, a) =>
+        a.findIndex((t) => t.id === v.id) === i
     )
   }, [data, preloadedEdges, pinPosts])
 
-
-
-    //  4. DATA YANG DITAMPILKAN
+  /* ===========================
+     5. VISIBLE POSTS (TIDAK DIUBAH)
+     =========================== */
   const visiblePosts = allPosts.slice(0, visibleCount)
 
   const renderPost = (post) => {
@@ -86,7 +123,6 @@ export default function CategoryStories({
 
     return (
       <div key={post.id} className={cx('post-wrapper')}>
-
         <PostTwoColumns
           title={post.title}
           uri={post.uri}
@@ -96,24 +132,29 @@ export default function CategoryStories({
         {guideInfo && (
           <div className={cx('guide-info')}>
             {guideInfo.guideName && (
-              <span className={cx('guide-name')}>{guideInfo.guideName}</span>
+              <span className={cx('guide-name')}>
+                {guideInfo.guideName}
+              </span>
             )}
 
-            {guideInfo.guideLocation && guideInfo.linkLocation && (
-              <a
-                href={guideInfo.linkLocation}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cx('guide-location')}
-              >
-                {guideInfo.guideLocation}
-              </a>
-            )}
+            {guideInfo.guideLocation &&
+              guideInfo.linkLocation && (
+                <a
+                  href={guideInfo.linkLocation}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cx('guide-location')}
+                >
+                  {guideInfo.guideLocation}
+                </a>
+              )}
 
             {guideInfo.guidePrice && (
               <>
                 <span className={cx('separator')}>|</span>
-                <span className={cx('guide-price')}>{guideInfo.guidePrice}</span>
+                <span className={cx('guide-price')}>
+                  {guideInfo.guidePrice}
+                </span>
               </>
             )}
 
@@ -137,7 +178,9 @@ export default function CategoryStories({
           title={post.title}
           excerpt={post.excerpt}
           uri={post.uri}
-          parentCategory={post.categories?.edges[0]?.node?.parent?.node?.name}
+          parentCategory={
+            post.categories?.edges[0]?.node?.parent?.node?.name
+          }
           category={post.categories?.edges[0]?.node?.name}
           categoryUri={post.categories?.edges[0]?.node?.uri}
         />
@@ -147,15 +190,14 @@ export default function CategoryStories({
 
   return (
     <div className={cx('component')}>
-
-      {/* Render post yang sudah visible */}
       {visiblePosts.map(renderPost)}
 
-      {/* Tombol load more → tanpa fetch ulang */}
       {allPosts.length > visibleCount && (
         <div className="mx-auto my-0 flex w-full justify-center">
           <Button
-            onClick={() => setVisibleCount((prev) => prev + POSTS_PER_LOAD)}
+            onClick={() =>
+              setVisibleCount((prev) => prev + POSTS_PER_LOAD)
+            }
             className="gap-x-4"
           >
             LOAD MORE...

@@ -1,28 +1,24 @@
 'use client'
 
-import React, {
-  Suspense,
-  useEffect,
-  useState,
-  useRef,
-  memo,
-} from 'react'
-import { useQuery } from '@apollo/client'
+import React, { useState, useRef, memo } from 'react'
 import dynamic from 'next/dynamic'
 import classNames from 'classnames/bind'
 import Link from 'next/link'
 
 import styles from './FrontPageLayout.module.scss'
+
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import { GetCategoryFeatures } from '../../queries/GetCategoryFeatures'
 import { GetChildrenTravelGuides } from '../../queries/GetChildrenTravelGuides'
+
+import { useSWRGraphQL } from '../../lib/useSWRGraphQL'
 
 import TravelGuideCategories from '../CategoryHomePage/TravelGuideCategories'
 import CategoryUpdates from '../CategoryHomePage/CategoryUpdates'
 import CategoryNewsUpdates from '../CategoryHomePage/CategoryNewsUpdates'
 import CategoryFeatures from '../CategoryHomePage/CategoryFeatures'
 
-// Dynamic import untuk komponen ads berat
+// === ADS (DYNAMIC IMPORT – NON BLOCKING) ===
 const MastHeadTopHome = dynamic(() =>
   import('../AdUnit/MastHeadTop/MastHeadTopHome'),
 )
@@ -41,78 +37,72 @@ const HalfPageHome1 = dynamic(() =>
 
 const cx = classNames.bind(styles)
 
+/* --------------------------------
+        LIGHT MOBILE DETECTION
+-------------------------------- */
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(false)
-  const timerRef = useRef(null)
+  const mediaRef = useRef(null)
 
-  useEffect(() => {
-    const update = () => setIsMobile(window.innerWidth <= breakpoint)
+  if (typeof window !== 'undefined' && !mediaRef.current) {
+    mediaRef.current = window.matchMedia(`(max-width: ${breakpoint}px)`)
+  }
 
-    const throttled = () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-      timerRef.current = setTimeout(update, 150)
-    }
+  React.useEffect(() => {
+    if (!mediaRef.current) return
 
-    update()
-    window.addEventListener('resize', throttled, { passive: true })
+    const media = mediaRef.current
+    setIsMobile(media.matches)
 
-    return () => {
-      clearTimeout(timerRef.current)
-      window.removeEventListener('resize', throttled)
-    }
+    const handler = (e) => setIsMobile(e.matches)
+    media.addEventListener('change', handler)
+
+    return () => media.removeEventListener('change', handler)
   }, [breakpoint])
 
   return isMobile
 }
 
-/* -------------------------------
+/* --------------------------------
         MAIN COMPONENT
 -------------------------------- */
 function FrontPageLayout() {
   const isMobile = useIsMobile()
 
-  // === QUERY ===
-  const { data: travelGuideData, loading: travelGuideLoading } = useQuery(
+  /* ===== SWR GRAPHQL (NON BLOCKING) ===== */
+  const { data: travelGuideData } = useSWRGraphQL(
+    'travel-guides',
     GetChildrenTravelGuides,
-    {
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'network-only',
-    },
   )
 
-  const { data: updatesData, loading: updatesLoading } = useQuery(
+  const { data: updatesData } = useSWRGraphQL(
+    'category-updates',
     GetCategoryUpdates,
-    {
-      variables: { include: ['41'] },
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'network-only',
-    },
+    { include: ['41'] },
   )
 
-  const { data: featuresData, loading: featuresLoading } = useQuery(
+  const { data: featuresData } = useSWRGraphQL(
+    'category-features',
     GetCategoryFeatures,
-    {
-      variables: { id: '20' },
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'network-only',
-    },
+    { id: '20' },
   )
 
-  // === DATA EXTRACT ===
-  const categoryEdges = updatesData?.category?.children?.edges || []
+  /* ===== DATA NORMALIZATION ===== */
+  const categoryEdges = updatesData?.category?.children?.edges ?? []
   const hasGuides =
     travelGuideData?.category?.children?.edges?.length > 0
+
   const categoryFeatures = featuresData?.category
 
   return (
     <>
-      {/* === TOP AD === */}
+      {/* ===== TOP AD ===== */}
       <div className={cx('ad-slot')}>
         {isMobile ? <MastHeadTopMobileHome /> : <MastHeadTopHome />}
       </div>
 
-      {/* === TRAVEL GUIDES === */}
-      {!travelGuideLoading && hasGuides && (
+      {/* ===== TRAVEL GUIDES ===== */}
+      {hasGuides && (
         <>
           <section className={cx('component-updates')}>
             <div className={cx('category-insights-component')}>
@@ -123,8 +113,8 @@ function FrontPageLayout() {
         </>
       )}
 
-      {/* === CATEGORY UPDATES === */}
-      {!updatesLoading && categoryEdges.length > 0 && (
+      {/* ===== CATEGORY UPDATES ===== */}
+      {categoryEdges.length > 0 && (
         <>
           <section className={cx('component-updates')}>
             <div className={cx('category-updates-component')}>
@@ -135,14 +125,15 @@ function FrontPageLayout() {
         </>
       )}
 
-      {/* === BOTTOM AD === */}
+      {/* ===== BOTTOM AD ===== */}
       <div className={cx('ad-slot')}>
         {isMobile ? <MastHeadBottomMobileHome /> : <MastHeadBottomHome />}
       </div>
 
-      {/* === CATEGORY TITLES === */}
+      {/* ===== CATEGORY TITLES ===== */}
       {categoryEdges.map(({ node: category }) => {
         const parent = category?.parent?.node?.name
+
         return (
           <section
             key={category.id}
@@ -157,7 +148,7 @@ function FrontPageLayout() {
         )
       })}
 
-      {/* === NEWS + HALF PAGE === */}
+      {/* ===== NEWS + HALF PAGE ===== */}
       {categoryEdges.length > 0 && (
         <>
           <section className={cx('component-news-updates')}>
@@ -176,16 +167,14 @@ function FrontPageLayout() {
         </>
       )}
 
-      {/* === CATEGORY FEATURES === */}
-      <Suspense fallback={null}>
-        {!featuresLoading && categoryFeatures && (
-          <section className={cx('component-updates')}>
-            <div className={cx('category-insights-component')}>
-              <CategoryFeatures data={categoryFeatures} />
-            </div>
-          </section>
-        )}
-      </Suspense>
+      {/* ===== CATEGORY FEATURES ===== */}
+      {categoryFeatures && (
+        <section className={cx('component-updates')}>
+          <div className={cx('category-insights-component')}>
+            <CategoryFeatures data={categoryFeatures} />
+          </div>
+        </section>
+      )}
     </>
   )
 }

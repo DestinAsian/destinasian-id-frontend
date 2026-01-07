@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useMemo } from 'react'
-import { useQuery } from '@apollo/client'
+import React, { memo, useEffect, useMemo, useState } from 'react'
+import useSWR from 'swr'
+import { getApolloClient } from '@faustwp/core'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper'
 import Link from 'next/link'
@@ -13,25 +14,51 @@ import styles from './CategoryNewsUpdates.module.scss'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-const CategoryNewsUpdates = React.memo(() => {
-  const { data, loading, error } = useQuery(GetCategoryUpdates, {
-    variables: { include: ['41'] },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
+/* ============================
+   GRAPHQL FETCHER
+============================ */
+const graphQLFetcher = async (query, variables) => {
+  const client = getApolloClient()
+  const { data } = await client.query({
+    query,
+    variables,
   })
+  return data
+}
 
-  const children = useMemo(() => data?.category?.children?.edges || [], [data])
+const CategoryNewsUpdates = memo(() => {
+  const [mounted, setMounted] = useState(false)
 
-  if (loading || !data) return null
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const { data, error } = useSWR(
+    mounted ? ['GetCategoryUpdates', { include: ['41'] }] : null,
+    ([, variables]) => graphQLFetcher(GetCategoryUpdates, variables),
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    }
+  )
+
+  const children = useMemo(
+    () => data?.category?.children?.edges || [],
+    [data]
+  )
+
+  if (!mounted) return null
   if (error) return <p className={styles.error}>Error: {error.message}</p>
+  if (!children.length) return null
 
   return (
     <div className={styles.categoryNewsUpdatesWrapper}>
       {children.map(({ node: category }) => {
         const posts = category?.contentNodes?.edges || []
+        if (!posts.length) return null
 
         return (
-          <div key={category.id} className={styles.childCategory}>
+          <section key={category.id} className={styles.childCategory}>
             {category.description && (
               <p className={styles.description}>{category.description}</p>
             )}
@@ -49,7 +76,6 @@ const CategoryNewsUpdates = React.memo(() => {
 
                 return (
                   <SwiperSlide key={post.id}>
-                    {/* Seluruh area slide clickable */}
                     <Link href={post.uri} className={styles.slideLink}>
                       <div className={styles.slideWrapper}>
                         {image?.mediaItemUrl && (
@@ -59,18 +85,19 @@ const CategoryNewsUpdates = React.memo(() => {
                               alt={image.title || post.title}
                               width={1022}
                               height={600}
-                              className={styles.thumbnail}
                               loading="lazy"
                               draggable={false}
-                              style={{
-                                width: '1022px',
-                                height: '600px',
-                                objectFit: 'cover',
-                              }}
+                              className={styles.thumbnail}
+                              style={{ objectFit: 'cover' }}
                             />
+
                             <div className={styles.overlay}>
-                              <h3 className={styles.postTitle}>{post.title}</h3>
-                              <span className={styles.readMore}>Read More →</span>
+                              <h3 className={styles.postTitle}>
+                                {post.title}
+                              </h3>
+                              <span className={styles.readMore}>
+                                Read More →
+                              </span>
                             </div>
                           </div>
                         )}
@@ -80,7 +107,7 @@ const CategoryNewsUpdates = React.memo(() => {
                 )
               })}
             </Swiper>
-          </div>
+          </section>
         )
       })}
     </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
 import classNames from 'classnames/bind'
@@ -15,9 +16,20 @@ const normalize = (str = '') => str.toLowerCase().trim()
 
 // Tambahkan slug kategori yang Coming Soon di sini
 const COMING_SOON = new Set([])
+
 export default function TravelGuideCategories({ data }) {
+  const { data: swrData } = useSWR(
+    'travel-guides-categories',
+    null,
+    {
+      fallbackData: data,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
   const categories =
-    data?.category?.children?.edges?.map((e) => e.node) ?? []
+    swrData?.category?.children?.edges?.map((e) => e.node) ?? []
 
   if (!categories.length) return null
 
