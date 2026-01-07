@@ -12,13 +12,11 @@ let cx = className.bind(styles)
 export default function EntryHeader({
   parent,
   title,
-  hcTitle,
-  hcCountryTitle,
+
   image,
   date,
   author,
   className,
-  hcCaption,
   contestTitle,
 }) {
   const hasText = parent || title || date || author
@@ -40,23 +38,6 @@ export default function EntryHeader({
             <PostInfo className={cx('byline')} author={author} date={date} />
           </Container>
         </div>
-      )}
-
-      {hcTitle && (
-        <Container>
-          <Heading className={cx('hc-title')}>{hcTitle}</Heading>
-          <Heading className={cx('hc-caption')}>{hcCaption}</Heading>
-        </Container>
-      )}
-
-      {hcCountryTitle && (
-        <Container>
-          <Heading className={cx('hc-title')}>
-            {'Honors Circle : '}
-            {hcCountryTitle}
-          </Heading>
-          <Heading className={cx('hc-caption')}>{hcCaption}</Heading>
-        </Container>
       )}
 
       {contestTitle && (

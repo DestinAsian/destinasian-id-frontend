@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import Link from 'next/link'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
@@ -30,23 +30,14 @@ export default function SingleHeader({
 }) {
   const isDesktop = useMediaQuery({ minWidth: 768 })
 
-  const [isMenuOpen, setMenuOpen] = useState(false)
-
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.classList.add('menu-open')
-    } else {
-      document.body.classList.remove('menu-open')
-    }
-  }, [isMenuOpen])
+    document.body.classList.toggle('menu-open', isNavShown)
+  }, [isNavShown])
   // Clear search input
-  const clearSearch = () => {
-    setSearchQuery('') // Reset the search query
-  }
-
-  const isSearchResultsVisible = !!searchQuery
+  const clearSearch = () => setSearchQuery('')
+  const isSearchResultsVisible = Boolean(searchQuery)
   // Initialize an array to store unique posts
-  const contentNodesPosts = []
+  const contentNodesPosts = useMemo(() => [], [])
 
   return (
     <header
@@ -61,7 +52,7 @@ export default function SingleHeader({
         <Container>
           <div
             className={cx('navbar', {
-              sticky: isScrolled && !isNavShown && !isMenuOpen,
+              sticky: isScrolled && !isNavShown,
               'menu-active': isNavShown,
             })}
           >

@@ -8,7 +8,6 @@ export default function SingleGuideFeaturedImage({ image, className }) {
   return (
     <div className={cx('component', className)}>
       <div className={cx('image-wrapper')}>
-        {/* Render the image only if provided */}
         {image && (
           <FeaturedImage
             image={image}
