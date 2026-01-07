@@ -1,11 +1,5 @@
 import styles from './LoadingSearchResult.module.scss';
 
-/**
- * A component that mimics a search result in a loading state for better
- * perceived performance.
- *
- * @returns {React.ReactElement} The LoadingSearchResults component.
- */
 export default function LoadingSearchResult() {
   return (
     <div className={styles['loading-result']}>
