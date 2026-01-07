@@ -56,6 +56,7 @@
     // Remove link underline when component is inside header.
     header & {
       text-decoration: none;
+      text-transform: uppercase;
     }
     @media (min-width: $breakpoint-small) {
       padding-left: 0;

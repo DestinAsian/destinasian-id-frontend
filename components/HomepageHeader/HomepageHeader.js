@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import Link from 'next/link'
@@ -28,6 +30,7 @@ export default function HomepageHeader({
   setIsNavShown,
   isScrolled,
 }) {
+  
   const isDesktop = useMediaQuery({ minWidth: 768 })
   const [isMenuOpen, setMenuOpen] = useState(false)
   // Tambahkan class "menu-open" ke <body> saat menu dibuka
@@ -40,7 +43,7 @@ export default function HomepageHeader({
   }, [isMenuOpen])
   // Clear search input
   const clearSearch = () => {
-    setSearchQuery('') // Reset the search query
+    setSearchQuery('')
   }
   const isSearchResultsVisible = !!searchQuery
 

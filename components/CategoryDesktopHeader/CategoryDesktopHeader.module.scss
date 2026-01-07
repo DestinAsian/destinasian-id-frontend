@@ -4,7 +4,6 @@ body.menu-open {
   overflow: hidden;
 }
 
-/* === HEADER UTAMA === */
 .component {
   color: var(--wpe--header--color);
   background-color: var(--wpe--main--background-color);
@@ -22,7 +21,6 @@ body.menu-open {
     color: var(--wpe--color--black);
   }
 
-  // Cegah warna putih pada button guides tertimpa
   .menu-button-guides {
     color: var(--wpe--color--white) !important;
 
@@ -322,7 +320,6 @@ body.menu-open {
       height: calc(-4.5rem + 100vh);
     }
 
-    // Saat menu full aktif, header berubah warna
     ~ .component,
     ~ .sticky,
     ~ .navbar {
@@ -347,10 +344,8 @@ body.menu-open {
   top: 0.5rem;
   width: 70%;
   z-index: 51;
-  // padding: 0 7rem;
   transition: all 0.3s ease;
 
-   // Saat sticky
    &.sticky {
     background-color: var(--wpe--main--background-color);
     z-index: 1000;

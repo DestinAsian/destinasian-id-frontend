@@ -7,10 +7,8 @@ import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import 'swiper/css/pagination'
@@ -193,7 +191,6 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
   )
 
   return (
-    // <div className={cx(['component', className])}>
        <div
     className={cx([
       'component',

@@ -32,8 +32,6 @@ export default function CategoryHeader({
     setSearchQuery('') // Reset the search query
   }
 
-
-
   return (
     <header
       className={cx('component', { sticky: isScrolled, navShown: isNavShown })}
@@ -192,9 +190,6 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           </div>
         </>
       )}
-
-   
-
       {/* Full menu */}
       <div
         className={cx(['full-menu-wrapper', isNavShown ? 'show' : undefined])}

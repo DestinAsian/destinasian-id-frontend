@@ -1,12 +1,23 @@
-import React, { useEffect } from 'react'
-import { useQuery } from '@apollo/client'
-import classNames from 'classnames/bind'
-import styles from './SecondaryHeader.module.scss'
+'use client'
+
+import { useEffect, useMemo, useCallback } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
+import classNames from 'classnames/bind'
+
+import styles from './SecondaryHeader.module.scss'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
+import { useSWRGraphQL } from '../../../lib/useSWRGraphQL'
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
 
 const cx = classNames.bind(styles)
+
+
+const DEFAULT_CATEGORIES = [
+  { id: '20', name: 'News', uri: '/news' },
+  { id: '29', name: 'Features', uri: '/features' },
+  { id: '3', name: 'Insights', uri: '/insights' },
+]
 
 export default function SecondaryHeader({
   setSearchQuery,
@@ -14,13 +25,28 @@ export default function SecondaryHeader({
   setIsGuidesNavShown,
   isScrolled,
 }) {
-  const { data, error, loading } = useQuery(GetSecondaryHeaders, {
-    variables: { include: ['20', '29', '3'] },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const router = useRouter()
 
-  // Lock/unlock body scroll when guides menu is toggled
+
+  const { data } = useSWRGraphQL(
+    'secondary-headers',
+    GetSecondaryHeaders,
+    { include: ['20', '29', '3'] }
+  )
+
+
+  const categories = useMemo(() => {
+    if (data?.categories?.edges?.length) {
+      return data.categories.edges.map(({ node }) => ({
+        id: node.id,
+        name: node.name,
+        uri: node.uri,
+      }))
+    }
+    return DEFAULT_CATEGORIES
+  }, [data])
+
+
   useEffect(() => {
     document.body.style.overflow = isGuidesNavShown ? 'hidden' : 'auto'
     return () => {
@@ -28,46 +54,53 @@ export default function SecondaryHeader({
     }
   }, [isGuidesNavShown])
 
-  if (error || loading || !data?.categories?.edges?.length) return null
 
-  const categories = data.categories.edges.map(({ node }) => ({
-    id: node.id,
-    name: node.name,
-    uri: node.uri,
-  }))
+  const toggleGuides = useCallback(() => {
+    setIsGuidesNavShown(prev => !prev)
+    setSearchQuery('')
+  }, [setIsGuidesNavShown, setSearchQuery])
+
+  const goToCategory = useCallback(
+    (uri) => {
+      router.push(uri)
+    },
+    [router]
+  )
 
   return (
     <>
       <div className={cx('navigation-wrapper', { sticky: isScrolled })}>
         <div className={cx('menu-wrapper')}>
-          {/* Guides button */}
+          {/* Guides */}
           <button
             type="button"
-            className={cx('menu-button', 'menu-button-guides', {
-              active: isGuidesNavShown,
-            })}
-            onClick={() => {
-              setIsGuidesNavShown(!isGuidesNavShown)
-              setSearchQuery('')
-            }}
+            className={cx(
+              'menu-button',
+              'menu-button-guides',
+              { active: isGuidesNavShown }
+            )}
+            onClick={toggleGuides}
             aria-label="Toggle Guides navigation"
           >
-            <div className={cx('menu-title')}>Guides</div>
+            <span className={cx('menu-title')}>Guides</span>
           </button>
 
-          {/* Category links */}
+          {/* Categories */}
           {categories.map(({ id, name, uri }) => (
-            <Link key={id} href={uri}>
-              <div className={cx('menu-button')}>
-                <div className={cx('menu-title')}>{name}</div>
-              </div>
-            </Link>
+            <button
+              key={id}
+              type="button"
+              className={cx('menu-button')}
+              onClick={() => goToCategory(uri)}
+            >
+              <span className={cx('menu-title')}>{name}</span>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Full screen Travel Guides menu */}
-      <div className={cx('full-menu-content', isGuidesNavShown && 'show')}>
+      {/* Guides Overlay */}
+      <div className={cx('full-menu-content', { show: isGuidesNavShown })}>
         <div className={cx('full-menu-wrapper')}>
           <TravelGuidesMenu />
         </div>

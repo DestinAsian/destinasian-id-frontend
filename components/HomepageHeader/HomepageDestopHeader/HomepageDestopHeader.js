@@ -33,15 +33,18 @@ export default function HomepageDestopHeader({
   isGuidesNavShown,
   setIsGuidesNavShown,
 }) {
-  const isDesktop = useMediaQuery({ minWidth: 768 })
-  const [isMenuOpen, setMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.classList.add('menu-open')
-    } else {
-      document.body.classList.remove('menu-open')
-    }
-  }, [isMenuOpen])
+    setMounted(true)
+  }, [])
+
+  const isDesktopRaw = useMediaQuery({ minWidth: 768 })
+  const isDesktop = mounted ? isDesktopRaw : false
+
+  useEffect(() => {
+    document.body.classList.toggle('menu-open', isNavShown)
+  }, [isNavShown])
 
   const clearSearch = () => {
     setSearchQuery('')
@@ -49,8 +52,6 @@ export default function HomepageDestopHeader({
 
   const isSearchResultsVisible = !!searchQuery
 
-  // Initialize an array to store unique posts
-  const contentNodesPosts = []
   const { data, error } = useQuery(GetSecondaryHeaders, {
     variables: { include: ['20', '29', '3'] },
     fetchPolicy: 'cache-and-network',
@@ -60,7 +61,7 @@ export default function HomepageDestopHeader({
   if (error) return <div>Error loading categories!</div>
 
   const categories = data?.categories?.edges || []
-
+  const contentNodesPosts = []
   return (
     <header className={cx('component', { white: isNavShown })}>
       {/* Responsive header */}
@@ -68,7 +69,7 @@ export default function HomepageDestopHeader({
         <Container>
           <div
             className={cx('navbar', {
-              sticky: isScrolled && !isNavShown && !isMenuOpen,
+              sticky: isScrolled && !isNavShown,
             })}
           >
             {/* DA logo */}
@@ -102,7 +103,7 @@ export default function HomepageDestopHeader({
             {!isNavShown && (
               <div
                 className={cx('navigation-wrapper-desktop', {
-                  sticky: isScrolled && !isNavShown && !isMenuOpen,
+                  sticky: isScrolled && !isNavShown,
                 })}
               >
                 <div className={cx('navigation-wrapper-desktop')}>
@@ -130,18 +131,15 @@ export default function HomepageDestopHeader({
                       >{`Guides`}</div>
                     </button>
 
-                    {categories.map((category) => {
-                      const { id, name, uri } = category.node
-                      return (
-                        <Link key={id} href={`${uri}`}>
-                          <div className={cx('menu-button-desktop')}>
-                            <div className={cx('menu-title-desktop')}>
-                              {name}
-                            </div>
-                          </div>
-                        </Link>
-                      )
-                    })}
+                    {categories.map(({ node }) => (
+                    <Link key={node.id} href={node.uri}>
+                      <div className={cx('menu-button-desktop')}>
+                        <div className={cx('menu-title-desktop')}>
+                          {node.name}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                   </div>
                 </div>
               </div>
