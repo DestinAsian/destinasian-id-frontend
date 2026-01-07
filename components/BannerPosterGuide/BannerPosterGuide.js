@@ -1,4 +1,4 @@
-import React from 'react'
+import Image from 'next/image'
 import classNames from 'classnames/bind'
 import styles from './BannerPosterGuide.module.scss'
 
@@ -14,43 +14,49 @@ const BannerPosterGuide = ({ guideStorie }) => {
     linkBannerGuideStories,
   } = guideStorie
 
-  // Return null if all banners are missing
-  const isAllEmpty =
-    !bannerLandscape?.mediaItemUrl &&
-    !bannerGuideStories?.mediaItemUrl
+  const hasLandscape =
+    bannerLandscape?.mediaItemUrl && linkBannerLandscape
 
-  if (isAllEmpty) return null
+  const hasGuideStories =
+    bannerGuideStories?.mediaItemUrl && linkBannerGuideStories
+
+  if (!hasLandscape && !hasGuideStories) return null
 
   return (
     <div className={cx('wrapper')}>
       <div className={cx('contentGrid')}>
         {/* Left Banner: Landscape */}
-        {bannerLandscape?.mediaItemUrl && (
+        {hasLandscape && (
           <div className={cx('leftContent')}>
             <a
               href={linkBannerLandscape}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img
+              <Image
                 src={bannerLandscape.mediaItemUrl}
-                alt="Banner Landscape"
+                alt={bannerLandscape.altText || 'Banner Landscape'}
+                width={800}
+                height={600}
+                priority
               />
             </a>
           </div>
         )}
 
         {/* Right Banner: Guide Stories */}
-        {bannerGuideStories?.mediaItemUrl && linkBannerGuideStories && (
+        {hasGuideStories && (
           <div className={cx('rightBanner')}>
             <a
               href={linkBannerGuideStories}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img
+              <Image
                 src={bannerGuideStories.mediaItemUrl}
-                alt="Banner Guide Stories"
+                alt={bannerGuideStories.altText || 'Banner Guide Stories'}
+                width={800}
+                height={600}
                 className={cx('bannerImage')}
               />
             </a>

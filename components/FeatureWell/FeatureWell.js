@@ -4,6 +4,7 @@ import styles from './FeatureWell.module.scss'
 import { useMediaQuery } from 'react-responsive'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Div100vh from 'react-div-100vh'
+import { useRouter } from 'next/navigation'
 
 import 'swiper/css'
 import 'swiper/css/effect-fade'
@@ -16,6 +17,8 @@ import Link from 'next/link'
 let cx = className.bind(styles)
 
 export default function FeatureWell({ featureWells }) {
+  const router = useRouter()
+
   const isDesktop = useMediaQuery({ minWidth: 640 })
   const isMobile = useMediaQuery({ maxWidth: 639 })
 
@@ -82,14 +85,16 @@ export default function FeatureWell({ featureWells }) {
               <Link href={featureWell.url}>
                 <div className={cx('image-wrapper')}>
                   <Image
-                    src={isDesktop ? featureWell.desktopSrc : featureWell.mobileSrc}
+                    src={
+                      isDesktop ? featureWell.desktopSrc : featureWell.mobileSrc
+                    }
                     alt="Feature Well Image"
                     fill
                     sizes="100vw"
                     priority
                   />
                   <div className={cx('caption-wrapper')}>
-                    {featureWell.category && featureWell.categoryLink && (
+                    {/* {featureWell.category && featureWell.categoryLink && (
                       <div className={cx('category-wrapper')}>
                         <Link href={featureWell.categoryLink}>
                           <h1 className={cx('category')}>
@@ -97,7 +102,22 @@ export default function FeatureWell({ featureWells }) {
                           </h1>
                         </Link>
                       </div>
+                    )} */}
+                    {featureWell.category && featureWell.categoryLink && (
+                      <div className={cx('category-wrapper')}>
+                        <h1
+                          className={cx('category')}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            router.push(featureWell.categoryLink)
+                          }}
+                        >
+                          {featureWell.category}
+                        </h1>
+                      </div>
                     )}
+
                     {featureWell.caption && (
                       <h1
                         ref={(el) => (captionRefs.current[index] = el)}
@@ -132,7 +152,7 @@ export default function FeatureWell({ featureWells }) {
                     muted
                   />
                   <div className={cx('caption-wrapper')}>
-                    {featureWell.category && featureWell.categoryLink && (
+                    {/* {featureWell.category && featureWell.categoryLink && (
                       <div className={cx('category-wrapper')}>
                         <Link href={featureWell.categoryLink}>
                           <h1 className={cx('category')}>
@@ -140,7 +160,22 @@ export default function FeatureWell({ featureWells }) {
                           </h1>
                         </Link>
                       </div>
+                    )} */}
+                    {featureWell.category && featureWell.categoryLink && (
+                      <div className={cx('category-wrapper')}>
+                        <h1
+                          className={cx('category')}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            router.push(featureWell.categoryLink)
+                          }}
+                        >
+                          {featureWell.category}
+                        </h1>
+                      </div>
                     )}
+
                     {featureWell.caption && (
                       <h1
                         ref={(el) => (captionRefs.current[index] = el)}

@@ -1,146 +1,113 @@
-import React, { useState, useEffect } from 'react'
+'use client'
+
+import React from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation } from 'swiper'
+import Image from 'next/image'
 import className from 'classnames/bind'
+import useSWR from 'swr'
+
 import styles from './GallerySliderSingle.module.scss'
 
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react'
-import Image from 'next/image'
-
-// Import Swiper styles
 import 'swiper/css'
-import 'swiper/css/effect-fade'
-import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-
-// import required modules
-import { EffectFade, Autoplay, Pagination, Navigation } from 'swiper'
 
 let cx = className.bind(styles)
 
-export default function GallerySliderSingle({ gallerySlider }) {
-  const [images, setImages] = useState([])
+/* ================================
+   FETCHER: LOGIKA ASLI (UTUH)
+================================ */
+const galleryFetcher = (gallerySlider) => {
+  if (!gallerySlider) return []
 
-  useEffect(() => {
-    if (!gallerySlider) return
+  const images = []
 
-    const processGalleryImages = (galleryNode) => {
-      let imagesArray = []
+  const extractImagesRecursively = (node) => {
+    if (node.nodeType === 1 && node.tagName === 'IMG') {
+      const figureParent = node.closest('figure.gallery-item')
+      let caption = ''
 
-      // Recursively extract all images and their captions
-      const extractImagesRecursively = (node) => {
-        if (node.nodeType === 1 && node.tagName === 'IMG') {
-          // Find the closest figure.gallery-item parent
-          const figureParent = node.closest('figure.gallery-item')
-          let caption = ''
-
-          if (figureParent) {
-            const figcaption = figureParent.querySelector('figcaption')
-            caption = figcaption ? figcaption.innerText.trim() : ''
-          }
-
-          imagesArray.push({
-            src: node.getAttribute('src'),
-            alt: node.getAttribute('alt') || 'Image',
-            width: node.getAttribute('width') || 800,
-            height: node.getAttribute('height') || 600,
-            caption, // Store the figcaption text
-          })
-        } else {
-          // Traverse child nodes
-          Array.from(node.childNodes).forEach(extractImagesRecursively)
-        }
+      if (figureParent) {
+        const figcaption = figureParent.querySelector('figcaption')
+        caption = figcaption ? figcaption.innerHTML.trim() : ''
+      } else {
+        const galleryCaption = node
+          .closest('.gallery-item')
+          ?.querySelector('.gallery-caption')
+        if (galleryCaption) caption = galleryCaption.innerHTML.trim()
       }
 
-      extractImagesRecursively(galleryNode)
-      return imagesArray
+      images.push({
+        src: node.getAttribute('src') || '',
+        alt: node.getAttribute('alt') || 'Image',
+        width: parseInt(node.getAttribute('width')) || 600,
+        height: parseInt(node.getAttribute('height')) || 800,
+        caption,
+      })
+    } else {
+      Array.from(node.childNodes).forEach(extractImagesRecursively)
     }
+  }
 
-    setImages(processGalleryImages(gallerySlider))
-  }, [gallerySlider])
+  extractImagesRecursively(gallerySlider)
+  return images
+}
+
+export default function GallerySliderSingle({ gallerySlider }) {
+  if (!gallerySlider) return null
+
+  /* ================================
+     SWR menggantikan proses render-sync
+  ================================= */
+  const { data: images = [] } = useSWR(
+    gallerySlider ? ['gallery-slider-single', gallerySlider] : null,
+    () => galleryFetcher(gallerySlider),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000,
+    }
+  )
+
+  if (!images.length) return null
 
   return (
-    // <div className={cx('component')}>
-    <div className={cx('component', 'gallery-slider-wrapper')}>
-      <div className={cx('swiper-slider', 'swiper-wrapper')}>
-        <Swiper
-          effect={'fade'}
-          autoplay={{ delay: 5000, disableOnInteraction: true }}
-          // autoplay={'false'}
-          loop={true}
-          // autoHeight={true}
-          pagination={{
-            el: '.swiper-custom-pagination',
-            clickable: true,
-            type: 'bullets',
-          }}
-          navigation={{
-            prevEl: '.swiper-custom-button-prev',
-            nextEl: '.swiper-custom-button-next',
-          }}
-          modules={[EffectFade, Autoplay, Pagination, Navigation]}
-          className="gallery-swiper-wrapper"
-        >
-          {images.map((image, index) => (
-            <SwiperSlide key={index}>
-              <div className={cx('slide-wrapper')}>
-                <div className={cx('image-wrapper')}>
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    // sizes="100%"
-                    priority
+    <div className={styles.gallerySliderWrapper}>
+      <Swiper
+        modules={[Navigation]}
+        navigation
+        spaceBetween={10}
+        slidesPerView={1}
+        className={styles.swiperContainer}
+        preloadImages={false}
+        lazy="true"
+      >
+        {images.map((img, index) => (
+          <SwiperSlide key={index}>
+            <div className={cx('slide-wrapper')}>
+              <div className={cx('image-wrapper')}>
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  className={cx('thumbnail')}
+                  loading="lazy"
+                />
+              </div>
+
+              {img.caption && (
+                <div className={cx('caption-wrapper')}>
+                  <div
+                    className={cx('caption')}
+                    dangerouslySetInnerHTML={{ __html: img.caption }}
                   />
                 </div>
-
-                <div className={cx('caption-wrapper')}>
-                  {image?.caption && (
-                    <div className={cx('caption')}>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: image.caption,
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-          <div className="swiper-custom-pagination"></div>
-          <div className="swiper-custom-button-prev">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="65"
-              height="65"
-              viewBox="0 0 65 65"
-              fill="none"
-            >
-              <rect width="65" height="65" fill="black" />
-              <path d="M45 12L21 31L45 49" stroke="white" strokeWidth="3" />
-            </svg>
-          </div>
-          <div className="swiper-custom-button-next">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="65"
-              height="65"
-              viewBox="0 0 65 65"
-              fill="none"
-            >
-              <rect
-                x="65"
-                y="65"
-                width="65"
-                height="65"
-                transform="rotate(-180 65 65)"
-                fill="black"
-              />
-              <path d="M20 53L44 34L20 16" stroke="white" strokeWidth="3" />
-            </svg>
-          </div>
-        </Swiper>
-      </div>
+              )}
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   )
 }
+
