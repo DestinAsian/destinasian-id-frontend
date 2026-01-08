@@ -133,14 +133,7 @@ export default function Category({ data: initialData, loading }) {
     fetcher(GetLatestStories, { first: 5 }),
   )
 
-  const { data: dataSecondaryHeader } = useSWR(
-    databaseId ? `secondary-header-${databaseId}` : null,
-    () => fetcher(GetSecondaryHeader, { id: databaseId }),
-  )
-
-  const isGuidesCategory =
-    dataSecondaryHeader?.category?.destinationGuides?.destinationGuides ===
-    'yes'
+  const isGuidesCategory = destinationGuides?.destinationGuides === 'yes'
 
   const latestPosts = useMemo(() => {
     const posts = [
