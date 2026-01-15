@@ -30,32 +30,35 @@
 .content-wrapper {
   width: 100%;
   display: flex;
+  align-items: flex-start;
   gap: 1rem;
   padding-bottom: 1rem;
-  min-width: calc(100vw - 2rem);
 
   @media (min-width: $breakpoint-small) {
-    min-width: calc(700px - 4rem);
+    min-width: calc(1000px - 4rem);
     padding-bottom: 2rem;
   }
 }
 
 .left-wrapper {
-  width: 50%;
-  flex-shrink: 0;
+  flex: 0 0 35%;
+  width: 35%;
 
   @media (min-width: $breakpoint-extra-small) {
-    width: 33.33%;
+    flex: 0 0 25%;
+    width: 25%;
   }
 }
 
 .right-wrapper {
-  width: 50%;
+  flex: 0 0 65%;
+  width: 65%;
   display: flex;
   flex-direction: column;
 
   @media (min-width: $breakpoint-extra-small) {
-    width: 66.67%;
+    flex: 0 0 75%;
+    width: 75%;
   }
 }
 
@@ -68,10 +71,10 @@
   margin-top: 0.7rem;
 
   img {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%;
+    height: 100%;
     object-fit: cover !important;
-
+    display: block;
     /* ALT TEXT STYLE */
     font-family: 'Open Sans', sans-serif;
     font-size: 0.8rem;
@@ -92,7 +95,6 @@
   }
 }
 
-/* Desktop size mengikuti excerpt */
 @media (min-width: $breakpoint-small) {
   .image-wrapper img {
     font-size: 1rem;
@@ -139,21 +141,28 @@
   overflow: hidden;
   font-family: 'Scheherazade New';
   font-weight: 300;
+  font-size: 0.9rem;
+
+  @media (min-width: $breakpoint-small) {
+    font-size: 1.5rem;
+  }
 }
 
 /* EXCERPT */
 .excerpt {
   margin-top: 0.5rem;
   font-family: 'Open Sans', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-weight: 300;
 
   @media (min-width: $breakpoint-small) {
     font-size: 1rem;
+    -webkit-line-clamp: 4;
   }
 }
 
@@ -197,7 +206,6 @@
   width: 100%;
   margin-bottom: 1.2rem;
   font-weight: 300;
-
 }
 
 .search-icon {
@@ -216,7 +224,7 @@
 }
 
 .search-close {
-  display: block; // tampil di mobile
+  display: block;
   position: absolute;
   top: 50%;
   right: 1rem;
@@ -232,7 +240,6 @@
     right: 1.5rem;
   }
 }
-
 
 .search-input {
   width: 100%;
