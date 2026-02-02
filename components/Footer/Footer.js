@@ -5,7 +5,7 @@ import styles from './Footer.module.scss'
 import destinasianLogoWht from '../../assets/logo/destinasianLogoWht.png'
 import damanFooterLogo from '../../assets/logo/daman_footer_logo.png'
 import prestigeLogo from '../../assets/logo/Prestige_logo.png'
-import NewsletterEmbed from '../../components/NewsletterEmbed/NewsletterEmbed'
+import NewsletterMailerLite from '../../components/NewsletterMailerLite/NewsletterMailerLite'
 
 import {
   FaFacebookF,
@@ -22,18 +22,41 @@ export default function Footer() {
 
   // Social media links
   const socialLinks = [
-    { href: 'https://www.facebook.com/share/19RyY4XyMj/', icon: <FaFacebookF />, label: 'Facebook' },
-    { href: 'https://x.com/DestinAsianID?t=7abAxXj_yoQgW3owe-RbQQ&s=09', icon: <FaXTwitter />, label: 'X' },
-    { href: 'https://www.instagram.com/destinasianindonesia', icon: <FaInstagram />, label: 'Instagram' },
-    { href: 'https://www.linkedin.com/company/destinasian-media/', icon: <FaLinkedinIn />, label: 'LinkedIn' },
-    { href: 'https://www.threads.net/@destinasianindonesia', icon: <FaThreads />, label: 'Threads' },
+    {
+      href: 'https://www.facebook.com/share/19RyY4XyMj/',
+      icon: <FaFacebookF />,
+      label: 'Facebook',
+    },
+    {
+      href: 'https://x.com/DestinAsianID?t=7abAxXj_yoQgW3owe-RbQQ&s=09',
+      icon: <FaXTwitter />,
+      label: 'X',
+    },
+    {
+      href: 'https://www.instagram.com/destinasianindonesia',
+      icon: <FaInstagram />,
+      label: 'Instagram',
+    },
+    {
+      href: 'https://www.linkedin.com/company/destinasian-media/',
+      icon: <FaLinkedinIn />,
+      label: 'LinkedIn',
+    },
+    {
+      href: 'https://www.threads.net/@destinasianindonesia',
+      icon: <FaThreads />,
+      label: 'Threads',
+    },
   ]
 
   return (
     <footer className={cx('footer')}>
       <div className={cx('container')}>
         {/* Newsletter subscription */}
-        <NewsletterEmbed />
+        <p className={cx('newsletter-title')}>
+          Stay inspired with our DestinAsian Indonesia newsletters
+        </p>
+        <NewsletterMailerLite />
 
         <div className={cx('footer-wrapper')}>
           {/* Left section */}
@@ -63,11 +86,13 @@ export default function Footer() {
               </div>
 
               <p>
-                © {year} DestinAsian Media Group All Rights Reserved. Use of this site constitutes acceptance of our User Agreement
+                © {year} DestinAsian Media Group All Rights Reserved. Use of
+                this site constitutes acceptance of our User Agreement
                 (effective 21/12/2015) and{' '}
-                <Link href="/privacy-policy">Privacy Policy</Link> (effective 21/12/2015). The material on this site may not be
-                reproduced, distributed, transmitted, cached or otherwise used, except with prior written permission of
-                DestinAsian Media Group.
+                <Link href="/privacy-policy">Privacy Policy</Link> (effective
+                21/12/2015). The material on this site may not be reproduced,
+                distributed, transmitted, cached or otherwise used, except with
+                prior written permission of DestinAsian Media Group.
               </p>
             </div>
           </div>
@@ -79,14 +104,41 @@ export default function Footer() {
             </a>
 
             <div className={cx('footer-logos')}>
-              <a href="https://destinasian.com/" target="_blank" rel="noopener noreferrer">
-                <Image src={destinasianLogoWht.src} alt="DestinAsian" width={120} height={30} />
+              <a
+                href="https://destinasian.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={destinasianLogoWht.src}
+                  alt="DestinAsian"
+                  width={120}
+                  height={30}
+                />
               </a>
-              <a href="https://www.prestigeonline.com/" target="_blank" rel="noopener noreferrer">
-                <Image src={prestigeLogo.src} alt="Prestige" width={120} height={30} />
+              <a
+                href="https://www.prestigeonline.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={prestigeLogo.src}
+                  alt="Prestige"
+                  width={120}
+                  height={30}
+                />
               </a>
-              <a href="https://daman.co.id/" target="_blank" rel="noopener noreferrer">
-                <Image src={damanFooterLogo.src} alt="Daman" width={120} height={30} />
+              <a
+                href="https://daman.co.id/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={damanFooterLogo.src}
+                  alt="Daman"
+                  width={120}
+                  height={30}
+                />
               </a>
             </div>
           </div>
