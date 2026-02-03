@@ -1,3 +1,5 @@
+'use client'
+
 import classNames from 'classnames/bind'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -5,7 +7,7 @@ import styles from './Footer.module.scss'
 import destinasianLogoWht from '../../assets/logo/destinasianLogoWht.png'
 import damanFooterLogo from '../../assets/logo/daman_footer_logo.png'
 import prestigeLogo from '../../assets/logo/Prestige_logo.png'
-import NewsletterMailerLite from '../../components/NewsletterMailerLite/NewsletterMailerLite'
+import NewsletterMailerLiteIframe from '../../components/NewsletterMailerLite/NewsletterMailerLiteIframe'
 
 import {
   FaFacebookF,
@@ -56,8 +58,7 @@ export default function Footer() {
         <p className={cx('newsletter-title')}>
           Stay inspired with our DestinAsian Indonesia newsletters
         </p>
-        <NewsletterMailerLite />
-
+        <NewsletterMailerLiteIframe />
         <div className={cx('footer-wrapper')}>
           {/* Left section */}
           <div className={cx('footer-left')}>
