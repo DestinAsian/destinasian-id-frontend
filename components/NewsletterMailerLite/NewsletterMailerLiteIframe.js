@@ -14,7 +14,7 @@ export default function NewsletterMailerLiteIframe() {
         margin: '0 auto',
         display: 'block',
       }}
-      title="DAI Newsletter Signup"
+      title="Newsletter Subscribe"
     />
   )
 }

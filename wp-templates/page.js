@@ -3,10 +3,12 @@ import useSWR from 'swr'
 import { gql } from '@apollo/client'
 import dynamic from 'next/dynamic'
 import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 import { PageFragment } from '../fragments/PageFragment'
+import NewsletterAds from '../components/NewsletterMailerLite/NewsletterAds'
 
 // Components
 import Header from '../components/Header/Header'
@@ -67,6 +69,9 @@ export default function Component(props) {
     passwordProtected,
   } = page || {}
 
+  const router = useRouter()
+  const isNewsletterPage = uri?.includes('newsletter')
+
   // ======================
   // PASSWORD FROM COOKIE
   // ======================
@@ -110,17 +115,15 @@ export default function Component(props) {
   // ======================
   // MENUS (SWR)
   // ======================
-  const { data: menusData, isLoading: menusLoading } = useSWR(
-    ['menus'],
-    () =>
-      graphQLFetcher(GetMenus, {
-        first: 10,
-        headerLocation: MENUS.PRIMARY_LOCATION,
-        secondHeaderLocation: MENUS.SECONDARY_LOCATION,
-        thirdHeaderLocation: MENUS.THIRD_LOCATION,
-        fourthHeaderLocation: MENUS.FOURTH_LOCATION,
-        fifthHeaderLocation: MENUS.FIFTH_LOCATION,
-      }),
+  const { data: menusData, isLoading: menusLoading } = useSWR(['menus'], () =>
+    graphQLFetcher(GetMenus, {
+      first: 10,
+      headerLocation: MENUS.PRIMARY_LOCATION,
+      secondHeaderLocation: MENUS.SECONDARY_LOCATION,
+      thirdHeaderLocation: MENUS.THIRD_LOCATION,
+      fourthHeaderLocation: MENUS.FOURTH_LOCATION,
+      fifthHeaderLocation: MENUS.FIFTH_LOCATION,
+    }),
   )
 
   const primaryMenu = menusData?.headerMenuItems?.nodes ?? []
@@ -270,6 +273,7 @@ export default function Component(props) {
 
         <Container>
           <ContentWrapperPage content={content} />
+          {isNewsletterPage && <NewsletterAds />}
         </Container>
 
         {isMobile ? <MastHeadBottomMobile /> : <MastHeadBottom />}
