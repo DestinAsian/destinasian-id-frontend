@@ -7,7 +7,7 @@ import styles from './Footer.module.scss'
 import destinasianLogoWht from '../../assets/logo/destinasianLogoWht.png'
 import damanFooterLogo from '../../assets/logo/daman_footer_logo.png'
 import prestigeLogo from '../../assets/logo/Prestige_logo.png'
-import NewsletterMailerLiteIframe from '../../components/NewsletterMailerLite/NewsletterMailerLiteIframe'
+import NewsletterForm from '../../components/NewsletterMailerLite/NewsletterForm'
 
 import {
   FaFacebookF,
@@ -58,7 +58,8 @@ export default function Footer() {
         <p className={cx('newsletter-title')}>
           Stay inspired with our DestinAsian Indonesia newsletters
         </p>
-        <NewsletterMailerLiteIframe />
+
+        <NewsletterForm />
         <div className={cx('footer-wrapper')}>
           {/* Left section */}
           <div className={cx('footer-left')}>
