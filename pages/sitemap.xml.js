@@ -11,88 +11,100 @@ export async function getServerSideProps({ res, query }) {
 
   if (!backendIndex) {
     res.statusCode = 500
-    res.setHeader('Content-Type', 'text/plain')
-    res.end('NEXT_PUBLIC_BACKEND_SITEMAP belum diset di .env.local')
+    res.end('NEXT_PUBLIC_BACKEND_SITEMAP belum diset')
     return { props: {} }
   }
 
   try {
-    // Ambil index sitemap utama dari backend
     const indexResponse = await fetch(backendIndex)
     const indexXml = await indexResponse.text()
 
-    // Ambil daftar semua child sitemap
-    const sitemapUrls = [...indexXml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1])
+    /**
+     * =============================
+     * INDEX SITEMAP
+     * =============================
+     */
 
-    // Jika user membuka sitemap.xml tanpa parameter, tampilkan daftar grup
-    if (!query.group) {
-      const sitemapList = sitemapUrls
-        .map(
-          (url) => `
-    <sitemap>
-      <loc>${frontendUrl}/sitemap.xml?group=${url
-        .replace(backendDomain, '')
-        .replace('.xml', '')
-        .split('/')
-        .pop()}</loc>
-    </sitemap>`
-        )
+    if (!query.sitemap) {
+      const sitemapBlocks = [
+        ...indexXml.matchAll(/<sitemap>([\s\S]*?)<\/sitemap>/g),
+      ]
+
+      const sitemapList = sitemapBlocks
+        .map((m) => {
+          const block = m[1]
+          const loc = block.match(/<loc>(.*?)<\/loc>/)?.[1]
+          const lastmod = block.match(/<lastmod>(.*?)<\/lastmod>/)?.[1]
+
+          if (!loc) return ''
+
+          const filename = loc.split('/').pop()
+
+          return `
+<sitemap>
+ <loc>${frontendUrl}/sitemap.xml?sitemap=${filename}</loc>
+ ${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}
+</sitemap>`
+        })
         .join('\n')
 
-      const indexOutput = `<?xml version="1.0" encoding="UTF-8"?>
+      const output = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapList}
 </sitemapindex>`
 
       res.setHeader('Content-Type', 'application/xml; charset=UTF-8')
-      res.write(indexOutput)
-      res.end()
+      res.end(output)
       return { props: {} }
     }
 
-    // Jika user membuka salah satu grup sitemap
-    const selectedGroup = query.group
-    const targetSitemap = sitemapUrls.find((url) =>
-      url.includes(selectedGroup)
+    /**
+     * =============================
+     * CHILD SITEMAP
+     * =============================
+     */
+
+    const selected = query.sitemap
+
+    const sitemapUrls = [...indexXml.matchAll(/<loc>(.*?)<\/loc>/g)].map(
+      (m) => m[1],
     )
 
-    if (!targetSitemap) {
+    const target = sitemapUrls.find((u) => u.includes(selected))
+
+    if (!target) {
       res.statusCode = 404
-      res.setHeader('Content-Type', 'text/plain')
-      res.end('Sitemap tidak ditemukan.')
+      res.end('Sitemap tidak ditemukan')
       return { props: {} }
     }
 
-    // Ambil isi sitemap yang dipilih
-    const groupResponse = await fetch(targetSitemap)
+    const groupResponse = await fetch(target)
     const groupXml = await groupResponse.text()
 
-    // Ambil semua <url> lalu ganti domain backend → frontend (kecuali image)
-    const allUrls = [...groupXml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((m) => {
+    const urls = [...groupXml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((m) => {
       let block = m[1]
+
       block = block.replace(
-        /<loc>(https:\/\/backend\.destinasian\.co\.id.*?)<\/loc>/gi,
-        (match, loc) =>
-          `<loc>${loc.replace(backendDomain, frontendUrl)}</loc>`
+        /<loc>(.*?)<\/loc>/gi,
+        (_, loc) => `<loc>${loc.replace(backendDomain, frontendUrl)}</loc>`,
       )
-      return block
+
+      return `<url>${block}</url>`
     })
 
-    // Satukan hasilnya
-    const mergedXml = `<?xml version="1.0" encoding="UTF-8"?>
+    const merged = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-${allUrls.map((url) => `<url>${url}</url>`).join('\n')}
+ xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+ xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${urls.join('\n')}
 </urlset>`
 
     res.setHeader('Content-Type', 'application/xml; charset=UTF-8')
-    res.write(mergedXml)
-    res.end()
-  } catch {
+    res.end(merged)
+  } catch (e) {
+    console.error(e)
     res.statusCode = 500
-    res.setHeader('Content-Type', 'text/plain')
-    res.end('Terjadi kesalahan saat membuat sitemap.')
+    res.end('Gagal generate sitemap')
   }
 
   return { props: {} }
