@@ -36,6 +36,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
+      - name: Show SSH Fingerprint
+        run: ssh-keygen -lf ~/.ssh/id_rsa
+
       - name: Test SSH
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "whoami"
 
