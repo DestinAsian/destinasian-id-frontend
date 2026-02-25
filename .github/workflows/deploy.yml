@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,20 +33,13 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_KEY }}
-          known_hosts: "unnecessary"
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+      - name: Test SSH
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "whoami"
 
       - name: Deploy with rsync
-        run: rsync -avz --delete . ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.TARGET_DIRECTORY }}
+        run: rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" --delete . ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.TARGET_DIRECTORY }}
 
       - name: Restart PM2 Process
-        run: |
-          echo "${{ secrets.SSH_KEY }}" > pm2_key
-          chmod 600 pm2_key
-          eval "$(ssh-agent -s)"
-          ssh-add pm2_key
-
-          # Restart PM2 process on the server
-          ssh -o StrictHostKeyChecking=no -i pm2_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} "pm2 restart @destinasian-id-frontend"
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "pm2 restart @destinasian-id-frontend"
