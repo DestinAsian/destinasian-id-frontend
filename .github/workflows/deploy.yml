@@ -39,6 +39,9 @@ jobs:
       - name: Show SSH Fingerprint
         run: ssh-keygen -lf ~/.ssh/id_rsa
 
+      - name: Test SSH (hardcode)
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@178.128.126.177 "whoami"
+
       - name: Test SSH
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "whoami"
 
