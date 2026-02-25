@@ -42,5 +42,8 @@ export const PageFragment = gql`
         sourceUrl
       }
     }
+    passwordProtected {
+      onOff
+    }
   }
 `

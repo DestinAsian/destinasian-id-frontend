@@ -6,6 +6,7 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = className.bind(styles)
 
@@ -22,7 +23,8 @@ const parseContent = async (content) => {
     BACKEND_URL
   )
 
-  const doc = parser.parseFromString(cleaned, 'text/html')
+  const safeContent = sanitizeHtml(cleaned)
+  const doc = parser.parseFromString(safeContent, 'text/html')
   const nodes = [...doc.body.childNodes]
 
   return nodes.map((node, index) => {
@@ -97,10 +99,10 @@ function renderConvertedImage(img, index) {
         width={width}
         height={height}
         style={{ objectFit: 'contain' }}
-        priority
+        priority={index === 0}
       />
       {caption && (
-        <figcaption dangerouslySetInnerHTML={{ __html: caption }} />
+        <figcaption dangerouslySetInnerHTML={{ __html: sanitizeHtml(caption) }} />
       )}
     </figure>
   )

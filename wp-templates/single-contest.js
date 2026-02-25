@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { gql } from '@apollo/client'
 import useSWR from 'swr'
-import Cookies from 'js-cookie'
+import { usePasswordProtection } from '../lib/usePasswordProtection'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
 
@@ -53,43 +53,42 @@ export default function SingleContest({ data, loading }) {
   /* ======================
      PASSWORD PROTECTION
   ====================== */
-  const [enteredPassword, setEnteredPassword] = useState('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  useEffect(() => {
-    if (!contest?.passwordProtected?.onOff) return
-
-    const saved = Cookies.get('contestPassword')
-    if (saved === contest.passwordProtected.password) {
-      setIsAuthenticated(true)
-    }
-  }, [contest?.passwordProtected])
-
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-
-    if (enteredPassword === contest?.passwordProtected?.password) {
-      Cookies.set('contestPassword', enteredPassword, { expires: 1 })
-      setIsAuthenticated(true)
-    } else {
-      alert('Incorrect password. Please try again.')
-    }
-  }
+  const {
+    enteredPassword,
+    setEnteredPassword,
+    isAuthenticated,
+    isChecking,
+    handlePasswordSubmit,
+    errorMessage,
+  } = usePasswordProtection({
+    contentType: 'contest',
+    databaseId: contest?.databaseId,
+    enabled: contest?.passwordProtected?.onOff,
+  })
 
   if (contest?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main>
-        <form onSubmit={handlePasswordSubmit}>
-          <PasswordProtected
-            enteredPassword={enteredPassword}
-            setEnteredPassword={setEnteredPassword}
-            title={contest?.seo?.title}
-            description={contest?.seo?.metaDesc}
-            imageUrl={contest?.featuredImage?.node?.sourceUrl}
-            url={contest?.uri}
-            focuskw={contest?.seo?.focuskw}
-          />
-        </form>
+        {isChecking ? (
+          <>Loading...</>
+        ) : (
+          <form onSubmit={handlePasswordSubmit}>
+            <PasswordProtected
+              enteredPassword={enteredPassword}
+              setEnteredPassword={setEnteredPassword}
+              title={contest?.seo?.title}
+              description={contest?.seo?.metaDesc}
+              imageUrl={contest?.featuredImage?.node?.sourceUrl}
+              url={contest?.uri}
+              focuskw={contest?.seo?.focuskw}
+            />
+            {errorMessage && (
+              <p className="mt-2 text-center text-sm font-medium text-red-600">
+                {errorMessage}
+              </p>
+            )}
+          </form>
+        )}
       </main>
     )
   }
@@ -275,7 +274,6 @@ SingleContest.query = gql`
       date
       passwordProtected {
         onOff
-        password
       }
       author {
         node {

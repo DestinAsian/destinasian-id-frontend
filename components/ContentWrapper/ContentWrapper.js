@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -21,7 +22,8 @@ export default function ContentWrapper({ content, children }) {
       BACKEND_URL
     )
 
-    const doc = parser.parseFromString(cleaned, 'text/html')
+    const safeContent = sanitizeHtml(cleaned)
+    const doc = parser.parseFromString(safeContent, 'text/html')
     const nodes = Array.from(doc.body.childNodes)
 
     const result = nodes.map((node, index) => {
@@ -74,7 +76,7 @@ function convertImage(img, index) {
       width={width}
       height={height}
       style={{ objectFit: 'contain' }}
-      priority
+      priority={index === 0}
     />
   )
 }

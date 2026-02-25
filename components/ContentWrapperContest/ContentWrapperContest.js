@@ -7,6 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
 import GallerySlider from '../../components/GallerySlider/GallerySlider'
 import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = className.bind(styles)
 
@@ -71,7 +72,8 @@ export default function ContentWrapperContest({ content, children }) {
       'https://destinasian.co.id',
       BACKEND_URL
     )
-    const doc = parser.parseFromString(cleanedContent, 'text/html')
+    const safeContent = sanitizeHtml(cleanedContent, { allowIframe: true })
+    const doc = parser.parseFromString(safeContent, 'text/html')
     const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/gi
 
     // traversal untuk img & dropcap
@@ -101,7 +103,7 @@ export default function ContentWrapperContest({ content, children }) {
               height={height}
               style={{ objectFit: 'contain' }}
               onError={(e) => (e.currentTarget.src = '/fallback-image.jpg')}
-              priority
+              loading="lazy"
             />
           )
           node.outerHTML = renderToStaticMarkup(imageComponent)

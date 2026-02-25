@@ -15,7 +15,7 @@ module.exports = withFaust({
         pathname: '/**',
       },
     ],
-    domains: ['backend.destinasian.co.id/id/wp', 'destinasian.co.id'],
+    domains: ['backend.destinasian.co.id', 'destinasian.co.id'],
   },
 
   i18n: {

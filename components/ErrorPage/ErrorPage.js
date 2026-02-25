@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import styles from './ErrorPage.module.scss'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const FeaturedImage = dynamic(() =>
   import('../../components/FeaturedImage/FeaturedImage')
@@ -32,7 +33,7 @@ export default function ErrorPage({ image, title, content }) {
           {title && <h2>{title}</h2>}
           {content && (
             <div
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }}
             />
           )}
         </div>

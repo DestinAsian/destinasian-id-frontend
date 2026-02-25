@@ -2,6 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './GuideLatestStories.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -35,7 +36,7 @@ export default function GuideLatestStories({
           </Link>
           <div
             className={cx('excerpt')}
-            dangerouslySetInnerHTML={{ __html: finalExcerpt }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalExcerpt) }}
           />
           <div className={cx('buttonWrapper')}>
             <Link href={uri} passHref>

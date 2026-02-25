@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './FloatingButtons.module.scss'
 import classNames from 'classnames/bind'
 import { FaTimes } from 'react-icons/fa'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -52,7 +53,9 @@ const FloatingButtons = ({ buttonTopUp }) => {
             {logoButtonPopUp && (
               <div
                 className={cx('logoWrapper')}
-                dangerouslySetInnerHTML={{ __html: logoButtonPopUp }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(logoButtonPopUp),
+                }}
               />
             )}
             <span>{buttonPopUp1}</span>

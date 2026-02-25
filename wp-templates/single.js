@@ -4,7 +4,6 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { gql } from '@apollo/client'
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
-import Cookies from 'js-cookie'
 import { open_sans } from '../styles/fonts/fonts'
 import { getNextStaticProps } from '@faustwp/core'
 import { GetMenus } from '../queries/GetMenus'
@@ -25,6 +24,7 @@ import SingleFeaturedImage from '../components/Single/SingleFeaturedImage'
 import SingleSlider from '../components/SingleSlider/SingleSlider'
 import SingleHeader from '../components/SingleHeader/SingleHeader'
 import RelatedPosts from '../components/RelatedPosts/RelatedPosts'
+import { usePasswordProtection } from '../lib/usePasswordProtection'
 
 import dynamic from 'next/dynamic'
 
@@ -41,9 +41,6 @@ const MastHeadBottomMobile = dynamic(
 export default function SinglePost(props) {
   if (props.loading) return <>Loading...</>
 
-  const [enteredPassword, setEnteredPassword] = useState('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
@@ -81,15 +78,18 @@ export default function SinglePost(props) {
     document.body.style.overflow = shouldLock ? 'hidden' : ''
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
-  useEffect(() => {
-    const storedPassword = Cookies.get('postPassword')
-    if (
-      storedPassword &&
-      storedPassword === post?.passwordProtected?.password
-    ) {
-      setIsAuthenticated(true)
-    }
-  }, [post?.passwordProtected?.password])
+  const {
+    enteredPassword,
+    setEnteredPassword,
+    isAuthenticated,
+    isChecking,
+    handlePasswordSubmit,
+    errorMessage,
+  } = usePasswordProtection({
+    contentType: 'post',
+    databaseId: post?.databaseId,
+    enabled: post?.passwordProtected?.onOff,
+  })
 
   const { data: menusData, isLoading: menusLoading } = useSWRGraphQL(
     'menus',
@@ -146,17 +146,6 @@ export default function SinglePost(props) {
   /* ===============================
      PASSWORD SUBMIT
   =============================== */
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    if (enteredPassword === post?.passwordProtected?.password) {
-      setIsAuthenticated(true)
-      Cookies.set('postPassword', enteredPassword, { expires: 1 })
-      setErrorMsg('')
-    } else {
-      setErrorMsg('Incorrect password.')
-    }
-  }
-
   if (post?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main className={`${open_sans.variable} overflow-x-hidden`}>
@@ -165,22 +154,26 @@ export default function SinglePost(props) {
             Preview Mode, Konten ini belum dipublikasikan
           </div>
         )}
-        <form onSubmit={handlePasswordSubmit}>
-          <PasswordProtected
-            enteredPassword={enteredPassword}
-            setEnteredPassword={setEnteredPassword}
-            title={post?.seo?.title}
-            description={post?.seo?.metaDesc}
-            imageUrl={post?.featuredImage?.node?.sourceUrl}
-            url={post?.uri}
-            focuskw={post?.seo?.focuskw}
-          />
-          {errorMsg && (
-            <p className="mt-2 text-center text-sm font-medium text-red-600">
-              {errorMsg}
-            </p>
-          )}
-        </form>
+        {isChecking ? (
+          <>Loading...</>
+        ) : (
+          <form onSubmit={handlePasswordSubmit}>
+            <PasswordProtected
+              enteredPassword={enteredPassword}
+              setEnteredPassword={setEnteredPassword}
+              title={post?.seo?.title}
+              description={post?.seo?.metaDesc}
+              imageUrl={post?.featuredImage?.node?.sourceUrl}
+              url={post?.uri}
+              focuskw={post?.seo?.focuskw}
+            />
+            {errorMessage && (
+              <p className="mt-2 text-center text-sm font-medium text-red-600">
+                {errorMessage}
+              </p>
+            )}
+          </form>
+        )}
       </main>
     )
   }
@@ -287,7 +280,6 @@ SinglePost.query = gql`
       }
       passwordProtected {
         onOff
-        password
       }
       author {
         node {

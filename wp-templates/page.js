@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { gql } from '@apollo/client'
 import dynamic from 'next/dynamic'
-import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 
 import * as MENUS from '../constants/menus'
@@ -28,6 +27,7 @@ import { GetLatestStories } from '../queries/GetLatestStories'
 
 // GraphQL fetcher (FaustWP)
 import { graphQLFetcher } from '../lib/graphqlFetcher'
+import { usePasswordProtection } from '../lib/usePasswordProtection'
 
 // Ads (lazy)
 const MastHeadTop = dynamic(() =>
@@ -46,8 +46,17 @@ const MastHeadBottomMobile = dynamic(() =>
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
-  const [enteredPassword, setEnteredPassword] = useState('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const {
+    enteredPassword,
+    setEnteredPassword,
+    isAuthenticated,
+    isChecking,
+    handlePasswordSubmit,
+  } = usePasswordProtection({
+    contentType: 'page',
+    databaseId: page?.databaseId,
+    enabled: passwordProtected?.onOff,
+  })
   const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavShown, setIsNavShown] = useState(false)
@@ -73,14 +82,8 @@ export default function Component(props) {
   const isNewsletterPage = uri?.includes('newsletter')
 
   // ======================
-  // PASSWORD FROM COOKIE
+  // PASSWORD CHECK (SERVER)
   // ======================
-  useEffect(() => {
-    const storedPassword = Cookies.get('pagePassword')
-    if (storedPassword && storedPassword === passwordProtected?.password) {
-      setIsAuthenticated(true)
-    }
-  }, [passwordProtected?.password])
 
   // ======================
   // BODY SCROLL LOCK
@@ -147,35 +150,26 @@ export default function Component(props) {
       ?.sort((a, b) => new Date(b?.date) - new Date(a?.date)) ?? []
 
   // ======================
-  // PASSWORD SUBMIT
-  // ======================
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    if (enteredPassword === passwordProtected?.password) {
-      setIsAuthenticated(true)
-      Cookies.set('pagePassword', enteredPassword, { expires: 1 })
-    } else {
-      alert('Incorrect password. Please try again.')
-    }
-  }
-
-  // ======================
   // PASSWORD PAGE
   // ======================
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main>
-        <form onSubmit={handlePasswordSubmit}>
-          <PasswordProtected
-            enteredPassword={enteredPassword}
-            setEnteredPassword={setEnteredPassword}
-            title={seo?.title}
-            description={seo?.metaDesc}
-            imageUrl={featuredImage?.node?.sourceUrl}
-            url={uri}
-            focuskw={seo?.focuskw}
-          />
-        </form>
+        {isChecking ? (
+          <>Loading...</>
+        ) : (
+          <form onSubmit={handlePasswordSubmit}>
+            <PasswordProtected
+              enteredPassword={enteredPassword}
+              setEnteredPassword={setEnteredPassword}
+              title={seo?.title}
+              description={seo?.metaDesc}
+              imageUrl={featuredImage?.node?.sourceUrl}
+              url={uri}
+              focuskw={seo?.focuskw}
+            />
+          </form>
+        )}
       </main>
     )
   }

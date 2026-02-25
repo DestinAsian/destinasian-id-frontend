@@ -10,6 +10,7 @@ import useSWR from 'swr'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySliderSingle/GallerySliderSingle'
 import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -21,8 +22,9 @@ const contentFetcher = (content) => {
 
   const parser = new DOMParser()
   const fixedHTML = content.replaceAll('https://destinasian.co.id', BACKEND_URL)
+  const safeHTML = sanitizeHtml(fixedHTML, { allowIframe: true })
 
-  const doc = parser.parseFromString(fixedHTML, 'text/html')
+  const doc = parser.parseFromString(safeHTML, 'text/html')
   const bodyNodes = [...doc.body.childNodes]
   const dropcapRegex = /\[dropcap\](.*?)\[\/dropcap\]/i
 
@@ -56,7 +58,7 @@ const contentFetcher = (content) => {
       img.width = Number(width)
       img.height = Number(height)
       img.style.objectFit = 'contain'
-      img.loading = 'eager'
+      img.loading = 'lazy'
 
       node.replaceWith(img)
 

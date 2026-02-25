@@ -3,6 +3,7 @@
 import React from 'react'
 import styles from './GuideStories.module.scss'
 import classNames from 'classnames/bind'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -66,14 +67,18 @@ const GuideStories = ({ guideStories }) => {
             {titleGuideStories && (
               <div
                 className={cx('titleWrapper')}
-                dangerouslySetInnerHTML={{ __html: titleGuideStories }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(titleGuideStories),
+                }}
               />
             )}
 
             {contentGuideStories && (
               <div
                 className={cx('contentWrapper')}
-                dangerouslySetInnerHTML={{ __html: contentGuideStories }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(contentGuideStories),
+                }}
               />
             )}
           </div>

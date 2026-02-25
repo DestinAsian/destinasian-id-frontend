@@ -4,6 +4,7 @@ import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './GuideSecondLatestStories.module.scss'
 import Link from 'next/link'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 const MAX_LENGTH = 150
@@ -35,7 +36,7 @@ export default function GuideTextBlock({ title, excerpt, uri }) {
       {cleanedExcerpt && (
         <div
           className={cx('excerpt')}
-          dangerouslySetInnerHTML={{ __html: cleanedExcerpt }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(cleanedExcerpt) }}
         />
       )}
     </div>

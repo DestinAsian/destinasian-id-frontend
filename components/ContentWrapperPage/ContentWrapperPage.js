@@ -5,6 +5,7 @@ import styles from './ContentWrapperPage.module.scss'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import GallerySlider from '../../components/GallerySliderPage/GallerySliderPage'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -34,7 +35,8 @@ export default function ContentWrapperPage({ content, children }) {
       (_, inner) => inner
     )
 
-    const doc = parser.parseFromString(captionFixed, 'text/html')
+    const safeContent = sanitizeHtml(captionFixed, { allowIframe: true })
+    const doc = parser.parseFromString(safeContent, 'text/html')
     const nodes = [...doc.body.childNodes]
 
     const processed = nodes.map((node, index) => {
@@ -105,16 +107,16 @@ function renderConvertedImage(img, index) {
 
   return (
     <figure key={index} className="figure">
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        style={{ objectFit: 'contain' }}
-        priority
-      />
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          style={{ objectFit: 'contain' }}
+          priority={index === 0}
+        />
       {caption && (
-        <figcaption dangerouslySetInnerHTML={{ __html: caption }} />
+        <figcaption dangerouslySetInnerHTML={{ __html: sanitizeHtml(caption) }} />
       )}
     </figure>
   )

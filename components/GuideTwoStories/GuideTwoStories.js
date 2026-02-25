@@ -2,6 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './GuideTwoStories.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -42,7 +43,7 @@ export default function GuideTwoStories({
                 alt={`${title} Featured Image`}
                 fill
                 sizes="100vw"
-                priority
+                loading="lazy"
               />
             </Link>
           </div>
@@ -76,7 +77,9 @@ export default function GuideTwoStories({
             <Link href={uri}>
               <div
                 className={cx('excerpt')}
-                dangerouslySetInnerHTML={{ __html: trimmedExcerpt }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(trimmedExcerpt),
+                }}
               />
             </Link>
           </div>

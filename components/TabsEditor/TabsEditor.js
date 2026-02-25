@@ -6,6 +6,7 @@ import { LayoutGroup } from 'framer-motion'
 // src/components/TabDays/TabDays.js
 import React, { useState, useEffect } from 'react'
 import { BACKEND_URL } from '../../constants/backendUrl'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 let cx = className.bind(styles)
 
 export default function TabsEditor({ tabsEditor, luxuryTravelClass }) {
@@ -35,7 +36,7 @@ export default function TabsEditor({ tabsEditor, luxuryTravelClass }) {
             width={parseInt(width, 10)}
             height={parseInt(height, 10)}
             style={{ objectFit: 'contain' }}
-            priority
+            loading="lazy"
           />
         )
 
@@ -43,7 +44,7 @@ export default function TabsEditor({ tabsEditor, luxuryTravelClass }) {
         img.outerHTML = imageHtmlString
       })
 
-      return doc.body.innerHTML
+      return sanitizeHtml(doc.body.innerHTML)
     }
 
     // Transform content for both tabs

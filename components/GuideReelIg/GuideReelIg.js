@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './GuideReelIg.module.scss'
 import classNames from 'classnames/bind'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -33,14 +34,14 @@ const GuideReelIg = ({ guideReelIg }) => {
       {titleReelIg && (
         <div
           className={cx('titleWrapper')}
-          dangerouslySetInnerHTML={{ __html: titleReelIg }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(titleReelIg) }}
         />
       )}
 
       {contentReelIg && (
         <div
           className={cx('contentWrapper')}
-          dangerouslySetInnerHTML={{ __html: contentReelIg }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(contentReelIg) }}
         />
       )}
 
@@ -49,13 +50,13 @@ const GuideReelIg = ({ guideReelIg }) => {
         {reelGuideIg1 && (
           <div
             className={cx('leftReel', 'reelContent')}
-            dangerouslySetInnerHTML={{ __html: reelGuideIg1 }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(reelGuideIg1) }}
           />
         )}
         {videoReelIg1 && (
           <div
             className={cx('rightVideo', 'videoContent')}
-            dangerouslySetInnerHTML={{ __html: videoReelIg1 }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(videoReelIg1) }}
           />
         )}
       </div>
@@ -76,7 +77,7 @@ const GuideReelIg = ({ guideReelIg }) => {
         {reelGuideIg2 && (
           <div
             className={cx('rightReel', 'reelContent')}
-            dangerouslySetInnerHTML={{ __html: reelGuideIg2 }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(reelGuideIg2) }}
           />
         )}
       </div>

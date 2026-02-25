@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import dynamic from 'next/dynamic'
-import Cookies from 'js-cookie'
 
 import * as MENUS from '../constants/menus'
 import { BlogInfoFragment } from '../fragments/GeneralSettings'
@@ -21,6 +20,7 @@ import PasswordProtected from '../components/PasswordProtected/PasswordProtected
 import SingleLTEntryHeader from '../components/SingleLuxuryTravel/SingleLTEntryHeader'
 import ContentWrapperLuxuryTravel from '../components/ContentWrapperLuxuryTravel/ContentWrapperLuxuryTravel'
 import SingleLTContainer from '../components/SingleLuxuryTravel/SingleLTContainer'
+import { usePasswordProtection } from '../lib/usePasswordProtection'
 
 /* =====================
    ADS (LAZY)
@@ -47,42 +47,42 @@ export default function SingleLuxuryTravel({ data, loading }) {
   /* =====================
      PASSWORD
   ===================== */
-  const [enteredPassword, setEnteredPassword] = useState('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  useEffect(() => {
-    if (!luxury?.passwordProtected?.onOff) return
-
-    const stored = Cookies.get('luxuryTravelPassword')
-    if (stored === luxury.passwordProtected.password) {
-      setIsAuthenticated(true)
-    }
-  }, [luxury?.passwordProtected])
-
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    if (enteredPassword === luxury?.passwordProtected?.password) {
-      Cookies.set('luxuryTravelPassword', enteredPassword, { expires: 1 })
-      setIsAuthenticated(true)
-    } else {
-      alert('Incorrect password. Please try again.')
-    }
-  }
+  const {
+    enteredPassword,
+    setEnteredPassword,
+    isAuthenticated,
+    isChecking,
+    handlePasswordSubmit,
+    errorMessage,
+  } = usePasswordProtection({
+    contentType: 'luxuryTravel',
+    databaseId: luxury?.databaseId,
+    enabled: luxury?.passwordProtected?.onOff,
+  })
 
   if (luxury?.passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main className={open_sans.variable}>
-        <form onSubmit={handlePasswordSubmit}>
-          <PasswordProtected
-            enteredPassword={enteredPassword}
-            setEnteredPassword={setEnteredPassword}
-            title={luxury?.seo?.title}
-            description={luxury?.seo?.metaDesc}
-            imageUrl={luxury?.featuredImage?.node?.sourceUrl}
-            url={luxury?.uri}
-            focuskw={luxury?.seo?.focuskw}
-          />
-        </form>
+        {isChecking ? (
+          <>Loading...</>
+        ) : (
+          <form onSubmit={handlePasswordSubmit}>
+            <PasswordProtected
+              enteredPassword={enteredPassword}
+              setEnteredPassword={setEnteredPassword}
+              title={luxury?.seo?.title}
+              description={luxury?.seo?.metaDesc}
+              imageUrl={luxury?.featuredImage?.node?.sourceUrl}
+              url={luxury?.uri}
+              focuskw={luxury?.seo?.focuskw}
+            />
+            {errorMessage && (
+              <p className="mt-2 text-center text-sm font-medium text-red-600">
+                {errorMessage}
+              </p>
+            )}
+          </form>
+        )}
       </main>
     )
   }
@@ -250,7 +250,6 @@ SingleLuxuryTravel.query = gql`
       date
       passwordProtected {
         onOff
-        password
       }
       parent {
         node {

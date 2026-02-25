@@ -14,12 +14,21 @@ export default async function handler(req, res) {
     // -----------------------
     // 1️⃣ Ambil informasi tambahan otomatis
     // -----------------------
-    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    const forwarded = req.headers["x-forwarded-for"];
+    const ip =
+      (typeof forwarded === "string" ? forwarded.split(",")[0].trim() : "") ||
+      req.socket.remoteAddress;
 
     // contoh API untuk IP -> location, bisa pakai freegeoip.app atau ipapi.co
     let location = { city: "", country: "", state: "", zip: "" };
     try {
-      const locRes = await fetch(`https://ipapi.co/${ip}/json/`);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 2000);
+
+      const locRes = await fetch(`https://ipapi.co/${ip}/json/`, {
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
       const locData = await locRes.json();
       location = {
         city: locData.city || "",

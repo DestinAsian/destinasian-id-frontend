@@ -4,6 +4,7 @@ import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 
 import styles from './Post.module.scss'
 import Link from 'next/link'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 let cx = classNames.bind(styles)
 
@@ -63,7 +64,9 @@ export default function Post({
             <Link href={uri}>
               <div
                 className={cx('excerpt')}
-                dangerouslySetInnerHTML={{ __html: trimmedExcerpt }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(trimmedExcerpt),
+                }}
               />
             </Link>
           )}

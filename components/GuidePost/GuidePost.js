@@ -3,6 +3,7 @@ import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 
 import styles from './GuidePost.module.scss'
 import Link from 'next/link'  
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 let cx = classNames.bind(styles)
 
@@ -57,7 +58,9 @@ export default function GuidePost({
             <Link href={uri}>
               <div
                 className={cx('content')}
-                dangerouslySetInnerHTML={{ __html: trimmedContent }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(trimmedContent),
+                }}
               />
             </Link>
           )}

@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { gql } from '@apollo/client'
 import dynamic from 'next/dynamic'
-import Cookies from 'js-cookie'
 import { useSWRGraphQL } from '../lib/useSWRGraphQL'
 
 // Constants & Fragments
@@ -32,6 +31,7 @@ import PasswordProtected from '../components/PasswordProtected/PasswordProtected
 import FeaturedImage from '../components/FeaturedImage/FeaturedImage'
 import FloatingButtons from '../components/FloatingButtons/FloatingButtons'
 import RelatedTravelGuides from '../components/RelatedPosts/RelatedTravelGuides'
+import { usePasswordProtection } from '../lib/usePasswordProtection'
 
 // Fonts
 import { open_sans } from '../styles/fonts/fonts'
@@ -62,15 +62,6 @@ const MastHeadBottomMobileGuides = dynamic(
 export default function SingleTravelGuide(props) {
   if (props.loading) return <>Loading...</>
 
-  const [enteredPassword, setEnteredPassword] = useState('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isNavShown, setIsNavShown] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
   const travelGuide = props?.data?.travelGuide || {}
   const {
     title,
@@ -85,16 +76,29 @@ export default function SingleTravelGuide(props) {
     date,
   } = travelGuide
 
+  const {
+    enteredPassword,
+    setEnteredPassword,
+    isAuthenticated,
+    isChecking,
+    handlePasswordSubmit,
+    errorMessage,
+  } = usePasswordProtection({
+    contentType: 'travelGuide',
+    databaseId,
+    enabled: passwordProtected?.onOff,
+  })
+
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
   const categories = travelGuide?.categories?.edges ?? []
 
   const siteDescription = props?.data?.generalSettings?.description
-
-  useEffect(() => {
-    const storedPassword = Cookies.get('travelGuidePassword')
-    if (storedPassword === passwordProtected?.password) {
-      setIsAuthenticated(true)
-    }
-  }, [passwordProtected?.password])
 
   useEffect(() => {
     const handleResize = () => {
@@ -171,30 +175,29 @@ export default function SingleTravelGuide(props) {
 
   const firstSlider = images[0]?.filter(Boolean)
 
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    if (enteredPassword === passwordProtected?.password) {
-      setIsAuthenticated(true)
-      Cookies.set('travelGuidePassword', enteredPassword, { expires: 1 })
-    } else {
-      alert('Incorrect password. Please try again.')
-    }
-  }
-
   if (passwordProtected?.onOff && !isAuthenticated) {
     return (
       <main className={open_sans.variable}>
-        <form onSubmit={handlePasswordSubmit}>
-          <PasswordProtected
-            enteredPassword={enteredPassword}
-            setEnteredPassword={setEnteredPassword}
-            title={seo?.title}
-            description={seo?.metaDesc}
-            imageUrl={featuredImage?.node?.sourceUrl}
-            url={uri}
-            focuskw={seo?.focuskw}
-          />
-        </form>
+        {isChecking ? (
+          <>Loading...</>
+        ) : (
+          <form onSubmit={handlePasswordSubmit}>
+            <PasswordProtected
+              enteredPassword={enteredPassword}
+              setEnteredPassword={setEnteredPassword}
+              title={seo?.title}
+              description={seo?.metaDesc}
+              imageUrl={featuredImage?.node?.sourceUrl}
+              url={uri}
+              focuskw={seo?.focuskw}
+            />
+            {errorMessage && (
+              <p className="mt-2 text-center text-sm font-medium text-red-600">
+                {errorMessage}
+              </p>
+            )}
+          </form>
+        )}
       </main>
     )
   }
@@ -335,7 +338,6 @@ SingleTravelGuide.query = gql`
       date
       passwordProtected {
         onOff
-        password
       }
       author {
         node {

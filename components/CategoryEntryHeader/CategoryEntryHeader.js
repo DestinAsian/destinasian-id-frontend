@@ -6,6 +6,7 @@ import styles from './CategoryEntryHeader.module.scss'
 import { useEffect, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -81,7 +82,7 @@ export default function CategoryEntryHeader({
       })
 
       // Set the transformed HTML description
-      setTransformedDescription(doc.body.innerHTML)
+      setTransformedDescription(sanitizeHtml(doc.body.innerHTML))
     }
 
     // Call the function to extract image data and replace <img>
@@ -127,7 +128,7 @@ export default function CategoryEntryHeader({
                   alt={'Slider Image' + index}
                   fill
                   sizes="100%"
-                  priority
+                  priority={index === 0}
                 />
                 {image[1] && (
                   <figcaption className={'slide-caption'}>

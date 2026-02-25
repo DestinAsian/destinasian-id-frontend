@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './Tagline.module.scss'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -12,7 +13,7 @@ const Tagline = ({ tagline }) => {
     <div className={cx('taglineWrap')}>
       <div
         className={cx('contentWrapper')}
-        dangerouslySetInnerHTML={{ __html: tagline.tagline }} // render HTML content safely
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(tagline.tagline) }} // render HTML content safely
       />
     </div>
   )

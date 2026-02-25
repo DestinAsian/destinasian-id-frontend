@@ -6,6 +6,7 @@ import { Navigation } from 'swiper'
 import Image from 'next/image'
 import className from 'classnames/bind'
 import useSWR from 'swr'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 import styles from './GallerySliderSingle.module.scss'
 
@@ -99,7 +100,9 @@ export default function GallerySliderSingle({ gallerySlider }) {
                 <div className={cx('caption-wrapper')}>
                   <div
                     className={cx('caption')}
-                    dangerouslySetInnerHTML={{ __html: img.caption }}
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(img.caption),
+                    }}
                   />
                 </div>
               )}
@@ -110,4 +113,3 @@ export default function GallerySliderSingle({ gallerySlider }) {
     </div>
   )
 }
-

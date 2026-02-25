@@ -8,6 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import GallerySlider from '../../components/GallerySliderPage/GallerySliderPage'
 import HalfPageGuides1 from '../../components/AdUnit/HalfPage1/HalfPageGuides1'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 let cx = className.bind(styles)
 
@@ -77,9 +78,10 @@ export default function ContentWrapperLuxuryTravel({ content, children }) {
   useEffect(() => {
     const parser = new DOMParser()
     const cleaned = content.replaceAll('https://destinasian.co.id', BACKEND_URL)
-    const doc = parser.parseFromString(cleaned, 'text/html')
+    const safeContent = sanitizeHtml(cleaned, { allowIframe: true })
+    const doc = parser.parseFromString(safeContent, 'text/html')
 
-    const processNode = (node) => {
+    const processNode = (node, index) => {
       // ========= 3A. GALLERY =========
       if (node.nodeType === 1 && node.matches('div.gallery')) {
         return <GallerySlider gallerySlider={node} />
@@ -101,7 +103,7 @@ export default function ContentWrapperLuxuryTravel({ content, children }) {
             alt={alt}
             width={width}
             height={height}
-            priority
+            priority={index === 0}
             style={{ objectFit: 'contain' }}
           />
         )

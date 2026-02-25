@@ -5,6 +5,7 @@ import React, { useState, useDeferredValue, useRef, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import Image from 'next/image'
 import Link from 'next/link'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 import classNames from 'classnames/bind'
 import { IoSearchOutline } from 'react-icons/io5'
 import { FaSpinner } from 'react-icons/fa'
@@ -145,7 +146,9 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
                         <Link
                           href={node.uri}
                           dangerouslySetInnerHTML={{
-                            __html: highlight(node.title, deferred),
+                            __html: sanitizeHtml(
+                              highlight(node.title, deferred)
+                            ),
                           }}
                         />
                       </h2>
@@ -155,7 +158,7 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
                       <div
                         className={cx('excerpt')}
                         dangerouslySetInnerHTML={{
-                          __html: trimExcerpt(node.excerpt),
+                          __html: sanitizeHtml(trimExcerpt(node.excerpt)),
                         }}
                       />
                     )}

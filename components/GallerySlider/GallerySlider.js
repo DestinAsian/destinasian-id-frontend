@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper'
 import Image from 'next/image'
 import className from 'classnames/bind'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 import styles from './GallerySlider.module.scss'
 
@@ -76,7 +77,9 @@ export default function GallerySlider({ gallerySlider }) {
                 <div className={cx('caption-wrapper')}>
                   <div
                     className={cx('caption')}
-                    dangerouslySetInnerHTML={{ __html: img.caption }}
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(img.caption),
+                    }}
                   />
                 </div>
               )}

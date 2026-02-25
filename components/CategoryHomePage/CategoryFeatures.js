@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { format } from 'date-fns'
 import styles from './CategoryFeatures.module.scss'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const CategoryFeatures = ({ data }) => {
   if (!data) return null
@@ -72,7 +73,9 @@ const CategoryFeatures = ({ data }) => {
                 {post.excerpt && (
                   <div
                     className={styles.excerpt}
-                    dangerouslySetInnerHTML={{ __html: post.excerpt }}
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(post.excerpt),
+                    }}
                   />
                 )}
 

@@ -2,6 +2,7 @@
 import classNames from 'classnames/bind'
 import styles from './PostTwoColumns.module.scss'
 import Link from 'next/link'
+import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
 
@@ -48,7 +49,7 @@ export default function TextTwoColumns({
         <Link href={uri}>
           <div
             className={cx('excerpt')}
-            dangerouslySetInnerHTML={{ __html: trimmedExcerpt }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(trimmedExcerpt) }}
           />
         </Link>
       )}
