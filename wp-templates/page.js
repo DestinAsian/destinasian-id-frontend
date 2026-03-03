@@ -46,28 +46,7 @@ const MastHeadBottomMobile = dynamic(() =>
 export default function Component(props) {
   if (props.loading) return <>Loading...</>
 
-  const {
-    enteredPassword,
-    setEnteredPassword,
-    isAuthenticated,
-    isChecking,
-    handlePasswordSubmit,
-  } = usePasswordProtection({
-    contentType: 'page',
-    databaseId: page?.databaseId,
-    enabled: passwordProtected?.onOff,
-  })
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isNavShown, setIsNavShown] = useState(false)
-  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
   const { generalSettings, page } = props?.data || {}
-  const { title: siteTitle, description: siteDescription } =
-    generalSettings || {}
-
   const {
     title,
     content,
@@ -76,18 +55,33 @@ export default function Component(props) {
     seo,
     uri,
     passwordProtected,
+    databaseId,
   } = page || {}
+
+  const { title: siteTitle, description: siteDescription } =
+    generalSettings || {}
+
+  const {
+    enteredPassword,
+    setEnteredPassword,
+    isAuthenticated,
+    isChecking,
+    handlePasswordSubmit,
+  } = usePasswordProtection({
+    contentType: 'page',
+    databaseId: databaseId || null,
+    enabled: passwordProtected?.onOff || false,
+  })
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isNavShown, setIsNavShown] = useState(false)
+  const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
 
   const router = useRouter()
   const isNewsletterPage = uri?.includes('newsletter')
 
-  // ======================
-  // PASSWORD CHECK (SERVER)
-  // ======================
-
-  // ======================
-  // BODY SCROLL LOCK
-  // ======================
   useEffect(() => {
     const shouldLock = searchQuery || isNavShown
     document.body.style.overflow = shouldLock ? 'hidden' : 'visible'
@@ -152,12 +146,13 @@ export default function Component(props) {
   // ======================
   // PASSWORD PAGE
   // ======================
-  if (passwordProtected?.onOff && !isAuthenticated) {
-    return (
-      <main>
-        {isChecking ? (
-          <>Loading...</>
-        ) : (
+
+  if (passwordProtected?.onOff) {
+    if (isChecking) return <>Loading...</>
+
+    if (!isAuthenticated) {
+      return (
+        <main>
           <form onSubmit={handlePasswordSubmit}>
             <PasswordProtected
               enteredPassword={enteredPassword}
@@ -169,11 +164,10 @@ export default function Component(props) {
               focuskw={seo?.focuskw}
             />
           </form>
-        )}
-      </main>
-    )
+        </main>
+      )
+    }
   }
-
   // ======================
   // RENDER
   // ======================
