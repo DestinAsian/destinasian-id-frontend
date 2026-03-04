@@ -4,13 +4,18 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import classNames from 'classnames/bind'
 
 import { GetRelatedTravelGuides } from '../../queries/GetRelatedTravelGuides'
 import { graphQLFetcher } from '../../lib/graphqlFetcher'
 
 import styles from './RelatedTravelGuides.module.scss'
-import HalfPageGuides2 from '../../components/AdUnit/HalfPage2/HalfPageGuides2'
+
+const HalfPageGuides2 = dynamic(
+  () => import('../../components/AdUnit/HalfPage2/HalfPageGuides2'),
+  { ssr: false },
+)
 
 const cx = classNames.bind(styles)
 
@@ -96,12 +101,9 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
                 {(primaryCategory || secondaryCategory) && (
                   <div className={styles.category}>
                     {primaryCategory && (
-                      <Link
-                        href={primaryCategory.uri}
-                        className={styles.categoryLink}
-                      >
+                      <span className={styles.categoryLink}>
                         {primaryCategory.name}
-                      </Link>
+                      </span>
                     )}
 
                     {primaryCategory && secondaryCategory && (
@@ -109,12 +111,9 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
                     )}
 
                     {secondaryCategory && (
-                      <Link
-                        href={secondaryCategory.uri}
-                        className={styles.categoryLink}
-                      >
+                      <span className={styles.categoryLink}>
                         {secondaryCategory.name}
-                      </Link>
+                      </span>
                     )}
                   </div>
                 )}

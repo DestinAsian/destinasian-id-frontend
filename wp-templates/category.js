@@ -79,7 +79,14 @@ export default function Category({ data: initialData, loading }) {
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
   const { generalSettings, category } = initialData || {}
-  const pickImageUrl = (media) => media?.mediaItemUrl || media?.sourceUrl || null
+  const pickImageUrl = (media) => {
+    const raw = media?.mediaItemUrl || media?.sourceUrl || ""
+    if (typeof raw !== "string") return null
+
+    const cleaned = raw.trim()
+    return cleaned || null
+  }
+
   const {
     name,
     description,
@@ -134,6 +141,17 @@ export default function Category({ data: initialData, loading }) {
       ]),
     [categoryImages],
   )
+
+  const primaryCategoryImage = useMemo(() => {
+    const featuredCategoryImage = pickImageUrl(categoryImages?.categoryImages)
+    if (featuredCategoryImage) return featuredCategoryImage
+
+    const firstSlideImage =
+      categorySlider.find((slide) => slide?.[0])?.[0] || null
+
+    return firstSlideImage
+  }, [categoryImages, categorySlider])
+
 
   const sharedHeaderProps = useMemo(
     () => ({
@@ -201,7 +219,7 @@ export default function Category({ data: initialData, loading }) {
       <SEO
         title={category?.seo?.title || name}
         description={category?.seo?.metaDesc || description}
-        imageUrl={pickImageUrl(category?.categoryImages?.categoryImages)}
+        imageUrl={primaryCategoryImage}
         url={category?.uri}
         focuskw={category?.seo?.focuskw}
       />
@@ -233,7 +251,7 @@ export default function Category({ data: initialData, loading }) {
           changeToSlider={categoryImages?.changeToSlider}
           guidesTitle={destinationGuides?.guidesTitle}
           categorySlider={categorySlider}
-          image={pickImageUrl(categoryImages?.categoryImages)}
+          image={primaryCategoryImage}
           imageCaption={categoryImages?.categoryImagesCaption}
           description={description}
         />
@@ -274,7 +292,7 @@ export default function Category({ data: initialData, loading }) {
             <GuideFitur
               guidesfitur={guidesfitur}
               fallbackImage={
-                pickImageUrl(categoryImages?.categoryImages) ||
+                primaryCategoryImage ||
                 pickImageUrl(categoryImages?.categorySlide1) ||
                 ''
               }

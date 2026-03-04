@@ -1,13 +1,10 @@
 import className from 'classnames/bind'
 import Heading from '../../components/Heading/Heading'
 import Container from '../../components/Container/Container'
-import { useQuery } from '@apollo/client'
 import styles from './CategoryEntryHeader.module.scss'
-import { useEffect, useState } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import Image from 'next/image'
+import { useMemo } from 'react'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
-import { BACKEND_URL } from '../../constants/backendUrl'
+import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import 'swiper/css'
@@ -38,61 +35,28 @@ export default function CategoryEntryHeader({
   const isGuide = destinationGuides == 'yes'
 
   // Validator for Slider or Image
-  const isSlider = changeToSlider == 'yes'
-  const isImage = changeToSlider == null
+  const normalizedChangeToSlider =
+    typeof changeToSlider === "string"
+      ? changeToSlider.trim().toLowerCase()
+      : ""
 
-  const [transformedDescription, setTransformedDescription] = useState('')
+  const isSlider = normalizedChangeToSlider === "yes"
+  const isImage = !isSlider
 
-  useEffect(() => {
-    // Function to extract image data and replace <img> with <Image>
-    const extractImageData = () => {
-      // Create a DOMParser
-      const parser = new DOMParser()
 
-      // Parse the HTML description
-      const doc = parser.parseFromString(description, 'text/html')
 
-      // Get only image elements with src containing BACKEND_URL
-      const imageElements = doc.querySelectorAll(`img[src*="${BACKEND_URL}"]`)
+  const transformedDescription = useMemo(
+    () => sanitizeHtml(description || ''),
+    [description],
+  )
 
-      // Replace <img> elements with <Image> components
-      imageElements.forEach((img) => {
-        const src = img.getAttribute('src')
-        const alt = img.getAttribute('alt')
-        const width = img.getAttribute('width')
-        const height = img.getAttribute('height')
+  const sliderData = Array.isArray(categorySlider)
+    ? categorySlider.filter((slide) => slide?.[0])
+    : []
 
-        // Create Image component
-        const imageComponent = (
-          <Image
-            src={src}
-            alt={alt}
-            width={width ? width : '500'}
-            height={height ? height : '500'}
-            style={{ objectFit: 'contain' }}
-            priority
-          />
-        )
+  const menuIndex = sliderData.map((_, index) => index)
 
-        // Render the Image component to HTML string
-        const imageHtmlString = renderToStaticMarkup(imageComponent)
-
-        // Replace the <img> element with the Image HTML string in the HTML description
-        img.outerHTML = imageHtmlString
-      })
-
-      // Set the transformed HTML description
-      setTransformedDescription(sanitizeHtml(doc.body.innerHTML))
-    }
-
-    // Call the function to extract image data and replace <img>
-    extractImageData()
-  }, [description])
-
-  // Swiper pagination
-  const menuIndex = categorySlider?.map((image, index) => {
-    return index
-  })
+  const hasValidSlider = sliderData.length > 0
 
   const swiperComponent = (
     <>
@@ -119,25 +83,21 @@ export default function CategoryEntryHeader({
         modules={[EffectFade, Autoplay, Pagination, Navigation]}
         className="post-category-swiper"
       >
-        {categorySlider?.map((image, index) => (
-          <div key={index} className="post-swiper-slide">
-            {image[0] && (
-              <SwiperSlide key={index}>
-                <Image
-                  src={image[0]}
-                  alt={'Slider Image' + index}
-                  fill
-                  sizes="100%"
-                  priority={index === 0}
-                />
-                {image[1] && (
-                  <figcaption className={'slide-caption'}>
-                    <span className={'caption'}>{image[1]}</span>
-                  </figcaption>
-                )}
-              </SwiperSlide>
+        {sliderData.map((image, index) => (
+          <SwiperSlide key={index}>
+            <Image
+              src={image[0]}
+              alt={'Slider Image' + index}
+              fill
+              sizes="100%"
+              priority={index === 0}
+            />
+            {image[1] && (
+              <figcaption className={'slide-caption'}>
+                <span className={'caption'}>{image[1]}</span>
+              </figcaption>
             )}
-          </div>
+          </SwiperSlide>
         ))}
         <div className="swiper-custom-button-prev">
           <svg
@@ -208,7 +168,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
             <div className={cx('container-wrapper')}>
               <div className={cx('text', { 'has-image': image })}>
                 <Container>
-                  {categorySlider ? (
+                  {hasValidSlider ? (
                     <figure className={cx('image-slider')}>
                       <div>{swiperComponent}</div>
                       <div className="swiper-post-custom-pagination"></div>
@@ -311,7 +271,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
             <div className={cx('container-wrapper')}>
               <div className={cx('text', { 'has-image': image })}>
                 <Container>
-                  {categorySlider ? (
+                  {hasValidSlider ? (
                     <figure className={cx('image-slider')}>
                       <div>{swiperComponent}</div>
                       <div className="swiper-post-custom-pagination"></div>
