@@ -36,6 +36,9 @@
   justify-content: space-between;
 }
 
+.threeMobile {}
+.fourMobile {}
+
 .guideFiturItem {
   flex: 1 1 calc(25% - 1.125rem); // 4 columns on desktop
   text-decoration: none;
@@ -45,9 +48,17 @@
   @media (max-width: $breakpoint-medium) {
     flex: 1 1 calc(50% - 0.75rem); // 2 columns on mobile
   }
+}
 
-  .threeMobile & {
-    flex: 1 1 calc(33.333% - 1rem); // 3 columns on small screens if 3 items
+.guideFiturWrap.threeMobile .guideFiturItem {
+  @media (max-width: $breakpoint-medium) {
+    flex: 1 1 calc(33.333% - 1rem); // 3 columns on mobile if total items = 3
+  }
+}
+
+.guideFiturWrap.fourMobile .guideFiturItem {
+  @media (max-width: $breakpoint-medium) {
+    flex: 1 1 calc(25% - 1.125rem); // 4 columns on mobile if total items = 4
   }
 }
 
@@ -63,6 +74,12 @@
     object-fit: cover;
     display: block;
   }
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #9a9a9a 0%, #666 100%);
 }
 
 .titleOverlay {

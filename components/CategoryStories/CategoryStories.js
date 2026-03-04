@@ -89,8 +89,6 @@ export default function CategoryStories({
     }
   )
 
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
-
   /* ===========================
      4. MERGE DATA (TIDAK DIUBAH)
      =========================== */
@@ -118,6 +116,8 @@ export default function CategoryStories({
      =========================== */
   const visiblePosts = allPosts.slice(0, visibleCount)
 
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
+
   const renderPost = (post) => {
     const guideInfo = post?.guide_book_now
 
@@ -126,7 +126,8 @@ export default function CategoryStories({
         <PostTwoColumns
           title={post.title}
           uri={post.uri}
-          featuredImage={post.featuredImage?.node}
+          featuredImage={post.featuredImage?.node || post.featuredImage}
+          content={post.content}
         />
 
         {guideInfo && (

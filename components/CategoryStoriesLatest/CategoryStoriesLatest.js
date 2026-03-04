@@ -19,19 +19,15 @@ export default function CategoryStoriesLatest({
 }) {
   const uri = categoryUri?.categoryUri || categoryUri?.id || categoryUri || ''
   const shouldSkip = !uri
+  const isPostType = contentType === CONTENT_TYPES.POST
 
-  // Hindari hydration mismatch (LOGIKA TETAP)
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
-
-  // Jika POST → jangan render
-  if (contentType === CONTENT_TYPES.POST) {
-    return null
-  }
 
   const swrKey =
     mounted &&
     !shouldSkip &&
+    !isPostType &&
     contentType === CONTENT_TYPES.TRAVEL_GUIDES
       ? [
           GetCategoryStories,
@@ -50,10 +46,11 @@ export default function CategoryStoriesLatest({
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
-    }
+    },
   )
 
-  // Placeholder loading (TETAP SAMA)
+  if (isPostType) return null
+
   if (!mounted || isLoading) {
     return (
       <div className={cx('component', 'stable-placeholder')}>
@@ -70,7 +67,6 @@ export default function CategoryStoriesLatest({
 
   if (shouldSkip || error) return null
 
-  // Ambil post
   const fetchedPosts =
     data?.category?.contentNodes?.edges?.map((edge) => edge.node) || []
 
@@ -96,7 +92,9 @@ export default function CategoryStoriesLatest({
           }
           category={displayedPost.categories?.edges?.[0]?.node?.name}
           categoryUri={displayedPost.categories?.edges?.[0]?.node?.uri}
-          featuredImage={displayedPost.featuredImage?.node}
+          featuredImage={
+            displayedPost.featuredImage?.node || displayedPost.featuredImage
+          }
           caption={displayedPost.featuredImage?.node?.caption}
         />
       </div>

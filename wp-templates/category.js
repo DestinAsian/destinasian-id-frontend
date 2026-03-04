@@ -40,27 +40,7 @@ import { GetMenus } from '../queries/GetMenus'
 import { GetLatestStories } from '../queries/GetLatestStories'
 import { GetSecondaryHeader } from '../queries/GetSecondaryHeader'
 import { useSWRGraphQL } from '../lib/useSWRGraphQL'
-
-const fetcher = async (query, variables = {}) => {
-  const res = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables }),
-  })
-
-  if (!res.ok) {
-    throw new Error('Network error')
-  }
-
-  const json = await res.json()
-
-  if (json.errors) {
-    console.error(json.errors)
-    throw new Error('GraphQL error')
-  }
-
-  return json.data
-}
+import { graphQLFetcher } from '../lib/graphqlFetcher'
 
 export default function Category({ data: initialData, loading }) {
   const [searchQuery, setSearchQuery] = useState('')
@@ -99,6 +79,7 @@ export default function Category({ data: initialData, loading }) {
   }, [searchQuery, isNavShown, isGuidesNavShown])
 
   const { generalSettings, category } = initialData || {}
+  const pickImageUrl = (media) => media?.mediaItemUrl || media?.sourceUrl || null
   const {
     name,
     description,
@@ -130,7 +111,7 @@ export default function Category({ data: initialData, loading }) {
   const isMenuReady = menusData?.headerMenuItems?.nodes?.length > 0
 
   const { data: latestStories } = useSWR('latest-stories', () =>
-    fetcher(GetLatestStories, { first: 5 }),
+    graphQLFetcher(GetLatestStories, { first: 5 }),
   )
 
   const isGuidesCategory = destinationGuides?.destinationGuides === 'yes'
@@ -148,7 +129,7 @@ export default function Category({ data: initialData, loading }) {
   const categorySlider = useMemo(
     () =>
       [1, 2, 3, 4, 5].map((i) => [
-        categoryImages?.[`categorySlide${i}`]?.mediaItemUrl || null,
+        pickImageUrl(categoryImages?.[`categorySlide${i}`]),
         categoryImages?.[`categorySlideCaption${i}`] || null,
       ]),
     [categoryImages],
@@ -220,7 +201,7 @@ export default function Category({ data: initialData, loading }) {
       <SEO
         title={category?.seo?.title || name}
         description={category?.seo?.metaDesc || description}
-        imageUrl={category?.categoryImages?.categoryImages?.mediaItemUrl}
+        imageUrl={pickImageUrl(category?.categoryImages?.categoryImages)}
         url={category?.uri}
         focuskw={category?.seo?.focuskw}
       />
@@ -252,7 +233,7 @@ export default function Category({ data: initialData, loading }) {
           changeToSlider={categoryImages?.changeToSlider}
           guidesTitle={destinationGuides?.guidesTitle}
           categorySlider={categorySlider}
-          image={categoryImages?.categoryImages?.mediaItemUrl}
+          image={pickImageUrl(categoryImages?.categoryImages)}
           imageCaption={categoryImages?.categoryImagesCaption}
           description={description}
         />
@@ -290,7 +271,14 @@ export default function Category({ data: initialData, loading }) {
           />
 
           {isGuidesCategory && guidesfitur && (
-            <GuideFitur guidesfitur={guidesfitur} />
+            <GuideFitur
+              guidesfitur={guidesfitur}
+              fallbackImage={
+                pickImageUrl(categoryImages?.categoryImages) ||
+                pickImageUrl(categoryImages?.categorySlide1) ||
+                ''
+              }
+            />
           )}
           <CategorySecondStoriesLatest
             categoryUri={databaseId}
@@ -354,21 +342,27 @@ Category.query = gql`
         changeToSlider
         categorySlide1 {
           mediaItemUrl
+          sourceUrl
         }
         categorySlide2 {
           mediaItemUrl
+          sourceUrl
         }
         categorySlide3 {
           mediaItemUrl
+          sourceUrl
         }
         categorySlide4 {
           mediaItemUrl
+          sourceUrl
         }
         categorySlide5 {
           mediaItemUrl
+          sourceUrl
         }
         categoryImages {
           mediaItemUrl
+          sourceUrl
         }
         categorySlideCaption1
         categorySlideCaption2
@@ -392,15 +386,19 @@ Category.query = gql`
         titleGuideFitur4
         featureImageGuideFitur1 {
           mediaItemUrl
+          sourceUrl
         }
         featureImageGuideFitur2 {
           mediaItemUrl
+          sourceUrl
         }
         featureImageGuideFitur3 {
           mediaItemUrl
+          sourceUrl
         }
         featureImageGuideFitur4 {
           mediaItemUrl
+          sourceUrl
         }
       }
       guideReelIg {
@@ -446,6 +444,7 @@ Category.query = gql`
             title
             uri
             excerpt
+            content
             ...FeaturedImageFragment
             author {
               node {
@@ -474,6 +473,7 @@ Category.query = gql`
             title
             uri
             excerpt
+            content
             guide_book_now {
               guideLocation
               guideName
@@ -511,6 +511,7 @@ Category.query = gql`
             title
             uri
             excerpt
+            content
             ...FeaturedImageFragment
             author {
               node {
@@ -539,6 +540,7 @@ Category.query = gql`
             title
             uri
             excerpt
+            content
             guide_book_now {
               guideLocation
               guideName

@@ -113,7 +113,7 @@ export default function CategorySecondStoriesLatest({
             }
             category={travelGuide.categories?.edges?.[0]?.node?.name}
             categoryUri={travelGuide.categories?.edges?.[0]?.node?.uri}
-            featuredImage={travelGuide.featuredImage?.node}
+            featuredImage={travelGuide.featuredImage?.node || travelGuide.featuredImage}
             caption={travelGuide.featuredImage?.node?.caption}
           />
 

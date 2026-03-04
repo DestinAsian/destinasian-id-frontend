@@ -13,13 +13,29 @@ const stripDropcapTags = (content = '') =>
     .replace(/\[\/?dropcap\]/gi, '')
     .replace(/<span[^>]*class=["']?dropcap["']?[^>]*>(.*?)<\/span>/gi, '$1')
 
+const getFirstImageFromContent = (content) => {
+  if (!content || typeof content !== 'string') return ''
+
+  const srcMatch =
+    content.match(/<img[^>]+src=["']([^"']+)["']/i) ||
+    content.match(/<img[^>]+data-src=["']([^"']+)["']/i)
+
+  return srcMatch?.[1] || ''
+}
+
 export default function GuideLatestStories({
   title,
   excerpt,
+  content,
   uri,
   featuredImage,
   caption,
 }) {
+  const imageUrl =
+    featuredImage?.sourceUrl ||
+    featuredImage?.mediaItemUrl ||
+    getFirstImageFromContent(content) ||
+    ''
   const text = stripDropcapTags(excerpt)
   const trimmed = text.slice(0, MAX_EXCERPT_LENGTH)
   const lastSpace = trimmed.lastIndexOf(' ')
@@ -46,22 +62,24 @@ export default function GuideLatestStories({
         </div>
 
         {/* Kolom gambar */}
-        {featuredImage && (
-          <div className={cx('imageColumn')}>
-            <Link href={uri} passHref>
-              <div className={cx('imageWrapper')}>
+        <div className={cx('imageColumn')}>
+          <Link href={uri} passHref>
+            <div className={cx('imageWrapper')}>
+              {imageUrl ? (
                 <Image
-                  src={featuredImage.sourceUrl}
+                  src={imageUrl}
                   alt={`${title} Featured Image`}
                   fill
                   className={cx('mainImage')}
                   loading="lazy"
                 />
-              </div>
-            </Link>
-            {caption && <div className={cx('caption')}>{caption}</div>}
-          </div>
-        )}
+              ) : (
+                <div className={cx('imagePlaceholder')} aria-hidden="true" />
+              )}
+            </div>
+          </Link>
+          {caption && <div className={cx('caption')}>{caption}</div>}
+        </div>
       </div>
     </article>
   )
