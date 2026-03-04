@@ -11,15 +11,17 @@ jobs:
     steps:
       - name: Checkout Main Branch
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Generate Possible Types
         run: npm run generate
@@ -29,6 +31,7 @@ jobs:
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
+        
         with:
           key: ${{ secrets.SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
@@ -36,21 +39,14 @@ jobs:
       - name: Show SSH Fingerprint
         run: ssh-keygen -lf ~/.ssh/id_rsa
 
+      - name: Test SSH (hardcode)
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@178.128.126.177 "whoami"
+
       - name: Test SSH
-        run: ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "whoami"
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "whoami"
 
       - name: Deploy with rsync
-        run: >-
-          rsync -avz --delete
-          --exclude '.git'
-          --exclude '.github'
-          --exclude 'node_modules'
-          --exclude '.next'
-          --exclude '.env'
-          --exclude '.env.*'
-          -e "ssh -i ~/.ssh/id_rsa"
-          .
-          ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.TARGET_DIRECTORY }}
+        run: rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" --delete . ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.TARGET_DIRECTORY }}
 
       - name: Restart PM2 Process
-        run: ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "pm2 restart @destinasian-id-frontend"
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "pm2 restart @destinasian-id-frontend"
