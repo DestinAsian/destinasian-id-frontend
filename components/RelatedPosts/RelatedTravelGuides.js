@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -14,11 +14,24 @@ import HalfPageGuides2 from '../../components/AdUnit/HalfPage2/HalfPageGuides2'
 
 const cx = classNames.bind(styles)
 
-const cleanExcerpt = (excerpt = '') =>
-  excerpt
+const decodeHtml = (value = '') => {
+  if (!value) return ''
+  if (typeof window === 'undefined') return value
+
+  const textarea = document.createElement('textarea')
+  textarea.innerHTML = value
+  return textarea.value
+}
+
+const cleanExcerpt = (excerpt = '') => {
+  const cleaned = excerpt
     .replace(/\[\/?dropcap\]/gi, '')
     .replace(/<span[^>]*class=["']?dropcap["']?[^>]*>.*?<\/span>/gi, '')
+    .replace(/<\/?[^>]+(>|$)/g, '')
     .trim()
+
+  return decodeHtml(cleaned)
+}
 
 export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
   const shouldFetch = tagIds.length > 0
@@ -36,9 +49,6 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
 
   const [isMobile, setIsMobile] = useState(false)
 
-  // =========================
-  // Responsive detection
-  // =========================
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)')
     const handleChange = (e) => setIsMobile(e.matches)
@@ -47,9 +57,6 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
-  // =========================
-  // States handling
-  // =========================
   if (!shouldFetch) return null
   if (!data && !error)
     return <p className={styles.statusText}>Loading related guides...</p>
@@ -58,9 +65,6 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
   if (!guides.length)
     return <p className={styles.statusText}>No related guides found.</p>
 
-  // =========================
-  // Render
-  // =========================
   return (
     <div className={cx('layoutWrapper')}>
       <div className={cx('relatedPosts')}>
@@ -68,8 +72,6 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
           const categories = node.categories?.edges || []
           const primaryCategory = categories[0]?.node
           const secondaryCategory = categories[1]?.node
-
-          // langsung panggil cleanExcerpt
           const excerptText = cleanExcerpt(node.excerpt)
 
           return (
@@ -125,7 +127,6 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
           )
         })}
 
-        {/* Ads mobile */}
         {guides.length > 0 && isMobile && (
           <div className={styles.adsMobile}>
             <HalfPageGuides2 />
@@ -133,7 +134,6 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
         )}
       </div>
 
-      {/* Ads desktop */}
       {guides.length > 0 && !isMobile && (
         <aside className={styles.adsWrapper}>
           <div className={styles.stickyAds}>
