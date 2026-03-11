@@ -1,11 +1,24 @@
 import { gql } from '@apollo/client'
 
 export const GetContentNodesSearch = gql`
-  query GetContentNodesSearch($search: String!, $first: Int = 30) {
+  query GetContentNodesSearch(
+    $search: String!
+    $first: Int = 30
+    $after: String
+  ) {
     contentNodes(
-      where: { search: $search, status: PUBLISH, contentTypes: [POST, TRAVEL_GUIDE] }
+      where: {
+        search: $search
+        status: PUBLISH
+        contentTypes: [POST, TRAVEL_GUIDE]
+      }
       first: $first
+      after: $after
     ) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       nodes {
         __typename
         id
