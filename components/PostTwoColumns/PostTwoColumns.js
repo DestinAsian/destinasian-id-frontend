@@ -16,7 +16,7 @@ const getFirstImageFromContent = (content) => {
   return srcMatch?.[1] || ''
 }
 
-export default function PostTwoColumns({ title, uri, featuredImage, content }) {
+export default function PostTwoColumns({ title, uri, featuredImage, content, priority = false }) {
   const imageUrl =
     featuredImage?.sourceUrl ||
     featuredImage?.mediaItemUrl ||
@@ -36,7 +36,7 @@ export default function PostTwoColumns({ title, uri, featuredImage, content }) {
                 alt={title + ' Featured Image'}
                 fill
                 sizes="100%"
-                priority
+                priority={priority}
               />
             ) : (
               <div className={cx('imagePlaceholder')} aria-hidden="true" />

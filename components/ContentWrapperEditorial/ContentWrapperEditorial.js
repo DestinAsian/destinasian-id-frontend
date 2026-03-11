@@ -94,7 +94,7 @@ function renderConvertedImage(img, index) {
         width={width}
         height={height}
         style={{ objectFit: 'contain' }}
-        priority={index === 0}
+        priority={false}
       />
       {caption && (
         <figcaption

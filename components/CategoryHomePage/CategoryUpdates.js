@@ -23,7 +23,7 @@ const CategoryUpdates = memo(({ data = [] }) => {
 
   return (
     <div className={styles.categoryUpdatesWrapper}>
-      {swrData.map(({ node: category }) => {
+      {swrData.map(({ node: category }, categoryIndex) => {
         const posts = category?.contentNodes?.edges?.slice(0, 8) || []
         if (!posts.length) return null
 
@@ -38,7 +38,7 @@ const CategoryUpdates = memo(({ data = [] }) => {
             )}
 
             <div className={styles.postsWrapper}>
-              {posts.map(({ node: post }) => {
+              {posts.map(({ node: post }, postIndex) => {
                 const image = post.featuredImage?.node
 
                 return (
@@ -52,7 +52,7 @@ const CategoryUpdates = memo(({ data = [] }) => {
                             alt={image.title || post.title}
                             width={400}
                             height={300}
-                            loading="lazy"
+                            priority={categoryIndex === 0 && postIndex < 8}
                             draggable={false}
                             className={styles.thumbnail}
                           />

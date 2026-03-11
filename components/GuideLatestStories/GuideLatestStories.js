@@ -30,6 +30,7 @@ export default function GuideLatestStories({
   uri,
   featuredImage,
   caption,
+  priority = false,
 }) {
   const imageUrl =
     featuredImage?.sourceUrl ||
@@ -72,7 +73,7 @@ export default function GuideLatestStories({
                   alt={`${title} Featured Image`}
                   fill
                   className={cx('mainImage')}
-                  loading="lazy"
+                  priority={priority}
                 />
               ) : (
                 <div className={cx('imagePlaceholder')} aria-hidden="true" />

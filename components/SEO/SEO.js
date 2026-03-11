@@ -3,7 +3,7 @@ import Script from 'next/script'
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 import { AdScript, AdConfig } from 'react-ad-manager'
 import { GetFavicon } from '../../queries/GetFavicon'
-import { useQuery } from '@apollo/client'
+import { useSWRGraphQL } from '../../lib/useSWRGraphQL'
 import { useEffect, useState } from 'react'
 // import PageViewsCounter from '../PageViewsCounter/PageViewsCounter'
 
@@ -34,10 +34,19 @@ export default function SEO({ title, description, imageUrl, url, focuskw }) {
   }, [])
 
   // Ambil favicon dari GraphQL
-  const { data } = useQuery(GetFavicon, {
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const { data } = useSWRGraphQL(
+    'favicon',
+    GetFavicon,
+    {},
+    {
+      apollo: {
+        fetchPolicy: 'cache-first',
+        nextFetchPolicy: 'cache-first',
+        ensureFresh: true,
+        staleTimeMs: 30000,
+      },
+    },
+  )
   const favicon = data?.favicon
 
   return (

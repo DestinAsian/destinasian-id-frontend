@@ -1,9 +1,9 @@
 import React from 'react'
-import { useQuery } from '@apollo/client'
 import classNames from 'classnames/bind'
 import styles from './SecondaryDesktopHeader.module.scss'
 import Link from 'next/link'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
+import { useSWRGraphQL } from '../../../lib/useSWRGraphQL'
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
 
 const cx = classNames.bind(styles)
@@ -14,11 +14,19 @@ export default function SecondaryDesktopHeader({
   setIsGuidesNavShown,
   isScrolled,
 }) {
-  const { data, error, loading } = useQuery(GetSecondaryHeaders, {
-    variables: { include: ['20', '29', '3'] },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const { data, error, isLoading: loading } = useSWRGraphQL(
+    ['secondary-headers-desktop', '20-29-3'],
+    GetSecondaryHeaders,
+    { include: ['20', '29', '3'] },
+    {
+      apollo: {
+        fetchPolicy: 'cache-first',
+        nextFetchPolicy: 'cache-first',
+        ensureFresh: true,
+        staleTimeMs: 30000,
+      },
+    },
+  )
 
   if (error || loading || !data?.categories?.edges?.length) return null
 

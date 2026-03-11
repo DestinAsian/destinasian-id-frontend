@@ -96,6 +96,7 @@ export default function CategoryStoriesLatest({
             displayedPost.featuredImage?.node || displayedPost.featuredImage
           }
           caption={displayedPost.featuredImage?.node?.caption}
+          priority
         />
       </div>
     </div>

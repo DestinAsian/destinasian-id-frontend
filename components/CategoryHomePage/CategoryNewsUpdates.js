@@ -68,7 +68,7 @@ const CategoryNewsUpdates = memo(() => {
               className={styles.swiperContainer}
               preloadImages={false}
             >
-              {posts.map(({ node: post }) => {
+              {posts.map(({ node: post }, postIndex) => {
                 const image = post.featuredImage?.node
 
                 return (
@@ -83,7 +83,7 @@ const CategoryNewsUpdates = memo(() => {
                               alt={image.title || post.title}
                               width={1022}
                               height={600}
-                              loading="lazy"
+                              priority={postIndex < 4}
                               draggable={false}
                               className={styles.thumbnail}
                               style={{ objectFit: 'cover' }}

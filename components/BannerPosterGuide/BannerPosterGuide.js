@@ -38,7 +38,6 @@ const BannerPosterGuide = ({ guideStorie }) => {
                 alt={bannerLandscape.altText || 'Banner Landscape'}
                 width={800}
                 height={600}
-                priority
               />
             </a>
           </div>

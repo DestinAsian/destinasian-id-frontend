@@ -115,6 +115,7 @@ export default function CategorySecondStoriesLatest({
             categoryUri={travelGuide.categories?.edges?.[0]?.node?.uri}
             featuredImage={travelGuide.featuredImage?.node || travelGuide.featuredImage}
             caption={travelGuide.featuredImage?.node?.caption}
+            priority
           />
 
           {guideInfo && (

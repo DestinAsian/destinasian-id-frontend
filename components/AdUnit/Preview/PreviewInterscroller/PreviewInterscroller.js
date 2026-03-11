@@ -13,8 +13,8 @@ export default function PreviewInterscroller() {
       // Interscroller id
       id: 93939,
     },
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-first",
   });
 
   if (loading) {

@@ -23,6 +23,7 @@ export default function GuideSecondLatestStories({
   caption,
   uri,
   content,
+  priority = false,
 }) {
   const imageUrl =
     featuredImage?.sourceUrl ||
@@ -41,7 +42,7 @@ export default function GuideSecondLatestStories({
             alt={caption || 'Featured Image'}
             width={600} // Fixed dimensions to prevent layout shift
             height={400} // Keeping consistent 3:2 ratio
-            priority={false} // Lazy load by default
+            priority={priority}
             className={cx('mainImage')}
           />
         ) : (

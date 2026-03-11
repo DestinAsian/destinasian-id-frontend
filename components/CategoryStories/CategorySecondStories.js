@@ -55,8 +55,8 @@ export default function CategorySecondStories({
       id: uri,
       contentTypes,
     },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-first',
   })
 
   /** =========================
@@ -135,7 +135,7 @@ export default function CategorySecondStories({
     <div className={cx('component')}>
       {postsToDisplay.length > 0 ? (
         <div className={cx('grid-layout')}>
-          {postsToDisplay.map((post) => {
+          {postsToDisplay.map((post, index) => {
             const guideInfo = post?.guide_book_now
 
             return (
@@ -144,6 +144,7 @@ export default function CategorySecondStories({
                   title={post?.title}
                   uri={post?.uri}
                   featuredImage={post?.featuredImage?.node}
+                  priority={index < 4}
                 />
 
                 {/* GUIDE META */}

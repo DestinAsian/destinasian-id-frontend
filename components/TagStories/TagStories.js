@@ -31,8 +31,8 @@ export default function TagStories({ tagUri }) {
       id: tagUri,
       contentTypes: [CONTENT_TYPES.POST, CONTENT_TYPES.TRAVEL_GUIDES],
     },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-first',
   })
 
   // Merge old + new data
@@ -110,7 +110,7 @@ export default function TagStories({ tagUri }) {
     )
   }
 
-  const renderPost = (post) => {
+  const renderPost = (post, index) => {
     const guideInfo = post?.guide_book_now
 
     return (
@@ -119,6 +119,7 @@ export default function TagStories({ tagUri }) {
           title={post?.title}
           uri={post?.uri}
           featuredImage={post?.featuredImage?.node}
+          priority={index < 4}
         />
 
         {guideInfo && (
@@ -172,7 +173,7 @@ export default function TagStories({ tagUri }) {
 
   return (
     <div className={cx('component')}>
-      {[...initialPosts, ...delayedPosts].map(renderPost)}
+      {[...initialPosts, ...delayedPosts].map((post, index) => renderPost(post, index))}
 
       {isFetchingMore && (
         <div className="mx-auto my-4 flex max-w-[100vw] justify-center md:max-w-[700px]">

@@ -19,21 +19,21 @@ import CategoryNewsUpdates from '../CategoryHomePage/CategoryNewsUpdates'
 import CategoryFeatures from '../CategoryHomePage/CategoryFeatures'
 
 // === ADS (DYNAMIC IMPORT – NON BLOCKING) ===
-const MastHeadTopHome = dynamic(() =>
-  import('../AdUnit/MastHeadTop/MastHeadTopHome'),
-)
-const MastHeadTopMobileHome = dynamic(() =>
-  import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'),
-)
-const MastHeadBottomHome = dynamic(() =>
-  import('../AdUnit/MastHeadBottom/MastHeadBottomHome'),
-)
-const MastHeadBottomMobileHome = dynamic(() =>
-  import('../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'),
-)
-const HalfPageHome1 = dynamic(() =>
-  import('../AdUnit/HalfPage1/HalfPageHome1'),
-)
+const MastHeadTopHome = dynamic(() => import('../AdUnit/MastHeadTop/MastHeadTopHome'), {
+  ssr: false,
+})
+const MastHeadTopMobileHome = dynamic(() => import('../AdUnit/MastHeadTopMobile/MastHeadTopMobileHome'), {
+  ssr: false,
+})
+const MastHeadBottomHome = dynamic(() => import('../AdUnit/MastHeadBottom/MastHeadBottomHome'), {
+  ssr: false,
+})
+const MastHeadBottomMobileHome = dynamic(() => import('../AdUnit/MastHeadBottomMobile/MastHeadBottomMobileHome'), {
+  ssr: false,
+})
+const HalfPageHome1 = dynamic(() => import('../AdUnit/HalfPage1/HalfPageHome1'), {
+  ssr: false,
+})
 
 const cx = classNames.bind(styles)
 

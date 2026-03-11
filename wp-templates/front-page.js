@@ -40,11 +40,7 @@ export default function FrontPage(props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(() =>
-    typeof window !== 'undefined'
-      ? window.matchMedia('(min-width: 1024px)').matches
-      : false,
-  )
+  const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
     const media = window.matchMedia('(min-width: 1024px)')

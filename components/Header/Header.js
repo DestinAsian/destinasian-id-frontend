@@ -62,7 +62,6 @@ export default function Header({
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 ) : (
                   <Image
@@ -71,7 +70,6 @@ export default function Header({
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 )}
               </div>

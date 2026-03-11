@@ -57,7 +57,7 @@ export default function TravelGuideCategories({ data }) {
 
       {/* GRID */}
       <div className={cx('grid')}>
-        {ordered.map((cat) => {
+        {ordered.map((cat, index) => {
           const { id, name, uri, categoryImages } = cat
           const imageUrl = categoryImages?.categorySlide1?.mediaItemUrl
           const slug = normalize(name)
@@ -74,7 +74,7 @@ export default function TravelGuideCategories({ data }) {
                     width={800}
                     height={600}
                     className={cx('image')}
-                    loading="lazy"
+                    priority={index < 4}
                     draggable={false}
                   />
                 )}

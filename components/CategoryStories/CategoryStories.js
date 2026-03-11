@@ -118,7 +118,7 @@ export default function CategoryStories({
 
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
-  const renderPost = (post) => {
+  const renderPost = (post, index) => {
     const guideInfo = post?.guide_book_now
 
     return (
@@ -128,6 +128,7 @@ export default function CategoryStories({
           uri={post.uri}
           featuredImage={post.featuredImage?.node || post.featuredImage}
           content={post.content}
+          priority={index < 4}
         />
 
         {guideInfo && (

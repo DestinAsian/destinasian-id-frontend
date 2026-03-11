@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import { useMediaQuery } from 'react-responsive'
-import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import Image from 'next/image'
 import { IoSearchOutline } from 'react-icons/io5'
@@ -12,6 +11,7 @@ import FullMenu from '../../../components/FullMenu/FullMenu'
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
 import styles from './HomepageDestopHeader.module.scss'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
+import { useSWRGraphQL } from '../../../lib/useSWRGraphQL'
 
 let cx = classNames.bind(styles)
 
@@ -52,11 +52,19 @@ export default function HomepageDestopHeader({
 
   const isSearchResultsVisible = !!searchQuery
 
-  const { data, error } = useQuery(GetSecondaryHeaders, {
-    variables: { include: ['20', '29', '3'] },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
-  })
+  const { data, error } = useSWRGraphQL(
+    ['secondary-headers-homepage', '20-29-3'],
+    GetSecondaryHeaders,
+    { include: ['20', '29', '3'] },
+    {
+      apollo: {
+        fetchPolicy: 'cache-first',
+        nextFetchPolicy: 'cache-first',
+        ensureFresh: true,
+        staleTimeMs: 30000,
+      },
+    },
+  )
 
   if (error) return <div>Error loading categories!</div>
 
