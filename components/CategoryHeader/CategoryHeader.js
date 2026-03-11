@@ -44,11 +44,11 @@ export default function CategoryHeader({
             <div className={cx('brand')}>
               <Link href="/">
                 <Image
+                  quality={100}
                   src={destinasianLogo.src}
                   alt="Destinasian Logo"
                   fill
                   sizes="100%"
-                  priority
                 />
               </Link>
             </div>

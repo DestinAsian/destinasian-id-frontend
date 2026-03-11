@@ -17,10 +17,7 @@ export default function ContentWrapper({ content, children }) {
     const parser = new DOMParser()
 
     // Replace domain dalam satu langkah lebih cepat
-    const cleaned = content.replaceAll(
-      'https://destinasian.co.id',
-      BACKEND_URL
-    )
+    const cleaned = content.replaceAll('https://destinasian.co.id', BACKEND_URL)
 
     const safeContent = sanitizeHtml(cleaned)
     const doc = parser.parseFromString(safeContent, 'text/html')
@@ -43,10 +40,7 @@ export default function ContentWrapper({ content, children }) {
       }
 
       return (
-        <div
-          key={index}
-          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-        />
+        <div key={index} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
       )
     })
 
@@ -70,6 +64,7 @@ function convertImage(img, index) {
 
   return (
     <Image
+      quality={100}
       key={index}
       src={src}
       alt={alt}
@@ -93,7 +88,7 @@ function convertImagesInside(node) {
     const width = parseInt(img.getAttribute('width')) || 800
     const height = parseInt(img.getAttribute('height')) || 600
 
-    // Replace <img> → <Image> string
+    // Replace <img> → <Image
     const wrapper = document.createElement('div')
     wrapper.innerHTML = `
       <img 

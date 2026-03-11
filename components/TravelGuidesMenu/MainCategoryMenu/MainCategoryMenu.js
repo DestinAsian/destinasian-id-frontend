@@ -270,6 +270,7 @@ export default function MainCategoryMenu(categoryName) {
                                                 >
                                                   <div className={cx('image')}>
                                                     <Image
+                                                      quality={100}
                                                       src={
                                                         honorsCircle
                                                           ?.featuredImage?.node
@@ -300,6 +301,7 @@ export default function MainCategoryMenu(categoryName) {
                                           <div className={cx('image-wrapper')}>
                                             <div className={cx('image')}>
                                               <Image
+                                                quality={100}
                                                 src={
                                                   getHonorsCircle[0]
                                                     ?.featuredImage?.node
@@ -411,6 +413,7 @@ export default function MainCategoryMenu(categoryName) {
                               <div className={cx('image-wrapper')}>
                                 <div className={cx('image')}>
                                   <Image
+                                    quality={100}
                                     src={
                                       connectedNode?.node?.categoryImages
                                         ?.categorySlide1 !== null

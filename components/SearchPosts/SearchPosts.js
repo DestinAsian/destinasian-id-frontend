@@ -1,4 +1,3 @@
-
 'use client'
 
 import React, { useState, useDeferredValue, useRef, useEffect } from 'react'
@@ -47,7 +46,8 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
     return text.replace(regex, '<mark class="global-highlight">$1</mark>')
   }
 
-  const cleanExcerpt = (excerpt) => excerpt?.replace(/\[\/?dropcap\]/g, '') || ''
+  const cleanExcerpt = (excerpt) =>
+    excerpt?.replace(/\[\/?dropcap\]/g, '') || ''
 
   const trimExcerpt = (excerpt) => {
     const MAX = 110
@@ -82,13 +82,17 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
       {/* RESULTS */}
       {(keyword.length > 0 || results.length > 0) && (
         <div className={cx('results-scroll')}>
-          {error && <div className={cx('no-results')}>Error: {error.message}</div>}
+          {error && (
+            <div className={cx('no-results')}>Error: {error.message}</div>
+          )}
 
           {!isReady && keyword.length > 0 && (
             <div className={cx('no-results')}>
               <div className={cx('no-results-row')}>
                 <IoSearchOutline className={cx('no-results-icon')} />
-                <span className={cx('no-results-text')}>Type at least 2 characters…</span>
+                <span className={cx('no-results-text')}>
+                  Type at least 2 characters…
+                </span>
               </div>
             </div>
           )}
@@ -124,6 +128,7 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
                       <Link href={node.uri} className={cx('image-link')}>
                         <div className={cx('image-wrapper')}>
                           <Image
+                            quality={100}
                             src={img}
                             alt={node?.title}
                             fill
@@ -138,7 +143,9 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
 
                   <div className={cx('right-wrapper')}>
                     <div className={cx('meta-date')}>
-                      {category && <span className={cx('meta')}>{category}</span>}
+                      {category && (
+                        <span className={cx('meta')}>{category}</span>
+                      )}
                     </div>
 
                     {node?.title && (
@@ -147,7 +154,7 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
                           href={node.uri}
                           dangerouslySetInnerHTML={{
                             __html: sanitizeHtml(
-                              highlight(node.title, deferred)
+                              highlight(node.title, deferred),
                             ),
                           }}
                         />

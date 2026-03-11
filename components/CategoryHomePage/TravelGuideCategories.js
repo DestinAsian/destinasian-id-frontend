@@ -18,15 +18,11 @@ const normalize = (str = '') => str.toLowerCase().trim()
 const COMING_SOON = new Set([])
 
 export default function TravelGuideCategories({ data }) {
-  const { data: swrData } = useSWR(
-    'travel-guides-categories',
-    null,
-    {
-      fallbackData: data,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  )
+  const { data: swrData } = useSWR('travel-guides-categories', null, {
+    fallbackData: data,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
   const categories =
     swrData?.category?.children?.edges?.map((e) => e.node) ?? []
@@ -35,7 +31,7 @@ export default function TravelGuideCategories({ data }) {
 
   // Convert menjadi map sekali saja → lebih efisien
   const mapByName = Object.fromEntries(
-    categories.map((c) => [normalize(c.name), c])
+    categories.map((c) => [normalize(c.name), c]),
   )
 
   // Urutkan kategori sesuai ORDER
@@ -48,6 +44,7 @@ export default function TravelGuideCategories({ data }) {
         <h2 className={cx('title')}>Guides</h2>
 
         <Image
+          quality={100}
           src={logohilton}
           alt="Hilton Logo"
           width={120}
@@ -67,13 +64,11 @@ export default function TravelGuideCategories({ data }) {
           const comingSoon = COMING_SOON.has(slug)
 
           const content = (
-            <div
-              className={cx('card', { comingSoon })}
-              draggable={false}
-            >
+            <div className={cx('card', { comingSoon })} draggable={false}>
               <div className={cx('imageWrapper')}>
                 {imageUrl && (
                   <Image
+                    quality={100}
                     src={imageUrl}
                     alt={name}
                     width={800}

@@ -18,10 +18,7 @@ const parseContent = async (content) => {
 
   const parser = new DOMParser()
 
-  const cleaned = content.replaceAll(
-    'https://destinasian.co.id',
-    BACKEND_URL
-  )
+  const cleaned = content.replaceAll('https://destinasian.co.id', BACKEND_URL)
 
   const safeContent = sanitizeHtml(cleaned)
   const doc = parser.parseFromString(safeContent, 'text/html')
@@ -49,10 +46,7 @@ const parseContent = async (content) => {
     }
 
     return (
-      <div
-        key={index}
-        dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-      />
+      <div key={index} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
     )
   })
 }
@@ -70,7 +64,7 @@ export default function ContentWrapperEditorial({ content, children }) {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       dedupingInterval: 60000, // 🔥 cache 1 menit
-    }
+    },
   )
 
   return (
@@ -94,6 +88,7 @@ function renderConvertedImage(img, index) {
   return (
     <figure key={index} className="figure">
       <Image
+        quality={100}
         src={src}
         alt={alt}
         width={width}
@@ -102,7 +97,9 @@ function renderConvertedImage(img, index) {
         priority={index === 0}
       />
       {caption && (
-        <figcaption dangerouslySetInnerHTML={{ __html: sanitizeHtml(caption) }} />
+        <figcaption
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(caption) }}
+        />
       )}
     </figure>
   )
@@ -161,6 +158,6 @@ function extractCaption(img) {
 function applyDropcap(node) {
   node.innerHTML = node.innerHTML.replace(
     /\[dropcap\](.*?)\[\/dropcap\]/gi,
-    (_, t) => `<span class="dropcap">${t.toUpperCase()}</span>`
+    (_, t) => `<span class="dropcap">${t.toUpperCase()}</span>`,
   )
 }

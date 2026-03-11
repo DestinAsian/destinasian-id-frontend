@@ -7,10 +7,7 @@ const cx = classNames.bind(styles)
 const BannerFokusDA = ({ bannerDa }) => {
   if (!bannerDa) return null
 
-  const {
-    linkBannerFokusHubDa,
-    bannerFokusHubDa,
-  } = bannerDa
+  const { linkBannerFokusHubDa, bannerFokusHubDa } = bannerDa
 
   if (!bannerFokusHubDa?.mediaItemUrl || !linkBannerFokusHubDa) {
     return null
@@ -26,6 +23,7 @@ const BannerFokusDA = ({ bannerDa }) => {
           rel="noopener noreferrer"
         >
           <Image
+            quality={100}
             src={bannerFokusHubDa.mediaItemUrl}
             alt={bannerFokusHubDa.altText || 'Banner Fokus'}
             width={800}

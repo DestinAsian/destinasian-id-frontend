@@ -77,14 +77,15 @@ export default function HomepageDestopHeader({
               <div className={cx('brand')}>
                 {isNavShown ? (
                   <Image
+                    quality={100}
                     src={destinasianLogoWht.src}
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 ) : (
                   <Image
+                    quality={100}
                     src={
                       isScrolled
                         ? destinasianLogoBlk.src
@@ -93,7 +94,6 @@ export default function HomepageDestopHeader({
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 )}
               </div>
@@ -132,14 +132,14 @@ export default function HomepageDestopHeader({
                     </button>
 
                     {categories.map(({ node }) => (
-                    <Link key={node.id} href={node.uri}>
-                      <div className={cx('menu-button-desktop')}>
-                        <div className={cx('menu-title-desktop')}>
-                          {node.name}
+                      <Link key={node.id} href={node.uri}>
+                        <div className={cx('menu-button-desktop')}>
+                          <div className={cx('menu-title-desktop')}>
+                            {node.name}
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>

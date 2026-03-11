@@ -27,6 +27,7 @@ export default function PasswordProtected(enteredPassword, ...props) {
             <Link href="/" className={cx('logo')}>
               <div className={cx('brand')}>
                 <Image
+                  quality={100}
                   src={destinasianLogoBlk.src}
                   alt="Destinasian Logo"
                   fill

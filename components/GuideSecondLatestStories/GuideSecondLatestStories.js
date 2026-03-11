@@ -36,6 +36,7 @@ export default function GuideSecondLatestStories({
       <Link href={uri} aria-label={caption || 'Guide story'}>
         {imageUrl ? (
           <Image
+            quality={100}
             src={imageUrl}
             alt={caption || 'Featured Image'}
             width={600} // Fixed dimensions to prevent layout shift

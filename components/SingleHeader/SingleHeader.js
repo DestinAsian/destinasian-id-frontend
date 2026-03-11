@@ -60,19 +60,19 @@ export default function SingleHeader({
               <div className={cx('brand')}>
                 {isNavShown ? (
                   <Image
+                    quality={100}
                     src={destinasianLogoWht.src}
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 ) : (
                   <Image
+                    quality={100}
                     src={destinasianLogoBlk.src}
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 )}
               </div>

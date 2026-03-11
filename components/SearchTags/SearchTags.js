@@ -44,8 +44,8 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
     GetContentNodesSearch,
     {
       search: debouncedKeyword,
-      first: FETCH_LIMIT
-    }
+      first: FETCH_LIMIT,
+    },
   )
 
   /* ------------------------------
@@ -58,12 +58,13 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
 
     return data.contentNodes.nodes.reduce((acc, node) => {
       if (!node?.id || seen.has(node.id)) return acc
-      if (node.__typename !== 'Post' && node.__typename !== 'TravelGuide') return acc
+      if (node.__typename !== 'Post' && node.__typename !== 'TravelGuide')
+        return acc
 
       seen.add(node.id)
 
       const category =
-        node.categories?.edges?.find(e => e.isPrimary)?.node?.name ||
+        node.categories?.edges?.find((e) => e.isPrimary)?.node?.name ||
         node.categories?.edges?.[0]?.node?.name ||
         ''
 
@@ -74,7 +75,7 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
         excerpt: node.excerpt,
         date: node.date,
         featuredImage: node.featuredImage?.node?.sourceUrl,
-        category
+        category,
       })
 
       return acc
@@ -147,9 +148,7 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
       {(keyword.length > 0 || results.length > 0) && (
         <div className={cx('results-scroll')}>
           {error && (
-            <div className={cx('no-results')}>
-              Error: {error.message}
-            </div>
+            <div className={cx('no-results')}>Error: {error.message}</div>
           )}
 
           {!isReady && keyword.length > 0 && (
@@ -170,18 +169,17 @@ export default function SearchTags({ setIsSearchResultsVisible }) {
           {isReady && !isLoading && results.length === 0 && (
             <div className={cx('no-results')}>
               <IoSearchOutline className={cx('no-results-icon')} />
-              <span className={cx('no-results-text')}>
-                No results found.
-              </span>
+              <span className={cx('no-results-text')}>No results found.</span>
             </div>
           )}
 
-          {results.map(item => (
+          {results.map((item) => (
             <div key={item.id} className={cx('content-wrapper')}>
               {item.featuredImage && (
                 <Link href={item.uri} className={cx('image-link')}>
                   <div className={cx('image-wrapper')}>
                     <Image
+                      quality={100}
                       src={item.featuredImage}
                       alt={item.title || ''}
                       width={300}

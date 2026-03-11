@@ -51,209 +51,89 @@ export default function CategoryDesktopHeader({
   return (
     <header className={cx('component', { white: isNavShown })}>
       {/* Responsive header */}
-        <Container>
-          <div className={cx('navbar')}>
-            {/* DA logo */}
-            <Link href="/" className={cx('title')}>
-              <div className={cx('brand')}>
-                {isNavShown ? (
-                  <Image
-                    src={destinasianLogoWht.src}
-                    alt="Destinasian Logo"
-                    fill
-                    sizes="100%"
-                    priority
-                  />
-                ) : (
-                  <Image
-                    src={
-                      isScrolled
-                        ? destinasianLogoBlk.src
-                        : destinasianLogoBlk.src
-                    }
-                    alt="Destinasian Logo"
-                    fill
-                    sizes="100%"
-                    priority
-                  />
-                )}
-              </div>
-            </Link>
-
-            {/* Desktop menu*/}
-            {!isNavShown && (
-              <div className={cx('navigation-wrapper-desktop')}>
-                <div className={cx('navigation-wrapper-desktop')}>
-                  <div className={cx('menu-wrapper-desktop')}>
-                    <button
-                      type="button"
-                      className={cx(
-                        'menu-button-desktop',
-                        'menu-button-guides',
-                        {
-                          active: isGuidesNavShown,
-                        },
-                      )}
-                      onClick={() => {
-                        setIsGuidesNavShown(!isGuidesNavShown)
-                        setSearchQuery('')
-                      }}
-                      aria-label="Toggle navigation"
-                    >
-                      <div
-                        className={cx(
-                          'menu-title-desktop',
-                          'menu-button-guides',
-                        )}
-                      >{`Guides`}</div>
-                    </button>
-
-                    {categories.map((category) => {
-                      const { id, name, uri } = category.node
-                      return (
-                        <Link key={id} href={`${uri}`}>
-                          <div className={cx('menu-button-desktop')}>
-                            <div className={cx('menu-title-desktop')}>
-                              {name}
-                            </div>
-                          </div>
-                        </Link>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div
-              className={cx(
-                'full-menu-content-desktop',
-                isGuidesNavShown ? 'show' : undefined,
-              )}
-            >
-              <div className={cx('full-menu-wrapper-desktop')}>
-                <TravelGuidesMenu />
-              </div>
-            </div>
-
-            <Container>
-              {/* Menu Button */}
-              {isNavShown == false ? (
-                <div className={cx('menu-button-wrapper')}>
-                  <div className={cx('search-button')}>
-                    {/* search button */}
-                    <button
-                      type="button"
-                      className={cx('search-icon')}
-                      onClick={() => {
-                        setIsNavShown(!isNavShown)
-                        setSearchQuery('')
-                      }}
-                      aria-label="Toggle navigation"
-                      aria-controls={cx('full-menu-wrapper')}
-                      aria-expanded={!isNavShown}
-                    >
-                      <IoSearchOutline className={cx('search-icon')} />
-                    </button>
-                  </div>
-                  <div className={cx('menu-button')}>
-                    {/* Divider */}
-                    <div className={cx('divider-vertical')} />
-
-                    {/* menu button */}
-                    {isScrolled ? (
-                      <button
-                        type="button"
-                        className={cx('menu-icon')}
-                        onClick={() => {
-                          setIsNavShown(!isNavShown)
-                          setSearchQuery('')
-                        }}
-                        aria-label="Toggle navigation"
-                        aria-controls={cx('full-menu-wrapper')}
-                        aria-expanded={!isNavShown}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="200"
-                          height="200"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <rect
-                            x="1"
-                            y="3"
-                            width="100"
-                            height="2"
-                            fill="black"
-                          />
-                          <rect
-                            x="1"
-                            y="11"
-                            width="100"
-                            height="2"
-                            fill="black"
-                          />
-                          <rect
-                            x="1"
-                            y="19"
-                            width="100"
-                            height="2"
-                            fill="black"
-                          />
-                        </svg>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className={cx('menu-icon')}
-                        onClick={() => {
-                          setIsNavShown(!isNavShown)
-                          setSearchQuery('')
-                        }}
-                        aria-label="Toggle navigation"
-                        aria-controls={cx('full-menu-wrapper')}
-                        aria-expanded={!isNavShown}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="200"
-                          height="200"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <rect
-                            x="1"
-                            y="3"
-                            width="100"
-                            height="2"
-                            fill="black"
-                          />
-                          <rect
-                            x="1"
-                            y="11"
-                            width="100"
-                            height="2"
-                            fill="black"
-                          />
-                          <rect
-                            x="1"
-                            y="19"
-                            width="100"
-                            height="2"
-                            fill="black"
-                          />
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                </div>
+      <Container>
+        <div className={cx('navbar')}>
+          {/* DA logo */}
+          <Link href="/" className={cx('title')}>
+            <div className={cx('brand')}>
+              {isNavShown ? (
+                <Image
+                  quality={100}
+                  src={destinasianLogoWht.src}
+                  alt="Destinasian Logo"
+                  fill
+                  sizes="100%"
+                />
               ) : (
-                <div className={cx('menu-button')}>
-                  {/* close button */}
+                <Image
+                  quality={100}
+                  src={
+                    isScrolled ? destinasianLogoBlk.src : destinasianLogoBlk.src
+                  }
+                  alt="Destinasian Logo"
+                  fill
+                  sizes="100%"
+                />
+              )}
+            </div>
+          </Link>
+
+          {/* Desktop menu*/}
+          {!isNavShown && (
+            <div className={cx('navigation-wrapper-desktop')}>
+              <div className={cx('navigation-wrapper-desktop')}>
+                <div className={cx('menu-wrapper-desktop')}>
                   <button
                     type="button"
-                    className={cx('close-icon')}
+                    className={cx('menu-button-desktop', 'menu-button-guides', {
+                      active: isGuidesNavShown,
+                    })}
+                    onClick={() => {
+                      setIsGuidesNavShown(!isGuidesNavShown)
+                      setSearchQuery('')
+                    }}
+                    aria-label="Toggle navigation"
+                  >
+                    <div
+                      className={cx('menu-title-desktop', 'menu-button-guides')}
+                    >{`Guides`}</div>
+                  </button>
+
+                  {categories.map((category) => {
+                    const { id, name, uri } = category.node
+                    return (
+                      <Link key={id} href={`${uri}`}>
+                        <div className={cx('menu-button-desktop')}>
+                          <div className={cx('menu-title-desktop')}>{name}</div>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div
+            className={cx(
+              'full-menu-content-desktop',
+              isGuidesNavShown ? 'show' : undefined,
+            )}
+          >
+            <div className={cx('full-menu-wrapper-desktop')}>
+              <TravelGuidesMenu />
+            </div>
+          </div>
+
+          <Container>
+            {/* Menu Button */}
+            {isNavShown == false ? (
+              <div className={cx('menu-button-wrapper')}>
+                <div className={cx('search-button')}>
+                  {/* search button */}
+                  <button
+                    type="button"
+                    className={cx('search-icon')}
                     onClick={() => {
                       setIsNavShown(!isNavShown)
                       setSearchQuery('')
@@ -262,21 +142,118 @@ export default function CategoryDesktopHeader({
                     aria-controls={cx('full-menu-wrapper')}
                     aria-expanded={!isNavShown}
                   >
-                    <svg
-                      version="1.0"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="512.000000pt"
-                      height="512.000000pt"
-                      viewBox="0 0 512.000000 512.000000"
-                      preserveAspectRatio="xMidYMid meet"
+                    <IoSearchOutline className={cx('search-icon')} />
+                  </button>
+                </div>
+                <div className={cx('menu-button')}>
+                  {/* Divider */}
+                  <div className={cx('divider-vertical')} />
+
+                  {/* menu button */}
+                  {isScrolled ? (
+                    <button
+                      type="button"
+                      className={cx('menu-icon')}
+                      onClick={() => {
+                        setIsNavShown(!isNavShown)
+                        setSearchQuery('')
+                      }}
+                      aria-label="Toggle navigation"
+                      aria-controls={cx('full-menu-wrapper')}
+                      aria-expanded={!isNavShown}
                     >
-                      <g
-                        transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="#ffffff"
-                        stroke="none"
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="200"
+                        height="200"
+                        viewBox="0 0 24 24"
+                        fill="none"
                       >
-                        <path
-                          d="M2330 5109 c-305 -29 -646 -126 -910 -259 -273 -138 -559 -356 -755
+                        <rect x="1" y="3" width="100" height="2" fill="black" />
+                        <rect
+                          x="1"
+                          y="11"
+                          width="100"
+                          height="2"
+                          fill="black"
+                        />
+                        <rect
+                          x="1"
+                          y="19"
+                          width="100"
+                          height="2"
+                          fill="black"
+                        />
+                      </svg>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={cx('menu-icon')}
+                      onClick={() => {
+                        setIsNavShown(!isNavShown)
+                        setSearchQuery('')
+                      }}
+                      aria-label="Toggle navigation"
+                      aria-controls={cx('full-menu-wrapper')}
+                      aria-expanded={!isNavShown}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="200"
+                        height="200"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <rect x="1" y="3" width="100" height="2" fill="black" />
+                        <rect
+                          x="1"
+                          y="11"
+                          width="100"
+                          height="2"
+                          fill="black"
+                        />
+                        <rect
+                          x="1"
+                          y="19"
+                          width="100"
+                          height="2"
+                          fill="black"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className={cx('menu-button')}>
+                {/* close button */}
+                <button
+                  type="button"
+                  className={cx('close-icon')}
+                  onClick={() => {
+                    setIsNavShown(!isNavShown)
+                    setSearchQuery('')
+                  }}
+                  aria-label="Toggle navigation"
+                  aria-controls={cx('full-menu-wrapper')}
+                  aria-expanded={!isNavShown}
+                >
+                  <svg
+                    version="1.0"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="512.000000pt"
+                    height="512.000000pt"
+                    viewBox="0 0 512.000000 512.000000"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <g
+                      transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                      fill="#ffffff"
+                      stroke="none"
+                    >
+                      <path
+                        d="M2330 5109 c-305 -29 -646 -126 -910 -259 -273 -138 -559 -356 -755
 -576 -384 -432 -602 -931 -655 -1499 -41 -446 55 -949 260 -1355 138 -273 356
 -559 576 -755 432 -384 931 -602 1499 -655 446 -41 949 55 1355 260 273 138
 559 356 755 576 384 432 602 931 655 1499 41 446 -55 949 -260 1355 -138 273
@@ -285,15 +262,15 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
 425 -425 425 -425 -213 -212 -212 -213 -425 425 -425 425 -425 -425 -425 -425
 -212 213 -213 212 425 425 425 425 -425 425 -425 425 210 210 c115 115 212
 210 215 210 3 0 195 -190 427 -422z"
-                        />
-                      </g>
-                    </svg>
-                  </button>
-                </div>
-              )}
-            </Container>
-          </div>
-        </Container>
+                      />
+                    </g>
+                  </svg>
+                </button>
+              </div>
+            )}
+          </Container>
+        </div>
+      </Container>
       {/* Full menu */}
       <div
         className={cx(['full-menu-wrapper', isNavShown ? 'show' : undefined])}

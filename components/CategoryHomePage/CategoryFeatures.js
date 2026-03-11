@@ -32,9 +32,9 @@ const CategoryFeatures = ({ data }) => {
           if (!post) return null
 
           const image = post.featuredImage?.node?.mediaItemUrl
-          const categories = post.categories?.edges?.map(e => e.node) ?? []
+          const categories = post.categories?.edges?.map((e) => e.node) ?? []
 
-          const categoryWithParent = categories.find(cat => cat?.parent?.node)
+          const categoryWithParent = categories.find((cat) => cat?.parent?.node)
           const category = categoryWithParent || categories[0]
 
           const parentCategory = category?.parent?.node?.name
@@ -50,6 +50,7 @@ const CategoryFeatures = ({ data }) => {
                 {image && (
                   <div className={styles.imageWrapper}>
                     <Image
+                      quality={100}
                       src={image}
                       alt={post.title || 'Article image'}
                       width={800}

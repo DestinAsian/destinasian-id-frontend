@@ -67,6 +67,7 @@ export default function GuideLatestStories({
             <div className={cx('imageWrapper')}>
               {imageUrl ? (
                 <Image
+                  quality={100}
                   src={imageUrl}
                   alt={`${title} Featured Image`}
                   fill

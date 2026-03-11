@@ -25,7 +25,7 @@ const FrontPageVideos = dynamic(
 
 const FeatureWell = dynamic(
   () => import('../components/FeatureWell/FeatureWell'),
-  { ssr: false }
+  { ssr: false },
 )
 
 export default function FrontPage(props) {
@@ -40,10 +40,23 @@ export default function FrontPage(props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [isNavShown, setIsNavShown] = useState(false)
   const [isGuidesNavShown, setIsGuidesNavShown] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(min-width: 1024px)').matches
+      : false,
+  )
 
   useEffect(() => {
     const media = window.matchMedia('(min-width: 1024px)')
 
+    const onMediaChange = (e) => setIsDesktop(e.matches)
+    setIsDesktop(media.matches)
+
+    if (media.addEventListener) {
+      media.addEventListener('change', onMediaChange)
+    } else {
+      media.addListener(onMediaChange)
+    }
 
     // scroll optimized
     let ticking = false
@@ -61,6 +74,11 @@ export default function FrontPage(props) {
 
     return () => {
       window.removeEventListener('scroll', onScroll)
+      if (media.removeEventListener) {
+        media.removeEventListener('change', onMediaChange)
+      } else {
+        media.removeListener(onMediaChange)
+      }
     }
   }, [])
 
@@ -126,24 +144,24 @@ export default function FrontPage(props) {
         focuskw={seo?.focuskw}
       />
 
-      <div className="hidden lg:block">
+      {isDesktop ? (
         <HomepageDestopHeader
           {...menuProps}
           isGuidesNavShown={isGuidesNavShown}
           setIsGuidesNavShown={setIsGuidesNavShown}
         />
-      </div>
-
-      <div className="block lg:hidden">
-        <HomepageHeader {...menuProps} />
-        <HomepageSecondaryHeader
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          isGuidesNavShown={isGuidesNavShown}
-          setIsGuidesNavShown={setIsGuidesNavShown}
-          isScrolled={isScrolled}
-        />
-      </div>
+      ) : (
+        <>
+          <HomepageHeader {...menuProps} />
+          <HomepageSecondaryHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isGuidesNavShown={isGuidesNavShown}
+            setIsGuidesNavShown={setIsGuidesNavShown}
+            isScrolled={isScrolled}
+          />
+        </>
+      )}
 
       <Main>
         {featureWell.length > 0 && (

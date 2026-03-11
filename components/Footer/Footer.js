@@ -112,6 +112,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 <Image
+                  quality={100}
                   src={destinasianLogoWht.src}
                   alt="DestinAsian"
                   width={120}
@@ -124,6 +125,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 <Image
+                  quality={100}
                   src={prestigeLogo.src}
                   alt="Prestige"
                   width={120}
@@ -136,6 +138,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 <Image
+                  quality={100}
                   src={damanFooterLogo.src}
                   alt="Daman"
                   width={120}

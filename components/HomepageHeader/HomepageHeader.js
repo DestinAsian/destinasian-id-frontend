@@ -30,7 +30,6 @@ export default function HomepageHeader({
   setIsNavShown,
   isScrolled,
 }) {
-  
   const isDesktop = useMediaQuery({ minWidth: 768 })
   const [isMenuOpen, setMenuOpen] = useState(false)
   // Tambahkan class "menu-open" ke <body> saat menu dibuka
@@ -46,9 +45,6 @@ export default function HomepageHeader({
     setSearchQuery('')
   }
   const isSearchResultsVisible = !!searchQuery
-
-
- 
 
   return (
     <header className={cx('component', { white: isNavShown })}>
@@ -66,14 +62,15 @@ export default function HomepageHeader({
               <div className={cx('brand')}>
                 {isNavShown ? (
                   <Image
+                    quality={100}
                     src={destinasianLogoWht.src}
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 ) : (
                   <Image
+                    quality={100}
                     src={
                       isScrolled
                         ? destinasianLogoBlk.src
@@ -82,7 +79,6 @@ export default function HomepageHeader({
                     alt="Destinasian Logo"
                     fill
                     sizes="100%"
-                    priority
                   />
                 )}
               </div>

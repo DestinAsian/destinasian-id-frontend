@@ -26,13 +26,13 @@ export default function ContentWrapperPage({ content, children }) {
       (match, ids) => {
         const idArray = ids.split(',')
         return `<div class="gallery" data-ids="${idArray.join(',')}"></div>`
-      }
+      },
     )
 
     // --- PROSES CAPTION WP ---
     const captionFixed = galleryFixed.replace(
       /\[caption.*?\](.*?)\[\/caption\]/gis,
-      (_, inner) => inner
+      (_, inner) => inner,
     )
 
     const safeContent = sanitizeHtml(captionFixed, { allowIframe: true })
@@ -40,7 +40,6 @@ export default function ContentWrapperPage({ content, children }) {
     const nodes = [...doc.body.childNodes]
 
     const processed = nodes.map((node, index) => {
-
       // 1) HANDLE GALLERY
       if (node.nodeType === 1 && node.classList.contains('gallery')) {
         return <GallerySlider key={`g-${index}`} gallerySlider={node} />
@@ -79,10 +78,7 @@ export default function ContentWrapperPage({ content, children }) {
         return <p key={index}>{text}</p>
       }
       return (
-        <div
-          key={index}
-          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-        />
+        <div key={index} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
       )
     })
 
@@ -92,9 +88,7 @@ export default function ContentWrapperPage({ content, children }) {
   return (
     <article className={cx('component')}>
       <div className={cx('with-slider-wrapper')}>
-        <div className={cx('content-wrapper')}>
-          {output}
-        </div>
+        <div className={cx('content-wrapper')}>{output}</div>
         {children}
       </div>
     </article>
@@ -107,16 +101,19 @@ function renderConvertedImage(img, index) {
 
   return (
     <figure key={index} className="figure">
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          style={{ objectFit: 'contain' }}
-          priority={index === 0}
-        />
+      <Image
+        quality={100}
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        style={{ objectFit: 'contain' }}
+        priority={index === 0}
+      />
       {caption && (
-        <figcaption dangerouslySetInnerHTML={{ __html: sanitizeHtml(caption) }} />
+        <figcaption
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(caption) }}
+        />
       )}
     </figure>
   )
@@ -179,6 +176,6 @@ function applyDropcap(node) {
   const regex = /\[dropcap\](.*?)\[\/dropcap\]/gi
   node.innerHTML = node.innerHTML.replace(
     regex,
-    (_, text) => `<span class="dropcap">${text.toUpperCase()}</span>`
+    (_, text) => `<span class="dropcap">${text.toUpperCase()}</span>`,
   )
 }

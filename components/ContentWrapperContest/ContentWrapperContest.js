@@ -70,7 +70,7 @@ export default function ContentWrapperContest({ content, children }) {
     const parser = new DOMParser()
     const cleanedContent = content.replaceAll(
       'https://destinasian.co.id',
-      BACKEND_URL
+      BACKEND_URL,
     )
     const safeContent = sanitizeHtml(cleanedContent, { allowIframe: true })
     const doc = parser.parseFromString(safeContent, 'text/html')
@@ -97,6 +97,7 @@ export default function ContentWrapperContest({ content, children }) {
 
           const imageComponent = (
             <Image
+              quality={100}
               src={src}
               alt={alt}
               width={width}

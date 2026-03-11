@@ -31,6 +31,7 @@ export default function TabsEditor({ tabsEditor, luxuryTravelClass }) {
 
         const imageComponent = (
           <Image
+            quality={100}
             src={src}
             alt={alt}
             width={parseInt(width, 10)}

@@ -57,6 +57,7 @@ export default function Header({
               <div className={cx('brand')}>
                 {isNavShown ? (
                   <Image
+                    quality={100}
                     src={destinasianLogoWht.src}
                     alt="Destinasian Logo"
                     fill
@@ -65,6 +66,7 @@ export default function Header({
                   />
                 ) : (
                   <Image
+                    quality={100}
                     src={destinasianLogoBlk.src}
                     alt="Destinasian Logo"
                     fill
@@ -168,34 +170,34 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
           </div>
         </>
       ) : (
-          <div className={cx('close-button', { sticky: isScrolled })}>
-            {/* close button */}
-            <button
-              type="button"
-              className={cx('close-icon')}
-              onClick={() => {
-                setIsNavShown(!isNavShown)
-                setSearchQuery('')
-              }}
-              aria-label="Toggle navigation"
-              aria-controls={cx('primary-navigation')}
-              aria-expanded={!isNavShown}
+        <div className={cx('close-button', { sticky: isScrolled })}>
+          {/* close button */}
+          <button
+            type="button"
+            className={cx('close-icon')}
+            onClick={() => {
+              setIsNavShown(!isNavShown)
+              setSearchQuery('')
+            }}
+            aria-label="Toggle navigation"
+            aria-controls={cx('primary-navigation')}
+            aria-expanded={!isNavShown}
+          >
+            <svg
+              version="1.0"
+              xmlns="http://www.w3.org/2000/svg"
+              width="512.000000pt"
+              height="512.000000pt"
+              viewBox="0 0 512.000000 512.000000"
+              preserveAspectRatio="xMidYMid meet"
             >
-              <svg
-                version="1.0"
-                xmlns="http://www.w3.org/2000/svg"
-                width="512.000000pt"
-                height="512.000000pt"
-                viewBox="0 0 512.000000 512.000000"
-                preserveAspectRatio="xMidYMid meet"
+              <g
+                transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                fill="#fff"
+                stroke="none"
               >
-                <g
-                  transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                  fill="#fff"
-                  stroke="none"
-                >
-                  <path
-                    d="M2330 5109 c-305 -29 -646 -126 -910 -259 -273 -138 -559 -356 -755
+                <path
+                  d="M2330 5109 c-305 -29 -646 -126 -910 -259 -273 -138 -559 -356 -755
 -576 -384 -432 -602 -931 -655 -1499 -41 -446 55 -949 260 -1355 138 -273 356
 -559 576 -755 432 -384 931 -602 1499 -655 446 -41 949 55 1355 260 273 138
 559 356 755 576 384 432 602 931 655 1499 41 446 -55 949 -260 1355 -138 273
@@ -204,11 +206,11 @@ m-193 -1701 l423 -423 425 425 425 425 212 -213 213 -212 -425 -425 -425 -425
 425 -425 425 -425 -213 -212 -212 -213 -425 425 -425 425 -425 -425 -425 -425
 -212 213 -213 212 425 425 425 425 -425 425 -425 425 210 210 c115 115 212
 210 215 210 3 0 195 -190 427 -422z"
-                  />
-                </g>
-              </svg>
-            </button>
-          </div>
+                />
+              </g>
+            </svg>
+          </button>
+        </div>
       )}
 
       {/* Full menu */}

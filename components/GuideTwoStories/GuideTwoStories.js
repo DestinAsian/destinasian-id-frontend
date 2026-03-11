@@ -39,6 +39,7 @@ export default function GuideTwoStories({
           <div className={cx('content-wrapper-image')}>
             <Link href={uri}>
               <Image
+                quality={100}
                 src={featuredImage?.sourceUrl}
                 alt={`${title} Featured Image`}
                 fill

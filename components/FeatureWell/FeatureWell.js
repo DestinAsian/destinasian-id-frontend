@@ -85,13 +85,14 @@ export default function FeatureWell({ featureWells }) {
               <Link href={featureWell.url}>
                 <div className={cx('image-wrapper')}>
                   <Image
+                    quality={100}
                     src={
                       isDesktop ? featureWell.desktopSrc : featureWell.mobileSrc
                     }
                     alt="Feature Well Image"
                     fill
                     sizes="100vw"
-                    priority
+                    priority={index === 0}
                   />
                   <div className={cx('caption-wrapper')}>
                     {/* {featureWell.category && featureWell.categoryLink && (

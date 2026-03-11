@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import Image from "next/image";
+import { gql } from '@apollo/client'
+import Image from 'next/image'
 
 export default function FeaturedImage({
   image,
@@ -10,20 +10,24 @@ export default function FeaturedImage({
   fill,
   ...props
 }) {
-  const src = image?.sourceUrl;
-  const altText = image?.altText || '';
+  const src = image?.sourceUrl
+  const altText = image?.altText || ''
 
   // Tentukan ukuran, fallback ke mediaDetails atau default
-  const imgWidth = width || image?.mediaDetails?.width || 600;
-  const imgHeight = height || image?.mediaDetails?.height || 400;
+  const imgWidth = width || image?.mediaDetails?.width || 600
+  const imgHeight = height || image?.mediaDetails?.height || 400
 
-  const useFill = !!fill;
+  const useFill = !!fill
 
-  if (!src) return null;
+  if (!src) return null
 
   return (
-    <figure className={className} style={useFill ? { position: 'relative' } : undefined}>
+    <figure
+      className={className}
+      style={useFill ? { position: 'relative' } : undefined}
+    >
       <Image
+        quality={100}
         src={src}
         alt={altText}
         {...(useFill ? { fill: true } : { width: imgWidth, height: imgHeight })}
@@ -31,7 +35,7 @@ export default function FeaturedImage({
         {...props}
       />
     </figure>
-  );
+  )
 }
 
 FeaturedImage.fragments = {
@@ -50,4 +54,4 @@ FeaturedImage.fragments = {
       }
     }
   `,
-};
+}

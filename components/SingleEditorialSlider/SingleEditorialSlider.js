@@ -31,11 +31,12 @@ export default function SingleEditorialSlider({ images }) {
       {images.map((image, index) => (
         <SwiperSlide key={index}>
           <Image
+            quality={100}
             src={image}
             alt={`Slider Image ${index + 1}`}
             fill
             sizes="100%"
-            priority
+            priority={index === 0}
           />
         </SwiperSlide>
       ))}

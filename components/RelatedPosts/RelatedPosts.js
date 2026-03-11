@@ -18,10 +18,7 @@ const cleanExcerpt = (excerpt = '') =>
     .replace(/<\/?[^>]+(>|$)/g, '')
     .trim()
 
-export default function RelatedPosts({
-  tagIds = [],
-  excludeIds = [],
-}) {
+export default function RelatedPosts({ tagIds = [], excludeIds = [] }) {
   const shouldFetch = tagIds.length > 0
 
   const { data, error } = useSWRGraphQL(
@@ -30,7 +27,7 @@ export default function RelatedPosts({
     {
       tagIn: tagIds,
       notIn: excludeIds,
-    }
+    },
   )
 
   const posts = data?.posts?.edges || []
@@ -41,27 +38,15 @@ export default function RelatedPosts({
   if (!shouldFetch) return null
 
   if (!data && !error) {
-    return (
-      <p className={styles.statusText}>
-        Loading related posts...
-      </p>
-    )
+    return <p className={styles.statusText}>Loading related posts...</p>
   }
 
   if (error) {
-    return (
-      <p className={styles.statusText}>
-        Error loading related posts.
-      </p>
-    )
+    return <p className={styles.statusText}>Error loading related posts.</p>
   }
 
   if (!posts.length) {
-    return (
-      <p className={styles.statusText}>
-        No related posts found.
-      </p>
-    )
+    return <p className={styles.statusText}>No related posts found.</p>
   }
 
   /* ===============================
@@ -70,8 +55,7 @@ export default function RelatedPosts({
   return (
     <div className={styles.relatedPosts}>
       {posts.map(({ node }) => {
-        const category =
-          node.categories?.edges?.[0]?.node
+        const category = node.categories?.edges?.[0]?.node
 
         return (
           <Link
@@ -82,11 +66,9 @@ export default function RelatedPosts({
             <div className={styles.imageWrapper}>
               {node.featuredImage?.node?.sourceUrl && (
                 <Image
+                  quality={100}
                   src={node.featuredImage.node.sourceUrl}
-                  alt={
-                    node.featuredImage.node.altText ||
-                    node.title
-                  }
+                  alt={node.featuredImage.node.altText || node.title}
                   width={180}
                   height={120}
                   className={styles.image}
@@ -101,13 +83,9 @@ export default function RelatedPosts({
                 </div>
               )}
 
-              <h3 className={styles.title}>
-                {node.title}
-              </h3>
+              <h3 className={styles.title}>{node.title}</h3>
 
-              <p className={styles.excerpt}>
-                {cleanExcerpt(node.excerpt)}
-              </p>
+              <p className={styles.excerpt}>{cleanExcerpt(node.excerpt)}</p>
             </div>
           </Link>
         )

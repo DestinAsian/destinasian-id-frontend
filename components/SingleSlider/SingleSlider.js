@@ -37,11 +37,12 @@ export default function SingleSlider({ images }) {
           image[0] ? (
             <SwiperSlide key={index} className="post-swiper-slide">
               <Image
+                    quality={100}
                 src={image[0]}
                 alt={`Slider Image ${index + 1}`}
                 fill
                 sizes="100%"
-                priority
+                priority={index === 0}
               />
               {image[1] && (
                 <figcaption className="slide-caption">{image[1]}</figcaption>

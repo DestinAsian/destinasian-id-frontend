@@ -99,6 +99,7 @@ export default function ContentWrapperLuxuryTravel({ content, children }) {
 
         const imgComponent = (
           <Image
+            quality={100}
             src={src}
             alt={alt}
             width={width}

@@ -39,13 +39,10 @@ const CategoryNewsUpdates = memo(() => {
     {
       revalidateOnFocus: false,
       dedupingInterval: 60000,
-    }
+    },
   )
 
-  const children = useMemo(
-    () => data?.category?.children?.edges || [],
-    [data]
-  )
+  const children = useMemo(() => data?.category?.children?.edges || [], [data])
 
   if (!mounted) return null
   if (error) return <p className={styles.error}>Error: {error.message}</p>
@@ -81,6 +78,7 @@ const CategoryNewsUpdates = memo(() => {
                         {image?.mediaItemUrl && (
                           <div className={styles.imageWrapper}>
                             <Image
+                              quality={100}
                               src={image.mediaItemUrl}
                               alt={image.title || post.title}
                               width={1022}
@@ -92,9 +90,7 @@ const CategoryNewsUpdates = memo(() => {
                             />
 
                             <div className={styles.overlay}>
-                              <h3 className={styles.postTitle}>
-                                {post.title}
-                              </h3>
+                              <h3 className={styles.postTitle}>{post.title}</h3>
                               <span className={styles.readMore}>
                                 Read More →
                               </span>

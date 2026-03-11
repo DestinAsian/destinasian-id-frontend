@@ -88,6 +88,7 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
               <div className={styles.imageWrapper}>
                 {node.featuredImage?.node?.sourceUrl && (
                   <Image
+                    quality={100}
                     src={node.featuredImage.node.sourceUrl}
                     alt={node.featuredImage.node.altText || node.title}
                     width={180}

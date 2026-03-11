@@ -31,6 +31,7 @@ export default function PostTwoColumns({ title, uri, featuredImage, content }) {
           <div className={cx('imageInner')}>
             {imageUrl ? (
               <Image
+                quality={100}
                 src={imageUrl}
                 alt={title + ' Featured Image'}
                 fill

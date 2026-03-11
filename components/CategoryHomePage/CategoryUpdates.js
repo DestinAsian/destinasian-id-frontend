@@ -13,15 +13,11 @@ const CategoryUpdates = memo(({ data = [] }) => {
     setMounted(true)
   }, [])
 
-  const { data: swrData } = useSWR(
-    mounted ? 'category-updates' : null,
-    null,
-    {
-      fallbackData: data,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  )
+  const { data: swrData } = useSWR(mounted ? 'category-updates' : null, null, {
+    fallbackData: data,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
   if (!mounted || !swrData?.length) return null
 
@@ -51,6 +47,7 @@ const CategoryUpdates = memo(({ data = [] }) => {
                       {image?.mediaItemUrl && (
                         <figure className={styles.imageWrapper}>
                           <Image
+                            quality={100}
                             src={image.mediaItemUrl}
                             alt={image.title || post.title}
                             width={400}

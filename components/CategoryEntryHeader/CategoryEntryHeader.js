@@ -36,14 +36,12 @@ export default function CategoryEntryHeader({
 
   // Validator for Slider or Image
   const normalizedChangeToSlider =
-    typeof changeToSlider === "string"
+    typeof changeToSlider === 'string'
       ? changeToSlider.trim().toLowerCase()
-      : ""
+      : ''
 
-  const isSlider = normalizedChangeToSlider === "yes"
+  const isSlider = normalizedChangeToSlider === 'yes'
   const isImage = !isSlider
-
-
 
   const transformedDescription = useMemo(
     () => sanitizeHtml(description || ''),
@@ -86,6 +84,7 @@ export default function CategoryEntryHeader({
         {sliderData.map((image, index) => (
           <SwiperSlide key={index}>
             <Image
+              quality={100}
               src={image[0]}
               alt={'Slider Image' + index}
               fill
@@ -152,15 +151,16 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
   )
 
   return (
-       <div
-    className={cx([
-      'component',
-      className,
-      {
-        'normal-category': isNormalCategory,
-        'guides-category': isGuide,
-      },
-    ])}>
+    <div
+      className={cx([
+        'component',
+        className,
+        {
+          'normal-category': isNormalCategory,
+          'guides-category': isGuide,
+        },
+      ])}
+    >
       {isNormalCategory && (
         <Container>
           {/* Normal Category with Slider */}
@@ -177,6 +177,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                     <figure className={cx('image')}>
                       {image && (
                         <Image
+                          quality={100}
                           src={image}
                           alt={title}
                           fill
@@ -221,6 +222,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                   {image && (
                     <figure className={cx('image')}>
                       <Image
+                        quality={100}
                         src={image}
                         alt={title}
                         fill
@@ -280,6 +282,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                     <figure className={cx('image')}>
                       {image && (
                         <Image
+                          quality={100}
                           src={image}
                           alt={title}
                           fill
@@ -330,6 +333,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                   {image && (
                     <figure className={cx('image')}>
                       <Image
+                        quality={100}
                         src={image}
                         alt={title}
                         fill
@@ -357,7 +361,7 @@ l961 -963 -961 -963 c-912 -913 -962 -965 -989 -1027 -40 -91 -46 -200 -15
                         (guidesTitle
                           ? guidesTitle
                           : ' DestinAsian Indonesia Travel Guide - ' + title)}
-                          {/* : (parent ? parent : '') + ' DestinAsian Indonesia Travel Guide - ' + title)} */}
+                      {/* : (parent ? parent : '') + ' DestinAsian Indonesia Travel Guide - ' + title)} */}
                     </Heading>
                   )}
 

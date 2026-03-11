@@ -14,8 +14,7 @@ const BannerPosterGuide = ({ guideStorie }) => {
     linkBannerGuideStories,
   } = guideStorie
 
-  const hasLandscape =
-    bannerLandscape?.mediaItemUrl && linkBannerLandscape
+  const hasLandscape = bannerLandscape?.mediaItemUrl && linkBannerLandscape
 
   const hasGuideStories =
     bannerGuideStories?.mediaItemUrl && linkBannerGuideStories
@@ -34,6 +33,7 @@ const BannerPosterGuide = ({ guideStorie }) => {
               rel="noopener noreferrer"
             >
               <Image
+                quality={100}
                 src={bannerLandscape.mediaItemUrl}
                 alt={bannerLandscape.altText || 'Banner Landscape'}
                 width={800}
@@ -53,6 +53,7 @@ const BannerPosterGuide = ({ guideStorie }) => {
               rel="noopener noreferrer"
             >
               <Image
+                quality={100}
                 src={bannerGuideStories.mediaItemUrl}
                 alt={bannerGuideStories.altText || 'Banner Guide Stories'}
                 width={800}

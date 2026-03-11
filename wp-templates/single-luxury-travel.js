@@ -29,13 +29,17 @@ const MastHeadTopGuides = dynamic(() =>
   import('../components/AdUnit/MastHeadTop/MastHeadTopGuides'),
 )
 const MastHeadTopMobileSingleGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'),
+  import(
+    '../components/AdUnit/MastHeadTopMobile/MastHeadTopMobileSingleGuides'
+  ),
 )
 const MastHeadBottomGuides = dynamic(() =>
   import('../components/AdUnit/MastHeadBottom/MastHeadBottomGuides'),
 )
 const MastHeadBottomMobileGuides = dynamic(() =>
-  import('../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'),
+  import(
+    '../components/AdUnit/MastHeadBottomMobile/MastHeadBottomMobileGuides'
+  ),
 )
 
 export default function SingleLuxuryTravel({ data, loading }) {
@@ -118,8 +122,7 @@ export default function SingleLuxuryTravel({ data, loading }) {
 
   // body lock
   useEffect(() => {
-    document.body.style.overflow =
-      searchQuery || isNavShown ? 'hidden' : ''
+    document.body.style.overflow = searchQuery || isNavShown ? 'hidden' : ''
   }, [searchQuery, isNavShown])
 
   /* =====================
@@ -134,8 +137,8 @@ export default function SingleLuxuryTravel({ data, loading }) {
       fourthHeaderLocation: MENUS.FOURTH_LOCATION,
       fifthHeaderLocation: MENUS.FIFTH_LOCATION,
     },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-first',
   })
 
   /* =====================
@@ -202,11 +205,7 @@ export default function SingleLuxuryTravel({ data, loading }) {
       )}
 
       <Main>
-        {isMobile ? (
-          <MastHeadTopMobileSingleGuides />
-        ) : (
-          <MastHeadTopGuides />
-        )}
+        {isMobile ? <MastHeadTopMobileSingleGuides /> : <MastHeadTopGuides />}
 
         <SingleLTContainer>
           {images.length > 0 && <SingleSlider images={images} />}
@@ -222,11 +221,7 @@ export default function SingleLuxuryTravel({ data, loading }) {
 
           <ContentWrapperLuxuryTravel content={luxury?.content} />
 
-          {isMobile ? (
-            <MastHeadBottomMobileGuides />
-          ) : (
-            <MastHeadBottomGuides />
-          )}
+          {isMobile ? <MastHeadBottomMobileGuides /> : <MastHeadBottomGuides />}
         </SingleLTContainer>
       </Main>
 
@@ -273,11 +268,21 @@ SingleLuxuryTravel.query = gql`
       }
       uri
       acfPostSlider {
-        slide1 { mediaItemUrl }
-        slide2 { mediaItemUrl }
-        slide3 { mediaItemUrl }
-        slide4 { mediaItemUrl }
-        slide5 { mediaItemUrl }
+        slide1 {
+          mediaItemUrl
+        }
+        slide2 {
+          mediaItemUrl
+        }
+        slide3 {
+          mediaItemUrl
+        }
+        slide4 {
+          mediaItemUrl
+        }
+        slide5 {
+          mediaItemUrl
+        }
         slideCaption1
         slideCaption2
         slideCaption3

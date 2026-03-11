@@ -67,7 +67,7 @@ export default function GallerySliderSingle({ gallerySlider }) {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       dedupingInterval: 60000,
-    }
+    },
   )
 
   if (!images.length) return null
@@ -88,6 +88,7 @@ export default function GallerySliderSingle({ gallerySlider }) {
             <div className={cx('slide-wrapper')}>
               <div className={cx('image-wrapper')}>
                 <Image
+                  quality={100}
                   src={img.src}
                   alt={img.alt}
                   fill
