@@ -4,6 +4,7 @@ import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './GuideSecondLatestStories.module.scss'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import Image from 'next/image'
 
 const cx = classNames.bind(styles)
@@ -34,7 +35,7 @@ export default function GuideSecondLatestStories({
 
   return (
     <div className={cx('imageWrapper')}>
-      <Link href={uri} aria-label={caption || 'Guide story'}>
+      <Link href={normalizeInternalHref(uri)} aria-label={caption || 'Guide story'}>
         {imageUrl ? (
           <Image
             quality={100}

@@ -10,6 +10,7 @@ import Image from 'next/image'
 
 import { GetCategoryUpdates } from '../../queries/GetCategoryUpdates'
 import styles from './CategoryNewsUpdates.module.scss'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -66,14 +67,13 @@ const CategoryNewsUpdates = memo(() => {
               spaceBetween={10}
               slidesPerView={1}
               className={styles.swiperContainer}
-              preloadImages={false}
             >
               {posts.map(({ node: post }, postIndex) => {
                 const image = post.featuredImage?.node
 
                 return (
-                  <SwiperSlide key={post.id}>
-                    <Link href={post.uri} className={styles.slideLink}>
+                  <SwiperSlide key={post.id || post.uri || `${category.id}-${postIndex}`}>
+                    <Link href={normalizeInternalHref(post.uri)} className={styles.slideLink}>
                       <div className={styles.slideWrapper}>
                         {image?.mediaItemUrl && (
                           <div className={styles.imageWrapper}>

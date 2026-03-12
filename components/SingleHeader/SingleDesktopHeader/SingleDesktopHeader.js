@@ -3,6 +3,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
 import styles from './SingleDesktopHeader.module.scss'
@@ -42,7 +43,7 @@ export default function SingleDesktopHeader({
           {categories.map(({ node }) => (
             <Link
               key={node.id}
-              href={node.uri}
+              href={normalizeInternalHref(node.uri)}
               className={cx('menu-button')}
             >
               <span className={cx('menu-title')}>{node.name}</span>

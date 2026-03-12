@@ -3,6 +3,7 @@ import classNames from 'classnames/bind'
 import styles from './PostTwoColumns.module.scss'
 import Link from 'next/link'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 const cx = classNames.bind(styles)
 
@@ -36,17 +37,17 @@ export default function TextTwoColumns({
   return (
     <div className={cx('content-wrapper')}>
       {parentCategory !== 'Rest of World' && category !== 'Rest of World' && categoryUri && (
-        <Link href={categoryUri}>
+        <Link href={normalizeInternalHref(categoryUri)}>
           <h5 className={cx('category')}>{parentCategory} {category}</h5>
         </Link>
       )}
       {uri && (
-        <Link href={uri}>
+        <Link href={normalizeInternalHref(uri)}>
           <h2 className={cx('title')}>{title}</h2>
         </Link>
       )}
       {trimmedExcerpt && uri && (
-        <Link href={uri}>
+        <Link href={normalizeInternalHref(uri)}>
           <div
             className={cx('excerpt')}
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(trimmedExcerpt) }}

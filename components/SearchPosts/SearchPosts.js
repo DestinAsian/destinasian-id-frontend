@@ -11,6 +11,7 @@ import { FaSpinner } from 'react-icons/fa'
 
 import styles from './SearchPosts.module.scss'
 import { GetSearchAll } from '../../queries/GetSearchAll'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 const cx = classNames.bind(styles)
 
@@ -125,7 +126,7 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
                 <div key={node?.id} className={cx('content-wrapper')}>
                   <div className={cx('left-wrapper')}>
                     {img && (
-                      <Link href={node.uri} className={cx('image-link')}>
+                      <Link href={normalizeInternalHref(node.uri)} className={cx('image-link')}>
                         <div className={cx('image-wrapper')}>
                           <Image
                             quality={100}
@@ -151,7 +152,7 @@ export default function SearchPosts({ setIsSearchResultsVisible }) {
                     {node?.title && (
                       <h2 className={cx('title', 'truncate')}>
                         <Link
-                          href={node.uri}
+                          href={normalizeInternalHref(node.uri)}
                           dangerouslySetInnerHTML={{
                             __html: sanitizeHtml(
                               highlight(node.title, deferred),

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import Image from 'next/image'
 
 import { GetRelatedPosts } from '../../queries/GetRelatedPosts'
@@ -59,7 +60,7 @@ export default function RelatedPosts({ tagIds = [], excludeIds = [] }) {
 
         return (
           <Link
-            href={node.uri}
+            href={normalizeInternalHref(node.uri)}
             key={node.databaseId}
             className={styles.relatedItem}
           >

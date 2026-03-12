@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import classNames from 'classnames/bind'
@@ -81,7 +82,7 @@ export default function RelatedTravelGuides({ tagIds = [], excludeIds = [] }) {
 
           return (
             <Link
-              href={node.uri}
+              href={normalizeInternalHref(node.uri)}
               key={node.databaseId}
               className={styles.relatedItem}
             >

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import classNames from 'classnames/bind'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import Image from 'next/image'
 import { IoSearchOutline } from 'react-icons/io5'
 import destinasianLogoBlk from '../../assets/logo/destinasian-indo-logo.png'
@@ -102,7 +103,7 @@ export default function CategoryDesktopHeader({
                   {categories.map((category) => {
                     const { id, name, uri } = category.node
                     return (
-                      <Link key={id} href={`${uri}`}>
+                      <Link key={id} href={normalizeInternalHref(uri)}>
                         <div className={cx('menu-button-desktop')}>
                           <div className={cx('menu-title-desktop')}>{name}</div>
                         </div>

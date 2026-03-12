@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
 import styles from './GuideTwoStories.module.scss'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import Image from 'next/image'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
@@ -37,7 +38,7 @@ export default function GuideTwoStories({
         {/* Featured Image */}
         {featuredImage && uri && (
           <div className={cx('content-wrapper-image')}>
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <Image
                 quality={100}
                 src={featuredImage?.sourceUrl}
@@ -55,7 +56,7 @@ export default function GuideTwoStories({
           category !== 'Rest of World' &&
           categoryUri && (
             <div className={cx('content-wrapper')}>
-              <Link href={categoryUri}>
+              <Link href={normalizeInternalHref(categoryUri)}>
                 <h5 className={cx('category')}>
                   {parentCategory} {category}
                 </h5>
@@ -66,7 +67,7 @@ export default function GuideTwoStories({
         {/* Title */}
         {uri && title && (
           <div className={cx('content-wrapper')}>
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <h2 className={cx('title')}>{title}</h2>
             </Link>
           </div>
@@ -75,7 +76,7 @@ export default function GuideTwoStories({
         {/* Excerpt */}
         {trimmedExcerpt && uri && (
           <div className={cx('content-wrapper')}>
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <div
                 className={cx('excerpt')}
                 dangerouslySetInnerHTML={{

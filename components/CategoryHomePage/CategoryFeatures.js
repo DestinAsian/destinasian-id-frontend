@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { format } from 'date-fns'
 import styles from './CategoryFeatures.module.scss'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 const CategoryFeatures = ({ data }) => {
   if (!data) return null
@@ -16,7 +17,7 @@ const CategoryFeatures = ({ data }) => {
   return (
     <section className={styles.CategoryFeaturesWrapper}>
       <header className={styles.childCategory}>
-        <Link href={uri} className={styles.titleLink}>
+        <Link href={normalizeInternalHref(uri)} className={styles.titleLink}>
           <h2 className={styles.title}>{name}</h2>
         </Link>
 
@@ -45,8 +46,8 @@ const CategoryFeatures = ({ data }) => {
             : null
 
           return (
-            <article key={post.id} className={styles.card}>
-              <Link href={post.uri} className={styles.cardLink}>
+            <article key={post.id || post.uri} className={styles.card}>
+              <Link href={normalizeInternalHref(post.uri)} className={styles.cardLink}>
                 {image && (
                   <div className={styles.imageWrapper}>
                     <Image

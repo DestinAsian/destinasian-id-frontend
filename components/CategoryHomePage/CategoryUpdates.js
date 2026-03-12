@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './CategoryUpdates.module.scss'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 const CategoryUpdates = memo(({ data = [] }) => {
   const [mounted, setMounted] = useState(false)
@@ -29,7 +30,7 @@ const CategoryUpdates = memo(({ data = [] }) => {
 
         return (
           <section key={category.id} className={styles.childCategory}>
-            <Link href={category.uri} className={styles.titleLink}>
+            <Link href={normalizeInternalHref(category.uri)} className={styles.titleLink}>
               <h2 className={styles.title}>{category.name}</h2>
             </Link>
 
@@ -42,8 +43,8 @@ const CategoryUpdates = memo(({ data = [] }) => {
                 const image = post.featuredImage?.node
 
                 return (
-                  <article key={post.id} className={styles.card}>
-                    <Link href={post.uri} className={styles.cardInner}>
+                  <article key={post.id || post.uri || `${category.id}-${postIndex}`} className={styles.card}>
+                    <Link href={normalizeInternalHref(post.uri)} className={styles.cardInner}>
                       {image?.mediaItemUrl && (
                         <figure className={styles.imageWrapper}>
                           <Image

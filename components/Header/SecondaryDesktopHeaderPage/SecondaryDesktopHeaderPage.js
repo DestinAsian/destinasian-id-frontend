@@ -2,6 +2,7 @@ import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './SecondaryDesktopHeaderPage.module.scss'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 import { useSWRGraphQL } from '../../../lib/useSWRGraphQL'
 import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesMenu'
@@ -55,7 +56,7 @@ export default function SecondaryDesktopHeaderPage({
           </button>
 
           {categories.map(({ id, name, uri }) => (
-            <Link key={id} href={uri} passHref>
+            <Link key={id} href={normalizeInternalHref(uri)} passHref>
               <div className={cx('menu-button')}>
                 <div className={cx('menu-title')}>{name}</div>
               </div>

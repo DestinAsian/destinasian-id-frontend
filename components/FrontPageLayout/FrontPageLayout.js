@@ -17,6 +17,7 @@ import TravelGuideCategories from '../CategoryHomePage/TravelGuideCategories'
 import CategoryUpdates from '../CategoryHomePage/CategoryUpdates'
 import CategoryNewsUpdates from '../CategoryHomePage/CategoryNewsUpdates'
 import CategoryFeatures from '../CategoryHomePage/CategoryFeatures'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 // === ADS (DYNAMIC IMPORT – NON BLOCKING) ===
 const MastHeadTopHome = dynamic(() => import('../AdUnit/MastHeadTop/MastHeadTopHome'), {
@@ -139,7 +140,7 @@ function FrontPageLayout() {
             key={category.id}
             className={cx('category-updates-component')}
           >
-            <Link href={category.uri}>
+            <Link href={normalizeInternalHref(category.uri)}>
               <h2 className={styles.title}>
                 {parent ? `${parent} ${category.name}` : category.name}
               </h2>

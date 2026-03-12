@@ -13,6 +13,7 @@ import 'swiper/css/pagination'
 import { EffectFade, Autoplay, Pagination } from 'swiper'
 import Image from 'next/image'
 import Link from 'next/link'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 let cx = className.bind(styles)
 
@@ -82,7 +83,7 @@ export default function FeatureWell({ featureWells }) {
         {featureWells?.map((featureWell, index) => (
           <SwiperSlide key={index}>
             {featureWell.type === 'image' && featureWell.url && (
-              <Link href={featureWell.url}>
+              <Link href={normalizeInternalHref(featureWell.url)}>
                 <div className={cx('image-wrapper')}>
                   <Image
                     quality={100}
@@ -111,7 +112,7 @@ export default function FeatureWell({ featureWells }) {
                           onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
-                            router.push(featureWell.categoryLink)
+                            router.push(normalizeInternalHref(featureWell.categoryLink))
                           }}
                         >
                           {featureWell.category}
@@ -141,7 +142,7 @@ export default function FeatureWell({ featureWells }) {
             )}
 
             {featureWell.type === 'video' && featureWell.url && (
-              <Link href={featureWell.url}>
+              <Link href={normalizeInternalHref(featureWell.url)}>
                 <div className={cx('video-wrapper')}>
                   <video
                     id={`video-${index}`}
@@ -169,7 +170,7 @@ export default function FeatureWell({ featureWells }) {
                           onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
-                            router.push(featureWell.categoryLink)
+                            router.push(normalizeInternalHref(featureWell.categoryLink))
                           }}
                         >
                           {featureWell.category}

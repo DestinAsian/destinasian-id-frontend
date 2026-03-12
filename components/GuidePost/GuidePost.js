@@ -4,6 +4,7 @@ import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 import styles from './GuidePost.module.scss'
 import Link from 'next/link'  
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 
 let cx = classNames.bind(styles)
 
@@ -27,7 +28,7 @@ export default function GuidePost({
       {featuredImage && (
         <div className={cx('content-wrapper-image')}>
           {uri && (
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <FeaturedImage
                 image={featuredImage}
                 className={styles.featuredImage}
@@ -39,7 +40,7 @@ export default function GuidePost({
 
       <div className={cx('content-wrapper')}>
         {uri && (
-          <Link href={uri}>
+          <Link href={normalizeInternalHref(uri)}>
             <h5 className={cx('category')}>{'Partner Content'}</h5>
           </Link>
         )}
@@ -47,7 +48,7 @@ export default function GuidePost({
 
       <div className={cx('content-wrapper')}>
         {uri && (
-          <Link href={uri}>
+          <Link href={normalizeInternalHref(uri)}>
             <h2 className={cx('title')}>{title}</h2>
           </Link>
         )}
@@ -55,7 +56,7 @@ export default function GuidePost({
       {content !== undefined && content !== null && (
         <div className={cx('content-wrapper')}>
           {uri && (
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <div
                 className={cx('content')}
                 dangerouslySetInnerHTML={{

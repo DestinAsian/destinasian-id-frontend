@@ -2,6 +2,7 @@ import { useQuery, useApolloClient } from '@apollo/client'
 import { FOOTER_LOCATION, PRIMARY_LOCATION } from '../../../constants/menus'
 import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import { Accordion } from 'flowbite-react'
 import classNames from 'classnames/bind'
 import styles from './MainCategoryMenu.module.scss'
@@ -262,7 +263,7 @@ export default function MainCategoryMenu(categoryName) {
                                             honorsCircle?.title &&
                                             honorsCircle?.featuredImage?.node
                                               ?.sourceUrl && (
-                                              <Link href={honorsCircle?.uri}>
+                                              <Link href={normalizeInternalHref(honorsCircle?.uri)}>
                                                 <div
                                                   className={cx(
                                                     'image-wrapper',
@@ -296,7 +297,7 @@ export default function MainCategoryMenu(categoryName) {
                                       getHonorsCircle[0]?.title &&
                                       getHonorsCircle[0]?.featuredImage?.node
                                         ?.sourceUrl && (
-                                        <Link href={getHonorsCircle[0]?.uri}>
+                                        <Link href={normalizeInternalHref(getHonorsCircle[0]?.uri)}>
                                           <div className={cx('image-wrapper')}>
                                             <div className={cx('image')}>
                                               <Image
@@ -332,7 +333,7 @@ export default function MainCategoryMenu(categoryName) {
                                       >
                                         {honorsCircle?.title &&
                                           honorsCircle?.uri && (
-                                            <Link href={honorsCircle?.uri}>
+                                            <Link href={normalizeInternalHref(honorsCircle?.uri)}>
                                               <div
                                                 className={cx('name-wrapper')}
                                               >
@@ -366,7 +367,7 @@ export default function MainCategoryMenu(categoryName) {
                                           >
                                             {honorsCircle?.title &&
                                               honorsCircle?.uri && (
-                                                <Link href={honorsCircle?.uri}>
+                                                <Link href={normalizeInternalHref(honorsCircle?.uri)}>
                                                   <div
                                                     className={cx(
                                                       'name-wrapper',
@@ -407,7 +408,7 @@ export default function MainCategoryMenu(categoryName) {
                         {connectedNode?.node?.uri &&
                           connectedNode?.node?.name &&
                           connectedNode?.node?.categoryImages && (
-                            <Link href={connectedNode?.node?.uri}>
+                            <Link href={normalizeInternalHref(connectedNode?.node?.uri)}>
                               <div className={cx('image-wrapper')}>
                                 <div className={cx('image')}>
                                   <Image
@@ -452,7 +453,7 @@ export default function MainCategoryMenu(categoryName) {
                                     className={cx('posts-content-wrapper')}
                                   >
                                     {post?.node?.title && post?.node?.uri && (
-                                      <Link href={post?.node?.uri}>
+                                      <Link href={normalizeInternalHref(post?.node?.uri)}>
                                         <div className={cx('name-wrapper')}>
                                           <div
                                             className={cx(

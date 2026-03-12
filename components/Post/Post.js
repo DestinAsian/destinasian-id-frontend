@@ -4,6 +4,7 @@ import FeaturedImage from '../../components/FeaturedImage/FeaturedImage'
 
 import styles from './Post.module.scss'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 let cx = classNames.bind(styles)
@@ -30,7 +31,7 @@ export default function Post({
       {featuredImage && (
         <div className={cx('content-wrapper-image')}>
           {uri && (
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <FeaturedImage
                 image={featuredImage}
                 className={styles.featuredImage}
@@ -43,7 +44,7 @@ export default function Post({
       {parentCategory !== 'Rest of World' && category !== 'Rest of World' && (
         <div className={cx('content-wrapper')}>
           {categoryUri && (
-            <Link href={categoryUri}>
+            <Link href={normalizeInternalHref(categoryUri)}>
               <h5 className={cx('category')}>
                 {parentCategory} {category}
               </h5>
@@ -53,7 +54,7 @@ export default function Post({
       )}
       <div className={cx('content-wrapper')}>
         {uri && (
-          <Link href={uri}>
+          <Link href={normalizeInternalHref(uri)}>
             <h2 className={cx('title')}>{title}</h2>
           </Link>
         )}
@@ -61,7 +62,7 @@ export default function Post({
       {excerpt !== undefined && excerpt !== null && (
         <div className={cx('content-wrapper')}>
           {uri && (
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <div
                 className={cx('excerpt')}
                 dangerouslySetInnerHTML={{

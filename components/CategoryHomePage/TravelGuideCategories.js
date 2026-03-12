@@ -8,6 +8,7 @@ import classNames from 'classnames/bind'
 
 import styles from './TravelGuidesCategories.module.scss'
 import logohilton from '../../assets/logo/logo_hilton.png'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 const cx = classNames.bind(styles)
 
@@ -92,7 +93,7 @@ export default function TravelGuideCategories({ data }) {
           return comingSoon ? (
             <div key={id}>{content}</div>
           ) : (
-            <Link key={id} href={uri} draggable={false}>
+            <Link key={id} href={normalizeInternalHref(uri)} draggable={false}>
               {content}
             </Link>
           )

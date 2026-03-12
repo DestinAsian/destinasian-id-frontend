@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
 import styles from './GuideLatestStories.module.scss'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import Image from 'next/image'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
@@ -48,7 +49,7 @@ export default function GuideLatestStories({
       <div className={cx('twoColumnLayout')}>
         {/* Kolom teks */}
         <div className={cx('textColumn')}>
-          <Link href={uri} passHref>
+          <Link href={normalizeInternalHref(uri)} passHref>
             <h2 className={cx('title')}>{title}</h2>
           </Link>
           <div
@@ -56,7 +57,7 @@ export default function GuideLatestStories({
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalExcerpt) }}
           />
           <div className={cx('buttonWrapper')}>
-            <Link href={uri} passHref>
+            <Link href={normalizeInternalHref(uri)} passHref>
               <button className={cx('readMoreButton')}>Read More →</button>
             </Link>
           </div>
@@ -64,7 +65,7 @@ export default function GuideLatestStories({
 
         {/* Kolom gambar */}
         <div className={cx('imageColumn')}>
-          <Link href={uri} passHref>
+          <Link href={normalizeInternalHref(uri)} passHref>
             <div className={cx('imageWrapper')}>
               {imageUrl ? (
                 <Image

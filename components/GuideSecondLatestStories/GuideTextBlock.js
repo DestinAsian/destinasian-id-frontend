@@ -4,6 +4,7 @@ import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './GuideSecondLatestStories.module.scss'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
 
 const cx = classNames.bind(styles)
@@ -29,7 +30,7 @@ export default function GuideTextBlock({ title, excerpt, uri }) {
   return (
     <div className={cx('textWrapper')}>
       {uri && (
-        <Link href={uri} aria-label={title || 'Guide story'}>
+        <Link href={normalizeInternalHref(uri)} aria-label={title || 'Guide story'}>
           <h2 className={cx('title')}>{title}</h2>
         </Link>
       )}

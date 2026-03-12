@@ -3,6 +3,7 @@ import classNames from 'classnames/bind'
 import styles from './PostTwoColumns.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 
 const cx = classNames.bind(styles)
 
@@ -27,7 +28,7 @@ export default function PostTwoColumns({ title, uri, featuredImage, content, pri
   return (
     <div className={cx('content-wrapper-image')}>
       {title && (
-        <Link href={uri} className={cx('imageLink')}>
+        <Link href={normalizeInternalHref(uri)} className={cx('imageLink')}>
           <div className={cx('imageInner')}>
             {imageUrl ? (
               <Image

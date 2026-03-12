@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 const FeaturedImage = dynamic(() => import('../../components/FeaturedImage/FeaturedImage'))
 import styles from './ContestPost.module.scss'
 import Link from 'next/link'
+import { normalizeInternalHref } from '@/lib/normalizeInternalHref'
 
 let cx = classNames.bind(styles)
 
@@ -13,7 +14,7 @@ export default function ContestPost({ title, uri, featuredImage }) {
       {featuredImage && (
         <div className={cx('content-wrapper-image')}>
           {uri && (
-            <Link href={uri}>
+            <Link href={normalizeInternalHref(uri)}>
               <FeaturedImage
                 image={featuredImage}
                 className={styles.featuredImage}
@@ -24,7 +25,7 @@ export default function ContestPost({ title, uri, featuredImage }) {
       )}
       <div className={cx('content-wrapper')}>
         {uri && (
-          <Link href={uri}>
+          <Link href={normalizeInternalHref(uri)}>
             <h2 className={cx('title')}>{title}</h2>
           </Link>
         )}

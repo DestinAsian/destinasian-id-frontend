@@ -117,6 +117,7 @@ export default function Footer() {
                   alt="DestinAsian"
                   width={120}
                   height={30}
+                  style={{ height: 'auto' }}
                 />
               </a>
               <a
@@ -130,6 +131,7 @@ export default function Footer() {
                   alt="Prestige"
                   width={120}
                   height={30}
+                  style={{ height: 'auto' }}
                 />
               </a>
               <a
@@ -143,6 +145,7 @@ export default function Footer() {
                   alt="Daman"
                   width={120}
                   height={30}
+                  style={{ height: 'auto' }}
                 />
               </a>
             </div>

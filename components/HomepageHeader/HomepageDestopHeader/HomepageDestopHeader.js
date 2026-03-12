@@ -12,6 +12,7 @@ import TravelGuidesMenu from '../../../components/TravelGuidesMenu/TravelGuidesM
 import styles from './HomepageDestopHeader.module.scss'
 import { GetSecondaryHeaders } from '../../../queries/GetSecondaryHeaders'
 import { useSWRGraphQL } from '../../../lib/useSWRGraphQL'
+import { normalizeInternalHref } from '../../../lib/normalizeInternalHref'
 
 let cx = classNames.bind(styles)
 
@@ -140,7 +141,7 @@ export default function HomepageDestopHeader({
                     </button>
 
                     {categories.map(({ node }) => (
-                      <Link key={node.id} href={node.uri}>
+                      <Link key={node.id} href={normalizeInternalHref(node.uri)}>
                         <div className={cx('menu-button-desktop')}>
                           <div className={cx('menu-title-desktop')}>
                             {node.name}
