@@ -16,7 +16,7 @@ import { normalizeInternalHref } from '../../lib/normalizeInternalHref'
 const cx = classNames.bind(styles)
 
 const MIN_CHAR = 2
-const MAX_RESULTS = 100
+const MAX_RESULTS = 300
 
 export default function SearchTags({ setIsSearchResultsVisible }) {
   const inputRef = useRef(null)
