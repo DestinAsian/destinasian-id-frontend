@@ -6,14 +6,13 @@ import '@faustwp/core/dist/css/toolbar.css'
 import '../styles/global.scss'
 import '../styles/slider.css'
 import '../styles/footer.css'
-import classNames from 'classnames'
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter()
 
   return (
     <FaustProvider pageProps={pageProps}>
-      <Component {...pageProps} router={router} key={router.asPath} classNames={classNames} />
+      <Component {...pageProps} router={router} key={router.asPath} />
     </FaustProvider>
   )
 }

@@ -1,31 +1,21 @@
 import { getWordPressProps, WordPressTemplate } from '@faustwp/core'
 import SEO from '../components/SEO/SEO'
+
 export default function Page(props) {
   const {
     category,
     contest,
     editorial,
-    luxuryTravel,
     page,
     post,
     tag,
     update,
   } = props?.__TEMPLATE_QUERY_DATA__ ?? {}
 
-  const source =
-    category ||
-    contest ||
-    editorial ||
-    luxuryTravel ||
-    page ||
-    post ||
-    tag ||
-    update ||
-    {}
+  const source = category || contest || editorial || page || post || tag || update || {}
 
   const { categoryImages, featuredImage, seo, uri } = source ?? {}
 
-  // Determine imageUrl: use categoryImages for tag or category, else use featuredImage
   const isTagOrCategory = !!(tag || category)
 
   const imageUrl = isTagOrCategory
@@ -43,9 +33,7 @@ export default function Page(props) {
         url={uri}
         focuskw={seo?.focuskw}
       />
-      <WordPressTemplate
-        {...props}
-      />
+      <WordPressTemplate {...props} />
     </>
   )
 }

@@ -12,7 +12,6 @@ import PagePreviewHomepageTemplate from './page-preview-homepage'
 // Singles
 import SingleTemplate from './single'
 import SingleContestTemplate from './single-contest'
-import SingleLuxuryTravelTemplate from './single-luxury-travel'
 import SingleTravelGuideTemplate from './single-travel-guide'
 
 export default {
@@ -30,6 +29,5 @@ export default {
   // Single templates
   single: SingleTemplate,
   'single-contest': SingleContestTemplate,
-  'single-luxury-travel': SingleLuxuryTravelTemplate,
   'single-travel-guide': SingleTravelGuideTemplate,
 }

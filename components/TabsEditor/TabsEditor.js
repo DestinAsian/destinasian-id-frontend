@@ -2,18 +2,15 @@ import className from 'classnames/bind'
 import styles from './TabsEditor.module.scss'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Image from 'next/image'
-import { LayoutGroup } from 'framer-motion'
-// src/components/TabDays/TabDays.js
 import React, { useState, useEffect } from 'react'
 import { BACKEND_URL } from '../../constants/backendUrl'
 import { sanitizeHtml } from '@/lib/sanitizeHtml'
+
 let cx = className.bind(styles)
 
-export default function TabsEditor({ tabsEditor, luxuryTravelClass }) {
+export default function TabsEditor({ tabsEditor }) {
   const [activeTab, setActiveTab] = useState('tab1')
-
   const [transformedContent1, setTransformedContent1] = useState('')
-
   const [transformedContent2, setTransformedContent2] = useState('')
 
   useEffect(() => {
@@ -48,7 +45,6 @@ export default function TabsEditor({ tabsEditor, luxuryTravelClass }) {
       return sanitizeHtml(doc.body.innerHTML)
     }
 
-    // Transform content for both tabs
     if (tabsEditor) {
       const transformedTab1 = extractImageData(tabsEditor.tab1 || '')
       setTransformedContent1(transformedTab1)
@@ -60,13 +56,7 @@ export default function TabsEditor({ tabsEditor, luxuryTravelClass }) {
 
   return (
     <div className={cx('component')}>
-      <div
-        className={
-          luxuryTravelClass === 'luxuryTravelClass'
-            ? 'tabs-container mx-auto max-w-[700px] sm:mx-0 sm:pl-[30px]'
-            : 'tabs-container mx-auto max-w-[700px]'
-        }
-      >
+      <div className="tabs-container mx-auto max-w-[700px]">
         <div className="my-4 flex border-2 border-black">
           <button
             onClick={() => setActiveTab('tab1')}

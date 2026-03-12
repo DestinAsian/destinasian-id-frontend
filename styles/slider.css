@@ -186,23 +186,6 @@
   margin: 3px 0;
 }
 
-.post-luxury-travel-swiper {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.post-luxury-travel-swiper .swiper-slide .slide-caption {
-  background-color: #000000;
-  color: #ffffff;
-  height: auto;
-  align-items: center;
-  justify-content: flex-end;
-  line-height: 1;
-  text-transform: none;
-  position: fixed;
-}
 
 .swiper {
   margin-left: auto;
@@ -399,17 +382,6 @@
   text-align: right;
 }
 
-.post-luxury-travel-swiper
-  > .swiper-wrapper
-  > .swiper-slide
-  > div
-  > div
-  > .slide-caption
-  > .caption {
-  width: 100%;
-  text-align: right;
-  line-height: 1.2;
-}
 
 .post-advertorial-swiper {
   position: relative;
@@ -558,11 +530,6 @@
     justify-content: center;
   }
 
-  .post-luxury-travel-swiper .swiper-slide .slide-caption {
-    height: 100%;
-    right: 50vw;
-    width: 50vw;
-  }
 
   .post-category-swiper
     > .swiper-wrapper
@@ -574,16 +541,6 @@
     font-style: italic;
   }
 
-  .post-luxury-travel-swiper
-    > .swiper-wrapper
-    > .swiper-slide
-    > div
-    > div
-    > .slide-caption
-    > .caption {
-    width: 100%;
-    max-width: 350px;
-  }
 
   .post-ll-swiper > .swiper-wrapper > .swiper-slide,
   .post-lt-swiper > .swiper-wrapper > .swiper-slide {
@@ -592,8 +549,7 @@
 }
 
 @media only screen and (min-width: 768px) {
-  .post-advertorial-swiper,
-  .post-luxury-travel-swiper {
+  .post-advertorial-swiper {
     width: 100vw;
   }
 }
